@@ -1700,15 +1700,19 @@ public class GamePanel extends JPanel {
 
 		paintFlagBrickSteelPower(g);
 
-		game.lock.lock();
+		if(!GameManager.offline)
+			game.lock.lock();
 		paintEnemy(g, g2d);
-		game.lock.unlock();
+		if(!GameManager.offline)
+			game.lock.unlock();
 
 		paintPlayer(g, g2d);
 		
-		game.lock.lock();
+		if(!GameManager.offline)
+			game.lock.lock();
 		paintRocket(g, g2d);
-		game.lock.unlock();
+		if(!GameManager.offline)
+			game.lock.unlock();
 		
 		paintTrees(g);
 

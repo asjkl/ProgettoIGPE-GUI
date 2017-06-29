@@ -176,6 +176,10 @@ public class FullGamePanel extends JPanel {
 			x = 25;
 			y = 50;
 			int cont = 0;
+			
+			if(!GameManager.offline)	
+				gameManager.lock.lock();
+			
 			for (int a = 0; a < gameManager.getPower().size(); a++) {
 				if (gameManager.getPower().get(a).isActivate() && gameManager.getPower().get(a).getTank() instanceof PlayerTank
 						&& (gameManager.getPower().get(a).getTank().toString().equals(player)
@@ -200,6 +204,8 @@ public class FullGamePanel extends JPanel {
 					cont++;
 				}
 			}
+			if(!GameManager.offline)
+				gameManager.lock.unlock();
 		}
 
 	}
