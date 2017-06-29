@@ -15,7 +15,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
-import java.util.BitSet;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -1648,6 +1647,7 @@ public class GamePanel extends JPanel {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void printLines(Graphics g, Graphics2D g2d){
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));
 		 for (int i = 0; i <= game.getHeight(); i++) {

@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import net.ConnectionManager;
-import net.ConnectionPanel;
+import net.NetworkPanel;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 @SuppressWarnings("serial")
@@ -18,8 +18,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
   public static boolean slide = true;
  
-  private LoadPanel load;
-  private ConnectionPanel connect;
+  public  LoadPanel load;
+  private NetworkPanel network;
   private MenuPanel menu;
   private PlayerPanel player; 
   private StagePanelFirst firstStage;
@@ -34,14 +34,15 @@ public class MainFrame extends JFrame implements PanelSwitcher {
   
   public MainFrame() {
 		 
-	  	 load = new LoadPanel(WIDTH, HEIGHT, this);	 	 
+	  	 load = new LoadPanel(WIDTH, HEIGHT, this);	 
+		 network = new NetworkPanel(WIDTH, HEIGHT, this);
 	  	 menu = new MenuPanel(WIDTH, HEIGHT, this);
 	  	 player = new PlayerPanel(WIDTH, HEIGHT, this);
 	  	 firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
 	  	 secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
 	  	 editor = new ConstructionPanel(WIDTH, HEIGHT, this);
 	  	 settings = new SettingsPanel(WIDTH, HEIGHT, this);
-	  	 connect = new ConnectionPanel(WIDTH, HEIGHT, this);
+	  
 	  	  	 	  	 
 //	     this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 	  	 this.setLayout(new BorderLayout());
@@ -90,6 +91,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			  if(component instanceof SettingsPanel) {
 				  ((SettingsPanel)component).getButton(settings.getCursorPosition()).requestFocus();	  
 		  }
+		  else 
+			  if(component instanceof NetworkPanel) {
+				  ((NetworkPanel)component).getButton(network.getCursorPosition()).requestFocus();
+			  }
 	  }
 	
 	  @Override
@@ -158,13 +163,9 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	  }
 	
 	  public void showNetwork() {
-		  switchTo(connect);
+		  switchTo(network);
 	  }
 	  
-	  public static void main(String[] args) {
-		   new MainFrame();
-	  }
-
 	  public GameManager startNetworkGame(ConnectionManager connectionManager, JTextField filename) {
 		  gamePanel = new GamePanel();
 		  gameManager = gamePanel.startNetwork(connectionManager);
@@ -172,5 +173,9 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		  switchTo(play);
 		  return gameManager;
+	  }
+	  
+	  public static void main(String[] args) {
+		   new MainFrame();
 	  }
 }

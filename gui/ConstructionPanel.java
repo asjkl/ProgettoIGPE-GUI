@@ -667,17 +667,17 @@ public class ConstructionPanel extends JPanel {
 						matrix[i][j] = TypeMatrix.PLAYER1;
 						contPlayerP1++;
 						if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-							totEnemyIntoMap = 20;
+							setTotEnemyIntoMap(20);
 						else
-							totEnemyIntoMap = 40;
+							setTotEnemyIntoMap(40);
 						break;
 					case ("P2"):
 						matrix[i][j] = TypeMatrix.PLAYER2;
 						contPlayerP2++;
 						if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-							totEnemyIntoMap = 20;
+							setTotEnemyIntoMap(20);
 						else
-							totEnemyIntoMap = 40;
+							setTotEnemyIntoMap(40);
 						break;
 					case ("FLAG"):
 						matrix[i][j] = TypeMatrix.FLAG;
@@ -1107,16 +1107,16 @@ public class ConstructionPanel extends JPanel {
 						if (matrix[row][col] == TypeMatrix.PLAYER1) {
 							contPlayerP1--;
 							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-								totEnemyIntoMap = 20;
+								setTotEnemyIntoMap(20);
 							else
-								totEnemyIntoMap = 40;
+								setTotEnemyIntoMap(40);
 						}
 						if (matrix[row][col] == TypeMatrix.PLAYER2) {
 							contPlayerP2--;
 							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-								totEnemyIntoMap = 20;
+								setTotEnemyIntoMap(20);
 							else
-								totEnemyIntoMap = 40;
+								setTotEnemyIntoMap(40);
 						}
 
 						if (((type == TypeMatrix.FLAG && contFlag == 0)
@@ -1133,16 +1133,16 @@ public class ConstructionPanel extends JPanel {
 						if (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0) {
 							contPlayerP1++;
 							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-								totEnemyIntoMap = 20;
+								setTotEnemyIntoMap(20);
 							else
-								totEnemyIntoMap = 40;
+								setTotEnemyIntoMap(40);
 						}
 						if (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0) {
 							contPlayerP2++;
 							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-								totEnemyIntoMap = 20;
+								setTotEnemyIntoMap(20);
 							else
-								totEnemyIntoMap = 40;
+								setTotEnemyIntoMap(40);
 						}
 					}
 				}
@@ -1261,15 +1261,15 @@ public class ConstructionPanel extends JPanel {
 					if (matrix[row][col] == TypeMatrix.PLAYER1) {
 						contPlayerP1--;
 						if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-							totEnemyIntoMap = 20;
+							setTotEnemyIntoMap(20);
 						else
-							totEnemyIntoMap = 40;
+							setTotEnemyIntoMap(40);
 					} else if (matrix[row][col] == TypeMatrix.PLAYER2) {
 						contPlayerP2--;
 						if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-							totEnemyIntoMap = 20;
+							setTotEnemyIntoMap(20);
 						else
-							totEnemyIntoMap = 40;
+							setTotEnemyIntoMap(40);
 					}
 					matrix[row][col] = type;
 					repaint();
@@ -1296,5 +1296,13 @@ public class ConstructionPanel extends JPanel {
 
 	public void setSwitcher(PanelSwitcher switcher) {
 		this.switcher = switcher;
+	}
+
+	public int getTotEnemyIntoMap() {
+		return totEnemyIntoMap;
+	}
+
+	public void setTotEnemyIntoMap(int totEnemyIntoMap) {
+		this.totEnemyIntoMap = totEnemyIntoMap;
 	}
 }

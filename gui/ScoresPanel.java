@@ -447,8 +447,8 @@ public class ScoresPanel extends JPanel {
 		totalEnemiesP1 = game.getPlayersArray().getFirst().getStatistics().getTotalOccurr();
 		
 		game.getPlayersArray().getLast().getStatistics().setNewRecord();
-		highScoreP2 = game.getPlayersArray().getLast().getStatistics().getHighScore();
-		currScoreP2 = game.getPlayersArray().getLast().getStatistics().getCurrScore();
+		setHighScoreP2(game.getPlayersArray().getLast().getStatistics().getHighScore());
+		setCurrScoreP2(game.getPlayersArray().getLast().getStatistics().getCurrScore());
 		totalEnemiesP2 = game.getPlayersArray().getLast().getStatistics().getTotalOccurr();
 		
 		for(int i = 0 ; i < occurrence.length; i++) {
@@ -899,5 +899,21 @@ public class ScoresPanel extends JPanel {
 
 	public void setSwitcher(PanelSwitcher panelSwitcher) {
 		this.panelSwitcher = panelSwitcher;
+	}
+
+	public int getHighScoreP2() {
+		return highScoreP2;
+	}
+
+	public void setHighScoreP2(int highScoreP2) {
+		this.highScoreP2 = highScoreP2;
+	}
+
+	public int getCurrScoreP2() {
+		return currScoreP2;
+	}
+
+	public void setCurrScoreP2(int currScoreP2) {
+		this.currScoreP2 = currScoreP2;
 	}
 }

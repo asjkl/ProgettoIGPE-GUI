@@ -12,8 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
-
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel {
 	
