@@ -345,7 +345,7 @@ public class GamePanel extends JPanel {
 					// game.getRocket().get(a).setFirstAnimationNo(false);
 					// }
 					
-					if(game.getRocket().get(a).rect.intersects(game.getRocket().get(a).getTank().rect)){
+					if(!game.getRocket().get(a).rect.intersects(game.getRocket().get(a).getTank().rect)){
 						game.getRocket().get(a).setFirstAnimationNo(false);
 					}
 
@@ -1700,7 +1700,9 @@ public class GamePanel extends JPanel {
 
 		paintFlagBrickSteelPower(g);
 
+		game.lock.lock();
 		paintEnemy(g, g2d);
+		game.lock.unlock();
 
 		paintPlayer(g, g2d);
 		

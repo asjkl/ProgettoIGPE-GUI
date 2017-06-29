@@ -37,7 +37,8 @@ public class FullGamePanel extends JPanel {
 	
 		gamePanel.setFocusable(true);
 		gamePanel.setBounds(282-shift, 20-shift, gameWidth+shift*2+3, gameHeight+shift*2);
-		valueMap = gameManager.getFilename().getText().replaceAll("[^0-9]", "");
+		if(GameManager.offline)
+			valueMap = gameManager.getFilename().getText().replaceAll("[^0-9]", "");
 		labelValueMap = new JLabel();
 		labelValueMap.setBounds(1150, 625, 30, 30);
 		labelValueMap.setPreferredSize(new Dimension(30, 30));
@@ -63,7 +64,7 @@ public class FullGamePanel extends JPanel {
 
 		x = 1125;
 		y = 15;
-		for (int i = 0; i < gamePanel.getGameManager().getEnemy().size(); i++) {
+		for (int i = 0; i < gameManager.getNumbersOfEnemy(); i++) {
 
 			if (i % 3 == 0) {
 

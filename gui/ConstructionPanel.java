@@ -347,7 +347,7 @@ public class ConstructionPanel extends JPanel {
 		World world = new World();
 		initWorld(world);
 		GameManager game = new GameManager(world, flag);
-		EnemyTank e = new EnemyTank(0, 0, game.getMatrix(), Speed.SLOW, Speed.SLOW, Direction.STOP, 1, 1, 1,0);
+		EnemyTank e = new EnemyTank(0, 0, game.getMatrix(), Speed.SLOW, Speed.SLOW, Direction.STOP, 1, 1, 1);
 		e.difficult(flag.getX(), flag.getY());
 		if (e.isHasApath()) {
 			return true;
