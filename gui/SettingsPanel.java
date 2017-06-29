@@ -20,8 +20,8 @@ import javax.swing.event.ChangeListener;
 public class SettingsPanel extends JPanel {
 
 	private boolean hide;
-	protected static float soundValue;
-	protected static boolean easy, medium, hard;
+	protected static float soundValue=0.0f;;
+	public static boolean easy=true, medium=false, hard=false;
 	
 	private float currValue;
 	private int cursorPosition;
@@ -40,9 +40,6 @@ public class SettingsPanel extends JPanel {
 		
 		hide = false;
 		cursorPosition = 0;
-		soundValue = 0.0f;
-		easy = true;
-		medium = hard = false;
 		buttons = new ArrayList<>();
 		level = new ArrayList<>();
 		group =  new ButtonGroup();

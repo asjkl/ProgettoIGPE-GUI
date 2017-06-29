@@ -127,7 +127,7 @@ public class GamePanel extends JPanel {
 					}
 				}
 				game.getPlayersArray().get(0).keyBits.set(keyCode);
-			connectionManager.dispatch(getUpdateMessage(event,"YES"));
+				connectionManager.dispatch(getUpdateMessage(event,"YES", game.getPlayersArray().get(0).getKeyPressedMillis(), game.getPlayersArray().get(0).isReleaseKeyRocket()));
 			}
 
 			@Override
@@ -140,7 +140,7 @@ public class GamePanel extends JPanel {
 				}
 				
 				game.getPlayersArray().get(0).keyBits.clear(keyCode);
-				connectionManager.dispatch(getUpdateMessage(event,"NO"));
+				connectionManager.dispatch(getUpdateMessage(event,"NO",game.getPlayersArray().get(0).getKeyPressedMillis(), game.getPlayersArray().get(0).isReleaseKeyRocket()));
 			}
 		});
 
@@ -278,6 +278,7 @@ public class GamePanel extends JPanel {
 
 				logic();
 				graphic();
+				
 				if (game.runnable != null)
 					game.runnable.run();
 				
@@ -428,8 +429,8 @@ public class GamePanel extends JPanel {
 
 	// ----------------------------ONLINE----------------------------------------
 
-	protected String getUpdateMessage(KeyEvent code, String string) {
-		return playerName + ":" + code.getKeyCode()+":"+string;
+	protected String getUpdateMessage(KeyEvent code, String string, long getKeyPressedMillis, boolean isReleaseKeyRocket) {
+		return playerName + ":" + code.getKeyCode()+":"+string+":"+getKeyPressedMillis+":"+isReleaseKeyRocket;
 	}
 		
 	GameManager startNetwork(ConnectionManager connectionManager) {
