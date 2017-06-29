@@ -344,6 +344,10 @@ public class GamePanel extends JPanel {
 					// game.getRocket().get(a).isFirstAnimationNo()) {
 					// game.getRocket().get(a).setFirstAnimationNo(false);
 					// }
+					
+					if(game.getRocket().get(a).rect.intersects(game.getRocket().get(a).getTank().rect)){
+						game.getRocket().get(a).setFirstAnimationNo(false);
+					}
 
 					if (game.getRocket().get(a).getCont() >= tile) {
 
@@ -1254,15 +1258,15 @@ public class GamePanel extends JPanel {
 		synchronized (this) {
 			for (int i = 0; i < game.getRocket().size(); i++) {
 	
-				if (game.getRocket().get(i).getNext() instanceof PowerUp) {
+				if (GameManager.offline && game.getRocket().get(i).getNext() instanceof PowerUp) {
 					paintPowerUp(g, (PowerUp) game.getRocket().get(i).getNext());
 				}
 	
-				if (game.getRocket().get(i).getCurr() instanceof PowerUp) {
+				if (GameManager.offline && game.getRocket().get(i).getCurr() instanceof PowerUp) {
 					paintPowerUp(g, (PowerUp) game.getRocket().get(i).getCurr());
 				}
 	
-				if (!game.getRocket().get(i).rect.intersects(game.getRocket().get(i).getTank().rect)) {
+				if (!game.getRocket().get(i).isFirstAnimationNo()) {
 					AffineTransform at = AffineTransform.getTranslateInstance(game.getRocket().get(i).getyGraphics(),
 							game.getRocket().get(i).getxGraphics());
 					rotation(game.getRocket().get(i), game.getRocket().get(i).getDirection());
@@ -1271,7 +1275,7 @@ public class GamePanel extends JPanel {
 				}
 	
 				// DA SEMPRE PROBLEMI DI ECCEZZIONI
-				if (game.getRocket().get(i).getNext() instanceof PowerUp)
+				if (GameManager.offline && game.getRocket().get(i).getNext() instanceof PowerUp)
 					if (((PowerUp) game.getRocket().get(i).getNext()).getBefore() instanceof Tree) {
 						g.drawImage(ImageProvider.getTree(), game.getRocket().get(i).getY() * tile,
 								game.getRocket().get(i).getX() * tile, null);
@@ -1700,8 +1704,10 @@ public class GamePanel extends JPanel {
 
 		paintPlayer(g, g2d);
 		
+		game.lock.lock();
 		paintRocket(g, g2d);
-
+		game.lock.unlock();
+		
 		paintTrees(g);
 
 		paintEffects(g, g2d);
