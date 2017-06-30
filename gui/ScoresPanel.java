@@ -89,7 +89,7 @@
 //		
 //		JLabel stage = new JLabel();
 //		
-//		stage.setFont(LoadPanel.customFontB);
+//		stage.setFont(MainFrame.customFontB);
 //		stage.setBackground(Color.BLACK);
 //		stage.setForeground(Color.WHITE);
 //		stage.setText("Stage " + value);
@@ -101,7 +101,7 @@
 //		
 //			JLabel pts = new JLabel();
 //			JLabel text = new JLabel();
-//			text.setFont(LoadPanel.customFontB);
+//			text.setFont(MainFrame.customFontB);
 //			
 //			if(i == 0) {
 //							
@@ -169,11 +169,11 @@
 //						JLabel occur = new JLabel();
 //						JLabel points = new JLabel();
 //						
-//						points.setFont(LoadPanel.customFontB);
+//						points.setFont(MainFrame.customFontB);
 //						points.setBackground(Color.BLACK);
 //						points.setForeground(Color.WHITE);
 //						
-//						occur.setFont(LoadPanel.customFontB);
+//						occur.setFont(MainFrame.customFontB);
 //						occur.setBackground(Color.BLACK);
 //						occur.setForeground(Color.WHITE);
 //						
@@ -202,7 +202,7 @@
 //					
 //					JLabel total = new JLabel();
 //					
-//					total.setFont(LoadPanel.customFontB);
+//					total.setFont(MainFrame.customFontB);
 //					total.setBackground(Color.BLACK);
 //					total.setForeground(Color.WHITE);
 //					add(total);
@@ -489,7 +489,7 @@ public class ScoresPanel extends JPanel {
 		
 		JLabel stage = new JLabel();
 		
-		stage.setFont(LoadPanel.customFontB);
+		stage.setFont(MainFrame.customFontB);
 		stage.setBackground(Color.BLACK);
 		stage.setForeground(Color.WHITE);
 		stage.setText("Stage " + value);
@@ -501,7 +501,7 @@ public class ScoresPanel extends JPanel {
 		
 			JLabel pts = new JLabel();
 			JLabel text = new JLabel();
-			text.setFont(LoadPanel.customFontB);
+			text.setFont(MainFrame.customFontB);
 			
 			if(i == 1) {
 				
@@ -569,11 +569,11 @@ public class ScoresPanel extends JPanel {
 						JLabel occur = new JLabel();
 						JLabel points = new JLabel();
 						
-						points.setFont(LoadPanel.customFontB);
+						points.setFont(MainFrame.customFontB);
 						points.setBackground(Color.BLACK);
 						points.setForeground(Color.WHITE);
 						
-						occur.setFont(LoadPanel.customFontB);
+						occur.setFont(MainFrame.customFontB);
 						occur.setBackground(Color.BLACK);
 						occur.setForeground(Color.WHITE);
 						
@@ -601,7 +601,7 @@ public class ScoresPanel extends JPanel {
 					
 					JLabel total = new JLabel();
 					
-					total.setFont(LoadPanel.customFontB);
+					total.setFont(MainFrame.customFontB);
 					total.setBackground(Color.BLACK);
 					total.setForeground(Color.WHITE);
 					add(total);
@@ -634,7 +634,7 @@ public class ScoresPanel extends JPanel {
 			
 				JLabel pts = new JLabel();
 				JLabel text = new JLabel();
-				text.setFont(LoadPanel.customFontB);
+				text.setFont(MainFrame.customFontB);
 
 				if(j == 1) {
 			
@@ -676,7 +676,7 @@ public class ScoresPanel extends JPanel {
 						text.setBounds(150 + k, 550, 200, 100);
 					}
 			
-				pts.setFont(LoadPanel.customFontB);
+				pts.setFont(MainFrame.customFontB);
 				pts.setBackground(Color.BLACK);
 				pts.setForeground(Color.WHITE);
 				pts.setText("pts");
@@ -710,11 +710,11 @@ public class ScoresPanel extends JPanel {
 							JLabel occur = new JLabel();
 							JLabel points = new JLabel();
 							
-							points.setFont(LoadPanel.customFontB);
+							points.setFont(MainFrame.customFontB);
 							points.setBackground(Color.BLACK);
 							points.setForeground(Color.WHITE);
 							
-							occur.setFont(LoadPanel.customFontB);
+							occur.setFont(MainFrame.customFontB);
 							occur.setBackground(Color.BLACK);
 							occur.setForeground(Color.WHITE);
 							
@@ -750,7 +750,7 @@ public class ScoresPanel extends JPanel {
 					
 					JLabel totalP1 = new JLabel();
 					
-					totalP1.setFont(LoadPanel.customFontB);
+					totalP1.setFont(MainFrame.customFontB);
 					totalP1.setBackground(Color.BLACK);
 					totalP1.setForeground(Color.WHITE);
 					add(totalP1);
@@ -764,7 +764,7 @@ public class ScoresPanel extends JPanel {
 					}
 					
 					JLabel totalP2 = new JLabel();
-					totalP2.setFont(LoadPanel.customFontB);
+					totalP2.setFont(MainFrame.customFontB);
 					totalP2.setBackground(Color.BLACK);
 					totalP2.setForeground(Color.WHITE);
 					add(totalP2);

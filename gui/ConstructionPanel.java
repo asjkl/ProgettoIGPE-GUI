@@ -113,7 +113,7 @@ public class ConstructionPanel extends JPanel {
 			numberOfEnemyPaint.add(new JLabel());
 
 			numberOfEnemyPaint.get(i).setForeground(Color.WHITE);
-			numberOfEnemyPaint.get(i).setFont(LoadPanel.customFontB);
+			numberOfEnemyPaint.get(i).setFont(MainFrame.customFontB);
 			this.add(numberOfEnemyPaint.get(i));
 		}
 
@@ -141,7 +141,7 @@ public class ConstructionPanel extends JPanel {
 			buttons.get(i).setBorderPainted(false);
 			buttons.get(i).setFocusPainted(false);
 			buttons.get(i).setFocusPainted(false);
-			buttons.get(i).setFont(LoadPanel.customFontM);
+			buttons.get(i).setFont(MainFrame.customFontM);
 			buttons.get(i).setForeground(Color.WHITE);
 			buttons.get(i).setBackground(Color.BLACK);
 			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
@@ -165,21 +165,21 @@ public class ConstructionPanel extends JPanel {
 						if (!empty()) {
 							if (!saveFile) {
 								SoundsProvider.playBulletHit1();
-								LoadPanel.transparent = true;
+								MainFrame.transparent = true;
 								backDialog();
 							} else {
 								setCursorPosition(1);
 								cleanMatrixOfType();
 								saveFile = selection = isFlag = isPlayer = isEnemy = false;
 								type = TypeMatrix.DEFAULT;
-								LoadPanel.transparent = false;
+								MainFrame.transparent = false;
 								getSwitcher().showMenu();
 							}
 						} else {
 							isFlag = isPlayer = isEnemy = false;
 							repaint();
 							cursorPosition = 1;
-							LoadPanel.transparent = false;
+							MainFrame.transparent = false;
 							getSwitcher().showMenu();
 						}
 					} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -230,7 +230,7 @@ public class ConstructionPanel extends JPanel {
 
 					if (!empty()) {
 						if (!saveFile) {
-							LoadPanel.transparent = true;
+							MainFrame.transparent = true;
 							backDialog();
 						} else {
 							setCursorPosition(1);
@@ -238,12 +238,12 @@ public class ConstructionPanel extends JPanel {
 							saveFile = selection = isFlag = isPlayer = isEnemy = false;
 							type = TypeMatrix.DEFAULT;
 							SoundsProvider.playBulletHit1();
-							LoadPanel.transparent = false;
+							MainFrame.transparent = false;
 							getSwitcher().showMenu();
 						}
 					} else {
 						isFlag = isPlayer = isEnemy = false;
-						LoadPanel.transparent = false;
+						MainFrame.transparent = false;
 						getSwitcher().showMenu();
 					}
 					repaint();
@@ -352,7 +352,7 @@ public class ConstructionPanel extends JPanel {
 		if (e.isHasApath()) {
 			return true;
 		}
-		LoadPanel.transparent = true;
+		MainFrame.transparent = true;
 		warning = new WarningDialog("Can't found path to Flag!");
 		return false;
 	}
@@ -417,7 +417,7 @@ public class ConstructionPanel extends JPanel {
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
 		fullpanel.setLayout(new BoxLayout(fullpanel, BoxLayout.Y_AXIS));
-		label.setFont(LoadPanel.customFontM);
+		label.setFont(MainFrame.customFontM);
 		label.setForeground(Color.WHITE);
 		label.setHorizontalAlignment(JLabel.CENTER);
 		text.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -430,7 +430,7 @@ public class ConstructionPanel extends JPanel {
 
 			final int curRow = i;
 			bts[i] = new JButton(buttonTxt[i]);
-			bts[i].setFont(LoadPanel.customFontM);
+			bts[i].setFont(MainFrame.customFontM);
 			bts[i].setBackground(Color.BLACK);
 			bts[i].setForeground(Color.WHITE);
 			bts[i].setContentAreaFilled(false);
@@ -494,7 +494,7 @@ public class ConstructionPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					LoadPanel.transparent = false;
+					MainFrame.transparent = false;
 					cursorPositionDialog = 0;
 					dialog.dispose();
 				}
@@ -515,7 +515,7 @@ public class ConstructionPanel extends JPanel {
 					isPlayer = false;
 					type = TypeMatrix.DEFAULT;
 
-					LoadPanel.transparent = false;
+					MainFrame.transparent = false;
 					hide = false;
 					dialog.dispose();
 					getSwitcher().showMenu();
@@ -800,7 +800,7 @@ public class ConstructionPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if (LoadPanel.transparent) {
+		if (MainFrame.transparent) {
 
 			// Apply our own painting effect
 			Graphics2D g2d = (Graphics2D) g;
@@ -821,13 +821,13 @@ public class ConstructionPanel extends JPanel {
 		// TANK BACKGROUND
 		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
 		g.drawImage(ImageProvider.getBackground(), 135, 52, null);
-		if (!LoadPanel.transparent)
+		if (!MainFrame.transparent)
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 		if (selection)
 			g.drawImage(ImageProvider.getSelection(), positionXObject - 2, positionYObject - 2, null);
 
-		if (!LoadPanel.transparent)
+		if (!MainFrame.transparent)
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
 
 		g.setColor(Color.WHITE);
@@ -846,7 +846,7 @@ public class ConstructionPanel extends JPanel {
 			g.drawLine(i * tile, begin, i * tile, end + tile);
 		}
 
-		if (!LoadPanel.transparent)
+		if (!MainFrame.transparent)
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 		for (int a = 0; a < positionLabel.size(); a++) {
@@ -868,13 +868,13 @@ public class ConstructionPanel extends JPanel {
 				g.drawImage(ImageProvider.getTree(), x, y, null);
 			else if (a == 5) {
 				if (contFlag == 0) {
-					if (isFlag && time == 0 && !LoadPanel.transparent) {
-						if (!LoadPanel.transparent)
+					if (isFlag && time == 0 && !MainFrame.transparent) {
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getFlag(), x, y, null);
 
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 					} else {
@@ -882,57 +882,57 @@ public class ConstructionPanel extends JPanel {
 					}
 				} else {
 
-					if (!LoadPanel.transparent)
+					if (!MainFrame.transparent)
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 					g.drawImage(ImageProvider.getFlag(), x, y, null);
 
-					if (!LoadPanel.transparent)
+					if (!MainFrame.transparent)
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 				}
 			} else if (a == 6) {
 
 				if (contPlayerP1 == 0) {
 					if (isPlayer && time == 0) {
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getPlayer1A(), x, y, null);
 
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					} else
 						g.drawImage(ImageProvider.getPlayer1A(), x, y, null);
 				} else {
 
-					if (!LoadPanel.transparent)
+					if (!MainFrame.transparent)
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 					g.drawImage(ImageProvider.getPlayer1A(), x, y, null);
 
-					if (!LoadPanel.transparent)
+					if (!MainFrame.transparent)
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 				}
 			} else if (a == 7) {
 				if (contPlayerP2 == 0) {
 					if (isPlayer && time == 0) {
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getPlayer2A(), x, y, null);
 
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					} else
 						g.drawImage(ImageProvider.getPlayer2A(), x, y, null);
 				} else {
 
-					if (!LoadPanel.transparent)
+					if (!MainFrame.transparent)
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 					g.drawImage(ImageProvider.getPlayer2A(), x, y, null);
 
-					if (!LoadPanel.transparent)
+					if (!MainFrame.transparent)
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 				}
 			} else if (a == 8) {
@@ -946,12 +946,12 @@ public class ConstructionPanel extends JPanel {
 					if (isEnemy && time == 1) {
 						g.drawImage(ImageProvider.getBasicA(), x, y, null);
 					} else {
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getBasicA(), x, y, null);
 
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					}
 				}
@@ -964,12 +964,12 @@ public class ConstructionPanel extends JPanel {
 					if (isEnemy && time == 1) {
 						g.drawImage(ImageProvider.getArmorA(), x, y, null);
 					} else {
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getArmorA(), x, y, null);
 
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					}
 				}
@@ -981,12 +981,12 @@ public class ConstructionPanel extends JPanel {
 					if (isEnemy && time == 1) {
 						g.drawImage(ImageProvider.getFastA(), x, y, null);
 					} else {
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getFastA(), x, y, null);
 
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					}
 				}
@@ -999,12 +999,12 @@ public class ConstructionPanel extends JPanel {
 					if (isEnemy && time == 1) {
 						g.drawImage(ImageProvider.getPowerA(), x, y, null);
 					} else {
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getPowerA(), x, y, null);
 
-						if (!LoadPanel.transparent)
+						if (!MainFrame.transparent)
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					}
 				}
@@ -1097,7 +1097,7 @@ public class ConstructionPanel extends JPanel {
 					if (((col == 0 && row == 0) || (col == width / 2 && row == 0) || (col == width - 1 && row == 0))
 							&& type != TypeMatrix.EMPTY) {
 						matrix[row][col] = type;
-						LoadPanel.transparent = true;
+						MainFrame.transparent = true;
 						warning = new WarningDialog("Warning! Cannot manage spawn positions.", matrix);
 					} else {
 
@@ -1249,7 +1249,7 @@ public class ConstructionPanel extends JPanel {
 				if (((col == 0 && row == 0) || (col == width / 2 && row == 0) || (col == width - 1 && row == 0))
 						&& type != TypeMatrix.EMPTY) {
 					matrix[row][col] = type;
-					LoadPanel.transparent = true;
+					MainFrame.transparent = true;
 					warning = new WarningDialog("Warning! Cannot manage spawn positions.", matrix);
 				}
 

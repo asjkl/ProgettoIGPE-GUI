@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import progettoIGPE.davide.giovanni.unical2016.GUI.ImageProvider;
-import progettoIGPE.davide.giovanni.unical2016.GUI.LoadPanel;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
@@ -79,13 +78,13 @@ public class NetworkPanel extends JPanel {
 		label.setText("Server IP");
 		label.setBackground(Color.BLACK);
 		label.setForeground(Color.WHITE);
-		label.setFont(LoadPanel.customFontM);
+		label.setFont(MainFrame.customFontM);
 		content.add(label, constraints);
 		ipTextField = new JTextField(10);
 		ipTextField.setText("127.0.0.1");
 		ipTextField.setBackground(Color.BLACK);
 		ipTextField.setForeground(Color.WHITE);
-		ipTextField.setFont(LoadPanel.customFontM);
+		ipTextField.setFont(MainFrame.customFontM);
 		constraints.gridx++;
 		content.add(ipTextField, constraints);
 		
@@ -96,13 +95,13 @@ public class NetworkPanel extends JPanel {
 		label2.setText("Server Port");
 		label2.setBackground(Color.BLACK);
 		label2.setForeground(Color.WHITE);
-		label2.setFont(LoadPanel.customFontM);
+		label2.setFont(MainFrame.customFontM);
 		content.add(label2, constraints);
 		portTextField = new JTextField(10);
 		portTextField.setText("1234");
 		portTextField.setBackground(Color.BLACK);
 		portTextField.setForeground(Color.WHITE);
-		portTextField.setFont(LoadPanel.customFontM);
+		portTextField.setFont(MainFrame.customFontM);
 		constraints.gridx++;
 		content.add(portTextField, constraints);
 		
@@ -113,13 +112,13 @@ public class NetworkPanel extends JPanel {
 		label3.setText("Player Name");
 		label3.setBackground(Color.BLACK);
 		label3.setForeground(Color.WHITE);
-		label3.setFont(LoadPanel.customFontM);
+		label3.setFont(MainFrame.customFontM);
 		content.add(label3, constraints);
 		nameTextField = new JTextField(10);
 		nameTextField.setText("P1");
 		nameTextField.setBackground(Color.BLACK);
 		nameTextField.setForeground(Color.WHITE);
-		nameTextField.setFont(LoadPanel.customFontM);
+		nameTextField.setFont(MainFrame.customFontM);
 		constraints.gridx++;
 		content.add(nameTextField, constraints);
 		
@@ -137,7 +136,7 @@ public class NetworkPanel extends JPanel {
 			buttons.get(i).setContentAreaFilled(false);
 			buttons.get(i).setBorderPainted(false);
 			buttons.get(i).setFocusPainted(false);
-			buttons.get(i).setFont(LoadPanel.customFontM);
+			buttons.get(i).setFont(MainFrame.customFontM);
 			buttons.get(i).setForeground(Color.WHITE);
 			buttons.get(i).setBackground(Color.BLACK);
 			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);

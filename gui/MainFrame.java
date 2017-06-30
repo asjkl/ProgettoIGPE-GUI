@@ -1,6 +1,9 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.*;
 
 import net.ConnectionManager;
@@ -15,10 +18,14 @@ public class MainFrame extends JFrame implements PanelSwitcher {
   private final int HEIGHT = 740;
   private final int gameWidth = WIDTH - 565;
   private final int gameHeight = HEIGHT - 40;
-
+  
   public static boolean slide = true;
- 
-  public  LoadPanel load;
+  public static Font customFontM;
+  public static Font customFontB;
+  public static Font customFontS;
+  public static boolean transparent = false;
+  private GraphicsEnvironment graphicscEnvironment;
+  
   private NetworkPanel network;
   private MenuPanel menu;
   private PlayerPanel player; 
@@ -31,33 +38,35 @@ public class MainFrame extends JFrame implements PanelSwitcher {
   public FullGamePanel play; 
   private GameManager gameManager;
   public GamePanel gamePanel;
+  private SoundsProvider sounds;
+  private ImageProvider images;
   
   public MainFrame() {
-		 
-	  	 load = new LoadPanel(WIDTH, HEIGHT, this);	 
+	  	
+		 setFont();
 		 network = new NetworkPanel(WIDTH, HEIGHT, this);
 	  	 menu = new MenuPanel(WIDTH, HEIGHT, this);
+	  	 
 	  	 player = new PlayerPanel(WIDTH, HEIGHT, this);
 	  	 firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
 	  	 secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
 	  	 editor = new ConstructionPanel(WIDTH, HEIGHT, this);
 	  	 settings = new SettingsPanel(WIDTH, HEIGHT, this);
-	  
-	  	  	 	  	 
-//	     this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+	  	 setImages(new ImageProvider());
+	  	 setSounds(new SoundsProvider());
+
 	  	 this.setLayout(new BorderLayout());
 	  	 this.setTitle("BATTLE CITY UNICAL");  
 	     this.setResizable(false);
-//	     this.setUndecorated(true);
-	     this.add(load);
+	     switchTo(menu);
 	     this.pack();
 	     this.setLocationRelativeTo(null);
 	     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	     this.setVisible(true);
+	    
   	}
-  
+  	
 	  public void switchTo(JComponent component) {   
-		
 		 this.getContentPane().removeAll();
 		 this.add(component);
 		 this.validate();
@@ -96,7 +105,25 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 				  ((NetworkPanel)component).getButton(network.getCursorPosition()).requestFocus();
 			  }
 	  }
-	
+	  
+	  private void setFont(){
+			
+			try {
+				
+				customFontM = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f);
+				customFontB = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f);
+				customFontS = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f);
+				graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
+			
+			} catch(IOException e) {
+				e.printStackTrace();
+				
+			} catch(FontFormatException e) {
+				e.printStackTrace();
+			}
+		}
+	  
 	  @Override
 	  public void showMenu() {
 		  
@@ -123,35 +150,28 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
 		  play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		  gamePanel.setFullGamePanel(play); //IMPORTANTE
+		 
 		  switchTo(play);
 	  }
 	  
 	  @Override
 	  public void showFirstStage() {
-		  
 		  firstStage.repaint();
 		  switchTo(firstStage);
 	  }
 	  
 	  @Override
 	  public void showSecondStage() {
-		 
 		  secondStage.repaint();
 		  switchTo(secondStage);
 	  }
 	  
 	  @Override
-	  public void showScores(String stage) {
-		  
+	  public void showScores(String stage) {  
 		  scores = new ScoresPanel(WIDTH, HEIGHT, this, gameManager, stage);
 		  switchTo(scores);
 	  }
 	  
-	  @Override
-	  public void showNetworkGame() {
-		  //TODO
-	  }
-	
 	  @Override
 	  public void showConstruction() {
 		  switchTo(editor);
@@ -161,12 +181,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	  public void showSettings() {
 		  switchTo(settings);
 	  }
-	
+	  
+	  @Override
 	  public void showNetwork() {
 		  switchTo(network);
 	  }
 	  
-	  public GameManager startNetworkGame(ConnectionManager connectionManager, JTextField filename) {
+	  public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename) {
 		  gamePanel = new GamePanel();
 		  gameManager = gamePanel.startNetwork(connectionManager);
 		  gamePanel.setGame(gameManager);
@@ -174,8 +195,24 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  switchTo(play);
 		  return gameManager;
 	  }
-	  
+	   
 	  public static void main(String[] args) {
 		   new MainFrame();
 	  }
+
+	  public SoundsProvider getSounds() {
+		return sounds;
+	}
+
+	  public void setSounds(SoundsProvider sounds) {
+		this.sounds = sounds;
+	}
+
+	  public ImageProvider getImages() {
+		return images;
+	}
+
+	  public void setImages(ImageProvider images) {
+		this.images = images;
+	}
 }

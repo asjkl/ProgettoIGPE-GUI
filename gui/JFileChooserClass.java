@@ -106,7 +106,7 @@ public class JFileChooserClass{
 			if (comp[x] instanceof Container)
 				setFileChooserFont(((Container) comp[x]).getComponents());
 			try {
-				comp[x].setFont(LoadPanel.customFontS);
+				comp[x].setFont(MainFrame.customFontS);
 			} catch (Exception e) {
 			}
 		}

@@ -77,7 +77,7 @@ public class MenuPanel extends JPanel {
 			buttons.get(i).setContentAreaFilled(false);
 			buttons.get(i).setBorderPainted(false);
 			buttons.get(i).setFocusPainted(false);
-			buttons.get(i).setFont(LoadPanel.customFontB);
+			buttons.get(i).setFont(MainFrame.customFontB);
 			buttons.get(i).setForeground(Color.WHITE);
 			buttons.get(i).setBackground(Color.BLACK);
 			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
@@ -219,7 +219,7 @@ public class MenuPanel extends JPanel {
 					SoundsProvider.playBulletHit1();
 					hide = true;
 					setCursorPosition(j);
-					LoadPanel.transparent = true;
+					MainFrame.transparent = true;
 					exitDialog();
 				}
 			});
@@ -289,7 +289,7 @@ public class MenuPanel extends JPanel {
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
 		fullpanel.setLayout(new BoxLayout(fullpanel, BoxLayout.Y_AXIS));
-		label.setFont(LoadPanel.customFontM);
+		label.setFont(MainFrame.customFontM);
 		label.setForeground(Color.WHITE);
 		label.setHorizontalAlignment(JLabel.CENTER);
 		text.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -302,7 +302,7 @@ public class MenuPanel extends JPanel {
 
 			final int curRow = i;
 			bts[i] = new JButton(buttonTxt[i]);
-			bts[i].setFont(LoadPanel.customFontM);
+			bts[i].setFont(MainFrame.customFontM);
 			bts[i].setBackground(Color.BLACK);
 			bts[i].setForeground(Color.WHITE);
 			bts[i].setBorder(null);
@@ -365,7 +365,7 @@ public class MenuPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					LoadPanel.transparent = false;
+					MainFrame.transparent = false;
 					cursorPositionDialog = 0;
 					hide = false;
 					repaint();
@@ -400,14 +400,14 @@ public class MenuPanel extends JPanel {
 			
 			tmp = Integer.parseInt(values[1]);
 			
-			high.setFont(LoadPanel.customFontB);
+			high.setFont(MainFrame.customFontB);
 			high.setBackground(Color.BLACK);
 			high.setForeground(Color.WHITE);
 			high.setText("Hi - " + values[1]);
 			high.setBounds(500, 0, 500, 100);
 		}
 		
-		player.setFont(LoadPanel.customFontB);
+		player.setFont(MainFrame.customFontB);
 		player.setBackground(Color.BLACK);
 		player.setForeground(Color.WHITE);
 		player.setText("I - " + values[0]);
@@ -481,7 +481,7 @@ public class MenuPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if (LoadPanel.transparent) {
+		if (MainFrame.transparent) {
 
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));

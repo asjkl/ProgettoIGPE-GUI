@@ -1,5 +1,4 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
-
 import javax.swing.JTextField;
 
 public interface PanelSwitcher {
@@ -16,11 +15,10 @@ public interface PanelSwitcher {
 
 	void showScores(String s);
 	
-	void showNetworkGame();
+	void showNetwork();
 	
 	void showConstruction();
 	
 	void showSettings();
 	
-	void showNetwork();
 }

@@ -67,7 +67,7 @@ public class StagePanelFirst extends JPanel {
 				maps.get(i).setContentAreaFilled(false);
 				maps.get(i).setBorderPainted(false);
 				maps.get(i).setFocusPainted(false);
-				maps.get(i).setFont(LoadPanel.customFontM);
+				maps.get(i).setFont(MainFrame.customFontM);
 				maps.get(i).setForeground(Color.BLACK);
 				maps.get(i).setHorizontalAlignment( SwingConstants.LEFT);
 			}
@@ -234,7 +234,7 @@ public class StagePanelFirst extends JPanel {
 
 		labelStage = new JLabel();
 		labelStage.setText("Stage " + j);
-		labelStage.setFont(LoadPanel.customFontM);
+		labelStage.setFont(MainFrame.customFontM);
 		labelStage.setBackground(Color.GRAY);
 		labelStage.setForeground(Color.BLACK);
 		labelStage.setBounds(posX + 35, posY + 190, 105, 25);

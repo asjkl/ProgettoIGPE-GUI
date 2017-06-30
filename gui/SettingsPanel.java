@@ -58,9 +58,9 @@ public class SettingsPanel extends JPanel {
 			buttons.add(new JButton());
 			
 			if(i == 0)
-				buttons.get(i).setFont(LoadPanel.customFontM);
+				buttons.get(i).setFont(MainFrame.customFontM);
 			else
-				buttons.get(i).setFont(LoadPanel.customFontB);
+				buttons.get(i).setFont(MainFrame.customFontB);
 				
 			buttons.get(i).setContentAreaFilled(false);
 			buttons.get(i).setBorderPainted(false);

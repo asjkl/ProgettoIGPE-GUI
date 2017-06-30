@@ -23,7 +23,7 @@ public class WarningDialog extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				matrix[0][0]=matrix[0][(matrix[0].length)/2]=matrix[0][(matrix[0].length)-1]=TypeMatrix.EMPTY;
-				LoadPanel.transparent = false;
+				MainFrame.transparent = false;
 			}
 		});
 		timer.setRepeats(false);
@@ -37,7 +37,7 @@ public class WarningDialog extends JDialog{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				LoadPanel.transparent = false;
+				MainFrame.transparent = false;
 			}
 		});
 		timer.setRepeats(false);
@@ -51,7 +51,7 @@ public class WarningDialog extends JDialog{
 		p.setBackground(Color.BLACK);
 		p.setBorder(BorderFactory.createLineBorder(Color.RED));
 		l.setForeground(Color.WHITE);
-		l.setFont(LoadPanel.customFontM);
+		l.setFont(MainFrame.customFontM);
 		p.add(l);
 		
 		add(p);

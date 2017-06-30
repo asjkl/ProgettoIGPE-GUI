@@ -184,7 +184,7 @@ public class StagePanelSecond extends JPanel {
 		
 		labelStage = new JLabel();
 		labelStage.setText("Stage " + j);
-		labelStage.setFont(LoadPanel.customFontM);
+		labelStage.setFont(MainFrame.customFontM);
 		labelStage.setBackground(Color.GRAY);
 		labelStage.setForeground(Color.BLACK);
 		labelStage.setBounds(posX + 35, posY + 190, 110, 25);

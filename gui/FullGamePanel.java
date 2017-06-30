@@ -43,7 +43,7 @@ public class FullGamePanel extends JPanel {
 		labelValueMap.setBounds(1150, 625, 30, 30);
 		labelValueMap.setPreferredSize(new Dimension(30, 30));
 		labelValueMap.setForeground(Color.BLACK);
-		labelValueMap.setFont(LoadPanel.customFontM);
+		labelValueMap.setFont(MainFrame.customFontM);
 		labelValueMap.setText(valueMap);
 		panelOfInfo = new PanelPlayersInfo[2];
 		int position = 50;
@@ -95,7 +95,7 @@ public class FullGamePanel extends JPanel {
 			this.setBackground(Color.GRAY);
 			PlayerLabel = new JLabel(player);
 			PlayerLabel.setPreferredSize(new Dimension(35, 35));
-			PlayerLabel.setFont(LoadPanel.customFontM.deriveFont(Font.BOLD, 25));
+			PlayerLabel.setFont(MainFrame.customFontM.deriveFont(Font.BOLD, 25));
 			PlayerLabel.setBounds(0, 0, 35, 35);
 			PlayerLabel.setForeground(Color.BLACK);
 			this.add(PlayerLabel);
@@ -169,7 +169,7 @@ public class FullGamePanel extends JPanel {
 						lives = Integer.toString(gameManager.getPlayersArray().get(0).getResume());
 				}
 			}
-			g.setFont(LoadPanel.customFontM);
+			g.setFont(MainFrame.customFontM);
 			if (lives != null)
 				g.drawString(lives, 100, 70);
 

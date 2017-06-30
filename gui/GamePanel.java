@@ -79,7 +79,7 @@ public class GamePanel extends JPanel {
 				if (!SoundsProvider.stageStartClip.isActive()) {
 					if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						if (!game.pauseOptionDialog && !game.isExit()) {
-							LoadPanel.transparent = true;
+							MainFrame.transparent = true;
 							game.pauseOptionDialog = true;
 							if (game.getPlayersArray().size() > 1) {
 								game.getPlayersArray().get(0).getKeys().clear();
@@ -167,7 +167,7 @@ public class GamePanel extends JPanel {
 				if (!SoundsProvider.stageStartClip.isActive()) {
 					if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						if (!game.pauseOptionDialog && !game.isExit()) {
-							LoadPanel.transparent = true;
+							MainFrame.transparent = true;
 							game.pauseOptionDialog = true;
 							if (game.getPlayersArray().size() > 1) {
 								game.getPlayersArray().get(0).getKeys().clear();
@@ -204,7 +204,7 @@ public class GamePanel extends JPanel {
 				int keyCode = event.getKeyCode();
 				// MULTIPLAYER
 				if (game.getPlayersArray().size() > 1 && GameManager.offline) {
-					System.out.println("no");
+					
 					if (game.getPlayersArray().get(0).getDefaultKeysPlayer().contains(keyCode) && keyCode != 32) {
 						if (!game.pauseOptionDialog && !game.getPlayersArray().get(0).isDied()) {
 							if (!game.getPlayersArray().get(0).keyBits.get(keyCode) && !game.getPlayersArray().get(0).isPressed())
@@ -502,7 +502,7 @@ public class GamePanel extends JPanel {
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
 		buttons = new JButton[buttonTxt.length];
-		label.setFont(LoadPanel.customFontB);
+		label.setFont(MainFrame.customFontB);
 		label.setForeground(Color.RED);
 		label.setBorder(null);
 		text.add(label);
@@ -516,7 +516,7 @@ public class GamePanel extends JPanel {
 
 			final int curRow = i;
 			buttons[i] = new JButton(buttonTxt[i]);
-			buttons[i].setFont(LoadPanel.customFontM);
+			buttons[i].setFont(MainFrame.customFontM);
 			buttons[i].setBackground(Color.BLACK);
 			buttons[i].setForeground(Color.WHITE);
 			buttons[i].setBorder(null);
@@ -533,7 +533,7 @@ public class GamePanel extends JPanel {
 						((JButton) e.getComponent()).doClick();
 						dialog.dispose();
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-						LoadPanel.transparent = false;
+						MainFrame.transparent = false;
 						game.pauseOptionDialog = false;
 						cursorPositionDialog = 0;
 						dialog.dispose();
@@ -587,7 +587,7 @@ public class GamePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					LoadPanel.transparent = false;
+					MainFrame.transparent = false;
 					game.pauseOptionDialog = false;
 					dialog.dispose();
 				}
@@ -599,7 +599,7 @@ public class GamePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					LoadPanel.transparent = false;
+					MainFrame.transparent = false;
 					game.setExit(true);
 					dialog.dispose();
 					getSwitcher().showGame(game.getFilename());
@@ -614,7 +614,7 @@ public class GamePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					LoadPanel.transparent = false;
+					MainFrame.transparent = false;
 					game.pauseOptionDialog = false;
 					game.setExit(true);
 					dialog.dispose();
@@ -831,7 +831,7 @@ public class GamePanel extends JPanel {
 
 	private void gameOver() {
 
-		LoadPanel.transparent = true;
+		MainFrame.transparent = true;
 		game.setExit(true);
 		MainFrame.slide = true;
 		MenuPanel.unlockedMaps = 1;
@@ -845,7 +845,7 @@ public class GamePanel extends JPanel {
 	private void win() {
 
 		repaint();
-		LoadPanel.transparent = true;
+		MainFrame.transparent = true;
 		game.setExit(true);
 		MenuPanel.unlockedMaps = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
 		SoundsProvider.cancelMove();
@@ -1184,7 +1184,7 @@ public class GamePanel extends JPanel {
 				///
 				long time = 0;
 
-				if (!LoadPanel.transparent)
+				if (!MainFrame.transparent)
 					time = (System.currentTimeMillis() / 200) % 2;
 				///
 
@@ -1682,7 +1682,7 @@ public class GamePanel extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 	
-		if (LoadPanel.transparent) {
+		if (MainFrame.transparent) {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));
 			g2d.setColor(getBackground());
 			g2d.fill(getBounds());

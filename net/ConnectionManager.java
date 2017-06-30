@@ -66,7 +66,7 @@ public class ConnectionManager implements Runnable {
 				buffer = br.readLine();
 			}
 			JTextField filename=new JTextField("stage1.txt");
-			final GameManager gameManager = mainFrame.startNetworkGame(this,filename);
+			final GameManager gameManager = mainFrame.showNetwork(this,filename);
 			buffer = br.readLine();
 			while (buffer != null) {
 				// System.out.println(buffer);
