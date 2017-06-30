@@ -97,16 +97,7 @@ public class GamePanel extends JPanel {
 						if (!game.paused && !game.isExit()) {
 							game.pauseOptionDialog = true;
 							SoundsProvider.playPause();
-							if (game.getPlayersArray().size() > 1) {
-								game.getPlayersArray().get(0).getKeys().clear();
-								game.getPlayersArray().get(1).getKeys().clear();
-							} else {
-								game.getPlayersArray().get(0).getKeys().clear();
-							}
-							
-							//DEVE FARLO IL SERVER
-							game.getPlayersArray().get(0).keyBits.clear();
-							game.getPlayersArray().get(1).keyBits.clear();
+							game.getPlayersArray().get(0).getKeys().clear();	
 							game.paused = true;
 						} else {
 							game.paused = false;
@@ -125,7 +116,7 @@ public class GamePanel extends JPanel {
 					}
 				}
 				game.getPlayersArray().get(0).keyBits.set(keyCode);
-				connectionManager.dispatch(getUpdateMessage(event,"YES", game.getPlayersArray().get(0).getKeyPressedMillis(), game.getPlayersArray().get(0).isReleaseKeyRocket()));
+				connectionManager.dispatch(getUpdateMessage(event,"YES", game.getPlayersArray().get(0).getKeyPressedMillis(), game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
 			}
 
 			@Override
@@ -138,7 +129,7 @@ public class GamePanel extends JPanel {
 				}
 				
 				game.getPlayersArray().get(0).keyBits.clear(keyCode);
-				connectionManager.dispatch(getUpdateMessage(event,"NO",game.getPlayersArray().get(0).getKeyPressedMillis(), game.getPlayersArray().get(0).isReleaseKeyRocket()));
+				connectionManager.dispatch(getUpdateMessage(event,"NO",game.getPlayersArray().get(0).getKeyPressedMillis(), game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
 			}
 		});
 
@@ -430,8 +421,8 @@ public class GamePanel extends JPanel {
 
 	// ----------------------------ONLINE----------------------------------------
 
-	protected String getUpdateMessage(KeyEvent code, String string, long getKeyPressedMillis, boolean isReleaseKeyRocket) {
-		return playerName + ":" + code.getKeyCode()+":"+string+":"+getKeyPressedMillis+":"+isReleaseKeyRocket;
+	protected String getUpdateMessage(KeyEvent code, String string, long getKeyPressedMillis, boolean isReleaseKeyRocket, boolean pauseOptionDialog, boolean paused) {
+		return playerName + ":" + code.getKeyCode()+":"+string+":"+getKeyPressedMillis+":"+isReleaseKeyRocket+":"+pauseOptionDialog+":"+paused;
 	}
 		
 	GameManager startNetwork(ConnectionManager connectionManager) {

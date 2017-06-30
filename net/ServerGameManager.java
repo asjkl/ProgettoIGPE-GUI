@@ -40,7 +40,13 @@ public class ServerGameManager {
 
 	public void received(final String buffer) {
 		final String[] split = buffer.split(":");
+		
 	
+		//BOOLEANE DI SISTEMA
+		gameManager.pauseOptionDialog=Boolean.parseBoolean(split[5]);
+		gameManager.paused=Boolean.parseBoolean(split[6]);
+		
+		
 		for(int a=0; a<gameManager.getPlayersArray().size(); a++){
 			if(gameManager.getPlayersArray().get(a).toString().equals(split[0])){
 				if(split[2].equals("YES")){
