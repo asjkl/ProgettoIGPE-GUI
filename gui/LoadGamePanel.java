@@ -43,6 +43,8 @@ public class LoadGamePanel extends JPanel{
 		
 		timer.setRepeats(false);
 		timer.start();
+		
+		this.setVisible(true);
 		}
 
 		public PanelSwitcher getSwitcher() {

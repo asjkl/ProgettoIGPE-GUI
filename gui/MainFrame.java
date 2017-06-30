@@ -3,7 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.Timer;
+import java.nio.channels.ShutdownChannelGroupException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -49,17 +49,15 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		new ImageProvider();
 	  	this.setLayout(new BorderLayout());
 	  	this.setTitle("BATTLE CITY UNICAL");  
-	  	this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
-	  	this.setResizable(false);
-	  	
+	  	this.setSize(new Dimension(WIDTH,HEIGHT));
+
 	 	load = new LoadPanel(WIDTH, HEIGHT, this);
 	  	this.add(load);
 	  	
+	  	this.setResizable(false);
 	  	this.pack();
 	  	this.setLocationRelativeTo(null);
 	  	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	  	this.setVisible(true);  // lo fa il loading
-	  	
 	}
   
 	public static void main(String[] args) {
@@ -69,7 +67,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	private void instantiate() {
 	
-		//TODO
 		Timer timer = new Timer(4000,  new ActionListener() {
 			
 			@Override
@@ -81,21 +78,16 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		timer.start();
 		
 		new SoundsProvider();
-		
 		setFont();
-		System.out.println("3");
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
 	  	menu = new MenuPanel(WIDTH, HEIGHT, this);
-	  	System.out.println("4");
 	  	player = new PlayerPanel(WIDTH, HEIGHT, this);
 	  	firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
 	  	secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
 	  	editor = new ConstructionPanel(WIDTH, HEIGHT, this);
-	  	System.out.println("5");
 	  	settings = new SettingsPanel(WIDTH, HEIGHT, this);
 	  	images = new ImageProvider();
 	  	sounds = new SoundsProvider();
-	  	System.out.println("6");
   }
 	
 	private void setFont(){
@@ -199,7 +191,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  secondStage.repaint();
 		  switchTo(secondStage);
 	  }
-	  
+	   
 	  @Override
 	  public void showScores(String stage) {  
 		  scores = new ScoresPanel(WIDTH, HEIGHT, this, gameManager, stage);
@@ -214,8 +206,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	  @Override
 	  public void showLoading(JTextField f) {
 		  loadGame = new LoadGamePanel(WIDTH, HEIGHT, this, f); 
-		  switchTo(loadGame);
-		  
+		  switchTo(loadGame); 
 	  }
 	  
 	  @Override
@@ -236,5 +227,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  switchTo(play);
 		  return gameManager;
 	  }
-	   
+
+	 
 }

@@ -22,5 +22,5 @@ public interface PanelSwitcher {
 	void showSettings();
 
 	void showLoading(JTextField f);
-	
+
 }

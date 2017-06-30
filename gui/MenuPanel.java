@@ -181,7 +181,7 @@ public class MenuPanel extends JPanel {
 					if(jfilechooser.functionLoadFile()) {
 						setCursorPosition(0);
 						jfilechooser.getFilename().setText(jfilechooser.getFilename().getText() + ".txt");
-						switcher.showGame(jfilechooser.getFilename());
+						  getSwitcher().showLoading(jfilechooser.getFilename());
 					}
 				}
 			});

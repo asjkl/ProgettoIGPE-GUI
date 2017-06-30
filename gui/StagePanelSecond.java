@@ -155,7 +155,7 @@ public class StagePanelSecond extends JPanel {
 	                    JTextField directory=new JTextField();
 	                    directory.setText(fileChooser.getCurrentDirectory().toString());
 	                    cursorPosition = 0;
-	                    getSwitcher().showGame(fileNameMap);
+	                    getSwitcher().showLoading(fileNameMap);
 					}
 					else {
 						cursorPosition = j;

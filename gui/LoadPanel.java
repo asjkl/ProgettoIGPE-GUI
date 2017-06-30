@@ -28,7 +28,7 @@ public class LoadPanel extends JPanel {
 	public void setProgressBar() {
 		
 		progressBar = new JProgressBar();
-		progressBar.setBounds(1075, 665, 225, 50);
+		progressBar.setBounds(1100, 700, 225, 50);
 		progressBar.setOpaque(false);
 		progressBar.setBorderPainted(false);
 		this.add(progressBar, BorderLayout.NORTH);
