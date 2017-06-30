@@ -1330,7 +1330,7 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getRocketExplosion2(), Y, X, null);
 				else if (inc == 3)
 					g.drawImage(ImageProvider.getRocketExplosion3(), Y, X, null);
-				else if (inc > 3) {
+				else if (inc > 3 && GameManager.offline) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
 					break;
@@ -1353,7 +1353,7 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
 				else if (inc == 5)
 					g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
-				else if (inc > 5) {
+				else if (inc > 5 && GameManager.offline) {
 					game.setWaitToExit(true);
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
@@ -1401,7 +1401,7 @@ public class GamePanel extends JPanel {
 						g.drawImage(ImageProvider.getPoints200(), game.getEffects().get(i).getY() * tile,
 								game.getEffects().get(i).getX() * tile, null);
 					}
-				} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12) {
+				} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12 && GameManager.offline) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
 					break;
@@ -1414,7 +1414,7 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getPoints500(), game.getEffects().get(i).getY() * tile,
 							game.getEffects().get(i).getX() * tile, null);
 				}
-				if (((PowerUp) game.getEffects().get(i)).getInc() >= 12) {
+				if (((PowerUp) game.getEffects().get(i)).getInc() >= 12 && GameManager.offline) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
 					break;
@@ -1718,7 +1718,11 @@ public class GamePanel extends JPanel {
 		
 		paintTrees(g);
 
+		if(!GameManager.offline)
+			game.lock.lock();
 		paintEffects(g, g2d);
+		if(!GameManager.offline)
+			game.lock.unlock();
 
 		paused(g, g2d);
 	}
