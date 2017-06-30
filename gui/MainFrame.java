@@ -3,7 +3,6 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.channels.ShutdownChannelGroupException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -175,8 +174,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  gameManager = new GameManager(filename, PlayerPanel.singlePlayer);	 
 		  gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
 		  play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
-		  gamePanel.setFullGamePanel(play); //IMPORTANTE
-		 
+		  gamePanel.setFullGamePanel(play); 
 		  switchTo(play);
 	  }
 	  

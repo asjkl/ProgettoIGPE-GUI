@@ -64,7 +64,6 @@ public class GamePanel extends JPanel {
 	
 	//online
 	public GamePanel() {
-		SoundsProvider.playStageStart();
 		this.tile = 35;
 		this.dialog = new JDialog();
 		this.setBackground(Color.BLACK);
@@ -147,7 +146,6 @@ public class GamePanel extends JPanel {
 
 	//offline
 	public GamePanel(final int w, final int h, PanelSwitcher switcher, GameManager game) {
-		SoundsProvider.playStageStart();
 		this.setPreferredSize(new Dimension(w, h));
 		this.setGame(game);
 		this.shift = 17;
@@ -1670,11 +1668,15 @@ public class GamePanel extends JPanel {
 	}
 	
 	private void stroke(Graphics g, Graphics2D g2d){
+		if (MainFrame.transparent)
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 		g.setColor(Color.GRAY);
 		Stroke oldStroke = g2d.getStroke();
 		g2d.setStroke(new BasicStroke(shift * 2 - 2));
 		g2d.drawRect(1, 1, this.getWidth() - 3, this.getHeight() - 2);
 		g2d.setStroke(oldStroke);
+		if (MainFrame.transparent)
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
 	}
 	
 	@Override
