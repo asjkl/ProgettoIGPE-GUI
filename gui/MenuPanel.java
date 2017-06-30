@@ -71,7 +71,7 @@ public class MenuPanel extends JPanel {
 
 			final int curRow = i;
 
-			buttons.add(new JButton());
+			buttons.add(new JButton("fef"));
 			buttons.get(i).setBorder(null);
 			buttons.get(i).setOpaque(false);
 			buttons.get(i).setContentAreaFilled(false);

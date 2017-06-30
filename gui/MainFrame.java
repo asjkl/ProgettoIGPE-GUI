@@ -3,9 +3,10 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
-
 import net.ConnectionManager;
 import net.NetworkPanel;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
@@ -14,59 +15,108 @@ import progettoIGPE.davide.giovanni.unical2016.GameManager;
 public class MainFrame extends JFrame implements PanelSwitcher {
 	
 //  private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
-  private final int WIDTH = 1300;
-  private final int HEIGHT = 740;
-  private final int gameWidth = WIDTH - 565;
-  private final int gameHeight = HEIGHT - 40;
-  
-  public static boolean slide = true;
-  public static Font customFontM;
-  public static Font customFontB;
-  public static Font customFontS;
-  public static boolean transparent = false;
-  private GraphicsEnvironment graphicscEnvironment;
-  
-  private NetworkPanel network;
-  private MenuPanel menu;
-  private PlayerPanel player; 
-  private StagePanelFirst firstStage;
-  private StagePanelSecond secondStage;
-  private ScoresPanel scores;
-  private ConstructionPanel editor;
-  private SettingsPanel settings;
-  private SlideContainer slideContainer;
-  public FullGamePanel play; 
-  private GameManager gameManager;
-  public GamePanel gamePanel;
-  private SoundsProvider sounds;
-  private ImageProvider images;
-  
-  public MainFrame() {
-	  	
-		 setFont();
-		 network = new NetworkPanel(WIDTH, HEIGHT, this);
-	  	 menu = new MenuPanel(WIDTH, HEIGHT, this);
-	  	 
-	  	 player = new PlayerPanel(WIDTH, HEIGHT, this);
-	  	 firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
-	  	 secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
-	  	 editor = new ConstructionPanel(WIDTH, HEIGHT, this);
-	  	 settings = new SettingsPanel(WIDTH, HEIGHT, this);
-	  	 setImages(new ImageProvider());
-	  	 setSounds(new SoundsProvider());
+	private final int WIDTH = 1300;
+	private final int HEIGHT = 740;
+	private final int gameWidth = WIDTH - 565;
+  	private final int gameHeight = HEIGHT - 40;
+ 
+	public static Font customFontM;
+	public static Font customFontB;
+	public static Font customFontS;
+	public static boolean transparent = false;
+	public static boolean slide = true;
+	private GraphicsEnvironment graphicscEnvironment;
 
-	  	 this.setLayout(new BorderLayout());
-	  	 this.setTitle("BATTLE CITY UNICAL");  
-	     this.setResizable(false);
-	     switchTo(menu);
-	     this.pack();
-	     this.setLocationRelativeTo(null);
-	     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	     this.setVisible(true);
-	    
-  	}
-  	
-	  public void switchTo(JComponent component) {   
+	public NetworkPanel network;
+	public MenuPanel menu;
+	public PlayerPanel player; 
+	public StagePanelFirst firstStage;
+	public StagePanelSecond secondStage;
+	public ScoresPanel scores;
+	public ConstructionPanel editor;
+	public SettingsPanel settings;
+	public SlideContainer slideContainer;
+	public FullGamePanel play; 
+	public GameManager gameManager;
+	public GamePanel gamePanel;
+	public SoundsProvider sounds;
+	public ImageProvider images;
+	public LoadGamePanel loadGame;
+	public LoadPanel load;
+	
+	public MainFrame(){
+	
+		new ImageProvider();
+	  	this.setLayout(new BorderLayout());
+	  	this.setTitle("BATTLE CITY UNICAL");  
+	  	this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+	  	this.setResizable(false);
+	  	
+	 	load = new LoadPanel(WIDTH, HEIGHT, this);
+	  	this.add(load);
+	  	
+	  	this.pack();
+	  	this.setLocationRelativeTo(null);
+	  	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//	  	this.setVisible(true);  // lo fa il loading
+	  	
+	}
+  
+	public static void main(String[] args) {
+		  MainFrame main =  new MainFrame();
+		  main.instantiate();
+	 }
+
+	private void instantiate() {
+	
+		//TODO
+		Timer timer = new Timer(4000,  new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showMenu();
+			}
+		});		
+		timer.setRepeats(false);
+		timer.start();
+		
+		new SoundsProvider();
+		
+		setFont();
+		System.out.println("3");
+		network = new NetworkPanel(WIDTH, HEIGHT, this);
+	  	menu = new MenuPanel(WIDTH, HEIGHT, this);
+	  	System.out.println("4");
+	  	player = new PlayerPanel(WIDTH, HEIGHT, this);
+	  	firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
+	  	secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
+	  	editor = new ConstructionPanel(WIDTH, HEIGHT, this);
+	  	System.out.println("5");
+	  	settings = new SettingsPanel(WIDTH, HEIGHT, this);
+	  	images = new ImageProvider();
+	  	sounds = new SoundsProvider();
+	  	System.out.println("6");
+  }
+	
+	private void setFont(){
+		
+		try {
+			
+			customFontM = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f);
+			customFontB = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f);
+			customFontS = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f);
+			graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
+		
+		} catch(IOException e) {
+			e.printStackTrace();
+			
+		} catch(FontFormatException e) {
+			e.printStackTrace();
+		}
+	}
+  
+	public void switchTo(JComponent component) {   
 		 this.getContentPane().removeAll();
 		 this.add(component);
 		 this.validate();
@@ -75,7 +125,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		 selectFocusButton(component);
 	}
 
-	  private void selectFocusButton(JComponent component) {
+	private void selectFocusButton(JComponent component) {
 		  
 		  if(component instanceof MenuPanel) { 
 			  ((MenuPanel)component).getButton(menu.getCursorPosition()).requestFocus();
@@ -106,26 +156,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			  }
 	  }
 	  
-	  private void setFont(){
-			
-			try {
-				
-				customFontM = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f);
-				customFontB = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f);
-				customFontS = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f);
-				graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-				graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
-			
-			} catch(IOException e) {
-				e.printStackTrace();
-				
-			} catch(FontFormatException e) {
-				e.printStackTrace();
-			}
-		}
-	  
+	//-----------------------------override methods-----------------------------------
+	
 	  @Override
-	  public void showMenu() {
+	 public void showMenu() {
 		  
 		  menu.drawScore();
 		  GameManager.offline = false;
@@ -136,13 +170,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  	slide = false;
 		  }
 		  else 
-			  switchTo(menu);
+			switchTo(menu);
 	  }
 	  
-	  @Override
-	  public void showPlayer() {
+	 @Override
+	 public void showPlayer() {
 		  switchTo(player);
-	  }
+	 }
 	  
 	  @Override
 	  public void showGame(JTextField filename) { 
@@ -176,6 +210,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	  public void showConstruction() {
 		  switchTo(editor);
 	  }
+	 
+	  @Override
+	  public void showLoading(JTextField f) {
+		  loadGame = new LoadGamePanel(WIDTH, HEIGHT, this, f); 
+		  switchTo(loadGame);
+		  
+	  }
 	  
 	  @Override
 	  public void showSettings() {
@@ -196,23 +237,4 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  return gameManager;
 	  }
 	   
-	  public static void main(String[] args) {
-		   new MainFrame();
-	  }
-
-	  public SoundsProvider getSounds() {
-		return sounds;
-	}
-
-	  public void setSounds(SoundsProvider sounds) {
-		this.sounds = sounds;
-	}
-
-	  public ImageProvider getImages() {
-		return images;
-	}
-
-	  public void setImages(ImageProvider images) {
-		this.images = images;
-	}
 }
