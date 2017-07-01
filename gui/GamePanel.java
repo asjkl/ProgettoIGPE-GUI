@@ -288,7 +288,6 @@ public class GamePanel extends JPanel {
 	}
 	
 	public void logic() {
-			
 		
 		// MANAGE KEYS
 		keyPresses();
@@ -587,6 +586,7 @@ public class GamePanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					SoundsProvider.playStageStart();
 					SoundsProvider.playBulletHit1();
 					MainFrame.transparent = false;
 					game.setExit(true);
@@ -813,9 +813,10 @@ public class GamePanel extends JPanel {
 			game.getEffects().add(p);
 		} else if (p.getDuration() != 0) {
 			game.sumPowerUp(t, p);
+			game.getPower().remove(p);
 		}
-		// t.setNext(p.getBefore()); //da vedere
-		t.setNext(null); // da vedere
+		t.setNext(null); // da vedere 
+		t.setCurr(null); // da vedere
 	}
 
 	private void gameOver() {
@@ -950,7 +951,7 @@ public class GamePanel extends JPanel {
 
 				game.getEnemy().get(a).setTmpDirection(game.getEnemy().get(a).getDirection());
 
-				if (GameManager.currentTime % 2 == 0)
+				if (game.isShotEnabled() && GameManager.currentTime % 2 == 0)
 					game.createRocketTank(game.getEnemy().get(a).getDirection(), game.getEnemy().get(a));
 			}
 		}
@@ -1398,6 +1399,7 @@ public class GamePanel extends JPanel {
 					break;
 				}
 			}
+		
 			// PowerUp points
 			if (game.getEffects().get(i) instanceof PowerUp) {
 				if (((PowerUp) game.getEffects().get(i)).getInc() > 5
@@ -1597,44 +1599,46 @@ public class GamePanel extends JPanel {
 						}
 					}
 				}
-
-				// paintPowerUp
-				if (game.getMatrix().world[a][b] instanceof PowerUp) {
-					PowerUp power = (PowerUp) game.getMatrix().world[a][b];
-
-					if (power.isBlink() && !game.pauseOptionDialog) {
-						if ((System.currentTimeMillis() / 400) % 2 == 0) {
-							paintPowerUp(g, power);
-						} else {
-							// ice
-							if (power.getBefore() instanceof Ice)
-								g.drawImage(ImageProvider.getIce(), power.getY() * tile, power.getX() * tile, null);
-							// steel
-							else if (power.getBefore() instanceof SteelWall)
-								g.drawImage(ImageProvider.getSteel(), power.getY() * tile, power.getX() * tile, null);
-							// tree
-							else if (power.getBefore() instanceof Tree) {
-								g.drawImage(ImageProvider.getTree(), power.getY() * tile, power.getX() * tile, null);
-							} else if (power.getBefore() instanceof Water) {
-
-								if (power.getBeforeWater() instanceof BrickWall) {
-									g.drawImage(ImageProvider.getBrick(), power.getY() * tile, power.getX() * tile,
-											null);
-								} else if (power.getBeforeWater() instanceof SteelWall) {
-									g.drawImage(ImageProvider.getSteel(), power.getY() * tile, power.getX() * tile,
-											null);
-								} else if (power.getBeforeWater() instanceof Tree) {
-									g.drawImage(ImageProvider.getTree(), power.getY() * tile, power.getX() * tile,
-											null);
-								} else if (power.getBeforeWater() instanceof Ice) {
-									g.drawImage(ImageProvider.getIce(), power.getY() * tile, power.getX() * tile, null);
-								}
-							}
-
-						}
-					} else {
+			}
+		}
+		
+		// paintPowerUp
+		for(int a=0; a<game.getPower().size(); a++){
+			if (!game.getPower().get(a).isActivate()) {
+				PowerUp power = game.getPower().get(a);
+	
+				if (power.isBlink() && !game.pauseOptionDialog) {
+					if ((System.currentTimeMillis() / 400) % 2 == 0) {
 						paintPowerUp(g, power);
+					} else {
+						// ice
+						if (power.getBefore() instanceof Ice)
+							g.drawImage(ImageProvider.getIce(), power.getY() * tile, power.getX() * tile, null);
+						// steel
+						else if (power.getBefore() instanceof SteelWall)
+							g.drawImage(ImageProvider.getSteel(), power.getY() * tile, power.getX() * tile, null);
+						// tree
+						else if (power.getBefore() instanceof Tree) {
+							g.drawImage(ImageProvider.getTree(), power.getY() * tile, power.getX() * tile, null);
+						} else if (power.getBefore() instanceof Water) {
+	
+							if (power.getBeforeWater() instanceof BrickWall) {
+								g.drawImage(ImageProvider.getBrick(), power.getY() * tile, power.getX() * tile,
+										null);
+							} else if (power.getBeforeWater() instanceof SteelWall) {
+								g.drawImage(ImageProvider.getSteel(), power.getY() * tile, power.getX() * tile,
+										null);
+							} else if (power.getBeforeWater() instanceof Tree) {
+								g.drawImage(ImageProvider.getTree(), power.getY() * tile, power.getX() * tile,
+										null);
+							} else if (power.getBeforeWater() instanceof Ice) {
+								g.drawImage(ImageProvider.getIce(), power.getY() * tile, power.getX() * tile, null);
+							}
+						}
+	
 					}
+				} else {
+					paintPowerUp(g, power);
 				}
 			}
 		}

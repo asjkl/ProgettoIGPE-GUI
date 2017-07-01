@@ -2,20 +2,16 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class LoadGamePanel extends JPanel{
 	private PanelSwitcher switcher;
-	private JProgressBar progressBar;
 	private JTextField filename;
 	
 	LoadGamePanel(final int w, final int h, PanelSwitcher switcher, JTextField filename){
@@ -26,7 +22,7 @@ public class LoadGamePanel extends JPanel{
 		this.setLayout(null);
 		this.setFilename(filename);
 		
-		JLabel label = new JLabel("LOADING");
+		JLabel label = new JLabel("a brutta copia");
 		label.setForeground(Color.BLACK);
 		label.setFont(MainFrame.customFontM);
 		label.setBounds(500, 300, 200, 40);
@@ -53,20 +49,12 @@ public class LoadGamePanel extends JPanel{
 			this.switcher = switcher;
 		}
 
-
 		public JTextField getFilename() {
 			return filename;
 		}
 
-
 		public void setFilename(JTextField filename) {
 			this.filename = filename;
-		}
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-
-			g.drawImage(ImageProvider.getLoading(), progressBar.getX(), progressBar.getY(), this);
 		}
 
 }

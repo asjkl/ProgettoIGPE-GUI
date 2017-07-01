@@ -24,6 +24,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public static Font customFontS;
 	public static boolean transparent = false;
 	public static boolean slide = true;
+	public static boolean startThread = false;
 	private GraphicsEnvironment graphicscEnvironment;
 
 	public NetworkPanel network;
@@ -149,8 +150,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	  
 	//-----------------------------override methods-----------------------------------
 	
-	  @Override
-	 public void showMenu() {
+	@Override
+	public void showMenu() {
 		  
 		  menu.drawScore();
 		  GameManager.offline = false;
@@ -164,60 +165,60 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			switchTo(menu);
 	  }
 	  
-	 @Override
-	 public void showPlayer() {
+	@Override
+	public void showPlayer() {
 		  switchTo(player);
-	 }
+	}
 	  
-	  @Override
-	  public void showGame(JTextField filename) { 
+	@Override
+    public void showGame(JTextField filename) { 
 		  gameManager = new GameManager(filename, PlayerPanel.singlePlayer);	 
 		  gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
 		  play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		  gamePanel.setFullGamePanel(play); 
 		  switchTo(play);
-	  }
-	  
-	  @Override
-	  public void showFirstStage() {
-		  firstStage.repaint();
-		  switchTo(firstStage);
-	  }
-	  
-	  @Override
-	  public void showSecondStage() {
-		  secondStage.repaint();
-		  switchTo(secondStage);
-	  }
-	   
-	  @Override
-	  public void showScores(String stage) {  
-		  scores = new ScoresPanel(WIDTH, HEIGHT, this, gameManager, stage);
-		  switchTo(scores);
-	  }
-	  
-	  @Override
-	  public void showConstruction() {
-		  switchTo(editor);
-	  }
-	 
-	  @Override
-	  public void showLoading(JTextField f) {
-		  loadGame = new LoadGamePanel(WIDTH, HEIGHT, this, f); 
-		  switchTo(loadGame); 
-	  }
-	  
-	  @Override
-	  public void showSettings() {
-		  switchTo(settings);
-	  }
-	  
-	  @Override
-	  public void showNetwork() {
-		  switchTo(network);
-	  }
-	  
-	  public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename) {
+    }
+  
+    @Override
+    public void showFirstStage() {
+	  firstStage.repaint();
+	  switchTo(firstStage);
+    }
+  
+    @Override
+    public void showSecondStage() {
+	  secondStage.repaint();
+	  switchTo(secondStage);
+    }
+    
+    @Override
+    public void showScores(String stage) {  
+	  scores = new ScoresPanel(WIDTH, HEIGHT, this, gameManager, stage);
+	  switchTo(scores);
+    }
+  
+    @Override
+    public void showConstruction() {
+	  switchTo(editor);
+    }
+ 
+    @Override
+    public void showLoading(JTextField f) {
+	  loadGame = new LoadGamePanel(WIDTH, HEIGHT, this, f); 
+	  switchTo(loadGame); 
+   }
+  
+    @Override
+    public void showSettings() {
+	  switchTo(settings);
+    }
+  
+    @Override
+    public void showNetwork() {
+	  switchTo(network);
+    }
+  
+    public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename) {
 		  gamePanel = new GamePanel();
 		  gameManager = gamePanel.startNetwork(connectionManager);
 		  gamePanel.setGame(gameManager);
@@ -225,6 +226,5 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  switchTo(play);
 		  return gameManager;
 	  }
-
 	 
 }
