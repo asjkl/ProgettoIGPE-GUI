@@ -22,22 +22,23 @@ public class FullGamePanel extends JPanel {
 	private JLabel labelValueMap;
 	private PanelPlayersInfo[] panelOfInfo;
 	private int x;
-	private int y;	
+	private int y;
 	public int shift = 17;
 
-	public FullGamePanel(final int WIDTH, int HEIGHT, int gameWidth, int gameHeight, PanelSwitcher switcher,GamePanel gamePanel) {
+	public FullGamePanel(final int WIDTH, int HEIGHT, int gameWidth, int gameHeight, PanelSwitcher switcher,
+			GamePanel gamePanel) {
 
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setLayout(null);
 		setBackground(Color.GRAY);
 		this.gamePanel = gamePanel;
 		this.gameManager = gamePanel.getGame();
-		
+
 		// +30 importante ( effects explosion )
-	
+
 		gamePanel.setFocusable(true);
-		gamePanel.setBounds(282-shift, 20-shift, gameWidth+shift*2+3, gameHeight+shift*2);
-		if(GameManager.offline)
+		gamePanel.setBounds(282 - shift, 20 - shift, gameWidth + shift * 2 + 3, gameHeight + shift * 2);
+		if (GameManager.offline)
 			valueMap = gameManager.getFilename().getText().replaceAll("[^0-9]", "");
 		labelValueMap = new JLabel();
 		labelValueMap.setBounds(1150, 625, 30, 30);
@@ -47,7 +48,7 @@ public class FullGamePanel extends JPanel {
 		labelValueMap.setText(valueMap);
 		panelOfInfo = new PanelPlayersInfo[2];
 		int position = 50;
-		for (int a = 0; a < gameManager.getPlayersArray().size(); a++) {			
+		for (int a = 0; a < gameManager.getPlayersArray().size(); a++) {
 			panelOfInfo[a] = new PanelPlayersInfo(gameManager.getPlayersArray().get(a).toString());
 			panelOfInfo[a].setForeground(Color.BLACK);
 			panelOfInfo[a].setBounds(10, position, 250, 300);
@@ -107,66 +108,47 @@ public class FullGamePanel extends JPanel {
 			g.setColor(Color.BLACK);
 			String lives = null;
 
-			if (player.equals("P1")) {
-				if(gameManager.getPlayersArray().get(0).getResume()<0){
-					((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
-				}
-				
-				if (gameManager.getPlayersArray().get(0).getLevel() == 0) {
-					g.drawImage(ImageProvider.getPlayer1A(), 60, 20, 40, 40, null);
-				} else if (gameManager.getPlayersArray().get(0).getLevel() == 1) {
-					g.drawImage(ImageProvider.getPlayer1A_s1(), 60, 20, 40, 40, null);
-				} else if (gameManager.getPlayersArray().get(0).getLevel() == 2) {
-					g.drawImage(ImageProvider.getPlayer1A_s2(), 60, 20, 40, 40, null);
-				} else if (gameManager.getPlayersArray().get(0).getLevel() == 3) {
-					g.drawImage(ImageProvider.getPlayer1A_s3(), 60, 20, 40, 40, null);
-				}
-				
-				((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-				
-				if (gameManager.getPlayersArray().get(0).getResume() >= 0)
-					lives = Integer.toString(gameManager.getPlayersArray().get(0).getResume());
-			} else if (player.equals("P2")) {
-				if (gameManager.getPlayersArray().size() > 1) {
-					
-					if(gameManager.getPlayersArray().get(1).getResume()<0){
+			for (int a = 0; a < gameManager.getPlayersArray().size(); a++) {
+				if (gameManager.getPlayersArray().get(a).toString().equals("P1") && player.equals("P1")) {
+					if (gameManager.getPlayersArray().get(a).getResume() < 0) {
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
 					}
-					
-					if (gameManager.getPlayersArray().get(1).getLevel() == 0) {
-						g.drawImage(ImageProvider.getPlayer2A(), 60, 20, 40, 40, null);
-					} else if (gameManager.getPlayersArray().get(1).getLevel() == 1) {
-						g.drawImage(ImageProvider.getPlayer2A_s1(), 60, 20, 40, 40, null);
-					} else if (gameManager.getPlayersArray().get(1).getLevel() == 2) {
-						g.drawImage(ImageProvider.getPlayer2A_s2(), 60, 20, 40, 40, null);
-					} else if (gameManager.getPlayersArray().get(1).getLevel() == 3) {
-						g.drawImage(ImageProvider.getPlayer2A_s3(), 60, 20, 40, 40, null);
-					}
-					
-					((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-					
-					if (gameManager.getPlayersArray().get(1).getResume() >= 0)
-						lives = Integer.toString(gameManager.getPlayersArray().get(1).getResume());
-				} else {
-					
-					if(gameManager.getPlayersArray().get(0).getResume()<0){
-						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
-					}
-					
-					if (gameManager.getPlayersArray().get(0).getLevel() == 0) {
-						g.drawImage(ImageProvider.getPlayer2A(), 60, 20, 40, 40, null);
-					} else if (gameManager.getPlayersArray().get(0).getLevel() == 1) {
-						g.drawImage(ImageProvider.getPlayer2A_s1(), 60, 20, 40, 40, null);
-					} else if (gameManager.getPlayersArray().get(0).getLevel() == 2) {
-						g.drawImage(ImageProvider.getPlayer2A_s2(), 60, 20, 40, 40, null);
-					} else if (gameManager.getPlayersArray().get(0).getLevel() == 3) {
-						g.drawImage(ImageProvider.getPlayer2A_s3(), 60, 20, 40, 40, null);
+					if (gameManager.getPlayersArray().get(a).getLevel() == 0) {
+						g.drawImage(ImageProvider.getPlayer1A(), 60, 20, 40, 40, null);
+					} else if (gameManager.getPlayersArray().get(a).getLevel() == 1) {
+						g.drawImage(ImageProvider.getPlayer1A_s1(), 60, 20, 40, 40, null);
+					} else if (gameManager.getPlayersArray().get(a).getLevel() == 2) {
+						g.drawImage(ImageProvider.getPlayer1A_s2(), 60, 20, 40, 40, null);
+					} else if (gameManager.getPlayersArray().get(a).getLevel() == 3) {
+						g.drawImage(ImageProvider.getPlayer1A_s3(), 60, 20, 40, 40, null);
 					}
 
 					((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-					
-					if (gameManager.getPlayersArray().get(0).getResume() >= 0)
-						lives = Integer.toString(gameManager.getPlayersArray().get(0).getResume());
+
+					if (gameManager.getPlayersArray().get(a).getResume() >= 0)
+						lives = Integer.toString(gameManager.getPlayersArray().get(a).getResume());
+				} else if (gameManager.getPlayersArray().get(a).toString().equals("P2") && player.equals("P2")) {
+					if (gameManager.getPlayersArray().size() > 1) {
+
+						if (gameManager.getPlayersArray().get(a).getResume() < 0) {
+							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+						}
+
+						if (gameManager.getPlayersArray().get(a).getLevel() == 0) {
+							g.drawImage(ImageProvider.getPlayer2A(), 60, 20, 40, 40, null);
+						} else if (gameManager.getPlayersArray().get(a).getLevel() == 1) {
+							g.drawImage(ImageProvider.getPlayer2A_s1(), 60, 20, 40, 40, null);
+						} else if (gameManager.getPlayersArray().get(a).getLevel() == 2) {
+							g.drawImage(ImageProvider.getPlayer2A_s2(), 60, 20, 40, 40, null);
+						} else if (gameManager.getPlayersArray().get(a).getLevel() == 3) {
+							g.drawImage(ImageProvider.getPlayer2A_s3(), 60, 20, 40, 40, null);
+						}
+
+						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+
+						if (gameManager.getPlayersArray().get(a).getResume() >= 0)
+							lives = Integer.toString(gameManager.getPlayersArray().get(a).getResume());
+					}
 				}
 			}
 			g.setFont(MainFrame.customFontM);
@@ -176,12 +158,13 @@ public class FullGamePanel extends JPanel {
 			x = 25;
 			y = 50;
 			int cont = 0;
-			
-			if(!GameManager.offline)	
+
+			if (!GameManager.offline)
 				gameManager.lock.lock();
-			
+
 			for (int a = 0; a < gameManager.getPower().size(); a++) {
-				if (gameManager.getPower().get(a).isActivate() && gameManager.getPower().get(a).getTank() instanceof PlayerTank
+				if (gameManager.getPower().get(a).isActivate()
+						&& gameManager.getPower().get(a).getTank() instanceof PlayerTank
 						&& (gameManager.getPower().get(a).getTank().toString().equals(player)
 								|| (gameManager.getPower().get(a).getPowerUp() == Power.SHOVEL))) {
 					if (cont % 3 == 0) {
@@ -189,7 +172,7 @@ public class FullGamePanel extends JPanel {
 						y += 80;
 					}
 					String time = Integer.toString((int) gameManager.getPower().get(a).getTime());
-	
+
 					if (gameManager.getPower().get(a).getPowerUp() == Power.HELMET) {
 						g.drawImage(ImageProvider.getHelmet(), x, y, null);
 						g.drawString(time, x, y + 70);
@@ -204,7 +187,7 @@ public class FullGamePanel extends JPanel {
 					cont++;
 				}
 			}
-			if(!GameManager.offline)
+			if (!GameManager.offline)
 				gameManager.lock.unlock();
 		}
 
