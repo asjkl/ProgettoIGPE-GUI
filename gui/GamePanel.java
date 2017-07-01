@@ -80,16 +80,6 @@ public class GamePanel extends JPanel {
 						if (!game.pauseOptionDialog && !game.isExit()) {
 							MainFrame.transparent = true;
 							game.pauseOptionDialog = true;
-							if (game.getPlayersArray().size() > 1) {
-								game.getPlayersArray().get(0).getKeys().clear();
-								game.getPlayersArray().get(1).getKeys().clear();
-							} else {
-								game.getPlayersArray().get(0).getKeys().clear();
-							}
-							
-							//DEVE FARLO IL SERVER
-							game.getPlayersArray().get(0).keyBits.clear();
-							game.getPlayersArray().get(1).keyBits.clear();
 							option();
 						}
 					} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -97,7 +87,6 @@ public class GamePanel extends JPanel {
 						if (!game.paused && !game.isExit()) {
 							game.pauseOptionDialog = true;
 							SoundsProvider.playPause();
-							game.getPlayersArray().get(0).getKeys().clear();	
 							game.paused = true;
 						} else {
 							game.paused = false;
@@ -1695,7 +1684,11 @@ public class GamePanel extends JPanel {
 
 		paintIce(g);
 
+		if(!GameManager.offline)
+			game.lock.lock();
 		paintFlagBrickSteelPower(g);
+		if(!GameManager.offline)
+			game.lock.unlock();
 
 		if(!GameManager.offline)
 			game.lock.lock();
