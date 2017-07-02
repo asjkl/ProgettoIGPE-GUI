@@ -97,4 +97,15 @@ public class ServerGameManager {
 		gamePanel.setGame(gameManager);
 	}
 
+	public void disconnetctedClient(String name) {
+		for(int a=0; a<gameManager.getPlayersArray().size(); a++){
+			if(gameManager.getPlayersArray().get(a).toString().equals(name)){
+				gameManager.getPlayersArray().get(a).setResume(0);
+				gameManager.destroyPlayerTank(gameManager.getPlayersArray().get(a));
+				break;
+			}
+		}
+		System.out.println("Client disconnected: " + name);
+	}
+
 }

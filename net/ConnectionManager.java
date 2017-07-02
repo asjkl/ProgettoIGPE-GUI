@@ -31,9 +31,7 @@ public class ConnectionManager implements Runnable {
 	public void close() {
 		try {
 			socket.close();
-		} catch (final IOException e) {
-			// do nothing
-		}
+		} catch (final IOException e) {}
 	}
 
 	public void dispatch(final String message) {

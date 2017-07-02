@@ -1408,7 +1408,7 @@ public class GamePanel extends JPanel {
 	private void paintPlayer(Graphics g, Graphics2D g2d) {
 
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (game.getPlayersArray().get(a).getResume() >= 0) {
+			if (!game.getPlayersArray().get(a).isDied()) {
 				AffineTransform at = AffineTransform.getTranslateInstance(game.getPlayersArray().get(a).getyGraphics(),
 						game.getPlayersArray().get(a).getxGraphics());
 				rotation(game.getPlayersArray().get(a), game.getPlayersArray().get(a).getTmpDirection());
