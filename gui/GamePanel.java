@@ -443,6 +443,7 @@ public class GamePanel extends JPanel {
 		}
 		// WIN
 		else if (game.getEnemy().size() == 0) {
+			System.out.println("win");
 			win();
 		}
 	}
@@ -832,7 +833,8 @@ public class GamePanel extends JPanel {
 		repaint();
 		MainFrame.transparent = true;
 		game.setExit(true);
-		MenuPanel.unlockedMaps = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
+		if(GameManager.offline)
+			MenuPanel.unlockedMaps = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
 		SoundsProvider.cancelMove();
 		SoundsProvider.cancelStop();
 		SoundsProvider.playStageComplete();
