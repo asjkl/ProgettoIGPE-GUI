@@ -517,10 +517,11 @@ public class GamePanel extends JPanel {
 				public void keyPressed(KeyEvent e) {
 
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						if(GameManager.offline) {
+					
 							((JButton) e.getComponent()).doClick();
-							dialog.dispose();
-						}
+							if(GameManager.offline) {
+								dialog.dispose();
+							}
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						MainFrame.transparent = false;
 						game.pauseOptionDialog = false;
@@ -549,8 +550,7 @@ public class GamePanel extends JPanel {
 
 			buttonspanel.add(buttons[i]);
 			buttonspanel.setBackground(Color.BLACK);
-			if(GameManager.offline)
-				optionActionListener(i);
+			optionActionListener(i);
 		}
 
 		buttonspanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -590,7 +590,7 @@ public class GamePanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
+					if(GameManager.offline) {
 						SoundsProvider.playStageStart();
 						SoundsProvider.playBulletHit1();
 						MainFrame.transparent = false;
@@ -599,6 +599,7 @@ public class GamePanel extends JPanel {
 						getSwitcher().showGame(game.getFilename());
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
+					}
 				}
 			});
 			break;
@@ -873,7 +874,7 @@ public class GamePanel extends JPanel {
 					game.getPlayersArray().get(a).setShot(false);
 				}
 
-				if (!GameManager.offline || game.getPlayersArray().size() == 1) {
+				if ((!GameManager.offline && a == 0) || game.getPlayersArray().size() == 1) {
 					if (!game.getPlayersArray().get(a).isPressed())
 						SoundsProvider.playStop();
 					else
