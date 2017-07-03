@@ -41,7 +41,6 @@ public class ServerGameManager {
 	public void received(final String buffer) {
 		final String[] split = buffer.split(":");
 		
-	
 		if(gameManager!=null){
 			if(split[0].equals("PAINT")){
 				gameManager.setWaitToExit(Boolean.parseBoolean(split[1]));	
@@ -50,6 +49,7 @@ public class ServerGameManager {
 				//BOOLEANE DI SISTEMA
 				gameManager.pauseOptionDialog=Boolean.parseBoolean(split[5]);
 				gameManager.paused=Boolean.parseBoolean(split[6]);
+				gamePanel.setBlink(Long.parseLong(split[7]));
 				
 				for(int a=0; a<gameManager.getPlayersArray().size(); a++){
 					if(gameManager.getPlayersArray().get(a).toString().equals(split[0])){

@@ -49,6 +49,7 @@ public class GamePanel extends JPanel {
 	public int tile;
 	private double end;
 	private long start;
+	private long blink;
 	private int cursorPositionDialog;
 	private static double tempFPS;
 	private PanelSwitcher switcher;
@@ -65,6 +66,7 @@ public class GamePanel extends JPanel {
 	//online
 	public GamePanel() {
 		this.tile = 35;
+		this.blink = -1;
 		this.dialog = new JDialog();
 		this.setBackground(Color.BLACK);
 		this.longTime = new Long(0);
@@ -80,6 +82,8 @@ public class GamePanel extends JPanel {
 						if (!game.pauseOptionDialog && !game.isExit()) {
 							MainFrame.transparent = true;
 							game.pauseOptionDialog = true;
+							
+							//TODO MANDARE SOLO IL PAUSEOPTIONDIALOG come string
 							option();
 						}
 					} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -105,7 +109,8 @@ public class GamePanel extends JPanel {
 					}
 				}
 				game.getPlayersArray().get(0).keyBits.set(keyCode);
-				connectionManager.dispatch(getUpdateMessage(event,"YES", game.getPlayersArray().get(0).getKeyPressedMillis(), game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
+				connectionManager.dispatch(getUpdateMessage(event,"YES", game.getPlayersArray().get(0).getKeyPressedMillis(),
+						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused, blink));
 			}
 
 			@Override
@@ -118,7 +123,8 @@ public class GamePanel extends JPanel {
 				}
 				
 				game.getPlayersArray().get(0).keyBits.clear(keyCode);
-				connectionManager.dispatch(getUpdateMessage(event,"NO",game.getPlayersArray().get(0).getKeyPressedMillis(), game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
+				connectionManager.dispatch(getUpdateMessage(event,"NO",game.getPlayersArray().get(0).getKeyPressedMillis(),
+						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused, blink));
 			}
 		});
 
@@ -128,6 +134,7 @@ public class GamePanel extends JPanel {
 	public GamePanel(final int w, final int h, PanelSwitcher switcher, GameManager game) {
 		this.setPreferredSize(new Dimension(w, h));
 		this.setGame(game);
+		this.blink = -1;
 		this.shift = 17;
 		this.tile = 35;
 		this.dialog = new JDialog();
@@ -266,7 +273,11 @@ public class GamePanel extends JPanel {
 				SoundsProvider.cancelMove();
 				SoundsProvider.cancelStop();
 			}
-
+			
+			//TODO
+			if(game.paused && !GameManager.offline)
+				// mandare sempre il blink some stringa
+			
 			repaint();
 			if(fullGamePanel != null)
 				fullGamePanel.repaint();
@@ -409,8 +420,10 @@ public class GamePanel extends JPanel {
 
 	// ----------------------------ONLINE----------------------------------------
 
-	protected String getUpdateMessage(KeyEvent code, String string, long getKeyPressedMillis, boolean isReleaseKeyRocket, boolean pauseOptionDialog, boolean paused) {
-		return playerName + ":" + code.getKeyCode()+":"+string+":"+getKeyPressedMillis+":"+isReleaseKeyRocket+":"+pauseOptionDialog+":"+paused;
+	protected String getUpdateMessage(KeyEvent code, String string, long getKeyPressedMillis, 
+			boolean isReleaseKeyRocket, boolean pauseOptionDialog, boolean paused, long blink) {
+		return playerName + ":" + code.getKeyCode()+":"+string+":"+getKeyPressedMillis+":"+
+			isReleaseKeyRocket+":"+pauseOptionDialog+":"+paused+":"+blink;
 	}
 	
 	protected String getUpdatePaintComponent(boolean isWaitToExit){
@@ -1656,7 +1669,8 @@ public class GamePanel extends JPanel {
 	}
 	
 	private void paused(Graphics g, Graphics2D g2d){
-		if (game.paused && (System.currentTimeMillis() / 400) % 2 == 0) {
+		blink = (System.currentTimeMillis() / 400);
+		if (game.paused && blink % 2 == 0) {
 			g2d.drawImage(ImageProvider.getPause(), this.getWidth() / 2 - (70 + shift), getHeight() / 2 - (45 + shift), null);
 		}
 	}
@@ -1757,6 +1771,14 @@ public class GamePanel extends JPanel {
 
 	public void setFullGamePanel(FullGamePanel fullGamePanel) {
 		this.fullGamePanel = fullGamePanel;
+	}
+
+	public long getBlink() {
+		return blink;
+	}
+
+	public void setBlink(long blink) {
+		this.blink = blink;
 	}
 
 }
