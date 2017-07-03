@@ -5,8 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-
-	int port;
+ 
+	int port; 
 	ServerSocket serverSocket;
 	
 	public static void main(String[] args) throws IOException {

@@ -49,7 +49,6 @@ public class GamePanel extends JPanel {
 	public int tile;
 	private double end;
 	private long start;
-	private long blink;
 	private int cursorPositionDialog;
 	private static double tempFPS;
 	private PanelSwitcher switcher;
@@ -66,7 +65,6 @@ public class GamePanel extends JPanel {
 	//online
 	public GamePanel() {
 		this.tile = 35;
-		this.blink = -1;
 		this.dialog = new JDialog();
 		this.setBackground(Color.BLACK);
 		this.longTime = new Long(0);
@@ -82,19 +80,14 @@ public class GamePanel extends JPanel {
 						if (!game.pauseOptionDialog && !game.isExit()) {
 							MainFrame.transparent = true;
 							game.pauseOptionDialog = true;
-							
-							//TODO MANDARE SOLO IL PAUSEOPTIONDIALOG come string
 							option();
 						}
 					} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-
 						if (!game.paused && !game.isExit()) {
-							game.pauseOptionDialog = true;
 							SoundsProvider.playPause();
 							game.paused = true;
 						} else {
 							game.paused = false;
-							game.pauseOptionDialog = false;
 						}
 					}
 
@@ -110,7 +103,7 @@ public class GamePanel extends JPanel {
 				}
 				game.getPlayersArray().get(0).keyBits.set(keyCode);
 				connectionManager.dispatch(getUpdateMessage(event,"YES", game.getPlayersArray().get(0).getKeyPressedMillis(),
-						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused, blink));
+						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
 			}
 
 			@Override
@@ -124,7 +117,7 @@ public class GamePanel extends JPanel {
 				
 				game.getPlayersArray().get(0).keyBits.clear(keyCode);
 				connectionManager.dispatch(getUpdateMessage(event,"NO",game.getPlayersArray().get(0).getKeyPressedMillis(),
-						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused, blink));
+						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
 			}
 		});
 
@@ -134,7 +127,6 @@ public class GamePanel extends JPanel {
 	public GamePanel(final int w, final int h, PanelSwitcher switcher, GameManager game) {
 		this.setPreferredSize(new Dimension(w, h));
 		this.setGame(game);
-		this.blink = -1;
 		this.shift = 17;
 		this.tile = 35;
 		this.dialog = new JDialog();
@@ -167,7 +159,6 @@ public class GamePanel extends JPanel {
 					} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
 
 						if (!game.paused && !game.isExit()) {
-							game.pauseOptionDialog = true;
 							SoundsProvider.playPause();
 							if (game.getPlayersArray().size() > 1) {
 								game.getPlayersArray().get(0).getKeys().clear();
@@ -180,7 +171,6 @@ public class GamePanel extends JPanel {
 							game.paused = true;
 						} else {
 							game.paused = false;
-							game.pauseOptionDialog = false;
 						}
 					}
 
@@ -258,7 +248,7 @@ public class GamePanel extends JPanel {
 		while (!game.isExit()) {
 			start = System.nanoTime();
 
-			if (!game.pauseOptionDialog) {
+			if (!game.paused) {
 
 				logic();
 				graphic();
@@ -269,16 +259,13 @@ public class GamePanel extends JPanel {
 				longTime = (System.nanoTime() - start);
 				end = (double) (longTime.doubleValue() / 1000000);
 
-			} else if (game.pauseOptionDialog) {
-				SoundsProvider.cancelMove();
-				SoundsProvider.cancelStop();
-			}
+			} 
 			
-			//TODO
-			if(game.paused && !GameManager.offline)
-				// mandare sempre il blink some stringa
+			SoundsProvider.cancelMove();
+			SoundsProvider.cancelStop();
 			
 			repaint();
+			
 			if(fullGamePanel != null)
 				fullGamePanel.repaint();
 
@@ -421,9 +408,9 @@ public class GamePanel extends JPanel {
 	// ----------------------------ONLINE----------------------------------------
 
 	protected String getUpdateMessage(KeyEvent code, String string, long getKeyPressedMillis, 
-			boolean isReleaseKeyRocket, boolean pauseOptionDialog, boolean paused, long blink) {
+			boolean isReleaseKeyRocket, boolean pauseOptionDialog, boolean paused) {
 		return playerName + ":" + code.getKeyCode()+":"+string+":"+getKeyPressedMillis+":"+
-			isReleaseKeyRocket+":"+pauseOptionDialog+":"+paused+":"+blink;
+			isReleaseKeyRocket+":"+pauseOptionDialog+":"+paused;
 	}
 	
 	protected String getUpdatePaintComponent(boolean isWaitToExit){
@@ -515,7 +502,10 @@ public class GamePanel extends JPanel {
 			buttons[i] = new JButton(buttonTxt[i]);
 			buttons[i].setFont(MainFrame.customFontM);
 			buttons[i].setBackground(Color.BLACK);
-			buttons[i].setForeground(Color.WHITE);
+			if( i == 1 && !GameManager.offline)
+				buttons[i].setForeground(Color.GRAY);
+			else
+				buttons[i].setForeground(Color.WHITE);
 			buttons[i].setBorder(null);
 			buttons[i].setFocusPainted(false);
 			buttons[i].setContentAreaFilled(false);
@@ -527,8 +517,10 @@ public class GamePanel extends JPanel {
 				public void keyPressed(KeyEvent e) {
 
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						((JButton) e.getComponent()).doClick();
-						dialog.dispose();
+						if(GameManager.offline) {
+							((JButton) e.getComponent()).doClick();
+							dialog.dispose();
+						}
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						MainFrame.transparent = false;
 						game.pauseOptionDialog = false;
@@ -557,7 +549,8 @@ public class GamePanel extends JPanel {
 
 			buttonspanel.add(buttons[i]);
 			buttonspanel.setBackground(Color.BLACK);
-			optionActionListener(i);
+			if(GameManager.offline)
+				optionActionListener(i);
 		}
 
 		buttonspanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -573,6 +566,8 @@ public class GamePanel extends JPanel {
 		dialog.pack();
 		dialog.setLocationRelativeTo(this);
 		dialog.setVisible(true);
+		
+		
 	}
 
 	public void optionActionListener(int j) {
@@ -595,14 +590,15 @@ public class GamePanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					SoundsProvider.playStageStart();
-					SoundsProvider.playBulletHit1();
-					MainFrame.transparent = false;
-					game.setExit(true);
-					dialog.dispose();
-					getSwitcher().showGame(game.getFilename());
-					SoundsProvider.cancelMove();
-					SoundsProvider.cancelStop();
+					
+						SoundsProvider.playStageStart();
+						SoundsProvider.playBulletHit1();
+						MainFrame.transparent = false;
+						game.setExit(true);
+						dialog.dispose();
+						getSwitcher().showGame(game.getFilename());
+						SoundsProvider.cancelMove();
+						SoundsProvider.cancelStop();
 				}
 			});
 			break;
@@ -877,7 +873,7 @@ public class GamePanel extends JPanel {
 					game.getPlayersArray().get(a).setShot(false);
 				}
 
-				if (a == 0) {
+				if (!GameManager.offline || game.getPlayersArray().size() == 1) {
 					if (!game.getPlayersArray().get(a).isPressed())
 						SoundsProvider.playStop();
 					else
@@ -1584,7 +1580,7 @@ public class GamePanel extends JPanel {
 						PowerUp power = ((PowerUp) ((BrickWall) game.getMatrix().world[a][b]).getBefore());
 
 						if (power.isBlink()) {
-							if ((System.currentTimeMillis() / 400) % 2 == 0 && !game.pauseOptionDialog)
+							if ((System.currentTimeMillis() / 400) % 2 == 0)
 								paintPowerUp(g, power);
 							else
 								g.drawImage(ImageProvider.getBrick(), power.getY() * tile, power.getX() * tile, null);
@@ -1602,7 +1598,7 @@ public class GamePanel extends JPanel {
 						PowerUp power = ((PowerUp) ((SteelWall) game.getMatrix().world[a][b]).getBefore());
 
 						if (power.isBlink()) {
-							if ((System.currentTimeMillis() / 400) % 2 == 0 && !game.pauseOptionDialog)
+							if ((System.currentTimeMillis() / 400) % 2 == 0)
 								paintPowerUp(g, power);
 							else
 								g.drawImage(ImageProvider.getSteel(), power.getY() * tile, power.getX() * tile, null);
@@ -1619,7 +1615,7 @@ public class GamePanel extends JPanel {
 			if (!game.getPower().get(a).isActivate()) {
 				PowerUp power = game.getPower().get(a);
 	
-				if (power.isBlink() && !game.pauseOptionDialog) {
+				if (power.isBlink()) {
 					if ((System.currentTimeMillis() / 400) % 2 == 0) {
 						paintPowerUp(g, power);
 					} else {
@@ -1669,8 +1665,7 @@ public class GamePanel extends JPanel {
 	}
 	
 	private void paused(Graphics g, Graphics2D g2d){
-		blink = (System.currentTimeMillis() / 400);
-		if (game.paused && blink % 2 == 0) {
+		if (game.paused && (System.currentTimeMillis() / 400) % 2 == 0) {
 			g2d.drawImage(ImageProvider.getPause(), this.getWidth() / 2 - (70 + shift), getHeight() / 2 - (45 + shift), null);
 		}
 	}
@@ -1771,14 +1766,6 @@ public class GamePanel extends JPanel {
 
 	public void setFullGamePanel(FullGamePanel fullGamePanel) {
 		this.fullGamePanel = fullGamePanel;
-	}
-
-	public long getBlink() {
-		return blink;
-	}
-
-	public void setBlink(long blink) {
-		this.blink = blink;
 	}
 
 }
