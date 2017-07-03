@@ -42,24 +42,31 @@ public class ServerGameManager {
 		final String[] split = buffer.split(":");
 		
 	
-		//BOOLEANE DI SISTEMA
-		gameManager.pauseOptionDialog=Boolean.parseBoolean(split[5]);
-		gameManager.paused=Boolean.parseBoolean(split[6]);
-		
-		
-		for(int a=0; a<gameManager.getPlayersArray().size(); a++){
-			if(gameManager.getPlayersArray().get(a).toString().equals(split[0])){
-				if(split[2].equals("YES")){
-					gameManager.getPlayersArray().get(a).keyBits.set(Integer.valueOf(split[1]));
-					gameManager.getPlayersArray().get(a).setKeyPressedMillis(Long.parseLong(split[3]));
-				}
-				else if(split[2].equals("NO")){
-					gameManager.getPlayersArray().get(a).keyBits.clear(Integer.valueOf(split[1]));
-					gameManager.getPlayersArray().get(a).setReleaseKeyRocket(Boolean.parseBoolean(split[4]));
+		if(gameManager!=null){
+			if(split[0].equals("PAINT")){
+				gameManager.setWaitToExit(Boolean.parseBoolean(split[1]));	
+			}
+			else{
+				//BOOLEANE DI SISTEMA
+				gameManager.pauseOptionDialog=Boolean.parseBoolean(split[5]);
+				gameManager.paused=Boolean.parseBoolean(split[6]);
+				
+				for(int a=0; a<gameManager.getPlayersArray().size(); a++){
+					if(gameManager.getPlayersArray().get(a).toString().equals(split[0])){
+						if(split[2].equals("YES")){
+							gameManager.getPlayersArray().get(a).keyBits.set(Integer.valueOf(split[1]));
+							gameManager.getPlayersArray().get(a).setKeyPressedMillis(Long.parseLong(split[3]));
+						}
+						else if(split[2].equals("NO")){
+							gameManager.getPlayersArray().get(a).keyBits.clear(Integer.valueOf(split[1]));
+							gameManager.getPlayersArray().get(a).setReleaseKeyRocket(Boolean.parseBoolean(split[4]));
+						}
+					}
 				}
 			}
 		}
 	}
+		
 
 	public void setReady(final ClientManager clientManager) {
 		synchronized (readyClients) {

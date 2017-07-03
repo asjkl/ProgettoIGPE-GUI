@@ -412,6 +412,10 @@ public class GamePanel extends JPanel {
 	protected String getUpdateMessage(KeyEvent code, String string, long getKeyPressedMillis, boolean isReleaseKeyRocket, boolean pauseOptionDialog, boolean paused) {
 		return playerName + ":" + code.getKeyCode()+":"+string+":"+getKeyPressedMillis+":"+isReleaseKeyRocket+":"+pauseOptionDialog+":"+paused;
 	}
+	
+	protected String getUpdatePaintComponent(boolean isWaitToExit){
+		return "PAINT"+":"+isWaitToExit;
+	}
 		
 	GameManager startNetwork(ConnectionManager connectionManager) {
 		this.connectionManager = connectionManager;
@@ -427,13 +431,15 @@ public class GamePanel extends JPanel {
 	
 	private void gameOverOrWin(){
 		// GAME OVER
+		
 		if (((game.getPlayersArray().size() > 1
 				&& (game.getPlayersArray().get(0).getResume() < 0 && game.getPlayersArray().get(1).getResume() < 0))
 				|| (game.getPlayersArray().size() == 1 && game.getPlayersArray().get(0).getResume() < 0))) {
 			gameOver();
 		} else if (game.getFlag().isHit()) {
-			if (game.isWaitToExit())
+			if (game.isWaitToExit()){
 				gameOver();
+			}
 		}
 		// WIN
 		else if (game.getEnemy().size() == 0) {
@@ -1339,6 +1345,8 @@ public class GamePanel extends JPanel {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
 					break;
+				}else if(inc >5 && !GameManager.offline){
+					game.setWaitToExit(true);
 				}
 			}
 
@@ -1713,6 +1721,10 @@ public class GamePanel extends JPanel {
 			game.lock.unlock();
 
 		paused(g, g2d);
+		
+		if(!GameManager.offline){
+			connectionManager.dispatch(getUpdatePaintComponent(game.isWaitToExit()));
+		}
 	}
 
 	// -----------------------GET & SET--------------------------//
