@@ -1,4 +1,5 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
+
 import javax.swing.JTextField;
 
 public interface PanelSwitcher {
@@ -9,9 +10,9 @@ public interface PanelSwitcher {
 	
 	void showGame(JTextField f);
 	
-	void showFirstStage();
+	void showFirstStage(String s);
 	
-	void showSecondStage();
+	void showSecondStage(String s);
 
 	void showScores(String s);
 	
@@ -20,7 +21,6 @@ public interface PanelSwitcher {
 	void showConstruction();
 	
 	void showSettings();
-
+	
 	void showLoading(JTextField f);
-
 }

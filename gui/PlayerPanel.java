@@ -21,6 +21,7 @@ public class PlayerPanel extends JPanel {
 	private int cursorPosition;
 	private PanelSwitcher switcher;
 	private final ArrayList<JButton> buttons;
+	private String path;
 	public static boolean singlePlayer;
 
 	public PlayerPanel(final int w, final int h, PanelSwitcher switcher) {
@@ -53,9 +54,9 @@ public class PlayerPanel extends JPanel {
 			buttons.get(i).setHorizontalAlignment( SwingConstants.LEFT );
 			
 			if(i == 0)
-				buttons.get(i).setFont(MainFrame.customFontM);
+				buttons.get(i).setFont(LoadPanel.customFontM);
 			else
-				buttons.get(i).setFont(MainFrame.customFontB);
+				buttons.get(i).setFont(LoadPanel.customFontB);
 			
 			setBoundAndText(i);
 			buttons.get(i).addKeyListener(new KeyAdapter() {
@@ -129,8 +130,9 @@ public class PlayerPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
 					setCursorPosition(1);
+					path = "./maps/career/singleplayer";
 					singlePlayer=true;
-					getSwitcher().showFirstStage();
+					getSwitcher().showFirstStage(path);
 					repaint();
 				}
 			});
@@ -143,9 +145,10 @@ public class PlayerPanel extends JPanel {
 				
 					SoundsProvider.playBulletHit1();
 					setCursorPosition(2);
+					path = "./maps/career/multiplayer";
 					singlePlayer=false;
 					repaint();
-					getSwitcher().showFirstStage();
+					getSwitcher().showFirstStage(path);
 				}				
 			});
 			break;

@@ -50,10 +50,8 @@ public class MenuPanel extends JPanel {
 		this.jfilechooser = new JFileChooserClass();
 		setSwitcher(switcher);
 		setCursorPosition(0);
-
-		values = new String[3];
-		for(int i = 0; i < values.length; i++)
-			values[i] = "0";
+		
+		values = new String[5];
 		
 		high = new JLabel();
 		player = new JLabel();
@@ -62,7 +60,6 @@ public class MenuPanel extends JPanel {
 		
 		createButton();
 		drawScore();
-		
 	}
 
 	public void createButton() {
@@ -71,7 +68,7 @@ public class MenuPanel extends JPanel {
 
 			final int curRow = i;
 
-			buttons.add(new JButton("fef"));
+			buttons.add(new JButton());
 			buttons.get(i).setBorder(null);
 			buttons.get(i).setOpaque(false);
 			buttons.get(i).setContentAreaFilled(false);
@@ -176,7 +173,6 @@ public class MenuPanel extends JPanel {
 					
 					SoundsProvider.playBulletHit1();
 					setCursorPosition(j);
-					
 					
 					if(jfilechooser.functionLoadFile()) {
 						setCursorPosition(0);
@@ -438,8 +434,7 @@ public class MenuPanel extends JPanel {
 					
 					tmp = st.nextToken();
 					
-					if(!tmp.equals("SCORE:") && !tmp.equals("MAPS:") 
-							&& i < values.length) {
+					if(tmp.matches("[0-9]+") && i < values.length) {
 						values[i++] = tmp;
 					}
 				}
@@ -447,7 +442,7 @@ public class MenuPanel extends JPanel {
 				line = reader.readLine();
 			}
 			
-			unlockedMaps = Integer.parseInt(values[2]);
+			unlockedMaps = Integer.parseInt(values[values.length - 1]);
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -464,9 +459,12 @@ public class MenuPanel extends JPanel {
 			w = new PrintWriter("./values.txt");
 			b = new BufferedWriter(w);
 			
-			b.write("SCORE:\n");
-			b.write(String.valueOf(0 + "\n"));
+			b.write("P1:\n");
+			b.write("0\n");
 			b.write(String.valueOf(values[1] + "\n"));
+			b.write("P2:\n");
+			b.write("0\n");
+			b.write("0\n");
 			b.write("MAPS:\n");
 			b.write(String.valueOf(unlockedMaps));
 			b.flush();

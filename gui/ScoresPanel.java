@@ -89,7 +89,7 @@
 //		
 //		JLabel stage = new JLabel();
 //		
-//		stage.setFont(MainFrame.customFontB);
+//		stage.setFont(LoadPanel.customFontB);
 //		stage.setBackground(Color.BLACK);
 //		stage.setForeground(Color.WHITE);
 //		stage.setText("Stage " + value);
@@ -101,7 +101,7 @@
 //		
 //			JLabel pts = new JLabel();
 //			JLabel text = new JLabel();
-//			text.setFont(MainFrame.customFontB);
+//			text.setFont(LoadPanel.customFontB);
 //			
 //			if(i == 0) {
 //							
@@ -169,11 +169,11 @@
 //						JLabel occur = new JLabel();
 //						JLabel points = new JLabel();
 //						
-//						points.setFont(MainFrame.customFontB);
+//						points.setFont(LoadPanel.customFontB);
 //						points.setBackground(Color.BLACK);
 //						points.setForeground(Color.WHITE);
 //						
-//						occur.setFont(MainFrame.customFontB);
+//						occur.setFont(LoadPanel.customFontB);
 //						occur.setBackground(Color.BLACK);
 //						occur.setForeground(Color.WHITE);
 //						
@@ -202,7 +202,7 @@
 //					
 //					JLabel total = new JLabel();
 //					
-//					total.setFont(MainFrame.customFontB);
+//					total.setFont(LoadPanel.customFontB);
 //					total.setBackground(Color.BLACK);
 //					total.setForeground(Color.WHITE);
 //					add(total);
@@ -361,6 +361,7 @@ import java.io.PrintWriter;
 import java.util.StringTokenizer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
@@ -369,18 +370,20 @@ import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
 @SuppressWarnings("serial")
 public class ScoresPanel extends JPanel {
 
-	private int totalEnemiesP1;
-	private int totalEnemiesP2;
+	private int totalP1;
+	private int totalP2;
 	private int highScoreP1;
 	private int highScoreP2;
 	private int currScoreP1;
 	private int currScoreP2;
 	private int x, y;
-	private final int TANKS = 4;
+	private final int OBJECT = 5;
 	private int occurrence[][];
 	private PanelSwitcher panelSwitcher;	
 	private GameManager game;
 	private String value;
+	private JTextField filename;
+	private MainFrame mainFrame;
 	
 	public ScoresPanel(final int w, final int h, PanelSwitcher panelSwitcher, GameManager game, String value) {
 	
@@ -391,8 +394,10 @@ public class ScoresPanel extends JPanel {
 		this.game = game;
 		this.value = value;
 		setSwitcher(panelSwitcher);
+	
+		mainFrame = (MainFrame) panelSwitcher;
 		
-		occurrence = new int[game.getPlayersArray().size()][TANKS];
+		occurrence = new int[game.getPlayersArray().size()][OBJECT];
 		
 		if(game.getPlayersArray().size() == 1)
 			setUp1Player();
@@ -404,7 +409,18 @@ public class ScoresPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getSwitcher().showMenu();
+				
+				if(mainFrame.isSlide()) {
+					
+					writeScore(0);
+					getSwitcher().showMenu();
+				}
+				else {
+					
+					filename = new JTextField();
+					filename.setText("stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
+					getSwitcher().showSlideStage(filename);
+				}
 			}
 		});
 		timer.start();
@@ -419,7 +435,7 @@ public class ScoresPanel extends JPanel {
 		game.getPlayersArray().getFirst().getStatistics().setNewRecord();
 		highScoreP1 = game.getPlayersArray().getFirst().getStatistics().getHighScore();
 		currScoreP1 = game.getPlayersArray().getFirst().getStatistics().getCurrScore();
-		totalEnemiesP1 = game.getPlayersArray().getFirst().getStatistics().getTotalOccurr();
+		totalP1 = game.getPlayersArray().getFirst().getStatistics().getTotalOccurr();
 	
 		for(int i = 0 ; i < occurrence.length; i++) {
 		
@@ -444,12 +460,12 @@ public class ScoresPanel extends JPanel {
 		game.getPlayersArray().getFirst().getStatistics().setNewRecord();
 		highScoreP1 = game.getPlayersArray().getFirst().getStatistics().getHighScore();
 		currScoreP1 = game.getPlayersArray().getFirst().getStatistics().getCurrScore();
-		totalEnemiesP1 = game.getPlayersArray().getFirst().getStatistics().getTotalOccurr();
+		totalP1 = game.getPlayersArray().getFirst().getStatistics().getTotalOccurr();
 		
 		game.getPlayersArray().getLast().getStatistics().setNewRecord();
-		setHighScoreP2(game.getPlayersArray().getLast().getStatistics().getHighScore());
-		setCurrScoreP2(game.getPlayersArray().getLast().getStatistics().getCurrScore());
-		totalEnemiesP2 = game.getPlayersArray().getLast().getStatistics().getTotalOccurr();
+		highScoreP2 = game.getPlayersArray().getLast().getStatistics().getHighScore();
+		currScoreP2 = game.getPlayersArray().getLast().getStatistics().getCurrScore();
+		totalP2 = game.getPlayersArray().getLast().getStatistics().getTotalOccurr();
 		
 		for(int i = 0 ; i < occurrence.length; i++) {
 			
@@ -479,6 +495,8 @@ public class ScoresPanel extends JPanel {
 		case 3:
 			occurrence[j][k] = p.getStatistics().getArmorTankOcc();
 			break;
+		case 4:
+			occurrence[j][k] = p.getStatistics().getPowerUpOcc();
 		default:
 			break;
 		}	
@@ -489,7 +507,7 @@ public class ScoresPanel extends JPanel {
 		
 		JLabel stage = new JLabel();
 		
-		stage.setFont(MainFrame.customFontB);
+		stage.setFont(LoadPanel.customFontB);
 		stage.setBackground(Color.BLACK);
 		stage.setForeground(Color.WHITE);
 		stage.setText("Stage " + value);
@@ -497,11 +515,11 @@ public class ScoresPanel extends JPanel {
 		
 		this.add(stage);
 		
-		for(int i = 0, y = 310; i < TANKS; i++, y += 65) {
+		for(int i = 0, y = 310; i < OBJECT; i++, y += 65) {
 		
 			JLabel pts = new JLabel();
 			JLabel text = new JLabel();
-			text.setFont(MainFrame.customFontB);
+			text.setFont(LoadPanel.customFontB);
 			
 			if(i == 1) {
 				
@@ -540,7 +558,7 @@ public class ScoresPanel extends JPanel {
 					text.setBackground(Color.BLACK);
 					text.setForeground(Color.WHITE);
 					text.setText("Total");
-					text.setBounds(545, 585, 300, 100);
+					text.setBounds(545, 665, 300, 100);
 				}	
 			
 			pts.setFont(text.getFont());
@@ -564,16 +582,16 @@ public class ScoresPanel extends JPanel {
 					int positionX = 675;
 					int positionY = 340;
 					
-					for(int i = 0, j = 0; j < TANKS; j++, positionY += 65) {
+					for(int i = 0, j = 0; j < OBJECT; j++, positionY += 65) {
 					
 						JLabel occur = new JLabel();
 						JLabel points = new JLabel();
 						
-						points.setFont(MainFrame.customFontB);
+						points.setFont(LoadPanel.customFontB);
 						points.setBackground(Color.BLACK);
 						points.setForeground(Color.WHITE);
 						
-						occur.setFont(MainFrame.customFontB);
+						occur.setFont(LoadPanel.customFontB);
 						occur.setBackground(Color.BLACK);
 						occur.setForeground(Color.WHITE);
 						
@@ -584,6 +602,9 @@ public class ScoresPanel extends JPanel {
 						
 						while(currValue <= occurrence[i][j]) {
 							
+							Thread.sleep(150);
+							SoundsProvider.playScore();
+							
 							points.setText(String.valueOf(currValue * 100 * (j + 1)));
 							
 							if(currValue == 0)
@@ -593,28 +614,24 @@ public class ScoresPanel extends JPanel {
 							
 							occur.setText(String.valueOf(currValue));
 							occur.setBounds(positionX, positionY, 95, 45);
-							SoundsProvider.playScore();
 							currValue++;
-							Thread.sleep(200);
 						}
 					}
 					
 					JLabel total = new JLabel();
 					
-					total.setFont(MainFrame.customFontB);
+					total.setFont(LoadPanel.customFontB);
 					total.setBackground(Color.BLACK);
 					total.setForeground(Color.WHITE);
 					add(total);
 					
-					for(int j = 0; j <= totalEnemiesP1; j++) {
+					for(int j = 0; j <= totalP1; j++) {
 						
-						total.setText(String.valueOf(j));
-						total.setBounds(positionX, positionY + 13, 95, 45);
+						Thread.sleep(200);
 						SoundsProvider.playScore();
-						Thread.sleep(300);
+						total.setText(String.valueOf(j));
+						total.setBounds(positionX, positionY + 28, 95, 45);
 					}
-					
-					writeScore();
 				}
 				catch(InterruptedException e) {
 						e.printStackTrace();
@@ -630,11 +647,11 @@ public class ScoresPanel extends JPanel {
 		
 		for(int i = 0; i < game.getPlayersArray().size(); i++) {
 		
-			for(int j = 0, posY = 270; j < TANKS; j++, posY += 65) {
+			for(int j = 0, posY = 270; j < OBJECT; j++, posY += 65) {
 			
 				JLabel pts = new JLabel();
 				JLabel text = new JLabel();
-				text.setFont(MainFrame.customFontB);
+				text.setFont(LoadPanel.customFontB);
 
 				if(j == 1) {
 			
@@ -673,10 +690,10 @@ public class ScoresPanel extends JPanel {
 						text.setBackground(Color.BLACK);
 						text.setForeground(Color.WHITE);
 						text.setText("Total");
-						text.setBounds(150 + k, 550, 200, 100);
+						text.setBounds(150 + k, 615, 200, 100);
 					}
 			
-				pts.setFont(MainFrame.customFontB);
+				pts.setFont(LoadPanel.customFontB);
 				pts.setBackground(Color.BLACK);
 				pts.setForeground(Color.WHITE);
 				pts.setText("pts");
@@ -710,11 +727,11 @@ public class ScoresPanel extends JPanel {
 							JLabel occur = new JLabel();
 							JLabel points = new JLabel();
 							
-							points.setFont(MainFrame.customFontB);
+							points.setFont(LoadPanel.customFontB);
 							points.setBackground(Color.BLACK);
 							points.setForeground(Color.WHITE);
 							
-							occur.setFont(MainFrame.customFontB);
+							occur.setFont(LoadPanel.customFontB);
 							occur.setBackground(Color.BLACK);
 							occur.setForeground(Color.WHITE);
 							
@@ -748,37 +765,35 @@ public class ScoresPanel extends JPanel {
 					
 					}
 					
-					JLabel totalP1 = new JLabel();
+					JLabel total1P = new JLabel();
 					
-					totalP1.setFont(MainFrame.customFontB);
-					totalP1.setBackground(Color.BLACK);
-					totalP1.setForeground(Color.WHITE);
-					add(totalP1);
+					total1P.setFont(LoadPanel.customFontB);
+					total1P.setBackground(Color.BLACK);
+					total1P.setForeground(Color.WHITE);
+					add(total1P);
 					
-					for(int j = 0; j <= totalEnemiesP1; j++) {
+					for(int j = 0; j <= totalP1; j++) {
 						
-						totalP1.setText(String.valueOf(j));
-						totalP1.setBounds(positionX, positionY - 22, 95, 45);
+						total1P.setText(String.valueOf(j));
+						total1P.setBounds(positionX, positionY - 22, 95, 45);
 						SoundsProvider.playScore();
 						Thread.sleep(200);
 					}
 					
-					JLabel totalP2 = new JLabel();
-					totalP2.setFont(MainFrame.customFontB);
-					totalP2.setBackground(Color.BLACK);
-					totalP2.setForeground(Color.WHITE);
-					add(totalP2);
+					JLabel total2P = new JLabel();
+					total2P.setFont(LoadPanel.customFontB);
+					total2P.setBackground(Color.BLACK);
+					total2P.setForeground(Color.WHITE);
+					add(total2P);
 					
 					
-					for(int j = 0; j <= totalEnemiesP2; j++) {
+					for(int j = 0; j <= totalP2; j++) {
 						
-						totalP2.setText(String.valueOf(j));
-						totalP2.setBounds(positionK, positionY - 22, 95, 45);
+						total2P.setText(String.valueOf(j));
+						total2P.setBounds(positionK, positionY - 22, 95, 45);
 						SoundsProvider.playScore();
 						Thread.sleep(200);
 					}
-					
-					writeScore();
 				}
 				catch(InterruptedException e) {
 						e.printStackTrace();
@@ -788,21 +803,26 @@ public class ScoresPanel extends JPanel {
 		}.start();
 	}
 	
-	public void writeScore() {
+public void writeScore(int t) {
 		
 		BufferedWriter b = null;
 		PrintWriter w = null;
-	
+		
+		t += 1;
+		
 		try {
 			
 			w = new PrintWriter("./values.txt");
 			b = new BufferedWriter(w);
 			
-			b.write("SCORE:\n");
+			b.write("P1:\n");
 			b.write(String.valueOf(currScoreP1 + "\n"));
 			b.write(String.valueOf(highScoreP1 + "\n"));
+			b.write("P2:\n");
+			b.write(String.valueOf(currScoreP2 + "\n"));
+			b.write(String.valueOf(highScoreP2 + "\n"));
 			b.write("MAPS:\n");
-			b.write(String.valueOf(MenuPanel.unlockedMaps));
+			b.write(String.valueOf(t));
 			b.flush();
 			b.close();
 		}
@@ -815,7 +835,7 @@ public class ScoresPanel extends JPanel {
 		
 		BufferedReader reader = null;
 		String line = null;
-		String scores[] = new String[2];
+		String scores[] = new String[5];
 		
 		try {
 			
@@ -833,10 +853,11 @@ public class ScoresPanel extends JPanel {
 					
 					tmp = st.nextToken();
 					
-					if(!tmp.equals("SCORE:") && !tmp.equals("MAPS:")) {
+					if(tmp.matches("[0-9]+")) {
+				
+						int a = Integer.parseInt(tmp);
 						
-						if(Integer.parseInt(tmp) > 24 || 
-								Integer.parseInt(tmp) == 0)
+						if(a > 24 || a == 0)
 							scores[i++] = tmp;
 					}
 				}
@@ -846,6 +867,9 @@ public class ScoresPanel extends JPanel {
 			
 			if((Integer.parseInt(scores[1])) > highScoreP1)
 				highScoreP1 = Integer.parseInt(scores[1]);
+			
+			if((Integer.parseInt(scores[3])) > highScoreP2)
+				highScoreP2 = Integer.parseInt(scores[3]);
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -864,29 +888,35 @@ public class ScoresPanel extends JPanel {
 			
 			for(int j = 0; j < occurrence[i].length; j++, positionY += 65) {
 			
-				if(i == 0) {
+				if(j == 0) {
 					
 					g.drawImage(ImageProvider.getBasicA(), positionX, positionY - 5, null);
 					g.drawImage(ImageProvider.getPtsArrow(), positionX - 70, positionY, null);
 				}	
 				else
-				if(i == 1) {
+				if(j == 1) {
 					
 					g.drawImage(ImageProvider.getFastA(), positionX, positionY - 5, null);
 					g.drawImage(ImageProvider.getPtsArrow(), positionX - 70, positionY, null);
 				}
 				else
-				if(i == 2) {
+				if(j == 2) {
 					
 					g.drawImage(ImageProvider.getPowerA(), positionX, positionY - 5, null);
 					g.drawImage(ImageProvider.getPtsArrow(), positionX - 70, positionY, null);
 				}
 				else
-				if(i == 3) {
+				if(j == 3) {
 					
 					g.drawImage(ImageProvider.getArmorA(), positionX, positionY - 5, null);
 					g.drawImage(ImageProvider.getPtsArrow(), positionX - 70, positionY, null);
 				}		
+				else
+				if(j == 4) {
+					
+					g.drawImage(ImageProvider.getStar(), positionX, positionY - 5, null);
+					g.drawImage(ImageProvider.getPtsArrow(), positionX - 70, positionY, null);
+				}
 			}
 			
 			g.drawImage(ImageProvider.getBar(), positionX - 145, positionY - 15, null);
@@ -899,21 +929,5 @@ public class ScoresPanel extends JPanel {
 
 	public void setSwitcher(PanelSwitcher panelSwitcher) {
 		this.panelSwitcher = panelSwitcher;
-	}
-
-	public int getHighScoreP2() {
-		return highScoreP2;
-	}
-
-	public void setHighScoreP2(int highScoreP2) {
-		this.highScoreP2 = highScoreP2;
-	}
-
-	public int getCurrScoreP2() {
-		return currScoreP2;
-	}
-
-	public void setCurrScoreP2(int currScoreP2) {
-		this.currScoreP2 = currScoreP2;
 	}
 }

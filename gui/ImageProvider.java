@@ -38,7 +38,8 @@ public class ImageProvider {
 	private static Image ptsArrow;
 	
 	// maps
-	private static ArrayList<Image> maps = new ArrayList<>();
+	private static ArrayList<Image> maps1P = new ArrayList<>();
+	private static ArrayList<Image> maps2P = new ArrayList<>();
 	
 	private static Image arrowRight;
 	private static Image arrowLeft;
@@ -136,8 +137,9 @@ public class ImageProvider {
 	private static Image points500;
 	
 	//construction panel
-	private static Image background;
-
+	private static Image background1P;
+	private static Image background2P;
+	
 	private static Image iconEnemy;
 	private static Image iconFlag;
 	private static Image locked;
@@ -150,54 +152,106 @@ public class ImageProvider {
 		try {
 
 			//TODO 			
-			maps.add((ImageIO.read(new File("resource/map1.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map1.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map2.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map2.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map3.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map3.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map4.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map4.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map5.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map5.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map6.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map6.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map7.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map7.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/locked.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map8.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map9.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map10.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map11.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map12.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map13.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map14.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map15.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map16.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map17.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map18.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map19.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map20.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map21.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map22.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map23.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map23.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			maps.add((ImageIO.read(new File("resource/map24.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+			maps1P.add((ImageIO.read(new File("resource/map24.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map1_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map2_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map3_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map4_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map5_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map6_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map7_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map8_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map9_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map10_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map11_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map12_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map13_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map14_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map15_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map16_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map17_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map18_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map19_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map20_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map21_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map22_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map23_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+			maps2P.add((ImageIO.read(new File("resource/map24_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+					java.awt.Image.SCALE_SMOOTH)));
+//			maps1P.add((ImageIO.read(new File("resource/mapBonus.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+//					java.awt.Image.SCALE_SMOOTH)));
+//			maps2P.add((ImageIO.read(new File("resource/mapBonus_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
+//			java.awt.Image.SCALE_SMOOTH)));
 			
 			setGameOver((ImageIO.read(new File("resource/gameOver.png")).getScaledInstance(400, 50,
 					java.awt.Image.SCALE_SMOOTH)));
@@ -205,7 +259,9 @@ public class ImageProvider {
 					java.awt.Image.SCALE_SMOOTH)));
 			setLocked((ImageIO.read(new File("resource/locked.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
-			setBackground((ImageIO.read(new File("resource/player1A.png")).getScaledInstance(600, 600,
+			setBackground1P((ImageIO.read(new File("resource/player1A.png")).getScaledInstance(600, 600,
+					java.awt.Image.SCALE_SMOOTH)));
+			setBackground2P((ImageIO.read(new File("resource/player2A.png")).getScaledInstance(750, 750,
 					java.awt.Image.SCALE_SMOOTH)));
 			setTitle((ImageIO.read(new File("resource/title.png")).getScaledInstance(975, 115,
 					java.awt.Image.SCALE_SMOOTH)));
@@ -1050,20 +1106,36 @@ public class ImageProvider {
 		ImageProvider.trash = trash;
 	}
 
-	public static Image getBackground() {
-		return background;
+	public static Image getBackground2P() {
+		return background2P;
 	}
 
-	public static void setBackground(Image background) {
-		ImageProvider.background = background;
+	public static void setBackground2P(Image background2P) {
+		ImageProvider.background2P = background2P;
+	}
+	
+	public static Image getBackground1P() {
+		return background1P;
 	}
 
-	public static ArrayList<Image> getMaps() {
-		return maps;
+	public static void setBackground1P(Image background1P) {
+		ImageProvider.background1P = background1P;
 	}
 
-	public static void setMaps(ArrayList<Image> maps) {
-		ImageProvider.maps = maps;
+	public static ArrayList<Image> getMaps2P() {
+		return maps2P;
+	}
+
+	public static void setMaps2P(ArrayList<Image> maps2P) {
+		ImageProvider.maps2P = maps2P;
+	}
+	
+	public static ArrayList<Image> getMaps1P() {
+		return maps1P;
+	}
+
+	public static void setMaps1P(ArrayList<Image> maps1P) {
+		ImageProvider.maps1P = maps1P;
 	}
 
 	public static Image getPause() {
