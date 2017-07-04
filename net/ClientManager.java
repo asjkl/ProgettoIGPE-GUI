@@ -1,10 +1,12 @@
-package net;
+package progettoIGPE.davide.giovanni.unical2016.NET;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import javax.swing.JTextField;
 
 public class ClientManager implements Runnable {
 	
@@ -16,10 +18,10 @@ public class ClientManager implements Runnable {
 	private ServerGameManager server;
 	private Socket socket;
 
-	public ClientManager(Socket socket, ServerGameManager server, String stringnName) {
+	public ClientManager(Socket socket, ServerGameManager server, String stringName) {
 		this.socket = socket;
 		this.server = server;
-		this.name=stringnName;
+		this.name=stringName;
 	}
 
 	public void dispatch(final String message) {
@@ -33,12 +35,16 @@ public class ClientManager implements Runnable {
 		try {
 			server.setReady(this);
 			final boolean running = true;
+			
+			printer.println(server.getFilename().getText());
+			
 			while (running) {
 				String string = reader.readLine();
 				server.received(string);
+				
 			}
 		} catch (final IOException e) {
-			server.disconnetctedClient(name);
+			System.out.println("Client disconnected: " + name);
 		}
 
 	}

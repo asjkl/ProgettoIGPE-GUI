@@ -1,4 +1,4 @@
-package net;
+package progettoIGPE.davide.giovanni.unical2016.NET;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,9 +8,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
+import progettoIGPE.davide.giovanni.unical2016.GUI.JFileChooserClass;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 
 public class ConnectionManager implements Runnable {
@@ -20,18 +22,21 @@ public class ConnectionManager implements Runnable {
 	private List<String> playerNames;
 	private PrintWriter pw;
 	private final Socket socket;
-
+	private JTextField filename;
+	
 	public ConnectionManager(final Socket socket, final String name, MainFrame mainFrame) {
 		this.socket = socket;
 		this.name = name;
 		this.mainFrame = mainFrame;
-
+		filename = new JTextField();
 	}
 
 	public void close() {
 		try {
 			socket.close();
-		} catch (final IOException e) {}
+		} catch (final IOException e) {
+			// do nothing
+		}
 	}
 
 	public void dispatch(final String message) {
@@ -51,10 +56,15 @@ public class ConnectionManager implements Runnable {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			pw = new PrintWriter(socket.getOutputStream(), true);
-			pw.println(getPlayerName());
+			pw.println(getPlayerName());	
+			//br non legge fin quando non vengono avviati i clients
 			String buffer = br.readLine();
 			while (!buffer.equals("#START")) {
 				final String[] split = buffer.split(";");
+				
+				if(split[0].contains(".txt"))
+					filename.setText(split[0]);
+				else
 				if (split.length != 0) {
 					playerNames = new ArrayList<>();
 					for (final String name : split) {
@@ -63,8 +73,8 @@ public class ConnectionManager implements Runnable {
 				}
 				buffer = br.readLine();
 			}
-			JTextField filename=new JTextField("stage1.txt");
-			final GameManager gameManager = mainFrame.showNetwork(this,filename);
+			
+			final GameManager gameManager = mainFrame.startNetworkGame(this,filename);
 			buffer = br.readLine();
 			while (buffer != null) {
 				// System.out.println(buffer);
