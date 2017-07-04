@@ -13,7 +13,6 @@ public class ServerGameManager {
 	private final Set<ClientManager> readyClients = new HashSet<ClientManager>();
 	public GameManager gameManager;
 	private GamePanel gamePanel;
-	private JTextField filename;
 
 	public void add(final ClientManager cm) {
 		clients.add(cm);
@@ -113,14 +112,6 @@ public class ServerGameManager {
 			}
 		}
 		System.out.println("Client disconnected: " + name);
-	}
-
-	public JTextField getFilename() {
-		return filename;
-	}
-
-	public void setFilename(JTextField filename) {
-		this.filename = filename;
 	}
 
 }

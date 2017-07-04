@@ -16,10 +16,10 @@ public class ClientManager implements Runnable {
 	private ServerGameManager server;
 	private Socket socket;
 
-	public ClientManager(Socket socket, ServerGameManager server, String stringName) {
+	public ClientManager(Socket socket, ServerGameManager server, String stringnName) {
 		this.socket = socket;
 		this.server = server;
-		this.name=stringName;
+		this.name=stringnName;
 	}
 
 	public void dispatch(final String message) {
@@ -33,16 +33,12 @@ public class ClientManager implements Runnable {
 		try {
 			server.setReady(this);
 			final boolean running = true;
-			
-			printer.println(server.getFilename().getText());
-			
 			while (running) {
 				String string = reader.readLine();
 				server.received(string);
-				
 			}
 		} catch (final IOException e) {
-			System.out.println("Client disconnected: " + name);
+			server.disconnetctedClient(name);
 		}
 
 	}

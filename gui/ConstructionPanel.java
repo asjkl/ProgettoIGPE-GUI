@@ -820,7 +820,7 @@ public class ConstructionPanel extends JPanel {
 
 		// TANK BACKGROUND
 		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-		g.drawImage(ImageProvider.getBackground1P(), 135, 52, null);
+		g.drawImage(ImageProvider.getBackground(), 135, 52, null);
 		if (!MainFrame.transparent)
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 

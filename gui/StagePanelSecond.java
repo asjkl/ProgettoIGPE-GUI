@@ -27,7 +27,6 @@ public class StagePanelSecond extends JPanel {
 	private JFileChooser fileChooser;
 	private JLabel labelStage;
 	private JButton arrowLeft;
-	private String path;
 	private ArrayList<JButton> maps;
 	private PanelSwitcher panelSwitcher;
 	
@@ -37,13 +36,14 @@ public class StagePanelSecond extends JPanel {
 		this.setBackground(Color.GRAY);
 		this.setLayout(null);
 	
-		path = "";
 		posY = 25;
 		posX = 200;
 		cursorPosition = 0;
 		
 		arrowLeft = new JButton();
 		maps = new ArrayList<>();
+		
+		file = new File("./maps/career");
 		fileChooser = new JFileChooser();
 		
 		setSwitcher(panelSwitcher);
@@ -147,7 +147,6 @@ public class StagePanelSecond extends JPanel {
 					
 					if(j + DIM <= MenuPanel.unlockedMaps) {
 						
-						file = new File(path);
 						fileChooser.setCurrentDirectory(file);
 						
 						JTextField fileNameMap=new JTextField();
@@ -156,7 +155,7 @@ public class StagePanelSecond extends JPanel {
 	                    JTextField directory=new JTextField();
 	                    directory.setText(fileChooser.getCurrentDirectory().toString());
 	                    cursorPosition = 0;
-	                    getSwitcher().showGame(fileNameMap);
+	                    getSwitcher().showLoading(fileNameMap);
 					}
 					else {
 						cursorPosition = j;
@@ -176,7 +175,7 @@ public class StagePanelSecond extends JPanel {
 			int k = (j + 13)-1;
 			setLabel(k+1);
 			maps.get(j).setBounds(posX, posY, 
-					ImageProvider.getMaps1P().get(k).getWidth(null), ImageProvider.getMaps1P().get(k).getHeight(null));
+					ImageProvider.getMaps().get(k).getWidth(null), ImageProvider.getMaps().get(k).getHeight(null));
 			
 			posX += 245;
 	}
@@ -233,7 +232,7 @@ public class StagePanelSecond extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cursorPosition = 0;
-				getSwitcher().showFirstStage(path);
+				getSwitcher().showFirstStage();
 			}
 		});	
 		this.add(arrowLeft);
@@ -255,30 +254,13 @@ public class StagePanelSecond extends JPanel {
 					maps.get(cursorPosition).getX() - 5, maps.get(cursorPosition).getY() - 5, this);
 		}
 		
-		if(path.contains("multi")) {
+		for(int i = 0; i < maps.size(); i++) {
 			
-			for(int i = 0; i < maps.size(); i++) {
-				
-				if((i + DIM) <= MenuPanel.unlockedMaps)
-					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps1P().get(i + DIM)));
-				else
-					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
-			}
-	}
-	else {
-		
-			for(int i = 0; i < maps.size(); i++) {
-				
-				if((i + DIM) <= MenuPanel.unlockedMaps)
-					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps2P().get(i + DIM)));
-				else
-					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
-			}
+			if((i + DIM) <= MenuPanel.unlockedMaps)
+				maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps().get(i + DIM)));
+			else
+				maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
 		}
-	}
-		
-	public void setPath(String path) {
-		this.path = path;
 	}
 	
 	public JButton getButton(int i) {

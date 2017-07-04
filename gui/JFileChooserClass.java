@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class JFileChooserClass {
+public class JFileChooserClass{
 	
 	private JFileChooser chooser;
 	private FileNameExtensionFilter filter;
@@ -25,7 +25,7 @@ public class JFileChooserClass {
 		this.chooser=new JFileChooser();
 		this.filename = new JTextField();
 		this.dir=new JTextField();
-		this.file=new File("./maps/career");
+		this.file=new File("./maps/editor");
 		this.filter = new FileNameExtensionFilter(".txt", "txt");
 		this.chooser.setFileFilter(filter);
 		setFileChooserFont(chooser.getComponents());
@@ -36,9 +36,9 @@ public class JFileChooserClass {
 	
 	public boolean functionSaveFile(int p1, int p2){
 		if(p1==1 && p2==1){
-			this.file=new File("./maps/career/multiplayer");
+			this.file=new File("./maps/editor/multiplayer");
 		}else{
-			this.file=new File("./maps/career/singleplayer");
+			this.file=new File("./maps/editor/singleplayer");
 		}
 		chooser.setCurrentDirectory(file);
 		int value = chooser.showSaveDialog(null); 						//
