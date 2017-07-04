@@ -1334,12 +1334,11 @@ public class GamePanel extends JPanel {
 				else if (inc > 3 && GameManager.offline) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
-					break;
 				}
 			}
 
 			// FLAG boom
-			if (game.getEffects().get(i) instanceof Flag) {
+			else if (game.getEffects().get(i) instanceof Flag) {
 
 				inc = ((Flag) game.getEffects().get(i)).getInc();
 				pixel = 17;
@@ -1358,14 +1357,13 @@ public class GamePanel extends JPanel {
 					game.setWaitToExit(true);
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
-					break;
 				}else if(inc >5 && !GameManager.offline){
 					game.setWaitToExit(true);
 				}
 			}
 
 			// ENEMY & PLAYER boom
-			if (game.getEffects().get(i) instanceof Tank) {
+			else if (game.getEffects().get(i) instanceof Tank) {
 
 				inc = ((Tank) game.getEffects().get(i)).getInc();
 				pixel = 17;
@@ -1380,15 +1378,14 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
 				else if (inc == 5)
 					g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
-				else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank) {
+				else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank && GameManager.offline) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
-					break;
 				}
 			}
 
 			// Enemy points
-			if (game.getEffects().get(i) instanceof EnemyTank) {
+			else if (game.getEffects().get(i) instanceof EnemyTank) {
 				if (((EnemyTank) game.getEffects().get(i)).getInc() > 5
 						&& ((EnemyTank) game.getEffects().get(i)).getInc() < 12) {
 					if (game.getEffects().get(i) instanceof BasicTank) {
@@ -1407,12 +1404,11 @@ public class GamePanel extends JPanel {
 				} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12 && GameManager.offline) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
-					break;
 				}
 			}
 		
 			// PowerUp points
-			if (game.getEffects().get(i) instanceof PowerUp) {
+			else if (game.getEffects().get(i) instanceof PowerUp) {
 				if (((PowerUp) game.getEffects().get(i)).getInc() > 5
 						&& ((PowerUp) game.getEffects().get(i)).getInc() < 12) {
 					g.drawImage(ImageProvider.getPoints500(), game.getEffects().get(i).getY() * tile,
@@ -1421,7 +1417,6 @@ public class GamePanel extends JPanel {
 				if (((PowerUp) game.getEffects().get(i)).getInc() >= 12 && GameManager.offline) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
-					break;
 				}
 			}
 		}
