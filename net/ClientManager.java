@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import javax.swing.JTextField;
-
 public class ClientManager implements Runnable {
 	
 	private BufferedReader reader;
