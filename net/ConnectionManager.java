@@ -82,7 +82,13 @@ public class ConnectionManager implements Runnable {
 				gameManager.parseStatusFromString(buffer);
 				mainFrame.gamePanel.repaint();
 				mainFrame.play.repaint();
-				buffer = br.readLine();
+				if(gameManager.isExit()){
+					buffer=null;
+					mainFrame.network.getButton(1).setEnabled(true);
+					mainFrame.showNetwork();
+				}else{
+					buffer = br.readLine();
+				}
 				// }
 			}
 		} catch (final IOException e) {

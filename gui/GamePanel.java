@@ -834,8 +834,9 @@ public class GamePanel extends JPanel {
 		SoundsProvider.cancelMove();
 		SoundsProvider.cancelStop();
 		SoundsProvider.playGameOver();
-		new TranslucentWindow(getSwitcher(), game.getFilename(), fullGamePanel.getValueMap(),
-				ImageProvider.getGameOver());
+		if(GameManager.offline)
+			new TranslucentWindow(getSwitcher(), game.getFilename(), fullGamePanel.getValueMap(),
+					ImageProvider.getGameOver());
 	}
 
 	private void win() {
@@ -848,8 +849,9 @@ public class GamePanel extends JPanel {
 		SoundsProvider.cancelMove();
 		SoundsProvider.cancelStop();
 		SoundsProvider.playStageComplete();
-		new TranslucentWindow(getSwitcher(), game.getFilename(), fullGamePanel.getValueMap(),
-				ImageProvider.getStageComplete());
+		if(GameManager.offline)
+			new TranslucentWindow(getSwitcher(), game.getFilename(), fullGamePanel.getValueMap(),
+					ImageProvider.getStageComplete());
 	}
 
 	private void sounds() {
