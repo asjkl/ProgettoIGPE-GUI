@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.NET;
+package net;
 
 import java.io.BufferedReader;
 import java.io.IOException;
