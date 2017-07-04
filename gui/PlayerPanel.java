@@ -54,9 +54,9 @@ public class PlayerPanel extends JPanel {
 			buttons.get(i).setHorizontalAlignment( SwingConstants.LEFT );
 			
 			if(i == 0)
-				buttons.get(i).setFont(LoadPanel.customFontM);
+				buttons.get(i).setFont(MainFrame.customFontM);
 			else
-				buttons.get(i).setFont(LoadPanel.customFontB);
+				buttons.get(i).setFont(MainFrame.customFontB);
 			
 			setBoundAndText(i);
 			buttons.get(i).addKeyListener(new KeyAdapter() {

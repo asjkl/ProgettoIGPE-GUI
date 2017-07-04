@@ -30,6 +30,7 @@ public class StagePanelFirst extends JPanel {
 	private JLabel labelStage;
 	private JButton arrowRight;
 	private ArrayList<JButton> maps;
+	private String path;
 	private PanelSwitcher panelSwitcher;
 	
 	public StagePanelFirst(final int w, final int h, PanelSwitcher panelSwitcher) {
@@ -38,14 +39,13 @@ public class StagePanelFirst extends JPanel {
 		this.setBackground(Color.GRAY);
 		this.setLayout(null);
 		
+		path = "";
 		posY = 25;
 		posX = 200;
 		cursorPosition = 1;
 		
 		arrowRight = new JButton();
 		maps = new ArrayList<>();
-		
-		file = new File("./maps/career");
 		fileChooser = new JFileChooser();
 		
 		setSwitcher(panelSwitcher);
@@ -187,6 +187,7 @@ public class StagePanelFirst extends JPanel {
 					
 					if(j <= MenuPanel.unlockedMaps) {
 					
+						file = new File(path);
 						fileChooser.setCurrentDirectory(file);
 						
 						JTextField fileNameMap=new JTextField();
@@ -224,7 +225,7 @@ public class StagePanelFirst extends JPanel {
 			}
 			setLabel(j);
 			maps.get(j).setBounds(posX, posY, 
-					ImageProvider.getMaps().get(j - 1).getWidth(null), ImageProvider.getMaps().get(j - 1).getHeight(null));
+					ImageProvider.getMaps1P().get(j - 1).getWidth(null), ImageProvider.getMaps1P().get(j - 1).getHeight(null));
 					
 			posX += 245;
 		}
@@ -281,7 +282,7 @@ public class StagePanelFirst extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				cursorPosition = 1;
-				getSwitcher().showSecondStage();
+				getSwitcher().showSecondStage(path);
 			}
 		});
 		
@@ -309,19 +310,40 @@ public class StagePanelFirst extends JPanel {
 					maps.get(cursorPosition).getX() + 80,maps.get(cursorPosition).getY() - 8, this);	
 		}
 		
-		for(int i = 0;i < maps.size(); i++) {
+		if(path.contains("single")) { 
 			
-			if(i != 0) {
+			for(int i = 0;i < maps.size(); i++) {
+			
+				if(i != 0) {
+					
+					if(i <= MenuPanel.unlockedMaps)
+						maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps1P().get(i - 1)));
+					
+					else
+						maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
+				}
+			}
+		}
+		else {
+			
+			for(int i = 0;i < maps.size(); i++) {
 				
-				if(i <= MenuPanel.unlockedMaps)
-					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps().get(i - 1)));
-				
-				else
-					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
+				if(i != 0) {
+					
+					if(i <= MenuPanel.unlockedMaps)
+						maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps2P().get(i - 1)));
+					
+					else
+						maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
+				}
 			}
 		}
 	}
 	
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 	public JButton getButton(int i) {
 		return maps.get(i);
 	}

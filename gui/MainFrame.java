@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.ConnectionManager;
-import net.NetworkPanel;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 @SuppressWarnings("serial")
@@ -18,7 +17,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private final int HEIGHT = 740;
 	private final int gameWidth = WIDTH - 565;
   	private final int gameHeight = HEIGHT - 40;
- 
+  	 
 	public static Font customFontM;
 	public static Font customFontB;
 	public static Font customFontS;
@@ -142,10 +141,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			  if(component instanceof SettingsPanel) {
 				  ((SettingsPanel)component).getButton(settings.getCursorPosition()).requestFocus();	  
 		  }
-		  else 
-			  if(component instanceof NetworkPanel) {
-				  ((NetworkPanel)component).getButton(network.getCursorPosition()).requestFocus();
-			  }
 	  }
 	  
 	//-----------------------------override methods-----------------------------------
@@ -180,18 +175,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
     }
   
     @Override
-    public void showFirstStage() {
-	  firstStage.repaint();
-	  switchTo(firstStage);
-    }
-  
-    @Override
-    public void showSecondStage() {
-	  secondStage.repaint();
-	  switchTo(secondStage);
-    }
-    
-    @Override
     public void showScores(String stage) {  
 	  scores = new ScoresPanel(WIDTH, HEIGHT, this, gameManager, stage);
 	  switchTo(scores);
@@ -218,13 +201,29 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	  switchTo(network);
     }
   
-    public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename) {
+    public GameManager startNetworkGame(ConnectionManager connectionManager, JTextField filename) {
 		  gamePanel = new GamePanel();
 		  gameManager = gamePanel.startNetwork(connectionManager);
 		  gamePanel.setGame(gameManager);
 		  play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		  switchTo(play);
 		  return gameManager;
+	  }
+
+    @Override
+	  public void showFirstStage(String path) {
+		  
+		  firstStage.setPath(path);
+		  firstStage.repaint();
+		  switchTo(firstStage);
+	  }
+	  
+	  @Override
+	  public void showSecondStage(String path) {
+		 
+		  firstStage.setPath(path);
+		  secondStage.repaint();
+		  switchTo(secondStage);
 	  }
 	 
 }

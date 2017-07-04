@@ -89,7 +89,7 @@
 //		
 //		JLabel stage = new JLabel();
 //		
-//		stage.setFont(LoadPanel.customFontB);
+//		stage.setFont(MainFrame.customFontB);
 //		stage.setBackground(Color.BLACK);
 //		stage.setForeground(Color.WHITE);
 //		stage.setText("Stage " + value);
@@ -101,7 +101,7 @@
 //		
 //			JLabel pts = new JLabel();
 //			JLabel text = new JLabel();
-//			text.setFont(LoadPanel.customFontB);
+//			text.setFont(MainFrame.customFontB);
 //			
 //			if(i == 0) {
 //							
@@ -169,11 +169,11 @@
 //						JLabel occur = new JLabel();
 //						JLabel points = new JLabel();
 //						
-//						points.setFont(LoadPanel.customFontB);
+//						points.setFont(MainFrame.customFontB);
 //						points.setBackground(Color.BLACK);
 //						points.setForeground(Color.WHITE);
 //						
-//						occur.setFont(LoadPanel.customFontB);
+//						occur.setFont(MainFrame.customFontB);
 //						occur.setBackground(Color.BLACK);
 //						occur.setForeground(Color.WHITE);
 //						
@@ -202,7 +202,7 @@
 //					
 //					JLabel total = new JLabel();
 //					
-//					total.setFont(LoadPanel.customFontB);
+//					total.setFont(MainFrame.customFontB);
 //					total.setBackground(Color.BLACK);
 //					total.setForeground(Color.WHITE);
 //					add(total);
@@ -383,7 +383,6 @@ public class ScoresPanel extends JPanel {
 	private GameManager game;
 	private String value;
 	private JTextField filename;
-	private MainFrame mainFrame;
 	
 	public ScoresPanel(final int w, final int h, PanelSwitcher panelSwitcher, GameManager game, String value) {
 	
@@ -394,8 +393,6 @@ public class ScoresPanel extends JPanel {
 		this.game = game;
 		this.value = value;
 		setSwitcher(panelSwitcher);
-	
-		mainFrame = (MainFrame) panelSwitcher;
 		
 		occurrence = new int[game.getPlayersArray().size()][OBJECT];
 		
@@ -410,7 +407,7 @@ public class ScoresPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if(mainFrame.isSlide()) {
+				if(MainFrame.slide) {
 					
 					writeScore(0);
 					getSwitcher().showMenu();
@@ -419,7 +416,7 @@ public class ScoresPanel extends JPanel {
 					
 					filename = new JTextField();
 					filename.setText("stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
-					getSwitcher().showSlideStage(filename);
+					getSwitcher().showLoading(filename);
 				}
 			}
 		});
@@ -507,7 +504,7 @@ public class ScoresPanel extends JPanel {
 		
 		JLabel stage = new JLabel();
 		
-		stage.setFont(LoadPanel.customFontB);
+		stage.setFont(MainFrame.customFontB);
 		stage.setBackground(Color.BLACK);
 		stage.setForeground(Color.WHITE);
 		stage.setText("Stage " + value);
@@ -519,7 +516,7 @@ public class ScoresPanel extends JPanel {
 		
 			JLabel pts = new JLabel();
 			JLabel text = new JLabel();
-			text.setFont(LoadPanel.customFontB);
+			text.setFont(MainFrame.customFontB);
 			
 			if(i == 1) {
 				
@@ -587,11 +584,11 @@ public class ScoresPanel extends JPanel {
 						JLabel occur = new JLabel();
 						JLabel points = new JLabel();
 						
-						points.setFont(LoadPanel.customFontB);
+						points.setFont(MainFrame.customFontB);
 						points.setBackground(Color.BLACK);
 						points.setForeground(Color.WHITE);
 						
-						occur.setFont(LoadPanel.customFontB);
+						occur.setFont(MainFrame.customFontB);
 						occur.setBackground(Color.BLACK);
 						occur.setForeground(Color.WHITE);
 						
@@ -620,7 +617,7 @@ public class ScoresPanel extends JPanel {
 					
 					JLabel total = new JLabel();
 					
-					total.setFont(LoadPanel.customFontB);
+					total.setFont(MainFrame.customFontB);
 					total.setBackground(Color.BLACK);
 					total.setForeground(Color.WHITE);
 					add(total);
@@ -651,7 +648,7 @@ public class ScoresPanel extends JPanel {
 			
 				JLabel pts = new JLabel();
 				JLabel text = new JLabel();
-				text.setFont(LoadPanel.customFontB);
+				text.setFont(MainFrame.customFontB);
 
 				if(j == 1) {
 			
@@ -693,7 +690,7 @@ public class ScoresPanel extends JPanel {
 						text.setBounds(150 + k, 615, 200, 100);
 					}
 			
-				pts.setFont(LoadPanel.customFontB);
+				pts.setFont(MainFrame.customFontB);
 				pts.setBackground(Color.BLACK);
 				pts.setForeground(Color.WHITE);
 				pts.setText("pts");
@@ -727,11 +724,11 @@ public class ScoresPanel extends JPanel {
 							JLabel occur = new JLabel();
 							JLabel points = new JLabel();
 							
-							points.setFont(LoadPanel.customFontB);
+							points.setFont(MainFrame.customFontB);
 							points.setBackground(Color.BLACK);
 							points.setForeground(Color.WHITE);
 							
-							occur.setFont(LoadPanel.customFontB);
+							occur.setFont(MainFrame.customFontB);
 							occur.setBackground(Color.BLACK);
 							occur.setForeground(Color.WHITE);
 							
@@ -767,7 +764,7 @@ public class ScoresPanel extends JPanel {
 					
 					JLabel total1P = new JLabel();
 					
-					total1P.setFont(LoadPanel.customFontB);
+					total1P.setFont(MainFrame.customFontB);
 					total1P.setBackground(Color.BLACK);
 					total1P.setForeground(Color.WHITE);
 					add(total1P);
@@ -781,7 +778,7 @@ public class ScoresPanel extends JPanel {
 					}
 					
 					JLabel total2P = new JLabel();
-					total2P.setFont(LoadPanel.customFontB);
+					total2P.setFont(MainFrame.customFontB);
 					total2P.setBackground(Color.BLACK);
 					total2P.setForeground(Color.WHITE);
 					add(total2P);
