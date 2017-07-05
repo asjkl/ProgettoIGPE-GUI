@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +16,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,6 +37,7 @@ public class NetworkPanel extends JPanel {
 	private JTextField nameTextField;
 	private JTextField portTextField;
 	private JPanel content;
+	private JDialog dialog;
 	private GridBagConstraints constraints;
 
 	private int cursorPosition;
@@ -138,6 +143,47 @@ public class NetworkPanel extends JPanel {
 		constraints.gridx = 0;
 	}
 	
+private void showDialog() {
+		
+		dialog = new JDialog(dialog, "ERROR");
+		JLabel label = new JLabel("Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText());
+		label.setFont(MainFrame.customFontS);
+		label.setBackground(Color.BLACK);
+		label.setForeground(Color.RED);
+		label.setHorizontalAlignment(JLabel.CENTER);
+		JPanel panel = new JPanel(new GridLayout(2,0));
+		panel.setBackground(Color.BLACK);
+		panel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		JButton ok = new JButton("OK");
+		ok.setBorder(null);
+		ok.setContentAreaFilled(false);
+		ok.setBorderPainted(false);
+		ok.setFocusPainted(false);
+		ok.setFont(MainFrame.customFontS);
+		ok.setBackground(Color.BLACK);
+		ok.setForeground(Color.WHITE);
+		ok.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				SoundsProvider.playBulletHit1();
+				dialog.dispose();
+			}
+		});
+		
+		panel.add(label);
+		panel.add(ok);
+		panel.setPreferredSize(new Dimension(300,100));
+		dialog.setContentPane(panel);
+		dialog.setUndecorated(true);
+		dialog.setModal(true);
+		dialog.pack();
+		dialog.setLocationRelativeTo(this);
+		dialog.setVisible(true);
+	}
+
+	
 	private void createButtons() {
 		
 		for (int i = 0; i < DIM; i++) {
@@ -234,9 +280,7 @@ public class NetworkPanel extends JPanel {
 						try {
 							connectoToServer();
 						} catch (final Exception e) {
-							JOptionPane.showMessageDialog(buttons.get(1),
-									"Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText(),
-									"Network Error", JOptionPane.ERROR_MESSAGE);
+							showDialog();
 						}
 					};
 				}.start();
