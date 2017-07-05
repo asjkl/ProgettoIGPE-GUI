@@ -23,6 +23,7 @@ public class StagePanelSecond extends JPanel {
 	private int posX;
 	private final int DIM = 12;
 	private int cursorPosition ;
+	private String path;
 	private File file;
 	private JFileChooser fileChooser;
 	private JLabel labelStage;
@@ -40,10 +41,11 @@ public class StagePanelSecond extends JPanel {
 		posX = 200;
 		cursorPosition = 0;
 		
+		path = "";
 		arrowLeft = new JButton();
 		maps = new ArrayList<>();
 		
-		file = new File("./maps/career");
+		file = new File(path);
 		fileChooser = new JFileChooser();
 		
 		setSwitcher(panelSwitcher);
@@ -175,7 +177,7 @@ public class StagePanelSecond extends JPanel {
 			int k = (j + 13)-1;
 			setLabel(k+1);
 			maps.get(j).setBounds(posX, posY, 
-					ImageProvider.getMaps().get(k).getWidth(null), ImageProvider.getMaps().get(k).getHeight(null));
+					ImageProvider.getMaps1P().get(k).getWidth(null), ImageProvider.getMaps1P().get(k).getHeight(null));
 			
 			posX += 245;
 	}
@@ -232,7 +234,7 @@ public class StagePanelSecond extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cursorPosition = 0;
-				getSwitcher().showFirstStage();
+				getSwitcher().showFirstStage(path);
 			}
 		});	
 		this.add(arrowLeft);
@@ -254,13 +256,30 @@ public class StagePanelSecond extends JPanel {
 					maps.get(cursorPosition).getX() - 5, maps.get(cursorPosition).getY() - 5, this);
 		}
 		
-		for(int i = 0; i < maps.size(); i++) {
+	if(path.contains("multi")) {
 			
-			if((i + DIM) <= MenuPanel.unlockedMaps)
-				maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps().get(i + DIM)));
-			else
-				maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
+			for(int i = 0; i < maps.size(); i++) {
+				
+				if((i + DIM) <= MenuPanel.unlockedMaps)
+					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps1P().get(i + DIM)));
+				else
+					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
+			}
+	}
+	else {
+		
+			for(int i = 0; i < maps.size(); i++) {
+				
+				if((i + DIM) <= MenuPanel.unlockedMaps)
+					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps2P().get(i + DIM)));
+				else
+					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
+			}
 		}
+	}
+	
+	public void setPath(String path) {
+		this.path = path;
 	}
 	
 	public JButton getButton(int i) {

@@ -1,60 +1,119 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
 @SuppressWarnings("serial")
-public class LoadGamePanel extends JPanel{
-	private PanelSwitcher switcher;
+public class LoadGamePanel extends JLayeredPane {
+
+	private final int DELAY = 5;
+	private final int DELTA_Y = 2;
+	private Component oldComponent;
+	boolean flag = false;
+	private JLabel label;
+	private PanelSwitcher panelSwitcher;
 	private JTextField filename;
-	
-	LoadGamePanel(final int w, final int h, PanelSwitcher switcher, JTextField filename){
+	private ArrayList<JPanel> panels = new ArrayList<>();
+
+	public LoadGamePanel(final int w, final int h, PanelSwitcher panelSwitcher, JTextField filename) {
 		
-		SoundsProvider.playStageStart();
+		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
-		this.setBackground(Color.DARK_GRAY);
 		this.setLayout(null);
-		this.setFilename(filename);
+		this.setOpaque(true);
 		
-		JLabel label = new JLabel("a brutta copia");
-		label.setForeground(Color.BLACK);
-		label.setFont(MainFrame.customFontM);
-		label.setBounds(500, 300, 200, 40);
+		label = new JLabel();
 		this.add(label);
-		setSwitcher(switcher);
+		this.filename = filename;
+		this.setSwitcher(panelSwitcher);
 		
-		Timer timer = new Timer(3000, new ActionListener() {
+		for(int i = 0; i < 2; i++) {
+			
+			panels.add(new JPanel());
+			panels.get(i).setPreferredSize(new Dimension(w, h));
+			panels.get(i).setBackground(Color.GRAY);
+		}
+		
+		this.add(panels.get(0), panels.get(1));
+	}
+
+	public void add(Component component1, Component component2) {
+
+		this.add(component1);
+		this.add(component2);
+
+		LoadGamePanel.putLayer((JComponent) component1, JLayeredPane.DRAG_LAYER);
+		LoadGamePanel.putLayer((JComponent) component2, JLayeredPane.DRAG_LAYER);
+
+		component1.setSize(getPreferredSize());
+		component1.setLocation(0, -getPreferredSize().height);
+		component2.setSize(getPreferredSize());
+		component2.setLocation(0, getPreferredSize().height);
+		
+		slideTopAndBottom(component1, component2);
+	}
+
+	public void slideTopAndBottom(final Component component1,final Component component2) {
+
+		final int tmp = -(getPreferredSize().height / 2);
+	
+		new Timer(DELAY, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getSwitcher().showGame(filename);
+
+				int y1 = component1.getY();
+				int y2 = component2.getY();
+				
+				if (y1 >= tmp) {
+
+					component1.setLocation(0, y1);
+					component2.setLocation(0, y2);
+					putLayer((JComponent) component1, JLayeredPane.DEFAULT_LAYER);
+					putLayer((JComponent) component2, JLayeredPane.DEFAULT_LAYER);
+					
+					if(oldComponent != null)
+						remove(oldComponent);
+						
+						label.setFont(MainFrame.customFontB);
+						label.setText("Stage " + filename.getText().subSequence(5, filename.getText().length() - 4));
+						label.setBounds((int) (getPreferredSize().getWidth() / 2) - 150,
+								(int) getPreferredSize().getHeight() / 2, 300, 100);
+						label.setBackground(Color.GRAY);
+						label.setForeground(Color.BLACK);
+						
+						((Timer) e.getSource()).stop();
+						
+						getSwitcher().showGame(filename);
+						
+				} else {
+
+					y1 += DELTA_Y;
+					y2 -= DELTA_Y;
+					component1.setLocation(0, y1);
+					component2.setLocation(0, y2);
+				}
+
+				repaint();
 			}
-		});
-		
-		timer.setRepeats(false);
-		timer.start();
-		}
+		}).start();
+	}
 
-		public PanelSwitcher getSwitcher() {
-			return switcher;
-		}
+	public PanelSwitcher getSwitcher() {
+		return panelSwitcher;
+	}
 
-		public void setSwitcher(PanelSwitcher switcher) {
-			this.switcher = switcher;
-		}
-
-		public JTextField getFilename() {
-			return filename;
-		}
-
-		public void setFilename(JTextField filename) {
-			this.filename = filename;
-		}
-
+	public void setSwitcher(PanelSwitcher panelSwitcher) {
+		this.panelSwitcher = panelSwitcher;
+	}	
 }

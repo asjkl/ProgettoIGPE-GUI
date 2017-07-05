@@ -51,7 +51,7 @@ public class MenuPanel extends JPanel {
 		setSwitcher(switcher);
 		setCursorPosition(0);
 
-		values = new String[3];
+		values = new String[5];
 		for(int i = 0; i < values.length; i++)
 			values[i] = "0";
 		
@@ -438,8 +438,7 @@ public class MenuPanel extends JPanel {
 					
 					tmp = st.nextToken();
 					
-					if(!tmp.equals("SCORE:") && !tmp.equals("MAPS:") 
-							&& i < values.length) {
+					if(tmp.matches("[0-9]+") && i < values.length) {
 						values[i++] = tmp;
 					}
 				}
@@ -447,7 +446,7 @@ public class MenuPanel extends JPanel {
 				line = reader.readLine();
 			}
 			
-			unlockedMaps = Integer.parseInt(values[2]);
+			unlockedMaps = Integer.parseInt(values[values.length - 1]);
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -464,9 +463,12 @@ public class MenuPanel extends JPanel {
 			w = new PrintWriter("./values.txt");
 			b = new BufferedWriter(w);
 			
-			b.write("SCORE:\n");
-			b.write(String.valueOf(0 + "\n"));
+			b.write("P1:\n");
+			b.write("0\n");
 			b.write(String.valueOf(values[1] + "\n"));
+			b.write("P2:\n");
+			b.write("0\n");
+			b.write("0\n");
 			b.write("MAPS:\n");
 			b.write(String.valueOf(unlockedMaps));
 			b.flush();

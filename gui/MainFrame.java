@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.ConnectionManager;
-import net.NetworkPanel;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 @SuppressWarnings("serial")
@@ -23,7 +22,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public static Font customFontB;
 	public static Font customFontS;
 	public static boolean transparent = false;
-	public static boolean slide = true;
+	private boolean slide;
 	public static boolean startThread = false;
 	private GraphicsEnvironment graphicscEnvironment;
 
@@ -44,8 +43,9 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public LoadGamePanel loadGame;
 	public LoadPanel load;
 	
-	public MainFrame(){
-	
+	public MainFrame() {
+
+		setSlide(true);
 		new ImageProvider();
 	  	this.setLayout(new BorderLayout());
 	  	this.setTitle("BATTLE CITY UNICAL");  
@@ -107,6 +107,15 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			e.printStackTrace();
 		}
 	}
+	
+	 public boolean isSlide() {
+		return slide;
+	 }
+
+	 public void setSlide(boolean slide) {
+		 this.slide = slide;
+	 }
+
   
 	public void switchTo(JComponent component) {   
 		 this.getContentPane().removeAll();
@@ -145,7 +154,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  else 
 			  if(component instanceof NetworkPanel) {
 				  ((NetworkPanel)component).getButton(network.getCursorPosition()).requestFocus();
-			  }
+		  }
 	  }
 	  
 	//-----------------------------override methods-----------------------------------
@@ -155,11 +164,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		  
 		  menu.drawScore();
 		  GameManager.offline = false;
-		  if(slide) {  
+		  if(isSlide()) {  
 			slideContainer = new SlideContainer(WIDTH, HEIGHT);
 		  	slideContainer.add(menu);
 		  	switchTo(slideContainer);
-		  	slide = false;
+		  	setSlide(false);
 		  }
 		  else 
 			switchTo(menu);
@@ -180,14 +189,16 @@ public class MainFrame extends JFrame implements PanelSwitcher {
     }
   
     @Override
-    public void showFirstStage() {
-	  firstStage.repaint();
+    public void showFirstStage(String path) {
+  	  firstStage.setPath(path);
+      firstStage.repaint();
 	  switchTo(firstStage);
     }
   
     @Override
-    public void showSecondStage() {
-	  secondStage.repaint();
+    public void showSecondStage(String path) {
+  	  secondStage.setPath(path);
+  	  secondStage.repaint();
 	  switchTo(secondStage);
     }
     

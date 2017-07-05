@@ -9,11 +9,11 @@ public interface PanelSwitcher {
 	
 	void showGame(JTextField f);
 	
-	void showFirstStage();
+	void showFirstStage(String p);
 	
-	void showSecondStage();
+	void showSecondStage(String p);
 
-	void showScores(String s);
+	void showScores(String v);
 	
 	void showNetwork();
 	

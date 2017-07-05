@@ -829,7 +829,7 @@ public class GamePanel extends JPanel {
 
 		MainFrame.transparent = true;
 		game.setExit(true);
-		MainFrame.slide = true;
+		((MainFrame)switcher).setSlide(true);
 		MenuPanel.unlockedMaps = 1;
 		SoundsProvider.cancelMove();
 		SoundsProvider.cancelStop();
