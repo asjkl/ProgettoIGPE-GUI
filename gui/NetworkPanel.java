@@ -3,11 +3,10 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -16,16 +15,17 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.Socket;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import net.ConnectionManager;
+import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
+import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
+import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
 
 @SuppressWarnings("serial")
 public class NetworkPanel extends JPanel {
@@ -34,153 +34,79 @@ public class NetworkPanel extends JPanel {
 	private JTextField ipTextField;
 	private JTextField nameTextField;
 	private JTextField portTextField;
-	private JPanel content;
-	private JDialog dialog;
-	private GridBagConstraints constraints;
-
 	private int cursorPosition;
 	private ArrayList<JButton> buttons;
 	private int DIM = 2;
 
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
+		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
 		this.setSwitcher(switcher);
-		this.setLayout(new BorderLayout());
-		content = new JPanel(new GridBagLayout()) {
-			
-			@Override
-			public void setPreferredSize(Dimension preferredSize) {
-				preferredSize.setSize(w, h);
-			}
-			
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				
-				((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-				g.drawImage(ImageProvider.getBackground2P(), 
-						(int) (content.getPreferredSize().getWidth() / 2),0, null);
-				
-				((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-
-					if (cursorPosition == 0)
-						g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX() + 85,
-								buttons.get(cursorPosition).getY() - 6, this);
-					else
-						g.drawImage(ImageProvider.getCursorRight(), buttons.get(cursorPosition).getX() - 65,
-								buttons.get(cursorPosition).getY() - 8, this);
-			}
-		};
-		content.setBackground(Color.BLACK);
-		constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.insets = new Insets(10, 10, 10, 10);
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-
+		this.setLayout(null);
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
 	
 		createLabels();
 		createButtons();
-		
-		add(content, BorderLayout.CENTER);
 	}
 	
 	private void createLabels() {
 
+		
+		
 		JLabel label = new JLabel();
 		label.setText("Server IP");
 		label.setBackground(Color.BLACK);
 		label.setForeground(Color.WHITE);
 		label.setFont(MainFrame.customFontM);
-		content.add(label, constraints);
+		label.setBounds(440,320,200,40);
+		this.add(label);
 		ipTextField = new JTextField(10);
 		ipTextField.setText("127.0.0.1");
 		ipTextField.setBackground(Color.BLACK);
 		ipTextField.setForeground(Color.WHITE);
 		ipTextField.setFont(MainFrame.customFontM);
-		constraints.gridx++;
-		content.add(ipTextField, constraints);
-		
-		constraints.gridy++;
-		constraints.gridx = 0;
+		ipTextField.setBounds(640,320,200,40);
+		this.add(ipTextField);
+	
+		//----
 		
 		JLabel label2 = new JLabel();
 		label2.setText("Server Port");
 		label2.setBackground(Color.BLACK);
 		label2.setForeground(Color.WHITE);
 		label2.setFont(MainFrame.customFontM);
-		content.add(label2, constraints);
+		label2.setBounds(440,380,200,40);
+		this.add(label2);
 		portTextField = new JTextField(10);
 		portTextField.setText("1234");
 		portTextField.setBackground(Color.BLACK);
 		portTextField.setForeground(Color.WHITE);
 		portTextField.setFont(MainFrame.customFontM);
-		constraints.gridx++;
-		content.add(portTextField, constraints);
+		portTextField.setBounds(640,380,200,40);
+		this.add(portTextField);
 		
-		constraints.gridy++;
-		constraints.gridx = 0;
+		//-----
 		
 		JLabel label3 = new JLabel();
 		label3.setText("Player Name");
 		label3.setBackground(Color.BLACK);
 		label3.setForeground(Color.WHITE);
 		label3.setFont(MainFrame.customFontM);
-		content.add(label3, constraints);
+		label3.setBounds(440,440,200,40);
+		this.add(label3);
 		nameTextField = new JTextField(10);
 		nameTextField.setText("P1");
 		nameTextField.setBackground(Color.BLACK);
 		nameTextField.setForeground(Color.WHITE);
 		nameTextField.setFont(MainFrame.customFontM);
-		constraints.gridx++;
-		content.add(nameTextField, constraints);
+		nameTextField.setBounds(640,440,200,40);
+		this.add(nameTextField);
 		
-		constraints.gridy++;
-		constraints.gridx = 0;
+
 	}
 	
-	private void showDialog() {
-		
-		dialog = new JDialog(dialog, "ERROR");
-		JLabel label = new JLabel("Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText());
-		label.setFont(MainFrame.customFontS);
-		label.setBackground(Color.BLACK);
-		label.setForeground(Color.RED);
-		label.setHorizontalAlignment(JLabel.CENTER);
-		JPanel panel = new JPanel(new GridLayout(2,0));
-		panel.setBackground(Color.BLACK);
-		panel.setBorder(BorderFactory.createLineBorder(Color.RED));
-		JButton ok = new JButton("OK");
-		ok.setBorder(null);
-		ok.setContentAreaFilled(false);
-		ok.setBorderPainted(false);
-		ok.setFocusPainted(false);
-		ok.setFont(MainFrame.customFontS);
-		ok.setBackground(Color.BLACK);
-		ok.setForeground(Color.WHITE);
-		ok.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				SoundsProvider.playBulletHit1();
-				dialog.dispose();
-			}
-		});
-		
-		panel.add(label);
-		panel.add(ok);
-		panel.setPreferredSize(new Dimension(300,100));
-		dialog.setContentPane(panel);
-		dialog.setUndecorated(true);
-		dialog.setModal(true);
-		dialog.pack();
-		dialog.setLocationRelativeTo(this);
-		dialog.setVisible(true);
-	}
-
 	private void createButtons() {
 		
 		for (int i = 0; i < DIM; i++) {
@@ -244,10 +170,25 @@ public class NetworkPanel extends JPanel {
 			});
 
 			addActionListener(i);
-			content.add(buttons.get(i),constraints);
-			constraints.gridx++;
+			this.add(buttons.get(i));
 		}
 		buttons.get(1).setForeground(Color.YELLOW);
+	}
+	
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+		g.drawImage(ImageProvider.getBackground2P(), (int) (getPreferredSize().getWidth() / 2)-375,0, null);
+		
+		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+
+			if (cursorPosition == 0)
+				g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX() + 85,
+						buttons.get(cursorPosition).getY() - 6, this);
+			else
+				g.drawImage(ImageProvider.getCursorRight(), buttons.get(cursorPosition).getX() - 60,
+						buttons.get(cursorPosition).getY() - 8, this);
 	}
 	
 	public void addActionListener(int j) {
@@ -277,7 +218,9 @@ public class NetworkPanel extends JPanel {
 						try {
 							connectoToServer();
 						} catch (final Exception e) {
-							showDialog();
+							JOptionPane.showMessageDialog(buttons.get(1),
+									"Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText(),
+									"Network Error", JOptionPane.ERROR_MESSAGE);
 						}
 					};
 				}.start();
@@ -298,7 +241,7 @@ public class NetworkPanel extends JPanel {
 			buttons.get(j).setText("Back");
 			break;
 		case 1:
-			buttons.get(j).setBounds((int) ((getPreferredSize().getWidth() / 2)-75), 600, 150, 35);
+			buttons.get(j).setBounds(600, 570, 150, 35);
 			buttons.get(j).setText("Connect");
 			break;
 		default:
@@ -315,7 +258,7 @@ public class NetworkPanel extends JPanel {
 	public int getCursorPosition() {
 		return cursorPosition;
 	}
-
+	
 	public void setCursorPosition(int cursorPosition) {
 		this.cursorPosition = cursorPosition;
 	}
@@ -332,3 +275,4 @@ public class NetworkPanel extends JPanel {
 		this.switcher = switcher;
 	}
 }
+

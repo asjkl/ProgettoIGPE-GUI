@@ -58,6 +58,7 @@ public class GamePanel extends JPanel {
 	private JDialog dialog;
 	private JButton[] buttons;
 	private GameManager game;
+	private int currentResume;
 	
 	private ConnectionManager connectionManager;
 	private String playerName;
@@ -135,6 +136,7 @@ public class GamePanel extends JPanel {
 		this.longTime = new Long(0);
 		cursorPositionDialog = 0;
 		tempFPS = 1.5d;
+		currentResume = ((MainFrame)switcher).getCurrentResume();
 
 		this.addKeyListener(new KeyAdapter() {
 
@@ -149,12 +151,12 @@ public class GamePanel extends JPanel {
 							if (game.getPlayersArray().size() > 1) {
 								game.getPlayersArray().get(0).getKeys().clear();
 								game.getPlayersArray().get(1).getKeys().clear();
+								game.getPlayersArray().get(1).keyBits.clear();
 							} else {
 								game.getPlayersArray().get(0).getKeys().clear();
 							}
 							game.getPlayersArray().get(0).keyBits.clear();
-							if(game.getPlayersArray().size()>1)
-								game.getPlayersArray().get(1).keyBits.clear();
+								
 							option();
 						}
 					} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -164,12 +166,12 @@ public class GamePanel extends JPanel {
 							if (game.getPlayersArray().size() > 1) {
 								game.getPlayersArray().get(0).getKeys().clear();
 								game.getPlayersArray().get(1).getKeys().clear();
+								game.getPlayersArray().get(1).keyBits.clear();
 							} else {
 								game.getPlayersArray().get(0).getKeys().clear();
 							}
 							game.getPlayersArray().get(0).keyBits.clear();
-							if(game.getPlayersArray().size()>1)
-								game.getPlayersArray().get(1).keyBits.clear();
+								
 							game.paused = true;
 						} else {
 							game.paused = false;
@@ -246,7 +248,10 @@ public class GamePanel extends JPanel {
 	
 	// ----------------------GAMELOOP---------------------------//
 	
-	public void gameLoop(){
+	public void gameLoop() {
+		
+		game.getPlayersArray().get(0).setResume(currentResume);
+		
 		while (!game.isExit()) {
 			start = System.nanoTime();
 
@@ -592,23 +597,7 @@ public class GamePanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					SoundsProvider.playBulletHit1();
-					MainFrame.transparent = false;
-					game.pauseOptionDialog = false;
-					game.setExit(true);
-					dialog.dispose();
-					getSwitcher().showMenu();
-					SoundsProvider.cancelMove();
-					SoundsProvider.cancelStop();
-				}
-			});
-			break;
-		case 2: // RESTART
-			buttons[j].addActionListener(new ActionListener() {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-				
 					if(GameManager.offline) {
 						SoundsProvider.playStageStart();
 						SoundsProvider.playBulletHit1();
@@ -620,7 +609,23 @@ public class GamePanel extends JPanel {
 						SoundsProvider.cancelStop();
 					}
 				}
+			});
+			break;
+		case 2: // RESTART
+			buttons[j].addActionListener(new ActionListener() {
 
+				@Override
+				public void actionPerformed(ActionEvent e) {
+				
+					SoundsProvider.playBulletHit1();
+					MainFrame.transparent = false;
+					game.pauseOptionDialog = false;
+					game.setExit(true);
+					dialog.dispose();
+					getSwitcher().showMenu();
+					SoundsProvider.cancelMove();
+					SoundsProvider.cancelStop();
+				}
 			});
 			break;
 			/*
@@ -845,7 +850,13 @@ public class GamePanel extends JPanel {
 		MainFrame.transparent = true;
 		game.setExit(true);
 		((MainFrame)switcher).setSlide(true);
-		MenuPanel.unlockedMaps = 1;
+		((MainFrame)switcher).setCurrentResume(3);
+		
+		if(game.getPlayersArray().size() == 1)
+			((MainFrame)switcher).setUnlockedMaps1P(1);
+			else 
+				((MainFrame)switcher).setUnlockedMaps2P(1);
+		
 		SoundsProvider.cancelMove();
 		SoundsProvider.cancelStop();
 		SoundsProvider.playGameOver();
@@ -859,8 +870,23 @@ public class GamePanel extends JPanel {
 		repaint();
 		MainFrame.transparent = true;
 		game.setExit(true);
-		if(GameManager.offline)
-			MenuPanel.unlockedMaps = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
+		if(GameManager.offline) {
+				
+			currentResume = game.getPlayersArray().get(0).getResume();
+			((MainFrame)switcher).setCurrentResume(currentResume);
+
+			
+			if(game.getPlayersArray().size() == 1) {
+				int m = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
+				((MainFrame)switcher).setUnlockedMaps1P(m);
+			}
+			else {
+				
+				int m = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
+				((MainFrame)switcher).setUnlockedMaps2P(m);
+				
+			}
+		}
 		SoundsProvider.cancelMove();
 		SoundsProvider.cancelStop();
 		SoundsProvider.playStageComplete();

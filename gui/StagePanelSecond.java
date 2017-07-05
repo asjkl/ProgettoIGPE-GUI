@@ -29,9 +29,9 @@ public class StagePanelSecond extends JPanel {
 	private JLabel labelStage;
 	private JButton arrowLeft;
 	private ArrayList<JButton> maps;
-	private PanelSwitcher panelSwitcher;
+	private PanelSwitcher switcher;
 	
-	public StagePanelSecond(final int w, final int h, PanelSwitcher panelSwitcher) {
+	public StagePanelSecond(final int w, final int h, PanelSwitcher switcher) {
 	
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.GRAY);
@@ -48,7 +48,7 @@ public class StagePanelSecond extends JPanel {
 		file = new File(path);
 		fileChooser = new JFileChooser();
 		
-		setSwitcher(panelSwitcher);
+		setSwitcher(switcher);
 		createArrowButton();
 		createButton();
 	}
@@ -146,8 +146,14 @@ public class StagePanelSecond extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					
 					SoundsProvider.playBulletHit1();
+					int tmp = 0;
 					
-					if(j + DIM <= MenuPanel.unlockedMaps) {
+					if(path.contains("single"))
+						tmp = ((MainFrame)switcher).getUnlockedMaps1P();
+					else
+						tmp = ((MainFrame)switcher).getUnlockedMaps2P();
+							
+					if(j + DIM <= tmp) {
 						
 						fileChooser.setCurrentDirectory(file);
 						
@@ -260,7 +266,7 @@ public class StagePanelSecond extends JPanel {
 			
 			for(int i = 0; i < maps.size(); i++) {
 				
-				if((i + DIM) <= MenuPanel.unlockedMaps)
+				if((i + DIM) <= ((MainFrame)switcher).getUnlockedMaps1P())
 					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps1P().get(i + DIM)));
 				else
 					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
@@ -270,7 +276,7 @@ public class StagePanelSecond extends JPanel {
 		
 			for(int i = 0; i < maps.size(); i++) {
 				
-				if((i + DIM) <= MenuPanel.unlockedMaps)
+				if((i + DIM) <= ((MainFrame)switcher).getUnlockedMaps2P())
 					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps2P().get(i + DIM)));
 				else
 					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
@@ -286,12 +292,12 @@ public class StagePanelSecond extends JPanel {
 		return maps.get(i);
 	}
 	
-	public void setSwitcher(PanelSwitcher panelSwitcher) {
-		this.panelSwitcher = panelSwitcher;
+	public void setSwitcher(PanelSwitcher switcher) {
+		this.switcher = switcher;
 	}
 
 	public PanelSwitcher getSwitcher() {
-		return panelSwitcher;
+		return switcher;
 	}
 
 	public int getCursorPosition() {

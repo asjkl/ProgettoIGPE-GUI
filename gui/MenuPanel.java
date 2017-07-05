@@ -38,7 +38,6 @@ public class MenuPanel extends JPanel {
 	private JLabel high;
 	private JLabel player;
 	private String values[];
-	protected static int unlockedMaps;
 	private int tmp = -1;
 
 	public MenuPanel(final int w, final int h, PanelSwitcher switcher) {
@@ -51,7 +50,7 @@ public class MenuPanel extends JPanel {
 		setSwitcher(switcher);
 		setCursorPosition(0);
 
-		values = new String[5];
+		values = new String[DIM + 1];
 		for(int i = 0; i < values.length; i++)
 			values[i] = "0";
 		
@@ -446,7 +445,9 @@ public class MenuPanel extends JPanel {
 				line = reader.readLine();
 			}
 			
-			unlockedMaps = Integer.parseInt(values[values.length - 1]);
+			((MainFrame)switcher).setCurrentResume(Integer.parseInt(values[values.length - 3]));
+			((MainFrame)switcher).setUnlockedMaps1P(Integer.parseInt(values[values.length - 2]));
+			((MainFrame)switcher).setUnlockedMaps2P(Integer.parseInt(values[values.length - 1]));
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -457,6 +458,10 @@ public class MenuPanel extends JPanel {
 		
 		BufferedWriter b = null;
 		PrintWriter w = null;
+		
+		int p1 = ((MainFrame)switcher).getUnlockedMaps1P();
+		int p2 = ((MainFrame)switcher).getUnlockedMaps2P();
+		int r = ((MainFrame)switcher).getCurrentResume();
 		
 		try {
 			
@@ -469,8 +474,11 @@ public class MenuPanel extends JPanel {
 			b.write("P2:\n");
 			b.write("0\n");
 			b.write("0\n");
+			b.write("LIVES:\n");
+			b.write(String.valueOf(r) + "\n");
 			b.write("MAPS:\n");
-			b.write(String.valueOf(unlockedMaps));
+			b.write(String.valueOf(p1) + "\n");
+			b.write(String.valueOf(p2));
 			b.flush();
 			b.close();
 			

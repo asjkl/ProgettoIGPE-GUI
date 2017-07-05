@@ -31,13 +31,14 @@ public class ScoresPanel extends JPanel {
 	private int x, y;
 	private final int OBJECT = 5;
 	private int occurrence[][];
-	private PanelSwitcher panelSwitcher;	
+	private PanelSwitcher switcher;	
 	private GameManager game;
 	private String value;
 	private JTextField filename;
-	private MainFrame mainFrame;
+	private final int SLEEP = 150;
+	private final int DELAY;
 	
-	public ScoresPanel(final int w, final int h, PanelSwitcher panelSwitcher, GameManager game, String value) {
+	public ScoresPanel(final int w, final int h, PanelSwitcher switcher, GameManager game, String value) {
 	
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
@@ -45,30 +46,30 @@ public class ScoresPanel extends JPanel {
 	
 		this.game = game;
 		this.value = value;
-		setSwitcher(panelSwitcher);
-	
-		mainFrame = (MainFrame) panelSwitcher;
-		
+		setSwitcher(switcher);
+
 		occurrence = new int[game.getPlayersArray().size()][OBJECT];
 		
 		if(game.getPlayersArray().size() == 1)
 			setUp1Player();
 		else 
 			setUp2Players();
+
+		DELAY = (8000 * game.getPlayersArray().size());
 		
-			
-		Timer timer = new Timer(8000,new ActionListener() {
+		Timer timer = new Timer(DELAY, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if(mainFrame.isSlide()) {
+				if(((MainFrame)switcher).isSlide()) {
 					
 					writeScore(0);
 					getSwitcher().showMenu();
 				}
 				else {
 					
+					writeScore(Integer.parseInt(value));
 					filename = new JTextField();
 					filename.setText("stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
 					getSwitcher().showLoading(filename);
@@ -103,9 +104,7 @@ public class ScoresPanel extends JPanel {
 	}
 	
 	public void setUp2Players() {
-	
-		//repaint();
-		
+
 		x = 385;
 		y = 305;
 		
@@ -154,7 +153,6 @@ public class ScoresPanel extends JPanel {
 		}	
 	}
 	
-	//TODO AGGIUNGER POINTS POWER UP
 	private void drawLabelP1() {
 		
 		JLabel stage = new JLabel();
@@ -254,7 +252,7 @@ public class ScoresPanel extends JPanel {
 						
 						while(currValue <= occurrence[i][j]) {
 							
-							Thread.sleep(150);
+							Thread.sleep(SLEEP);
 							SoundsProvider.playScore();
 							
 							points.setText(String.valueOf(currValue * 100 * (j + 1)));
@@ -279,7 +277,7 @@ public class ScoresPanel extends JPanel {
 					
 					for(int j = 0; j <= totalP1; j++) {
 						
-						Thread.sleep(200);
+						Thread.sleep(SLEEP);
 						SoundsProvider.playScore();
 						total.setText(String.valueOf(j));
 						total.setBounds(positionX, positionY + 28, 95, 45);
@@ -400,6 +398,9 @@ public class ScoresPanel extends JPanel {
 							
 							while(currValue <= occurrence[i][j]) {
 								
+								Thread.sleep(SLEEP);
+								SoundsProvider.playScore();
+								
 								points.setText(String.valueOf(currValue * 100 * (j + 1)));
 								
 								if(currValue == 0)
@@ -409,9 +410,8 @@ public class ScoresPanel extends JPanel {
 								
 								occur.setText(String.valueOf(currValue));
 								occur.setBounds(currPosition, positionY - 40, 95, 45);
-								SoundsProvider.playScore();
 								currValue++;
-								Thread.sleep(200);
+								
 							}
 						}				
 					
@@ -426,10 +426,11 @@ public class ScoresPanel extends JPanel {
 					
 					for(int j = 0; j <= totalP1; j++) {
 						
+						Thread.sleep(SLEEP);
+						SoundsProvider.playScore();
+						
 						total1P.setText(String.valueOf(j));
 						total1P.setBounds(positionX, positionY - 22, 95, 45);
-						SoundsProvider.playScore();
-						Thread.sleep(200);
 					}
 					
 					JLabel total2P = new JLabel();
@@ -441,10 +442,11 @@ public class ScoresPanel extends JPanel {
 					
 					for(int j = 0; j <= totalP2; j++) {
 						
+						Thread.sleep(SLEEP);
+						SoundsProvider.playScore();
+						
 						total2P.setText(String.valueOf(j));
 						total2P.setBounds(positionK, positionY - 22, 95, 45);
-						SoundsProvider.playScore();
-						Thread.sleep(200);
 					}
 				}
 				catch(InterruptedException e) {
@@ -455,12 +457,21 @@ public class ScoresPanel extends JPanel {
 		}.start();
 	}
 	
-public void writeScore(int t) {
+public void writeScore(int value) {
 		
 		BufferedWriter b = null;
 		PrintWriter w = null;
 		
-		t += 1;
+		int p1, p2, r;
+		
+		if(game.getPlayersArray().size() == 1) 
+			((MainFrame)switcher).setUnlockedMaps1P(++value);
+		else
+			((MainFrame)switcher).setUnlockedMaps2P(++value);
+		
+		p1 = ((MainFrame)switcher).getUnlockedMaps1P();
+		p2 = ((MainFrame)switcher).getUnlockedMaps2P();
+		r = ((MainFrame)switcher).getCurrentResume();
 		
 		try {
 			
@@ -473,8 +484,11 @@ public void writeScore(int t) {
 			b.write("P2:\n");
 			b.write(String.valueOf(currScoreP2 + "\n"));
 			b.write(String.valueOf(highScoreP2 + "\n"));
+			b.write("LIVES:\n");
+			b.write(String.valueOf(r) + "\n");
 			b.write("MAPS:\n");
-			b.write(String.valueOf(t));
+			b.write(String.valueOf(p1) + "\n");
+			b.write(String.valueOf(p2));
 			b.flush();
 			b.close();
 		}
@@ -576,10 +590,10 @@ public void writeScore(int t) {
 	}
 	
 	public PanelSwitcher getSwitcher() {
-		return panelSwitcher;
+		return switcher;
 	}
 
-	public void setSwitcher(PanelSwitcher panelSwitcher) {
-		this.panelSwitcher = panelSwitcher;
+	public void setSwitcher(PanelSwitcher switcher) {
+		this.switcher = switcher;
 	}
 }

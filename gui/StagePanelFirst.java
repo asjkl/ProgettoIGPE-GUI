@@ -31,9 +31,9 @@ public class StagePanelFirst extends JPanel {
 	private JLabel labelStage;
 	private JButton arrowRight;
 	private ArrayList<JButton> maps;
-	private PanelSwitcher panelSwitcher;
+	private PanelSwitcher switcher;
 	
-	public StagePanelFirst(final int w, final int h, PanelSwitcher panelSwitcher) {
+	public StagePanelFirst(final int w, final int h, PanelSwitcher switcher) {
 	
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.GRAY);
@@ -50,7 +50,7 @@ public class StagePanelFirst extends JPanel {
 		file = new File(path);
 		fileChooser = new JFileChooser();
 		
-		setSwitcher(panelSwitcher);
+		setSwitcher(switcher);
 		createButton();
 		createArrowButton();
 	}
@@ -186,8 +186,14 @@ public class StagePanelFirst extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					
 					SoundsProvider.playBulletHit1();
+					int tmp = 0;
 					
-					if(j <= MenuPanel.unlockedMaps) {
+					if(path.contains("single"))
+						tmp = ((MainFrame)switcher).getUnlockedMaps1P();
+					else
+						tmp = ((MainFrame)switcher).getUnlockedMaps2P();
+							
+					if(j <= tmp) {
 					
 						fileChooser.setCurrentDirectory(file);
 						
@@ -317,7 +323,7 @@ public class StagePanelFirst extends JPanel {
 			
 				if(i != 0) {
 					
-					if(i <= MenuPanel.unlockedMaps)
+					if(i <= ((MainFrame)switcher).getUnlockedMaps1P())
 						maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps1P().get(i - 1)));
 					
 					else
@@ -331,7 +337,7 @@ public class StagePanelFirst extends JPanel {
 				
 				if(i != 0) {
 					
-					if(i <= MenuPanel.unlockedMaps)
+					if(i <= ((MainFrame)switcher).getUnlockedMaps2P())
 						maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps2P().get(i - 1)));
 					
 					else
@@ -350,12 +356,12 @@ public class StagePanelFirst extends JPanel {
 		return maps.get(i);
 	}
 	
-	public void setSwitcher(PanelSwitcher panelSwitcher) {
-		this.panelSwitcher = panelSwitcher;
+	public void setSwitcher(PanelSwitcher switcher) {
+		this.switcher = switcher;
 	}
 
 	public PanelSwitcher getSwitcher() {
-		return panelSwitcher;
+		return switcher;
 	}
 
 	public int getCursorPosition() {

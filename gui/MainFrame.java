@@ -23,6 +23,9 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public static Font customFontS;
 	public static boolean transparent = false;
 	private boolean slide;
+	private int unlockedMaps1P;
+	private int unlockedMaps2P;
+	private int currentResume;
 	private GraphicsEnvironment graphicscEnvironment;
 
 	public NetworkPanel network;
@@ -39,12 +42,15 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public GamePanel gamePanel;
 	public SoundsProvider sounds;
 	public ImageProvider images;
-	public LoadGamePanel loadGame;
+	public LoadGamePanel LoadGamePanel;
 	public LoadPanel load;
 
 	public MainFrame() {
 
 		setSlide(true);
+		setCurrentResume(3);
+		setUnlockedMaps1P(1);
+		setUnlockedMaps2P(1);
 		new ImageProvider();
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
@@ -88,33 +94,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		images = new ImageProvider();
 		sounds = new SoundsProvider();
 	}
-
-	private void setFont() {
-
-		try {
-
-			customFontM = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f);
-			customFontB = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f);
-			customFontS = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f);
-			graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
-
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		} catch (FontFormatException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public boolean isSlide() {
-		return slide;
-	}
-
-	public void setSlide(boolean slide) {
-		this.slide = slide;
-	}
-
+	
 	public void switchTo(JComponent component) {
 		this.getContentPane().removeAll();
 		this.add(component);
@@ -201,8 +181,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	@Override
 	public void showLoading(JTextField f) {
-		loadGame = new LoadGamePanel(WIDTH, HEIGHT, this, f);
-		switchTo(loadGame);
+		LoadGamePanel = new LoadGamePanel(WIDTH, HEIGHT, this, f);
+		switchTo(LoadGamePanel);
 	}
 
 	@Override
@@ -223,5 +203,55 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		switchTo(play);
 		return gameManager;
 	}
+	
+	//---------------------------------SET & GET---------------------------------------------
+	private void setFont() {
 
+		try {
+
+			customFontM = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f);
+			customFontB = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f);
+			customFontS = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f);
+			graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int getCurrentResume() {
+		return currentResume;
+	}
+
+	public void setCurrentResume(int currentResume) {
+		this.currentResume = currentResume;
+	}
+	
+	public int getUnlockedMaps1P() {
+		return unlockedMaps1P;
+	}
+
+	public void setUnlockedMaps1P(int unlockedMaps1P) {
+		this.unlockedMaps1P = unlockedMaps1P;
+	}
+
+	public int getUnlockedMaps2P() {
+		return unlockedMaps2P;
+	}
+
+	public void setUnlockedMaps2P(int unlockedMaps2P) {
+		this.unlockedMaps2P = unlockedMaps2P;
+	}
+
+	public boolean isSlide() {
+		return slide;
+	}
+
+	public void setSlide(boolean slide) {
+		this.slide = slide;
+	}
 }
