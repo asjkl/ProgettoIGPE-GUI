@@ -27,6 +27,7 @@ public class LoadGamePanel extends JLayeredPane {
 
 	public LoadGamePanel(final int w, final int h, PanelSwitcher panelSwitcher, JTextField filename) {
 		
+		SoundsProvider.playStageStart();
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
 		this.setLayout(null);
@@ -36,6 +37,13 @@ public class LoadGamePanel extends JLayeredPane {
 		this.add(label);
 		this.filename = filename;
 		this.setSwitcher(panelSwitcher);
+		
+		label.setFont(MainFrame.customFontB);
+		label.setText("Stage " + filename.getText().subSequence(5, filename.getText().length() - 4));
+		label.setBounds((int) (getPreferredSize().getWidth() / 2) - 70,
+				(int) getPreferredSize().getHeight() / 2-50, 300, 100);
+		label.setBackground(Color.GRAY);
+		label.setForeground(Color.BLACK);
 		
 		for(int i = 0; i < 2; i++) {
 			
@@ -85,15 +93,14 @@ public class LoadGamePanel extends JLayeredPane {
 					if(oldComponent != null)
 						remove(oldComponent);
 						
-						label.setFont(MainFrame.customFontB);
-						label.setText("Stage " + filename.getText().subSequence(5, filename.getText().length() - 4));
-						label.setBounds((int) (getPreferredSize().getWidth() / 2) - 150,
-								(int) getPreferredSize().getHeight() / 2, 300, 100);
-						label.setBackground(Color.GRAY);
-						label.setForeground(Color.BLACK);
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}
 						
 						((Timer) e.getSource()).stop();
-						
+					
 						getSwitcher().showGame(filename);
 						
 				} else {

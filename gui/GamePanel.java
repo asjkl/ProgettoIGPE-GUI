@@ -466,7 +466,7 @@ public class GamePanel extends JPanel {
 
 	public void option() {
 
-		dialog.setPreferredSize(new Dimension(250, 250));
+		dialog.setPreferredSize(new Dimension(250, 300));
 		JPanel fullpanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -481,10 +481,12 @@ public class GamePanel extends JPanel {
 			}
 		};
 		JPanel text = new JPanel();
-		JPanel buttonspanel = new JPanel(new GridLayout(4, 1, 0, 10));
+		JPanel buttonspanel = new JPanel(new GridLayout(3, 1, 0, 40));
+//		JPanel buttonspanel = new JPanel(new GridLayout(4, 1, 0, 40));
 		JLabel label = new JLabel("Option");
-		String[] buttonTxt = { "Retry", "Menu", "Restart", "Exit" };
-		fullpanel.setPreferredSize(new Dimension(250, 250));
+		String[] buttonTxt = { "Retry", "Menu", "Restart"};
+//		String[] buttonTxt = { "Retry", "Menu", "Restart", "Exit" };
+		fullpanel.setPreferredSize(new Dimension(250, 350));
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
 		buttons = new JButton[buttonTxt.length];
@@ -568,8 +570,7 @@ public class GamePanel extends JPanel {
 		dialog.pack();
 		dialog.setLocationRelativeTo(this);
 		dialog.setVisible(true);
-		
-		
+	
 	}
 
 	public void optionActionListener(int j) {
@@ -623,6 +624,7 @@ public class GamePanel extends JPanel {
 
 			});
 			break;
+			/*
 		case 3: // EXIT
 			buttons[j].addActionListener(new ActionListener() {
 
@@ -633,6 +635,7 @@ public class GamePanel extends JPanel {
 
 			});
 			break;
+			*/
 		default:
 			break;
 		}

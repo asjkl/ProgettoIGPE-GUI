@@ -148,6 +148,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	@Override
 	public void showMenu() {
 
+		//TODO ce un problema delle volte controllare
 		menu.drawScore();
 		GameManager.offline = false;
 		if (isSlide()) {
