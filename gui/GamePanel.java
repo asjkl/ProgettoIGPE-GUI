@@ -261,11 +261,10 @@ public class GamePanel extends JPanel {
 				longTime = (System.nanoTime() - start);
 				end = (double) (longTime.doubleValue() / 1000000);
 
-			} 
-			
-			SoundsProvider.cancelMove();
-			SoundsProvider.cancelStop();
-			
+			}else if(game.paused || game.pauseOptionDialog){
+				SoundsProvider.cancelMove();
+				SoundsProvider.cancelStop();
+			}	
 			repaint();
 			
 			if(fullGamePanel != null)
@@ -466,7 +465,7 @@ public class GamePanel extends JPanel {
 
 	public void option() {
 
-		dialog.setPreferredSize(new Dimension(250, 300));
+		dialog.setPreferredSize(new Dimension(250, 250));
 		JPanel fullpanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -481,12 +480,12 @@ public class GamePanel extends JPanel {
 			}
 		};
 		JPanel text = new JPanel();
-		JPanel buttonspanel = new JPanel(new GridLayout(3, 1, 0, 40));
+		JPanel buttonspanel = new JPanel(new GridLayout(3, 1, 0, 10));
 //		JPanel buttonspanel = new JPanel(new GridLayout(4, 1, 0, 40));
 		JLabel label = new JLabel("Option");
-		String[] buttonTxt = { "Retry", "Menu", "Restart"};
+		String[] buttonTxt = { "Retry", "Restart","Menu"};
 //		String[] buttonTxt = { "Retry", "Menu", "Restart", "Exit" };
-		fullpanel.setPreferredSize(new Dimension(250, 350));
+		fullpanel.setPreferredSize(new Dimension(250, 250));
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
 		buttons = new JButton[buttonTxt.length];
@@ -873,14 +872,17 @@ public class GamePanel extends JPanel {
 	private void sounds() {
 
 		if (game.isSoundPowerUp()) {
-			SoundsProvider.playPowerUpAppear();
+			if(GameManager.offline)
+				SoundsProvider.playPowerUpAppear();
 			game.setSoundPowerUp(false);
 		}
 
 		if (game.isExplosion()) {
+			if(GameManager.offline){
+				SoundsProvider.playExplosion1();
+				SoundsProvider.playExplosion2();
+			}
 			game.setExplosion(false);
-			SoundsProvider.playExplosion1();
-			SoundsProvider.playExplosion2();
 		}
 
 		// players
@@ -888,16 +890,26 @@ public class GamePanel extends JPanel {
 
 			if (!SoundsProvider.stageStartClip.isActive()) {
 				if (game.getPlayersArray().get(a).isShot()) {
-					SoundsProvider.playBulletShot();
+					if(GameManager.offline){
+						SoundsProvider.playBulletShot();
+					}
 					game.getPlayersArray().get(a).setShot(false);
 				}
 
-				if ((!GameManager.offline && a == 0) || game.getPlayersArray().size() == 1) {
-					if (!game.getPlayersArray().get(a).isPressed())
-						SoundsProvider.playStop();
-					else
-						SoundsProvider.playMove();
-				}
+				if(GameManager.offline)
+					//SINGLEPLAYER OFFLINE
+					//TODO
+					if (game.getPlayersArray().size() == 1 && a==0) {
+						if (!game.getPlayersArray().get(a).isPressed())
+							SoundsProvider.playStop();
+						else
+							SoundsProvider.playMove();
+					}else{//MULTIPLAYER OFFLINE
+						if (!game.getPlayersArray().get(a).isPressed())
+							SoundsProvider.playStop();
+						else
+							SoundsProvider.playMove();
+					}
 			}
 		}
 

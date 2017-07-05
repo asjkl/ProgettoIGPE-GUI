@@ -10,8 +10,12 @@ import java.util.List;
 
 import javax.swing.JTextField;
 
+import progettoIGPE.davide.giovanni.unical2016.BrickWall;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
+import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
+import progettoIGPE.davide.giovanni.unical2016.SteelWall;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
+import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
 
 public class ConnectionManager implements Runnable {
 
@@ -80,6 +84,7 @@ public class ConnectionManager implements Runnable {
 				// mainFrame.showMenu();
 				// } else {
 				gameManager.parseStatusFromString(buffer);
+				playSounds(gameManager);
 				mainFrame.gamePanel.repaint();
 				mainFrame.play.repaint();
 				if(gameManager.isExit()){
@@ -93,6 +98,41 @@ public class ConnectionManager implements Runnable {
 			}
 		} catch (final IOException e) {
 			System.out.println("Connection closed");
+		}
+	}
+
+	private void playSounds(GameManager game) {
+		if(game.isSoundPowerUp()){
+			SoundsProvider.playPowerUpAppear();
+		}
+
+		if(game.isExplosion()){
+			SoundsProvider.playExplosion1();
+			SoundsProvider.playExplosion2();
+		}
+		
+		// players
+		for (int a = 0; a < game.getPlayersArray().size(); a++) {
+			if (game.getPlayersArray().get(a).isShot()) {
+				SoundsProvider.playBulletShot();
+			}
+			
+			if (!game.getPlayersArray().get(a).isPressed())
+				SoundsProvider.playStop();
+			else
+				SoundsProvider.playMove();
+			}
+		
+		// rockets
+		for (int a = 0; a < game.getRocket().size(); a++) {
+			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
+				if (game.getRocket().get(a).getNext() instanceof BrickWall)
+					SoundsProvider.playBulletHit2();
+				else if (game.getRocket().get(a).getNext() instanceof SteelWall
+						|| game.getRocket().get(a).isOnBorder()) {
+					SoundsProvider.playBulletHit1();
+				}
+			}
 		}
 	}
 }
