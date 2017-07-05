@@ -16,13 +16,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.Socket;
 import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -59,7 +57,7 @@ public class NetworkPanel extends JPanel {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				
-				((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
+				((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 				g.drawImage(ImageProvider.getBackground2P(), 
 						(int) (content.getPreferredSize().getWidth() / 2),0, null);
 				
@@ -143,7 +141,7 @@ public class NetworkPanel extends JPanel {
 		constraints.gridx = 0;
 	}
 	
-private void showDialog() {
+	private void showDialog() {
 		
 		dialog = new JDialog(dialog, "ERROR");
 		JLabel label = new JLabel("Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText());
@@ -183,7 +181,6 @@ private void showDialog() {
 		dialog.setVisible(true);
 	}
 
-	
 	private void createButtons() {
 		
 		for (int i = 0; i < DIM; i++) {

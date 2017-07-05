@@ -153,7 +153,8 @@ public class GamePanel extends JPanel {
 								game.getPlayersArray().get(0).getKeys().clear();
 							}
 							game.getPlayersArray().get(0).keyBits.clear();
-							game.getPlayersArray().get(1).keyBits.clear();
+							if(game.getPlayersArray().size()>1)
+								game.getPlayersArray().get(1).keyBits.clear();
 							option();
 						}
 					} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -167,7 +168,8 @@ public class GamePanel extends JPanel {
 								game.getPlayersArray().get(0).getKeys().clear();
 							}
 							game.getPlayersArray().get(0).keyBits.clear();
-							game.getPlayersArray().get(1).keyBits.clear();
+							if(game.getPlayersArray().size()>1)
+								game.getPlayersArray().get(1).keyBits.clear();
 							game.paused = true;
 						} else {
 							game.paused = false;
@@ -479,9 +481,9 @@ public class GamePanel extends JPanel {
 			}
 		};
 		JPanel text = new JPanel();
-		JPanel buttonspanel = new JPanel(new GridLayout(3, 1, 0, 10));
+		JPanel buttonspanel = new JPanel(new GridLayout(4, 1, 0, 10));
 		JLabel label = new JLabel("Option");
-		String[] buttonTxt = { "Retry", "Restart", "Menu" };
+		String[] buttonTxt = { "Retry", "Menu", "Restart", "Exit" };
 		fullpanel.setPreferredSize(new Dimension(250, 250));
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
@@ -585,25 +587,7 @@ public class GamePanel extends JPanel {
 				}
 			});
 			break;
-		case 1: // RESTART
-			buttons[j].addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if(GameManager.offline) {
-						SoundsProvider.playStageStart();
-						SoundsProvider.playBulletHit1();
-						MainFrame.transparent = false;
-						game.setExit(true);
-						dialog.dispose();
-						getSwitcher().showGame(game.getFilename());
-						SoundsProvider.cancelMove();
-						SoundsProvider.cancelStop();
-					}
-				}
-			});
-			break;
-		case 2: // MENU
+		case 1: // MENU
 			buttons[j].addActionListener(new ActionListener() {
 
 				@Override
@@ -616,6 +600,35 @@ public class GamePanel extends JPanel {
 					getSwitcher().showMenu();
 					SoundsProvider.cancelMove();
 					SoundsProvider.cancelStop();
+				}
+			});
+			break;
+		case 2: // RESTART
+			buttons[j].addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+				
+					if(GameManager.offline) {
+						SoundsProvider.playStageStart();
+						SoundsProvider.playBulletHit1();
+						MainFrame.transparent = false;
+						game.setExit(true);
+						dialog.dispose();
+						getSwitcher().showGame(game.getFilename());
+						SoundsProvider.cancelMove();
+						SoundsProvider.cancelStop();
+					}
+				}
+
+			});
+			break;
+		case 3: // EXIT
+			buttons[j].addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
 				}
 
 			});

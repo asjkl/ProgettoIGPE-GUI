@@ -22,6 +22,7 @@ public class LoadPanel extends JPanel {
 		this.setLayout(null);
 		setSwitcher(switcher);
 		setProgressBar();
+//		((MainFrame)switcher).setUndecorated(true);
 		((MainFrame)switcher).setVisible(true);
 	}	
 	

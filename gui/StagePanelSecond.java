@@ -256,7 +256,7 @@ public class StagePanelSecond extends JPanel {
 					maps.get(cursorPosition).getX() - 5, maps.get(cursorPosition).getY() - 5, this);
 		}
 		
-	if(path.contains("multi")) {
+	if(path.contains("single")) {
 			
 			for(int i = 0; i < maps.size(); i++) {
 				
