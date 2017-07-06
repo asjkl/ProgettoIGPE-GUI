@@ -52,6 +52,10 @@ public class ImageProvider {
 	private static Image star;
 	private static Image tank;
 	private static Image timer;
+	
+	private static Image helmetx;
+	private static Image shovelx;
+	private static Image timerx;
 
 	// player1
 	private static Image player1A;
@@ -138,6 +142,7 @@ public class ImageProvider {
 	
 	//construction panel
 	private static Image background1P;
+	private static Image background1Px;
 	private static Image background2P;
 	
 	private static Image iconEnemy;
@@ -261,6 +266,8 @@ public class ImageProvider {
 					java.awt.Image.SCALE_SMOOTH)));
 			setBackground1P((ImageIO.read(new File("resource/player1A.png")).getScaledInstance(600, 600,
 					java.awt.Image.SCALE_SMOOTH)));
+			setBackground1Px((ImageIO.read(new File("resource/player1A.png")).getScaledInstance(750, 750,
+					java.awt.Image.SCALE_SMOOTH)));
 			setBackground2P((ImageIO.read(new File("resource/player2A.png")).getScaledInstance(750, 750,
 					java.awt.Image.SCALE_SMOOTH)));
 			setTitle((ImageIO.read(new File("resource/title.png")).getScaledInstance(975, 115,
@@ -289,6 +296,16 @@ public class ImageProvider {
 					java.awt.Image.SCALE_SMOOTH)));
 			setHelmet((ImageIO.read(new File("resource/helmet.png")).getScaledInstance(getTile(), getTile(),
 					java.awt.Image.SCALE_SMOOTH)));
+			
+			//nn cancellare
+			setHelmetx((ImageIO.read(new File("resource/helmet.png")).getScaledInstance(70, 70,
+					java.awt.Image.SCALE_SMOOTH)));
+			setTimerx((ImageIO.read(new File("resource/timer.png")).getScaledInstance(70, 70,
+					java.awt.Image.SCALE_SMOOTH)));
+			setShovelx((ImageIO.read(new File("resource/shovel.png")).getScaledInstance(70, 70,
+					java.awt.Image.SCALE_SMOOTH)));
+			
+			
 			setShovel((ImageIO.read(new File("resource/shovel.png")).getScaledInstance(getTile(), getTile(),
 					java.awt.Image.SCALE_SMOOTH)));
 			setStar((ImageIO.read(new File("resource/star.png")).getScaledInstance(getTile(), getTile(),
@@ -523,9 +540,36 @@ public class ImageProvider {
 		return shovel;
 	}
 
+
 	public static void setShovel(Image shovel) {
 		ImageProvider.shovel = shovel;
 	}
+	
+	public static Image getHelmetx() {
+		return helmetx;
+	}
+
+	public static void setHelmetx(Image helmetx) {
+		ImageProvider.helmetx = helmetx;
+	}
+	
+	public static void setTimerx(Image timerx) {
+		ImageProvider.timerx = timerx;
+	}
+	
+	public static Image getTimerx() {
+		return timerx;
+	}
+	
+	public static void setShovelx(Image shovelx) {
+		ImageProvider.shovelx = shovelx;
+	}
+	
+	public static Image getShovelx() {
+		return shovelx;
+	}
+
+	
 
 	public static Image getStar() {
 		return star;
@@ -554,6 +598,7 @@ public class ImageProvider {
 	public static Image getTitle() {
 		return title;
 	}
+
 
 	public static void setTitle(Image title) {
 		ImageProvider.title = title;
@@ -1120,6 +1165,14 @@ public class ImageProvider {
 
 	public static void setBackground1P(Image background1P) {
 		ImageProvider.background1P = background1P;
+	}
+	
+	public static Image getBackground1Px() {
+		return background1Px;
+	}
+
+	public static void setBackground1Px(Image background1Px) {
+		ImageProvider.background1Px = background1Px;
 	}
 
 	public static ArrayList<Image> getMaps2P() {

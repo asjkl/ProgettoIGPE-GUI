@@ -1,14 +1,10 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 
 import java.awt.AlphaComposite;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -53,15 +49,13 @@ public class NetworkPanel extends JPanel {
 	
 	private void createLabels() {
 
-		
-		
-		JLabel label = new JLabel();
-		label.setText("Server IP");
+		JLabel label = new JLabel("Server IP");
 		label.setBackground(Color.BLACK);
 		label.setForeground(Color.WHITE);
 		label.setFont(MainFrame.customFontM);
 		label.setBounds(440,320,200,40);
 		this.add(label);
+		
 		ipTextField = new JTextField(10);
 		ipTextField.setText("127.0.0.1");
 		ipTextField.setBackground(Color.BLACK);
@@ -72,8 +66,7 @@ public class NetworkPanel extends JPanel {
 	
 		//----
 		
-		JLabel label2 = new JLabel();
-		label2.setText("Server Port");
+		JLabel label2 = new JLabel("Server Port");
 		label2.setBackground(Color.BLACK);
 		label2.setForeground(Color.WHITE);
 		label2.setFont(MainFrame.customFontM);
@@ -89,13 +82,13 @@ public class NetworkPanel extends JPanel {
 		
 		//-----
 		
-		JLabel label3 = new JLabel();
-		label3.setText("Player Name");
+		JLabel label3 = new JLabel("Player Name");
 		label3.setBackground(Color.BLACK);
 		label3.setForeground(Color.WHITE);
 		label3.setFont(MainFrame.customFontM);
 		label3.setBounds(440,440,200,40);
 		this.add(label3);
+		
 		nameTextField = new JTextField(10);
 		nameTextField.setText("P1");
 		nameTextField.setBackground(Color.BLACK);

@@ -46,15 +46,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public LoadPanel load;
 
 	public MainFrame() {
-
-		setSlide(true);
-		setCurrentResume(3);
-		setUnlockedMaps1P(1);
-		setUnlockedMaps2P(1);
+		this.getContentPane().setBackground(Color.BLACK);
 		new ImageProvider();
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
 		this.setSize(new Dimension(WIDTH, HEIGHT));
+		this.setMaximumSize(new Dimension(WIDTH, HEIGHT));
+		this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 
 		load = new LoadPanel(WIDTH, HEIGHT, this);
 		this.add(load);
@@ -72,6 +70,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	private void instantiate() {
 
+		setSlide(true);
+		setCurrentResume(3);
+		setUnlockedMaps1P(1);
+		setUnlockedMaps2P(1);
 		Timer timer = new Timer(4000, new ActionListener() {
 
 			@Override

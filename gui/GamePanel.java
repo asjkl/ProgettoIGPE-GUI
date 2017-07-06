@@ -1021,12 +1021,14 @@ public class GamePanel extends JPanel {
 		for (int a = 0; a < game.getEnemy().size(); a++) {
 			if (game.getEnemy().get(a).isUpdateObject() && game.getEnemy().get(a).isAppearsInTheMap()
 					&& !game.getEnemy().get(a).isStopEnemy()) {
-				game.getEnemy().get(a).update();
-
+				//TODO in prova
 				if (game.getEnemy().get(a).getNext() instanceof PowerUp
 						&& ((PowerUp) game.getEnemy().get(a).getNext()).getPowerUp() == Power.HELMET) {
 					powerUpPickUp(game.getEnemy().get(a), ((PowerUp) game.getEnemy().get(a).getNext()));
 				}
+				game.getEnemy().get(a).update();
+
+				
 
 				game.getMatrix().world[game.getEnemy().get(a).getX()][game.getEnemy().get(a).getY()] = game.getEnemy()
 						.get(a);
