@@ -836,8 +836,9 @@ public class GamePanel extends JPanel {
 			p.setActivate(true);
 			p.setTime(p.getDuration());
 			game.usePowerUp(p);
-			game.getEffects().add(p);
-			System.out.println("powerUpPickUp");
+			if(!game.getEffects().contains(p))
+				game.getEffects().add(p);
+
 		} else if (p.getDuration() != 0) {
 			game.sumPowerUp(t, p);
 			game.getPower().remove(p);
