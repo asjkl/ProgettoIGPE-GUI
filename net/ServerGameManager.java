@@ -104,12 +104,20 @@ public class ServerGameManager {
 	}
 
 	public void disconnetctedClient(String name) {
+		int cont=0;
+		
 		for(int a=0; a<gameManager.getPlayersArray().size(); a++){
 			if(gameManager.getPlayersArray().get(a).toString().equals(name)){
 				gameManager.getPlayersArray().get(a).setResume(0);
 				gameManager.destroyPlayerTank(gameManager.getPlayersArray().get(a));
-				break;
 			}
+			if(gameManager.getPlayersArray().get(a).getResume()<0){
+				cont++;
+			}
+		}
+		
+		if(cont==2){
+			gamePanel.gameOverOrWin();
 		}
 		System.out.println("Client disconnected: " + name);
 	}

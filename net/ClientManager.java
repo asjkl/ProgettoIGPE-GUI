@@ -35,7 +35,9 @@ public class ClientManager implements Runnable {
 			final boolean running = true;
 			while (running) {
 				String string = reader.readLine();
-				server.received(string);
+				if(string!=null){
+					server.received(string);
+				}
 			}
 		} catch (final IOException e) {
 			server.disconnetctedClient(name);
