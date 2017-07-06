@@ -607,7 +607,7 @@ public class GamePanel extends JPanel {
 						MainFrame.transparent = false;
 						game.setExit(true);
 						dialog.dispose();
-						getSwitcher().showGame(game.getFilename());
+						getSwitcher().showLoading(game.getFilename());
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
 					}
@@ -984,6 +984,7 @@ public class GamePanel extends JPanel {
 						game.getPlayersArray().get(a).setCont(35);
 					else
 						game.getPlayersArray().get(a).setCont(30);
+					SoundsProvider.playBulletHit2();
 				}
 
 				if (game.getPlayersArray().get(a).getNext() instanceof PowerUp)
@@ -1739,7 +1740,7 @@ public class GamePanel extends JPanel {
 	private void stroke(Graphics g, Graphics2D g2d){
 		if (MainFrame.transparent)
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-		g.setColor(Color.GRAY);
+		g.setColor(Color.DARK_GRAY);
 		Stroke oldStroke = g2d.getStroke();
 		g2d.setStroke(new BasicStroke(shift * 2 - 2));
 		g2d.drawRect(1, 1, this.getWidth() - 3, this.getHeight() - 2);

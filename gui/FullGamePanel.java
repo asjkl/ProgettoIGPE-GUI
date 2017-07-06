@@ -28,7 +28,7 @@ public class FullGamePanel extends JPanel {
 
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setLayout(null);
-		setBackground(Color.GRAY);
+		setBackground(Color.DARK_GRAY);
 		this.gamePanel = gamePanel;
 		this.gameManager = gamePanel.getGame();
 		gamePanel.setFocusable(true);

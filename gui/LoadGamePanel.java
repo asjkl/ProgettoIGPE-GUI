@@ -1,8 +1,10 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ public class LoadGamePanel extends JLayeredPane {
 		}
 		
 		this.add(panels.get(0), panels.get(1));
+
 	}
 
 	public void add(Component component1, Component component2) {

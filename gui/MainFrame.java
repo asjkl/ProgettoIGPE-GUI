@@ -51,13 +51,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
 		this.setSize(new Dimension(WIDTH, HEIGHT));
-		this.setMaximumSize(new Dimension(WIDTH, HEIGHT));
-		this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 
 		load = new LoadPanel(WIDTH, HEIGHT, this);
 		this.add(load);
 
-		this.setResizable(false);
+//		this.setResizable(false);
 		this.pack();
 //		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
