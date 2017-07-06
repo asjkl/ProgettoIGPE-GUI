@@ -435,7 +435,7 @@ public class GamePanel extends JPanel {
 	
 	//--------------------------------------------------------------------------
 	
-	private void gameOverOrWin(){
+	public void gameOverOrWin(){
 		// GAME OVER
 		
 		if (((game.getPlayersArray().size() > 1
@@ -849,20 +849,21 @@ public class GamePanel extends JPanel {
 
 		MainFrame.transparent = true;
 		game.setExit(true);
-		((MainFrame)switcher).setSlide(true);
-		((MainFrame)switcher).setCurrentResume(3);
+		if(GameManager.offline){
+			((MainFrame)switcher).setSlide(true);
+			((MainFrame)switcher).setCurrentResume(3);
 		
-		if(game.getPlayersArray().size() == 1)
-			((MainFrame)switcher).setUnlockedMaps1P(1);
+			if(game.getPlayersArray().size() == 1)
+				((MainFrame)switcher).setUnlockedMaps1P(1);
 			else 
 				((MainFrame)switcher).setUnlockedMaps2P(1);
 		
-		SoundsProvider.cancelMove();
-		SoundsProvider.cancelStop();
-		SoundsProvider.playGameOver();
-		if(GameManager.offline)
+			SoundsProvider.cancelMove();
+			SoundsProvider.cancelStop();
+			SoundsProvider.playGameOver();
 			new TranslucentWindow(getSwitcher(), game.getFilename(), fullGamePanel.getValueMap(),
 					ImageProvider.getGameOver());
+		}
 	}
 
 	private void win() {
@@ -886,13 +887,13 @@ public class GamePanel extends JPanel {
 				((MainFrame)switcher).setUnlockedMaps2P(m);
 				
 			}
-		}
+		
 		SoundsProvider.cancelMove();
 		SoundsProvider.cancelStop();
 		SoundsProvider.playStageComplete();
-		if(GameManager.offline)
 			new TranslucentWindow(getSwitcher(), game.getFilename(), fullGamePanel.getValueMap(),
 					ImageProvider.getStageComplete());
+		}
 	}
 
 	private void sounds() {
