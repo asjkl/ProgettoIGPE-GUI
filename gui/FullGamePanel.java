@@ -34,8 +34,7 @@ public class FullGamePanel extends JPanel {
 		gamePanel.setFocusable(true);
 		gamePanel.setBounds(282 - shift, 20 - shift, gameWidth + shift * 2 + 3, gameHeight + shift * 2);
 		if (GameManager.offline)
-			valueMap = gameManager.getFilename().getText().replaceAll("[^0-9]", "");
-		
+			valueMap = gameManager.getFilename().getText().replaceAll("[^0-9]", "");	
 		createInfoLabel();
 
 		labelValueMap = new JLabel();
@@ -232,8 +231,7 @@ public class FullGamePanel extends JPanel {
 	}
 
 	public String getValueMap() {
-		// TODO Auto-generated method stub
-		return null;
+		return valueMap;
 	}
 
 }
