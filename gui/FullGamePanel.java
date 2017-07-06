@@ -170,7 +170,7 @@ public class FullGamePanel extends JPanel {
 			if (lives != null)
 				g.drawString(lives, 140, 100);
 
-			x = 10;
+			x = 25;
 			y = 80;
 			int cont = 0;
 
@@ -184,22 +184,22 @@ public class FullGamePanel extends JPanel {
 						&& (gameManager.getPower().get(a).getTank().toString().equals(p)
 								|| (gameManager.getPower().get(a).getPowerUp() == Power.SHOVEL))) {
 					if (cont % 3 == 0) {
-//						x = 60;
+						x = 34;
 						y += 100;
 					}
 					String time = Integer.toString((int) gameManager.getPower().get(a).getTime());
 
 					if (gameManager.getPower().get(a).getPowerUp() == Power.HELMET) {
 						g.drawImage(ImageProvider.getHelmetx(), x, y, null);
-						g.drawString(time, x+20, y + 80);
+						g.drawString(time, x+10, y + 80);
 					} else if (gameManager.getPower().get(a).getPowerUp() == Power.TIMER) {
 						g.drawImage(ImageProvider.getTimerx(), x, y, null);
-						g.drawString(time, x+20, y + 80);
+						g.drawString(time, x+10, y + 80);
 					} else if (gameManager.getPower().get(a).getPowerUp() == Power.SHOVEL) {
 						g.drawImage(ImageProvider.getShovelx(), x, y, null);
-						g.drawString(time, x+20, y + 80);
+						g.drawString(time, x+10, y + 80);
 					}
-					x += 40;
+					x += 65;
 					cont++;
 				}
 			}
