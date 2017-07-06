@@ -125,6 +125,7 @@ public class NetworkPanel extends JPanel {
 
 					if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						SoundsProvider.playBulletHit1();
+						cursorPosition = 1;
                		  	getSwitcher().showMenu();
 						repaint();
 					} else 

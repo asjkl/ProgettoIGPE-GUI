@@ -251,7 +251,9 @@ public class GamePanel extends JPanel {
 	
 	public void gameLoop() {
 		
-		game.getPlayersArray().get(0).setResume(currentResume);
+		if(GameManager.offline){
+			game.getPlayersArray().get(0).setResume(currentResume);
+		}
 		
 		while (!game.isExit()) {
 			start = System.nanoTime();

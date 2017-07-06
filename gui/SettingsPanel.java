@@ -39,7 +39,7 @@ public class SettingsPanel extends JPanel {
 		this.setLayout(null);
 		
 		hide = false;
-		cursorPosition = 0;
+		cursorPosition = 1;
 		buttons = new ArrayList<>();
 		level = new ArrayList<>();
 		group =  new ButtonGroup();
@@ -88,6 +88,7 @@ public class SettingsPanel extends JPanel {
 	              		SoundsProvider.playBulletHit1();
 	              		hide = false;
 	              		repaint();
+	              		cursorPosition = 1;
 	              		getSwitcher().showMenu();
 	              	}
 	              	else 
@@ -160,6 +161,7 @@ public class SettingsPanel extends JPanel {
 					hide = false;
 					cursorPosition = j;
 					repaint();
+					cursorPosition = 1;
 					getSwitcher().showMenu();
 				}
 			});
