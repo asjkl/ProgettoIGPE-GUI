@@ -194,11 +194,12 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	@Override
 	public void showNetwork() {
+		network.getButton(1).setEnabled(true);
 		switchTo(network);
 	}
 
 	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename) {
-		gamePanel = new GamePanel();
+		gamePanel = new GamePanel(this);
 		gameManager = gamePanel.startNetwork(connectionManager);
 		gamePanel.setGame(gameManager);
 		play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);

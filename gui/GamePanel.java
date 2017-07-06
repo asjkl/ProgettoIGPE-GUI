@@ -64,13 +64,14 @@ public class GamePanel extends JPanel {
 	private String playerName;
 	
 	//online
-	public GamePanel() {
+	public GamePanel(PanelSwitcher switcher) {
 		this.tile = 35;
 		this.dialog = new JDialog();
 		this.setBackground(Color.BLACK);
 		this.longTime = new Long(0);
 		tempFPS = 1.5d;
 		this.shift = 17;
+		this.setSwitcher(switcher);
 		this.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -592,7 +593,7 @@ public class GamePanel extends JPanel {
 				}
 			});
 			break;
-		case 1: // MENU
+		case 1:// RESTART
 			buttons[j].addActionListener(new ActionListener() {
 
 				@Override
@@ -611,7 +612,7 @@ public class GamePanel extends JPanel {
 				}
 			});
 			break;
-		case 2: // RESTART
+		case 2: // MENU
 			buttons[j].addActionListener(new ActionListener() {
 
 				@Override
@@ -622,6 +623,12 @@ public class GamePanel extends JPanel {
 					game.pauseOptionDialog = false;
 					game.setExit(true);
 					dialog.dispose();
+					if(!GameManager.offline){
+						if(getGameManager().getPlayersArray().get(0).isDied() && getGameManager().getPlayersArray().get(1).isDied() )
+							connectionManager.dispatch("EXIT"+":"+connectionManager.getPlayerName()+":"+"true");
+						else
+							connectionManager.dispatch("EXIT"+":"+connectionManager.getPlayerName()+":"+"false");
+					}
 					getSwitcher().showMenu();
 					SoundsProvider.cancelMove();
 					SoundsProvider.cancelStop();

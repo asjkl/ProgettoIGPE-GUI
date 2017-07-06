@@ -44,8 +44,10 @@ public class ServerGameManager {
 		if(gameManager!=null){
 			if(split[0].equals("PAINT")){
 				gameManager.setWaitToExit(Boolean.parseBoolean(split[1]));	
-			}
-			else{
+			}else if(split[0].equals("EXIT")){
+				disconnetctedClient(split[1]);
+				gameManager.setExit(Boolean.parseBoolean(split[2]));
+			}else{
 				//BOOLEANE DI SISTEMA
 				gameManager.pauseOptionDialog=Boolean.parseBoolean(split[5]);
 				gameManager.paused=Boolean.parseBoolean(split[6]);
@@ -93,7 +95,7 @@ public class ServerGameManager {
 				dispatch(statusToString);
 			}
 		}, names,filename);
-		gamePanel=new GamePanel();
+		gamePanel=new GamePanel(null);
 		new Thread() {
 			@Override
 			public void run() {
@@ -115,7 +117,6 @@ public class ServerGameManager {
 				cont++;
 			}
 		}
-		
 		if(cont==2){
 			gamePanel.gameOverOrWin();
 		}

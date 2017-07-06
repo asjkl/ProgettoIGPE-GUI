@@ -89,7 +89,8 @@ public class ConnectionManager implements Runnable {
 				mainFrame.play.repaint();
 				if(gameManager.isExit()){
 					buffer=null;
-					mainFrame.network.getButton(1).setEnabled(true);
+					SoundsProvider.cancelMove();
+					SoundsProvider.cancelStop();
 					mainFrame.showNetwork();
 				}else{
 					buffer = br.readLine();
