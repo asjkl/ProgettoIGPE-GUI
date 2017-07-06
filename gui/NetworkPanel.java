@@ -193,7 +193,7 @@ public class NetworkPanel extends JPanel {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				SoundsProvider.playBulletHit1();
-				cursorPosition = j;
+				cursorPosition = 1;
 				getSwitcher().showMenu();
 
 			}
