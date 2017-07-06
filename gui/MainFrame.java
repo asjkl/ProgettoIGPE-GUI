@@ -26,7 +26,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private int unlockedMaps1P;
 	private int unlockedMaps2P;
 	private int currentResume;
-	public static boolean singlePlayer;
+//	public static boolean singlePlayer;
 	private GraphicsEnvironment graphicscEnvironment;
 
 	public NetworkPanel network;
@@ -147,9 +147,9 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	@Override
-	public void showGame(JTextField filename) {
-		singleOrMulti(filename);
-		gameManager = new GameManager(filename, singlePlayer);
+	public void showGame(JTextField path) {
+//		singleOrMulti(filename);
+		gameManager = new GameManager(path);
 		gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
 		play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		gamePanel.setFullGamePanel(play);
@@ -226,26 +226,26 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		}
 	}
 	
-	private void singleOrMulti(JTextField filename) {
-		File career=null;
-		career = new File("./maps/career/singleplayer/" + filename.getText());
-		if(!career.exists()){
-			career = new File("./maps/career/multiplayer/" + filename.getText());
-			if(!career.exists()){
-				career=new File("./maps/editor/multiplayer/" + filename.getText());
-				if(!career.exists()){
-					career=new File("./maps/editor/singleplayer/" + filename.getText());
-					singlePlayer=true;
-				}else{
-					singlePlayer=false;
-				}
-			}else{
-				singlePlayer=false;
-			}
-		}else{
-			singlePlayer=true;
-		}
-	}
+//	private void singleOrMulti(JTextField filename) {
+//		File career=null;
+//		career = new File("./maps/career/singleplayer/" + filename.getText());
+//		if(!career.exists()){
+//			career = new File("./maps/career/multiplayer/" + filename.getText());
+//			if(!career.exists()){
+//				career=new File("./maps/editor/multiplayer/" + filename.getText());
+//				if(!career.exists()){
+//					career=new File("./maps/editor/singleplayer/" + filename.getText());
+//					singlePlayer=true;
+//				}else{
+//					singlePlayer=false;
+//				}
+//			}else{
+//				singlePlayer=false;
+//			}
+//		}else{
+//			singlePlayer=true;
+//		}
+//	}
 	
 	public int getCurrentResume() {
 		return currentResume;

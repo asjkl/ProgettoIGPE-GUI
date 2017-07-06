@@ -65,7 +65,8 @@ public class JFileChooserClass{
 
 	public boolean functionLoadFile(){
 		chooser.setCurrentDirectory(file);
-		int value = chooser.showOpenDialog(null);						//
+		int value = chooser.showOpenDialog(null);
+		file=chooser.getCurrentDirectory();
 		filesInDirectory = chooser.getCurrentDirectory().listFiles();
 		if (value == JFileChooser.APPROVE_OPTION) {
 			dir.setText(chooser.getCurrentDirectory().toString());
@@ -138,5 +139,13 @@ public class JFileChooserClass{
 	
 	public JTextField getDir() {
 		return dir;
+	}
+	
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
 	}
 }

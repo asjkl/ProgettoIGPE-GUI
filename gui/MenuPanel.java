@@ -179,7 +179,7 @@ public class MenuPanel extends JPanel {
 					
 					if(jfilechooser.functionLoadFile()) {
 						setCursorPosition(0);
-						jfilechooser.getFilename().setText(jfilechooser.getFilename().getText() + ".txt");
+						jfilechooser.getFilename().setText(jfilechooser.getFile().toString()+"/"+jfilechooser.getFilename().getText() + ".txt");
 						  getSwitcher().showLoading(jfilechooser.getFilename());
 					}
 				}

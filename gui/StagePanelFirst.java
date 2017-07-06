@@ -198,7 +198,7 @@ public class StagePanelFirst extends JPanel {
 						fileChooser.setCurrentDirectory(file);
 						
 						JTextField fileNameMap=new JTextField();
-	                    fileNameMap.setText("stage" + j + ".txt");
+	                    fileNameMap.setText(path+"/stage" + j + ".txt");
 	                    
 	                    JTextField directory=new JTextField();
 	                    directory.setText(fileChooser.getCurrentDirectory().toString());

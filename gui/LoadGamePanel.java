@@ -41,7 +41,8 @@ public class LoadGamePanel extends JLayeredPane {
 		this.setSwitcher(panelSwitcher);
 		
 		label.setFont(MainFrame.customFontB);
-		label.setText("Stage " + filename.getText().subSequence(5, filename.getText().length() - 4));
+		System.out.println(filename.getText());
+		label.setText("Stage " + filename.getText().subSequence(filename.getText().length()-5, filename.getText().length() - 4));
 		label.setBounds((int) (getPreferredSize().getWidth() / 2) - 70,
 				(int) getPreferredSize().getHeight() / 2-50, 300, 100);
 		label.setBackground(Color.GRAY);
