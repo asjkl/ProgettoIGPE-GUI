@@ -298,11 +298,11 @@ public class ImageProvider {
 					java.awt.Image.SCALE_SMOOTH)));
 			
 			//nn cancellare
-			setHelmetx((ImageIO.read(new File("resource/helmet.png")).getScaledInstance(70, 70,
+			setHelmetx((ImageIO.read(new File("resource/helmet.png")).getScaledInstance(50, 50,
 					java.awt.Image.SCALE_SMOOTH)));
-			setTimerx((ImageIO.read(new File("resource/timer.png")).getScaledInstance(70, 70,
+			setTimerx((ImageIO.read(new File("resource/timer.png")).getScaledInstance(50, 50,
 					java.awt.Image.SCALE_SMOOTH)));
-			setShovelx((ImageIO.read(new File("resource/shovel.png")).getScaledInstance(70, 70,
+			setShovelx((ImageIO.read(new File("resource/shovel.png")).getScaledInstance(50, 50,
 					java.awt.Image.SCALE_SMOOTH)));
 			
 			

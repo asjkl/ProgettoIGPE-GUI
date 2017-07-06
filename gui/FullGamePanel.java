@@ -3,10 +3,8 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
@@ -121,7 +119,7 @@ public class FullGamePanel extends JPanel {
 			g.setColor(Color.BLACK);
 			String lives = null;
 			
-			g.fillRect(58, 150, 130, 130);
+			g.fillRect(10, 150, 230, 140);
 			
 			int X  = 100, Y = 50, X1 = 40, Y1 = 40;
 			
@@ -172,8 +170,8 @@ public class FullGamePanel extends JPanel {
 			if (lives != null)
 				g.drawString(lives, 140, 100);
 
-			x = 25;
-			y = 50;
+			x = 10;
+			y = 80;
 			int cont = 0;
 
 			if (!GameManager.offline)
@@ -186,20 +184,20 @@ public class FullGamePanel extends JPanel {
 						&& (gameManager.getPower().get(a).getTank().toString().equals(p)
 								|| (gameManager.getPower().get(a).getPowerUp() == Power.SHOVEL))) {
 					if (cont % 3 == 0) {
-						x = 25;
-						y += 80;
+//						x = 60;
+						y += 100;
 					}
 					String time = Integer.toString((int) gameManager.getPower().get(a).getTime());
 
 					if (gameManager.getPower().get(a).getPowerUp() == Power.HELMET) {
-						g.drawImage(ImageProvider.getHelmetx(), x+64, y+43, null);
-						g.drawString(time, x+89, y + 133);
+						g.drawImage(ImageProvider.getHelmetx(), x, y, null);
+						g.drawString(time, x+20, y + 80);
 					} else if (gameManager.getPower().get(a).getPowerUp() == Power.TIMER) {
-						g.drawImage(ImageProvider.getTimerx(), x+64, y+43, null);
-						g.drawString(time, x+89, y + 133);
+						g.drawImage(ImageProvider.getTimerx(), x, y, null);
+						g.drawString(time, x+20, y + 80);
 					} else if (gameManager.getPower().get(a).getPowerUp() == Power.SHOVEL) {
-						g.drawImage(ImageProvider.getShovelx(), x+64, y+43, null);
-						g.drawString(time, x+89, y + 133);
+						g.drawImage(ImageProvider.getShovelx(), x, y, null);
+						g.drawString(time, x+20, y + 80);
 					}
 					x += 40;
 					cont++;
@@ -233,7 +231,6 @@ public class FullGamePanel extends JPanel {
 		g.drawImage(ImageProvider.getIconFlag(), 1150, 640, null);
 	}
 
-	
 	public String getValueMap() {
 		// TODO Auto-generated method stub
 		return null;
