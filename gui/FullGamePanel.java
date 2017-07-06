@@ -41,7 +41,7 @@ public class FullGamePanel extends JPanel {
 		createInfoLabel();
 
 		labelValueMap = new JLabel();
-		labelValueMap.setBounds(1150, 625, 30, 30);
+		labelValueMap.setBounds(1175, 660, 30, 30);
 		labelValueMap.setPreferredSize(new Dimension(30, 30));
 		labelValueMap.setForeground(Color.BLACK);
 		labelValueMap.setFont(MainFrame.customFontM);
