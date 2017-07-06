@@ -21,7 +21,6 @@ public class PlayerPanel extends JPanel {
 	private int cursorPosition;
 	private PanelSwitcher switcher;
 	private final ArrayList<JButton> buttons;
-	public static boolean singlePlayer;
 
 	public PlayerPanel(final int w, final int h, PanelSwitcher switcher) {
 		
@@ -29,7 +28,6 @@ public class PlayerPanel extends JPanel {
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
 		
-		singlePlayer=true;
 		setSwitcher(switcher);
 		setCursorPosition(1);
 		
@@ -129,7 +127,6 @@ public class PlayerPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
 					setCursorPosition(1);
-					singlePlayer=true;
 					getSwitcher().showFirstStage("./maps/career/singleplayer");
 					repaint();
 				}
@@ -143,7 +140,6 @@ public class PlayerPanel extends JPanel {
 				
 					SoundsProvider.playBulletHit1();
 					setCursorPosition(2);
-					singlePlayer=false;
 					repaint();
 					getSwitcher().showFirstStage("./maps/career/multiplayer");
 				}				

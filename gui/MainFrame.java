@@ -26,6 +26,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private int unlockedMaps1P;
 	private int unlockedMaps2P;
 	private int currentResume;
+	public static boolean singlePlayer;
 	private GraphicsEnvironment graphicscEnvironment;
 
 	public NetworkPanel network;
@@ -147,7 +148,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	@Override
 	public void showGame(JTextField filename) {
-		gameManager = new GameManager(filename, PlayerPanel.singlePlayer);
+		singleOrMulti(filename);
+		gameManager = new GameManager(filename, singlePlayer);
 		gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
 		play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		gamePanel.setFullGamePanel(play);
@@ -221,6 +223,27 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 		} catch (FontFormatException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void singleOrMulti(JTextField filename) {
+		File career=null;
+		career = new File("./maps/career/singleplayer/" + filename.getText());
+		if(!career.exists()){
+			career = new File("./maps/career/multiplayer/" + filename.getText());
+			if(!career.exists()){
+				career=new File("./maps/editor/multiplayer/" + filename.getText());
+				if(!career.exists()){
+					career=new File("./maps/editor/singleplayer/" + filename.getText());
+					singlePlayer=true;
+				}else{
+					singlePlayer=false;
+				}
+			}else{
+				singlePlayer=false;
+			}
+		}else{
+			singlePlayer=true;
 		}
 	}
 	
