@@ -5,16 +5,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.Socket;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -32,6 +34,7 @@ public class NetworkPanel extends JPanel {
 	private JTextField portTextField;
 	private int cursorPosition;
 	private ArrayList<JButton> buttons;
+	private JDialog dialog;
 	private int DIM = 2;
 
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
@@ -40,6 +43,7 @@ public class NetworkPanel extends JPanel {
 		this.setPreferredSize(new Dimension(w, h));
 		this.setSwitcher(switcher);
 		this.setLayout(null);
+		dialog = new JDialog(dialog, "ERROR");
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
 	
@@ -102,7 +106,8 @@ public class NetworkPanel extends JPanel {
 	
 	private void createButtons() {
 		
-		for (int i = 0; i < DIM; i++) {
+		for(int i = 0; i < DIM; i++) {
+			
 			final int curRow = i;
 			buttons.add(new JButton());
 			buttons.get(i).setBorder(null);
@@ -209,23 +214,65 @@ public class NetworkPanel extends JPanel {
 				new Thread() {
 					@Override
 					public void run() {
-						try {
-							connectoToServer();
-						} catch (final Exception e) {
-							JOptionPane.showMessageDialog(buttons.get(1),
-									"Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText(),
-									"Network Error", JOptionPane.ERROR_MESSAGE);
-						}
-					};
-				}.start();
+							try {
+								connectoToServer();
+							} catch (final Exception e) {
+								showDialog();
+							}
+						};
+					}.start();
 
+				}
+			});
+			break;
+		default:
+			break;
+		}
+	}
+	
+	private void showDialog() {
+		
+		JLabel label = new JLabel("Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText());
+		
+		label.setFont(MainFrame.customFontS);
+		label.setBackground(Color.BLACK);
+		label.setForeground(Color.RED);
+		label.setHorizontalAlignment(JLabel.CENTER);
+		
+		JPanel panel = new JPanel(new GridLayout(2,0));
+		
+		panel.setBackground(Color.BLACK);
+		panel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		
+		JButton ok = new JButton("OK");
+		
+		ok.setBorder(null);
+		ok.setContentAreaFilled(false);
+		ok.setBorderPainted(false);
+		ok.setFocusPainted(false);
+		ok.setFont(MainFrame.customFontS);
+		ok.setBackground(Color.BLACK);
+		ok.setForeground(Color.WHITE);
+		ok.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				SoundsProvider.playBulletHit1();
+				dialog.dispose();
 			}
 		});
-		break;
-	default:
-		break;
+		
+		panel.add(label);
+		panel.add(ok);
+		panel.setPreferredSize(new Dimension(300,100));
+		dialog.setContentPane(panel);
+		dialog.setUndecorated(true);
+		dialog.setModal(true);
+		dialog.pack();
+		dialog.setLocationRelativeTo(this);
+		dialog.setVisible(true);
 	}
-}
 
 	public void setBoundAndText(int j) {
 

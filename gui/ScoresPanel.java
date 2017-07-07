@@ -260,7 +260,7 @@ public class ScoresPanel extends JPanel {
 							if(currValue == 0)
 								points.setBounds(positionX - 199, positionY, 45, 45);
 							else
-								points.setBounds(positionX - 245, positionY, 95, 45);
+								points.setBounds(positionX - 245, positionY, 105, 45);
 							
 							occur.setText(String.valueOf(currValue));
 							occur.setBounds(positionX, positionY, 95, 45);
@@ -406,7 +406,7 @@ public class ScoresPanel extends JPanel {
 								if(currValue == 0)
 									points.setBounds(currPosition - 139, positionY - 40, 45, 45);
 								else
-									points.setBounds(currPosition - 185, positionY - 40, 95, 45);
+									points.setBounds(currPosition - 185, positionY - 40, 105, 45);
 								
 								occur.setText(String.valueOf(currValue));
 								occur.setBounds(currPosition, positionY - 40, 95, 45);

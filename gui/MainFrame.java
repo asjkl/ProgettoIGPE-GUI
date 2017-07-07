@@ -43,7 +43,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public GamePanel gamePanel;
 	public SoundsProvider sounds;
 	public ImageProvider images;
-	public LoadGamePanel LoadGamePanel;
+	public SlideStage slideStage;
 	public LoadPanel load;
 
 	public MainFrame() {
@@ -97,6 +97,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	public void switchTo(JComponent component) {
+		
 		this.getContentPane().removeAll();
 		this.add(component);
 		this.validate();
@@ -132,6 +133,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		//TODO ce un problema delle volte controllare
 		menu.drawScore();
 		GameManager.offline = false;
+		
 		if (isSlide()) {
 			slideContainer = new SlideContainer(WIDTH, HEIGHT);
 			slideContainer.add(menu);
@@ -148,7 +150,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	@Override
 	public void showGame(JTextField path) {
-//		singleOrMulti(filename);
+
+		//singleOrMulti(path);
 		gameManager = new GameManager(path);
 		gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
 		play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
@@ -165,6 +168,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	@Override
 	public void showSecondStage(String path) {
+		
 		secondStage.setPath(path);
 		secondStage.repaint();
 		switchTo(secondStage);
@@ -183,8 +187,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	@Override
 	public void showLoading(JTextField f) {
-		LoadGamePanel = new LoadGamePanel(WIDTH, HEIGHT, this, f);
-		switchTo(LoadGamePanel);
+		slideStage = new SlideStage(WIDTH, HEIGHT, this, f);
+		switchTo(slideStage);
 	}
 
 	@Override
@@ -198,9 +202,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		switchTo(network);
 	}
 
-	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename) {
-		gamePanel = new GamePanel(this);
-		gameManager = gamePanel.startNetwork(connectionManager);
+	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename, String difficult) {
+		
+		gamePanel = new GamePanel(this, difficult);
+		gameManager = gamePanel.startNetwork(connectionManager, filename);
 		gamePanel.setGame(gameManager);
 		play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		switchTo(play);

@@ -9,7 +9,6 @@ import javax.sound.sampled.FloatControl;
 public class SoundsProvider {
 	
 	private static FloatControl gainControl;
-	private static FloatControl gainControlPlayer;
 	private static AudioInputStream audio;
 	
 	private static File stageStart;
@@ -140,10 +139,8 @@ public class SoundsProvider {
 	
 	public static void setGainPlayer(Clip clip) {
 		
-//		gainControlPlayer = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-//		gainControlPlayer.setValue(gainControl.getValue() - 20);
 		gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(-(SettingsPanel.soundValue+5));
+		gainControl.setValue(-(SettingsPanel.soundValue + 5));
 	}
 
 	public static void playStop() {

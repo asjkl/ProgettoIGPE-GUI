@@ -59,18 +59,19 @@ public class GamePanel extends JPanel {
 	private JButton[] buttons;
 	private GameManager game;
 	private int currentResume;
-	
+	private String difficult;
 	private ConnectionManager connectionManager;
 	private String playerName;
 	
 	//online
-	public GamePanel(PanelSwitcher switcher) {
+	public GamePanel(PanelSwitcher switcher, String difficult) {
 		this.tile = 35;
 		this.dialog = new JDialog();
 		this.setBackground(Color.BLACK);
 		this.longTime = new Long(0);
 		tempFPS = 1.5d;
 		this.shift = 17;
+		this.difficult = difficult;
 		this.setSwitcher(switcher);
 		this.addKeyListener(new KeyAdapter() {
 
@@ -426,12 +427,11 @@ public class GamePanel extends JPanel {
 		return "PAINT"+":"+isWaitToExit;
 	}
 		
-	GameManager startNetwork(ConnectionManager connectionManager) {
+	GameManager startNetwork(ConnectionManager connectionManager, JTextField filename) {
 		this.connectionManager = connectionManager;
 		playerName = connectionManager.getPlayerName();
 		System.out.println("GamePanel.startNetwork() " + playerName);
 		requestFocus();
-		JTextField filename=new JTextField("stage1.txt");
 		game = new GameManager(filename, playerName);
 		return game;
 	}
@@ -1010,19 +1010,40 @@ public class GamePanel extends JPanel {
 				game.getEnemy().get(a).setxGraphics(game.getEnemy().get(a).getX() * tile);
 				game.getEnemy().get(a).setyGraphics(game.getEnemy().get(a).getY() * tile);
 
+				if(GameManager.offline) {
 				// EASY
 				if (SettingsPanel.easy)
 					game.getEnemy().get(a).easy();
-				// MEDIUM
-				// if(SettingsPanel.medium)
-				// game.getEnemy().get(a).medium();
-				// DIFFICULT
-				if (SettingsPanel.hard) {
-					game.getEnemy().get(a).difficult(GameManager.flag.getX(), GameManager.flag.getY());
-					if (!game.getEnemy().get(a).isHasApath()) {
-						PlayerTank player = game.getPlayersArray().get(game.getEnemy().get(a).getRandomObject());
-						game.getEnemy().get(a).difficult(player.getX(), player.getY());
+				else
+					if(SettingsPanel.normal)
+					 game.getEnemy().get(a).medium();
+				 else
+					if (SettingsPanel.hard) {
+						game.getEnemy().get(a).difficult(GameManager.flag.getX(), GameManager.flag.getY());
+						
+						if (!game.getEnemy().get(a).isHasApath()) {
+							PlayerTank player = game.getPlayersArray().get(game.getEnemy().get(a).getRandomObject());
+							game.getEnemy().get(a).difficult(player.getX(), player.getY());
+						}
 					}
+				
+				}
+				else {
+					
+					if (difficult.equals("easy"))
+						game.getEnemy().get(a).easy();
+					else
+						if(difficult.equals("normal"))
+							game.getEnemy().get(a).medium();
+					else
+						if (difficult.equals("hard")) {
+							game.getEnemy().get(a).difficult(GameManager.flag.getX(), GameManager.flag.getY());
+						
+							if (!game.getEnemy().get(a).isHasApath()) {
+								PlayerTank player = game.getPlayersArray().get(game.getEnemy().get(a).getRandomObject());
+								game.getEnemy().get(a).difficult(player.getX(), player.getY());
+							}
+						}	
 				}
 
 				game.getEnemy().get(a).setTmpDirection(game.getEnemy().get(a).getDirection());

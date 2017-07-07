@@ -1,18 +1,28 @@
 package net;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
+import progettoIGPE.davide.giovanni.unical2016.GUI.JFileChooserClass;
+
 
 public class ServerGameManager {
 	private final Set<ClientManager> clients = new HashSet<ClientManager>();
 	private final Set<ClientManager> readyClients = new HashSet<ClientManager>();
 	public GameManager gameManager;
 	private GamePanel gamePanel;
+	private String difficult;
+	private JFileChooserClass chooser;
+	private JTextField map;
+
 
 	public void add(final ClientManager cm) {
 		clients.add(cm);
@@ -35,6 +45,14 @@ public class ServerGameManager {
 				sb.append(";");
 			}
 		}
+		
+		if(clients.contains("P1") && clients.contains("P2")) {
+			sb.append(map.getText());
+			sb.append(";");
+			sb.append(difficult);
+		}
+			
+		
 		return sb.toString();
 	}
 
@@ -80,6 +98,16 @@ public class ServerGameManager {
 	}
 
 	public void startGame() throws IOException {
+		
+		map = new JTextField();
+		chooser = new JFileChooserClass();
+		
+		if(chooser.functionLoadFile())
+			map.setText("./maps/editor/multiplayer/" 
+		+ chooser.getFilename().getText() + ".txt");
+		
+		chooseDifficult();
+		
 		final List<String> names = new ArrayList<>();
 		for (final ClientManager cm : clients) {
 			cm.setup();
@@ -87,15 +115,15 @@ public class ServerGameManager {
 			names.add(cm.getName());
 			
 		}
-		JTextField filename=new JTextField("stage1.txt");
+		
 		gameManager = new GameManager(new Runnable() {
 			@Override
 			public void run() {
 				final String statusToString = gameManager.statusToString();
 				dispatch(statusToString);
 			}
-		}, names,filename);
-		gamePanel=new GamePanel(null);
+		}, names, map);
+		gamePanel=new GamePanel(null, difficult);
 		new Thread() {
 			@Override
 			public void run() {
@@ -105,8 +133,23 @@ public class ServerGameManager {
 		gamePanel.setGame(gameManager);
 	}
 
+	//CON IL DIALOG NON ANDAVA
+	private void chooseDifficult() {
+		
+		JFileChooser jfc = new JFileChooser();
+		File f = new File("./maps/difficult/");
+		JTextField t = new JTextField();
+		jfc.setCurrentDirectory(f);
+		int v = jfc.showOpenDialog(null);
+		if (v == JFileChooser.APPROVE_OPTION)
+			t.setText(jfc.getSelectedFile().getName());
+		
+		difficult = t.getText();
+	}
+
 	public void disconnetctedClient(String name) {
-		int cont=0;
+		
+		int cont = 0;
 		
 		for(int a=0; a<gameManager.getPlayersArray().size(); a++){
 			if(gameManager.getPlayersArray().get(a).toString().equals(name)){
@@ -122,5 +165,4 @@ public class ServerGameManager {
 		}
 		System.out.println("Client disconnected: " + name);
 	}
-
 }

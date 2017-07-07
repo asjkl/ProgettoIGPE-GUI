@@ -22,8 +22,11 @@ public class ConnectionManager implements Runnable {
 	private MainFrame mainFrame;
 	private final String name;
 	private List<String> playerNames;
+	private BufferedReader br;
 	private PrintWriter pw;
 	private final Socket socket;
+	private JTextField map;
+	private String difficult;
 
 	public ConnectionManager(final Socket socket, final String name, MainFrame mainFrame) {
 		this.socket = socket;
@@ -53,7 +56,7 @@ public class ConnectionManager implements Runnable {
 	@Override
 	public void run() {
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			pw.println(getPlayerName());
 			String buffer = br.readLine();
@@ -62,13 +65,21 @@ public class ConnectionManager implements Runnable {
 				if (split.length != 0) {
 					playerNames = new ArrayList<>();
 					for (final String name : split) {
-						playerNames.add(name);
+						
+						if(name.contains(".txt"))
+							map.setText(name);
+						else {
+							if(name.contains("P"))
+								playerNames.add(name);
+							else
+								difficult = name;
+						}
 					}
 				}
 				buffer = br.readLine();
 			}
-			JTextField filename=new JTextField("stage1.txt");
-			final GameManager gameManager = mainFrame.showNetwork(this,filename);
+		
+			final GameManager gameManager = mainFrame.showNetwork(this,map, difficult);
 			buffer = br.readLine();
 			while (buffer != null) {
 				// System.out.println(buffer);

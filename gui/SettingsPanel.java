@@ -20,8 +20,8 @@ import javax.swing.event.ChangeListener;
 public class SettingsPanel extends JPanel {
 
 	private boolean hide;
-	protected static float soundValue=0.0f;;
-	public static boolean easy=true, medium=false, hard=false;
+	protected static float soundValue=0.0f;
+	public static boolean easy=true, normal=false, hard=false;
 	
 	private float currValue;
 	private int cursorPosition;
@@ -217,19 +217,19 @@ public class SettingsPanel extends JPanel {
 					if(level.get(0).isSelected()) {						
 						
 						easy = true;
-						medium = hard = false;
+						normal = hard = false;
 					}
 					else
 						if(level.get(1).isSelected()) {
 							
-							medium = true;
+							normal = true;
 							easy = hard = false;						
 						}
 						else
 							if(level.get(2).isSelected()) {
 								
 								hard = true;
-								easy = medium = false;
+								easy = normal = false;
 							}
 					
 					repaint();

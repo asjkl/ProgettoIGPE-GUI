@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class JFileChooserClass{
+public class JFileChooserClass {
 	
 	private JFileChooser chooser;
 	private FileNameExtensionFilter filter;
