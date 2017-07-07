@@ -21,11 +21,15 @@ public class JFileChooserClass {
 	private JTextField dir;
 	private File file;
 		
-	public JFileChooserClass() {
+	public JFileChooserClass(boolean online) {
 		this.chooser=new JFileChooser();
 		this.filename = new JTextField();
 		this.dir=new JTextField();
-		this.file=new File("./maps/editor");
+		if(!online){
+			this.file=new File("./maps/editor");
+		}else{
+			this.file=new File("./maps/career/multiplayer");
+		}
 		this.filter = new FileNameExtensionFilter(".txt", "txt");
 		this.chooser.setFileFilter(filter);
 		setFileChooserFont(chooser.getComponents());

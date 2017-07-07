@@ -1,17 +1,13 @@
 package net;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
-import progettoIGPE.davide.giovanni.unical2016.GUI.JFileChooserClass;
+
 
 
 public class ServerGameManager {
@@ -20,9 +16,7 @@ public class ServerGameManager {
 	public GameManager gameManager;
 	private GamePanel gamePanel;
 	private String difficult;
-	private JFileChooserClass chooser;
-	private JTextField map;
-
+	private JTextField map=new JTextField();
 
 	public void add(final ClientManager cm) {
 		clients.add(cm);
@@ -44,15 +38,7 @@ public class ServerGameManager {
 				sb.append(cm.getName());
 				sb.append(";");
 			}
-		}
-		
-		if(clients.contains("P1") && clients.contains("P2")) {
-			sb.append(map.getText());
-			sb.append(";");
-			sb.append(difficult);
-		}
-			
-		
+		}	
 		return sb.toString();
 	}
 
@@ -85,11 +71,10 @@ public class ServerGameManager {
 			}
 		}
 	}
-		
-
+	
 	public void setReady(final ClientManager clientManager) {
 		synchronized (readyClients) {
-			readyClients.add(clientManager);
+			readyClients.add(clientManager);		
 			if (readyClients.size() == 2) {
 				dispatch("#START");
 				System.out.println("ServerGameManager.setReady()");
@@ -98,22 +83,19 @@ public class ServerGameManager {
 	}
 
 	public void startGame() throws IOException {
-		
-		map = new JTextField();
-		chooser = new JFileChooserClass();
-		
-		if(chooser.functionLoadFile())
-			map.setText("./maps/editor/multiplayer/" 
-		+ chooser.getFilename().getText() + ".txt");
-		
-		chooseDifficult();
-		
 		final List<String> names = new ArrayList<>();
 		for (final ClientManager cm : clients) {
 			cm.setup();
+			if(!cm.getMap().getText().equals("")){
+				map.setText(cm.getMap().getText());
+			}
+			
+			if(cm.getDifficult() != null){
+				difficult=cm.getDifficult();
+			}
+			
 			new Thread(cm, cm.toString()).start();
 			names.add(cm.getName());
-			
 		}
 		
 		gameManager = new GameManager(new Runnable() {
@@ -131,20 +113,6 @@ public class ServerGameManager {
 			};
 		}.start();
 		gamePanel.setGame(gameManager);
-	}
-
-	//CON IL DIALOG NON ANDAVA
-	private void chooseDifficult() {
-		
-		JFileChooser jfc = new JFileChooser();
-		File f = new File("./maps/difficult/");
-		JTextField t = new JTextField();
-		jfc.setCurrentDirectory(f);
-		int v = jfc.showOpenDialog(null);
-		if (v == JFileChooser.APPROVE_OPTION)
-			t.setText(jfc.getSelectedFile().getName());
-		
-		difficult = t.getText();
 	}
 
 	public void disconnetctedClient(String name) {

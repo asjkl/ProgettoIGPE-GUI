@@ -118,7 +118,7 @@ public class ConstructionPanel extends JPanel {
 		}
 
 		myListener = new MyListener();
-		jfilechooser = new JFileChooserClass();
+		jfilechooser = new JFileChooserClass(false);
 
 		setSwitcher(switcher);
 		setCursorPosition(1);

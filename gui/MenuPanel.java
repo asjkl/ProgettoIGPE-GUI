@@ -46,7 +46,7 @@ public class MenuPanel extends JPanel {
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
 
-		this.jfilechooser = new JFileChooserClass();
+		this.jfilechooser = new JFileChooserClass(false);
 		setSwitcher(switcher);
 		setCursorPosition(0);
 
