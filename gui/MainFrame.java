@@ -47,7 +47,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public LoadPanel load;
 
 	public MainFrame() {
-		this.getContentPane().setBackground(Color.BLACK);
+		
 		new ImageProvider();
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
