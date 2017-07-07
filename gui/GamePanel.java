@@ -81,7 +81,7 @@ public class GamePanel extends JPanel {
 				if (!SoundsProvider.stageStartClip.isActive()) {
 					if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						if (!game.pauseOptionDialog && !game.isExit()) {
-							MainFrame.transparent = true;
+							((MainFrame)getSwitcher()).setTransparent(true);
 							game.pauseOptionDialog = true;
 							option();
 						}
@@ -138,7 +138,7 @@ public class GamePanel extends JPanel {
 		this.longTime = new Long(0);
 		cursorPositionDialog = 0;
 		tempFPS = 1.5d;
-		currentResume = ((MainFrame)switcher).getCurrentResume();
+		currentResume = ((MainFrame)getSwitcher()).getCurrentResume();
 
 		this.addKeyListener(new KeyAdapter() {
 
@@ -148,7 +148,7 @@ public class GamePanel extends JPanel {
 				if (!SoundsProvider.stageStartClip.isActive()) {
 					if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						if (!game.pauseOptionDialog && !game.isExit()) {
-							MainFrame.transparent = true;
+							((MainFrame)getSwitcher()).setTransparent(true);
 							game.pauseOptionDialog = true;
 							if (game.getPlayersArray().size() > 1) {
 								game.getPlayersArray().get(0).getKeys().clear();
@@ -534,7 +534,7 @@ public class GamePanel extends JPanel {
 								dialog.dispose();
 							}
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-						MainFrame.transparent = false;
+						((MainFrame)getSwitcher()).setTransparent(false);
 						game.pauseOptionDialog = false;
 						cursorPositionDialog = 0;
 						dialog.dispose();
@@ -589,7 +589,7 @@ public class GamePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					MainFrame.transparent = false;
+					((MainFrame)getSwitcher()).setTransparent(false);
 					game.pauseOptionDialog = false;
 					dialog.dispose();
 				}
@@ -604,7 +604,7 @@ public class GamePanel extends JPanel {
 					if(GameManager.offline) {
 						SoundsProvider.playStageStart();
 						SoundsProvider.playBulletHit1();
-						MainFrame.transparent = false;
+						((MainFrame)getSwitcher()).setTransparent(false);
 						game.setExit(true);
 						dialog.dispose();
 						getSwitcher().showLoading(game.getFilename());
@@ -621,7 +621,7 @@ public class GamePanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 				
 					SoundsProvider.playBulletHit1();
-					MainFrame.transparent = false;
+					((MainFrame)getSwitcher()).setTransparent(false);
 					game.pauseOptionDialog = false;
 					game.setExit(true);
 					dialog.dispose();
@@ -858,16 +858,16 @@ public class GamePanel extends JPanel {
 
 	private void gameOver() {
 
-		MainFrame.transparent = true;
+		((MainFrame)getSwitcher()).setTransparent(true);
 		game.setExit(true);
 		if(GameManager.offline){
-			((MainFrame)switcher).setSlide(true);
-			((MainFrame)switcher).setCurrentResume(3);
+			((MainFrame)getSwitcher()).setSlide(true);
+			((MainFrame)getSwitcher()).setCurrentResume(3);
 		
 			if(game.getPlayersArray().size() == 1)
-				((MainFrame)switcher).setUnlockedMaps1P(1);
+				((MainFrame)getSwitcher()).setUnlockedMaps1P(1);
 			else 
-				((MainFrame)switcher).setUnlockedMaps2P(1);
+				((MainFrame)getSwitcher()).setUnlockedMaps2P(1);
 		
 			SoundsProvider.cancelMove();
 			SoundsProvider.cancelStop();
@@ -880,22 +880,22 @@ public class GamePanel extends JPanel {
 	private void win() {
 
 		repaint();
-		MainFrame.transparent = true;
+		((MainFrame)getSwitcher()).setTransparent(true);
 		game.setExit(true);
 		if(GameManager.offline) {
 				
 			currentResume = game.getPlayersArray().get(0).getResume();
-			((MainFrame)switcher).setCurrentResume(currentResume);
+			((MainFrame)getSwitcher()).setCurrentResume(currentResume);
 
 			
 			if(game.getPlayersArray().size() == 1) {
 				int m = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
-				((MainFrame)switcher).setUnlockedMaps1P(m);
+				((MainFrame)getSwitcher()).setUnlockedMaps1P(m);
 			}
 			else {
 				
 				int m = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
-				((MainFrame)switcher).setUnlockedMaps2P(m);
+				((MainFrame)getSwitcher()).setUnlockedMaps2P(m);
 				
 			}
 		
@@ -1273,7 +1273,7 @@ public class GamePanel extends JPanel {
 				///
 				long time = 0;
 
-				if (!MainFrame.transparent)
+				if (!((MainFrame)getSwitcher()).isTransparent())
 					time = (System.currentTimeMillis() / 200) % 2;
 				///
 
@@ -1468,34 +1468,37 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
 				else if (inc == 5)
 					g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
-				else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank && GameManager.offline) {
+				
+				//ONLY PLAYER
+				else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank ) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
 				}
+				// ONLY ENEMY POINTS
+				else if (game.getEffects().get(i) instanceof EnemyTank) {
+						if (((EnemyTank) game.getEffects().get(i)).getInc() > 5
+								&& ((EnemyTank) game.getEffects().get(i)).getInc() < 12) {
+							if (game.getEffects().get(i) instanceof BasicTank) {
+								g.drawImage(ImageProvider.getPoints100(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof PowerTank) {
+								g.drawImage(ImageProvider.getPoints300(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof ArmorTank) {
+								g.drawImage(ImageProvider.getPoints400(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof FastTank) {
+								g.drawImage(ImageProvider.getPoints200(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							}
+						} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12) {
+							game.getEffects().remove(game.getEffects().get(i));
+							i--;
+						}
+					}
 			}
 
-			// Enemy points
-			else if (game.getEffects().get(i) instanceof EnemyTank) {
-				if (((EnemyTank) game.getEffects().get(i)).getInc() > 5
-						&& ((EnemyTank) game.getEffects().get(i)).getInc() < 12) {
-					if (game.getEffects().get(i) instanceof BasicTank) {
-						g.drawImage(ImageProvider.getPoints100(), game.getEffects().get(i).getY() * tile,
-								game.getEffects().get(i).getX() * tile, null);
-					} else if (game.getEffects().get(i) instanceof PowerTank) {
-						g.drawImage(ImageProvider.getPoints300(), game.getEffects().get(i).getY() * tile,
-								game.getEffects().get(i).getX() * tile, null);
-					} else if (game.getEffects().get(i) instanceof ArmorTank) {
-						g.drawImage(ImageProvider.getPoints400(), game.getEffects().get(i).getY() * tile,
-								game.getEffects().get(i).getX() * tile, null);
-					} else if (game.getEffects().get(i) instanceof FastTank) {
-						g.drawImage(ImageProvider.getPoints200(), game.getEffects().get(i).getY() * tile,
-								game.getEffects().get(i).getX() * tile, null);
-					}
-				} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12 && GameManager.offline) {
-					game.getEffects().remove(game.getEffects().get(i));
-					i--;
-				}
-			}
+	
 		
 			// PowerUp points
 			else if (game.getEffects().get(i) instanceof PowerUp) {
@@ -1504,7 +1507,7 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getPoints500(), game.getEffects().get(i).getY() * tile,
 							game.getEffects().get(i).getX() * tile, null);
 				}
-				if (((PowerUp) game.getEffects().get(i)).getInc() >= 12 && GameManager.offline) {
+				if (((PowerUp) game.getEffects().get(i)).getInc() >= 12) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
 				}
@@ -1759,14 +1762,14 @@ public class GamePanel extends JPanel {
 	}
 	
 	private void stroke(Graphics g, Graphics2D g2d){
-		if (MainFrame.transparent)
+		if (((MainFrame)getSwitcher()).isTransparent())
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 		g.setColor(Color.DARK_GRAY);
 		Stroke oldStroke = g2d.getStroke();
 		g2d.setStroke(new BasicStroke(shift * 2 - 2));
 		g2d.drawRect(1, 1, this.getWidth() - 3, this.getHeight() - 2);
 		g2d.setStroke(oldStroke);
-		if (MainFrame.transparent)
+		if (((MainFrame)getSwitcher()).isTransparent())
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
 	}
 	
@@ -1775,7 +1778,7 @@ public class GamePanel extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 	
-		if (MainFrame.transparent) {
+		if (((MainFrame)getSwitcher()).isTransparent()) {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));
 			g2d.setColor(getBackground());
 			g2d.fill(getBounds());

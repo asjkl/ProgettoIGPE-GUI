@@ -22,10 +22,14 @@ public class FullGamePanel extends JPanel {
 	private int x;
 	private int y;
 	public int shift = 17;
+	PanelSwitcher switcher;
+
+
 
 	public FullGamePanel(final int WIDTH, int HEIGHT, int gameWidth, int gameHeight, PanelSwitcher switcher,
 			GamePanel gamePanel) {
 
+		this.switcher = switcher;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setLayout(null);
 		setBackground(Color.DARK_GRAY);
@@ -105,7 +109,7 @@ public class FullGamePanel extends JPanel {
 			
 //			JLabel l = new JLabel("PowerUp:");
 //			l.setPreferredSize(new Dimension(120, 35));
-//			l.setFont(MainFrame.customFontS);
+//			l.setFont(((MainFrame)getSwitcher()).customFontS);
 //			l.setBounds(30, 120, 120, 35);
 //			l.setForeground(Color.BLACK);
 //			this.add(l);
@@ -233,5 +237,11 @@ public class FullGamePanel extends JPanel {
 	public String getValueMap() {
 		return valueMap;
 	}
+	public PanelSwitcher getSwitcher() {
+		return switcher;
+	}
 
+	public void setSwitcher(PanelSwitcher switcher) {
+		this.switcher = switcher;
+	}
 }
