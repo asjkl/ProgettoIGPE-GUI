@@ -1468,34 +1468,37 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
 				else if (inc == 5)
 					g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
-				else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank && GameManager.offline) {
+				
+				//ONLY PLAYER
+				else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank ) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
 				}
+				// ONLY ENEMY POINTS
+				else if (game.getEffects().get(i) instanceof EnemyTank) {
+						if (((EnemyTank) game.getEffects().get(i)).getInc() > 5
+								&& ((EnemyTank) game.getEffects().get(i)).getInc() < 12) {
+							if (game.getEffects().get(i) instanceof BasicTank) {
+								g.drawImage(ImageProvider.getPoints100(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof PowerTank) {
+								g.drawImage(ImageProvider.getPoints300(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof ArmorTank) {
+								g.drawImage(ImageProvider.getPoints400(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof FastTank) {
+								g.drawImage(ImageProvider.getPoints200(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							}
+						} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12) {
+							game.getEffects().remove(game.getEffects().get(i));
+							i--;
+						}
+					}
 			}
 
-			// Enemy points
-			else if (game.getEffects().get(i) instanceof EnemyTank) {
-				if (((EnemyTank) game.getEffects().get(i)).getInc() > 5
-						&& ((EnemyTank) game.getEffects().get(i)).getInc() < 12) {
-					if (game.getEffects().get(i) instanceof BasicTank) {
-						g.drawImage(ImageProvider.getPoints100(), game.getEffects().get(i).getY() * tile,
-								game.getEffects().get(i).getX() * tile, null);
-					} else if (game.getEffects().get(i) instanceof PowerTank) {
-						g.drawImage(ImageProvider.getPoints300(), game.getEffects().get(i).getY() * tile,
-								game.getEffects().get(i).getX() * tile, null);
-					} else if (game.getEffects().get(i) instanceof ArmorTank) {
-						g.drawImage(ImageProvider.getPoints400(), game.getEffects().get(i).getY() * tile,
-								game.getEffects().get(i).getX() * tile, null);
-					} else if (game.getEffects().get(i) instanceof FastTank) {
-						g.drawImage(ImageProvider.getPoints200(), game.getEffects().get(i).getY() * tile,
-								game.getEffects().get(i).getX() * tile, null);
-					}
-				} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12 && GameManager.offline) {
-					game.getEffects().remove(game.getEffects().get(i));
-					i--;
-				}
-			}
+	
 		
 			// PowerUp points
 			else if (game.getEffects().get(i) instanceof PowerUp) {
@@ -1504,7 +1507,7 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getPoints500(), game.getEffects().get(i).getY() * tile,
 							game.getEffects().get(i).getX() * tile, null);
 				}
-				if (((PowerUp) game.getEffects().get(i)).getInc() >= 12 && GameManager.offline) {
+				if (((PowerUp) game.getEffects().get(i)).getInc() >= 12) {
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
 				}
