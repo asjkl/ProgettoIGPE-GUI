@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import net.ConnectionManager;
-import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
 
@@ -292,7 +291,7 @@ public class NetworkPanel extends JPanel {
 
 	protected void connectoToServer() throws Exception {
 		final Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
-		final ConnectionManager connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame)switcher));
+		final ConnectionManager connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame)getSwitcher()) );
 		new Thread(connectionManager, "Connection Manager").start();
 	}
 	

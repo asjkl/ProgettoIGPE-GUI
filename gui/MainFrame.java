@@ -21,7 +21,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public static Font customFontM;
 	public static Font customFontB;
 	public static Font customFontS;
-	public static boolean transparent = false;
+	
+	private boolean transparent;
 	private boolean slide;
 	private int unlockedMaps1P;
 	private int unlockedMaps2P;
@@ -68,7 +69,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	private void instantiate() {
-
+		transparent = false;
 		setSlide(true);
 		setCurrentResume(3);
 		setUnlockedMaps1P(1);
@@ -125,12 +126,29 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		}
 	}
 
+	private void setFont() {
+
+		try {
+
+			customFontM = (Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f));
+			customFontB =(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f));
+			customFontS =(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f));
+			graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		}
+	}
 	// -----------------------------override methods-----------------------------------
 
 	@Override
 	public void showMenu() {
 
-		//TODO ce un problema delle volte controllare
+		//TODO  COSENTINO CERCA DI RISOLVERLO
 		menu.drawScore();
 		GameManager.offline = false;
 		
@@ -213,23 +231,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	//---------------------------------SET & GET---------------------------------------------
-	private void setFont() {
 
-		try {
-
-			customFontM = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f);
-			customFontB = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f);
-			customFontS = Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f);
-			graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
-
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		} catch (FontFormatException e) {
-			e.printStackTrace();
-		}
-	}
 	
 //	private void singleOrMulti(JTextField filename) {
 //		File career=null;
@@ -283,4 +285,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public void setSlide(boolean slide) {
 		this.slide = slide;
 	}
+
+	public boolean isTransparent() {
+		return transparent;
+	}
+
+	public void setTransparent(boolean transparent) {
+		this.transparent = transparent;
+	}
+
 }

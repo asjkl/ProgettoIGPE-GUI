@@ -62,7 +62,7 @@ public class ScoresPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if(((MainFrame)switcher).isSlide()) {
+				if( ((MainFrame)getSwitcher()).isSlide()) {
 					
 					writeScore(0);
 					getSwitcher().showMenu();
@@ -465,13 +465,13 @@ public void writeScore(int value) {
 		int p1, p2, r;
 		
 		if(game.getPlayersArray().size() == 1) 
-			((MainFrame)switcher).setUnlockedMaps1P(++value);
+			((MainFrame)getSwitcher()).setUnlockedMaps1P(++value);
 		else
-			((MainFrame)switcher).setUnlockedMaps2P(++value);
+			((MainFrame)getSwitcher()).setUnlockedMaps2P(++value);
 		
-		p1 = ((MainFrame)switcher).getUnlockedMaps1P();
-		p2 = ((MainFrame)switcher).getUnlockedMaps2P();
-		r = ((MainFrame)switcher).getCurrentResume();
+		p1 = ((MainFrame)getSwitcher()).getUnlockedMaps1P();
+		p2 = ((MainFrame)getSwitcher()).getUnlockedMaps2P();
+		r = ((MainFrame)getSwitcher()).getCurrentResume();
 		
 		try {
 			

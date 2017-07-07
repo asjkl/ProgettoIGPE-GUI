@@ -33,7 +33,7 @@ public class JFileChooserClass {
 		disableButton(chooser, "FileChooser.upFolderIcon");
 		disableButton(chooser, "FileChooser.newFolderIcon");
 	}
-	
+
 	public boolean functionSaveFile(int p1, int p2){
 		if(p1==1 && p2==1){
 			this.file=new File("./maps/editor/multiplayer");
@@ -148,4 +148,5 @@ public class JFileChooserClass {
 	public void setFile(File file) {
 		this.file = file;
 	}
+
 }

@@ -35,7 +35,7 @@ public class TranslucentWindow extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				
 				dispose();
-				MainFrame.transparent = false;
+				((MainFrame)getSwitcher()).setTransparent(false);
 				getSwitcher().showScores(value);
 			}
 		});

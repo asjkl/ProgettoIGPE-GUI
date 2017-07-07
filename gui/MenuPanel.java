@@ -218,7 +218,7 @@ public class MenuPanel extends JPanel {
 					SoundsProvider.playBulletHit1();
 					hide = true;
 					setCursorPosition(j);
-					MainFrame.transparent = true;
+					((MainFrame)getSwitcher()).setTransparent(true);
 					exitDialog();
 				}
 			});
@@ -364,7 +364,7 @@ public class MenuPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					MainFrame.transparent = false;
+					((MainFrame)getSwitcher()).setTransparent(false);
 					cursorPositionDialog = 0;
 					hide = false;
 					repaint();
@@ -445,9 +445,9 @@ public class MenuPanel extends JPanel {
 				line = reader.readLine();
 			}
 			
-			((MainFrame)switcher).setCurrentResume(Integer.parseInt(values[values.length - 3]));
-			((MainFrame)switcher).setUnlockedMaps1P(Integer.parseInt(values[values.length - 2]));
-			((MainFrame)switcher).setUnlockedMaps2P(Integer.parseInt(values[values.length - 1]));
+			((MainFrame)getSwitcher()).setCurrentResume(Integer.parseInt(values[values.length - 3]));
+			((MainFrame)getSwitcher()).setUnlockedMaps1P(Integer.parseInt(values[values.length - 2]));
+			((MainFrame)getSwitcher()).setUnlockedMaps2P(Integer.parseInt(values[values.length - 1]));
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -459,9 +459,9 @@ public class MenuPanel extends JPanel {
 		BufferedWriter b = null;
 		PrintWriter w = null;
 		
-		int p1 = ((MainFrame)switcher).getUnlockedMaps1P();
-		int p2 = ((MainFrame)switcher).getUnlockedMaps2P();
-		int r = ((MainFrame)switcher).getCurrentResume();
+		int p1 =((MainFrame)getSwitcher()).getUnlockedMaps1P();
+		int p2 = ((MainFrame)getSwitcher()).getUnlockedMaps2P();
+		int r = ((MainFrame)getSwitcher()).getCurrentResume();
 		
 		try {
 			
@@ -491,7 +491,7 @@ public class MenuPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if (MainFrame.transparent) {
+		if (((MainFrame)getSwitcher()).isTransparent()) {
 
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));

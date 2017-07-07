@@ -14,8 +14,10 @@ import javax.swing.Timer;
 public class WarningDialog extends JDialog{
 	JPanel p;
 	JLabel l;
+	MainFrame mainframe;
 	
-	public WarningDialog(String text, TypeMatrix[][] matrix) {
+	public WarningDialog(String text, TypeMatrix[][] matrix, MainFrame mainframe) {
+		this.mainframe = mainframe;
 		init(text);
 
 		Timer timer = new Timer(3000, new ActionListener() {
@@ -23,7 +25,7 @@ public class WarningDialog extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				matrix[0][0]=matrix[0][(matrix[0].length)/2]=matrix[0][(matrix[0].length)-1]=TypeMatrix.EMPTY;
-				MainFrame.transparent = false;
+				getMainframe().setTransparent(false);
 			}
 		});
 		timer.setRepeats(false);
@@ -31,13 +33,15 @@ public class WarningDialog extends JDialog{
 		setVisible(true);
 	}
 	
+
+
 	public WarningDialog(String text){
 		init(text);
 		Timer timer = new Timer(3000, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				MainFrame.transparent = false;
+				getMainframe().setTransparent(false);
 			}
 		});
 		timer.setRepeats(false);
@@ -60,5 +64,12 @@ public class WarningDialog extends JDialog{
 		setContentPane(p);
 		pack();
 		setLocationRelativeTo(this);
+	}
+	public MainFrame getMainframe() {
+		return mainframe;
+	}
+
+	public void setMainframe(MainFrame mainframe) {
+		this.mainframe = mainframe;
 	}
 }
