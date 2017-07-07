@@ -39,7 +39,11 @@ public class SlideStage extends JLayeredPane {
 		label = new JLabel();
 		label.setFont(MainFrame.customFontB);
 			
-		label.setText("Stage " + filename.getText().subSequence(filename.getText().indexOf("stage")+5, filename.getText().length() - 4));
+		if(filename.getText().contains("career")){
+			label.setText("Stage " + filename.getText().subSequence(filename.getText().indexOf("stage")+5, filename.getText().length() - 4));
+		}else{
+			label.setText("Stage");
+		}
 		label.setBounds((int) (getPreferredSize().getWidth() / 2) - 70,
 				(int) getPreferredSize().getHeight() / 2-50, 300, 100);
 		label.setBackground(Color.GRAY);
