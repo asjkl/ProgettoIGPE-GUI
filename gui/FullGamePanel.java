@@ -185,7 +185,8 @@ public class FullGamePanel extends JPanel {
 				if (gameManager.getPower().get(a).isActivate()
 						&& gameManager.getPower().get(a).getTank() instanceof PlayerTank
 						&& (gameManager.getPower().get(a).getTank().toString().equals(p)
-								|| (gameManager.getPower().get(a).getPowerUp() == Power.SHOVEL))) {
+								|| (gameManager.getPower().get(a).getPowerUp() == Power.SHOVEL)
+								|| (gameManager.getPower().get(a).getPowerUp() == Power.TIMER))) {
 					if (cont % 3 == 0) {
 						x = 34;
 						y += 100;
