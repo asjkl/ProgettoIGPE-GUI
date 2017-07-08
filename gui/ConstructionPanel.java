@@ -333,10 +333,10 @@ public class ConstructionPanel extends JPanel {
 	protected boolean numbersMaxOfEnemy() {
 		if ((contArmor + contBasic + contFast + contPower) > 20
 				&& ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))) {
-			warning = new WarningDialog("Numbers total Enemies is 20 with SinglePlayer!");
+			warning = new WarningDialog("Numbers total Enemies is 20 with SinglePlayer!",((MainFrame)switcher));
 			return false;
 		} else if ((contArmor + contBasic + contFast + contPower) > 40 && contPlayerP1 == 1 && contPlayerP2 == 1) {
-			warning = new WarningDialog("Numbers total Enemies is 40 with MultiPlayer!");
+			warning = new WarningDialog("Numbers total Enemies is 40 with MultiPlayer!", ((MainFrame)switcher));
 			return false;
 		}
 
@@ -353,7 +353,7 @@ public class ConstructionPanel extends JPanel {
 			return true;
 		}
 		((MainFrame)getSwitcher()).setTransparent(true);
-		warning = new WarningDialog("Can't found path to Flag!");
+		warning = new WarningDialog("Can't found path to Flag!",((MainFrame)switcher));
 		return false;
 	}
 

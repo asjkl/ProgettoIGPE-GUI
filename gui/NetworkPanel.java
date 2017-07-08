@@ -2,7 +2,6 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -21,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import net.Client;
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
@@ -28,9 +29,6 @@ import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
 @SuppressWarnings("serial")
 public class NetworkPanel extends JPanel {
 
-	private boolean difficult = false;
-	private boolean map = false;
-	
 	private PanelSwitcher switcher;
 	private JTextField ipTextField;
 	private JTextField nameTextField;
@@ -40,16 +38,10 @@ public class NetworkPanel extends JPanel {
 	private ArrayList<JButton> buttons;
 	private JDialog dialog;
 	private int DIM = 3;
-	private JDialog dialogRoom;
-	private JButton[] buttonsRoom;
-	private int cursorPositionRoom;
-	private WarningDialog warning;
 
 
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
-		
-		this.dialogRoom = new JDialog();
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
 		this.setSwitcher(switcher);
@@ -195,8 +187,6 @@ public class NetworkPanel extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				SoundsProvider.playBulletHit1();
 				cursorPosition = 1;
-				difficult = false;
-				map = false;
 				getSwitcher().showMenu();
 
 			}
@@ -208,7 +198,6 @@ public class NetworkPanel extends JPanel {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				SoundsProvider.playBulletHit1();
-				if(difficult && map) {
 					buttons.get(1).setEnabled(false);
 					new Thread() {
 						@Override
@@ -220,19 +209,16 @@ public class NetworkPanel extends JPanel {
 								}
 							};
 						}.start();
-	
-				}
-				else
-					warning = new WarningDialog("Create room first!");
 			}
 			});
 			break;
-	case 2: // CREATE ROOM
+	case 2: // chat
 		buttons.get(j).addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				Room();
+	
+				new Client(nameTextField.getText(),ipTextField.getText(), "1232" );
 			}
 		});
 			break;
@@ -298,174 +284,38 @@ public class NetworkPanel extends JPanel {
 			break;
 		case 2:
 			buttons.get(j).setBounds(580, 650, 200, 35);
-			buttons.get(j).setText("Create Room");
+			buttons.get(j).setText("Chat");
 			break;
 		default:
 			break;
 		}
 	}
 
-	// <<<<<<   Roooooom   >>>>>>>
-	
-	public void Room() {
-
-		dialogRoom.setSize(new Dimension(250, 250));
-		JPanel fullpanel = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				if (cursorPositionRoom == 0) {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 80, this);
-				} else if (cursorPositionRoom == 1) {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 133, this);
-				} else {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 185, this);
-				}
-			}
-		};
-		JPanel text = new JPanel();
-		JPanel buttonspanel = new JPanel(new GridLayout(3, 1, 0, 10));
-
-		JLabel label = new JLabel("Room");
-		String[] buttonTxt = { "Maps", "Difficult", "Back"};
-
-		fullpanel.setPreferredSize(new Dimension(250, 270));
-		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
-		fullpanel.setBackground(Color.BLACK);
-		buttonsRoom = new JButton[buttonTxt.length];
-		label.setFont(MainFrame.customFontB);
-		label.setForeground(Color.RED);
-		label.setBorder(null);
-		text.add(label);
-		text.setPreferredSize(new Dimension(200, 70));
-		text.setMaximumSize(new Dimension(200, 70)); // set max = pref
-		text.setBackground(Color.BLACK);
-		text.setAlignmentX(Component.CENTER_ALIGNMENT);
-		buttonspanel.setBackground(Color.BLACK);
-
-		for (int i = 0; i < buttonTxt.length; i++) {
-
-			final int curRow = i;
-			buttonsRoom[i] = new JButton(buttonTxt[i]);
-			buttonsRoom[i].setFont(MainFrame.customFontM);
-			buttonsRoom[i].setBackground(Color.BLACK);
-			buttonsRoom[i].setForeground(Color.WHITE);
-			buttonsRoom[i].setBorder(null);
-			buttonsRoom[i].setFocusPainted(false);
-			buttonsRoom[i].setContentAreaFilled(false);
-			buttonsRoom[i].setBorderPainted(false);
-			buttonsRoom[i].setFocusPainted(false);
-			buttonsRoom[i].addKeyListener(new KeyAdapter() {
-
-				@Override
-				public void keyPressed(KeyEvent e) {
-
-					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					
-							((JButton) e.getComponent()).doClick();
-							
-								dialogRoom.dispose();
-						
-					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-						
-						dialogRoom.dispose();
-					}
-
-					else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
-						SoundsProvider.playBulletHit1();
-						if (curRow < 1) {
-							buttonsRoom[buttonsRoom.length - 1].requestFocus();
-							cursorPositionRoom = buttonsRoom.length - 1;
-
-						} else {
-							buttonsRoom[curRow - 1].requestFocus();
-							cursorPositionRoom = curRow - 1;
-
-						}
-					} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-						SoundsProvider.playBulletHit1();
-						buttonsRoom[(curRow + 1) % buttonsRoom.length].requestFocus();
-						cursorPositionRoom = (curRow + 1) % buttonsRoom.length;
-					}
-				}
-			});
-
-			buttonspanel.add(buttonsRoom[i]);
-			buttonspanel.setBackground(Color.BLACK);
-			RoomActionListener(i);
-		}
-
-		buttonspanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		buttonspanel.setPreferredSize(new Dimension(100, 150));
-		buttonspanel.setMaximumSize(new Dimension(100, 150));
-		buttonspanel.setBackground(Color.BLACK);
-		fullpanel.add(text);
-		fullpanel.add(buttonspanel);
-		dialogRoom.setContentPane(fullpanel);
-		dialogRoom.setUndecorated(true);
-		dialogRoom.setModal(true);
-		dialogRoom.pack();
-		dialogRoom.setLocationRelativeTo(this);
-		dialogRoom.setVisible(true);
-	
-	}
-
-	public void RoomActionListener(int j) {
-
-		switch (j) {
-		case 0: 
-			buttonsRoom[j].addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SoundsProvider.playBulletHit1();
-		
-					dialogRoom.dispose();
-				}
-			});
-			break;
-		case 1:
-			buttonsRoom[j].addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SoundsProvider.playBulletHit1();
-				
-						dialogRoom.dispose();
-					
-				}
-			});
-		case 2:
-			buttonsRoom[j].addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SoundsProvider.playBulletHit1();
-				
-						dialogRoom.dispose();
-					
-				}
-			});
-			break;		
-		default:
-			break;
-		}
-	}
-
-	
 	protected void connectoToServer() throws Exception {
 		final Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
-		final ConnectionManager connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame)getSwitcher()) );
+		final ConnectionManager connectionManager = new ConnectionManager(socket, nameTextField.getText(),((MainFrame)getSwitcher()) );
 		new Thread(connectionManager, "Connection Manager").start();
 	}
 	
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+			if (((MainFrame)getSwitcher()).isTransparent()) {
+
+				// Apply our own painting effect
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));
+				g2d.setColor(getBackground());
+				g2d.fill(getBounds());
+			}
+		
+		if(!((MainFrame)getSwitcher()).isTransparent()) 
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+		
 		g.drawImage(ImageProvider.getBackground2P(), (int) (getPreferredSize().getWidth() / 2)-375,0, null);
 		
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+		if(!((MainFrame)getSwitcher()).isTransparent()) 
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 			if (cursorPosition == 0)
 				g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX() + 85,

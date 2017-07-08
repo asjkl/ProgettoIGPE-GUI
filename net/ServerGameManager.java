@@ -31,7 +31,6 @@ public class ServerGameManager {
 		}
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	public String getConnectedClientNames() {
 		final StringBuilder sb = new StringBuilder();
 		for (final ClientManager cm : clients) {

@@ -184,6 +184,7 @@ public class ConnectionManager implements Runnable {
 		// difficult = t.getText();
 
 		dialog.setPreferredSize(new Dimension(270, 250));
+		@SuppressWarnings("serial")
 		JPanel fullpanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {

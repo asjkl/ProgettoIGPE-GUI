@@ -25,7 +25,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private boolean transparent;
 	private boolean slide;
 	private int unlockedMaps1P;
-	private int unlockedMaps2P;
+	private int unlockedMaps2P; 
 	private int currentResume;
 //	public static boolean singlePlayer;
 	private GraphicsEnvironment graphicscEnvironment;
@@ -69,21 +69,22 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	private void instantiate() {
-		transparent = false;
-		setSlide(true);
-		setCurrentResume(3);
-		setUnlockedMaps1P(1);
-		setUnlockedMaps2P(1);
-		Timer timer = new Timer(4000, new ActionListener() {
+	
+		Timer timer = new Timer(9000, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				showMenu();
 			}
 		});
+	
+		transparent = false;
 		timer.setRepeats(false);
 		timer.start();
-
+		setSlide(true);
+		setCurrentResume(3);
+		setUnlockedMaps1P(1);
+		setUnlockedMaps2P(1);
 		new SoundsProvider();
 		setFont();
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
@@ -95,6 +96,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		settings = new SettingsPanel(WIDTH, HEIGHT, this);
 		images = new ImageProvider();
 		sounds = new SoundsProvider();
+	
+		System.out.println("istanziato tutto");
 	}
 	
 	public void switchTo(JComponent component) {
@@ -148,8 +151,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	@Override
 	public void showMenu() {
 
-		//TODO  COSENTINO CERCA DI RISOLVERLO
-		menu.drawScore();
+		
 		GameManager.offline = false;
 		
 		if (isSlide()) {

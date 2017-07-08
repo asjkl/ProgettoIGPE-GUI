@@ -35,7 +35,8 @@ public class WarningDialog extends JDialog{
 	
 
 
-	public WarningDialog(String text){
+	public WarningDialog(String text, MainFrame mainframe){
+		this.mainframe = mainframe;
 		init(text);
 		Timer timer = new Timer(3000, new ActionListener() {
 			@Override
@@ -63,7 +64,7 @@ public class WarningDialog extends JDialog{
 		setUndecorated(true);
 		setContentPane(p);
 		pack();
-		setLocationRelativeTo(this);
+		setLocationRelativeTo(mainframe);
 	}
 	public MainFrame getMainframe() {
 		return mainframe;
