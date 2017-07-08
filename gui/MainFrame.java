@@ -24,6 +24,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	
 	private boolean transparent;
 	private boolean slide;
+	private int highScoreP1;
+	private int highScoreP2;
 	private int unlockedMapsP1;
 	private int unlockedMapsP2;
 	private int resumeP1;
@@ -299,15 +301,30 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		this.unlockedMapsP2 = unlockedMapsP2;
 	}
 
-	
 	public int getUnlockedMapsP1() {
 		return unlockedMapsP1;
 	}
-
+	
 	public void setUnlockedMapsP1(int unlockedMapsP1) {
 		this.unlockedMapsP1 = unlockedMapsP1;
 	}
+	
+	public int getHighScoreP2() {
+		return highScoreP2;
+	}
 
+	public void setHighScoreP2(int highScoreP2) {
+		this.highScoreP2 = highScoreP2;
+	}
+
+	public int getHighScoreP1() {
+		return highScoreP1;
+	}
+
+	public void setHighScoreP1(int highScoreP1) {
+		this.highScoreP1 = highScoreP1;
+	}
+	
 	public boolean isSlide() {
 		return slide;
 	}
@@ -323,5 +340,4 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public void setTransparent(boolean transparent) {
 		this.transparent = transparent;
 	}
-
 }

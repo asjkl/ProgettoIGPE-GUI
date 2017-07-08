@@ -49,7 +49,7 @@ import progettoIGPE.davide.giovanni.unical2016.Water;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {
-
+	
 	public int tile;
 	private double end;
 	private long start;
@@ -66,6 +66,8 @@ public class GamePanel extends JPanel {
 	private ConnectionManager connectionManager;
 	private String playerName;
 
+	private final int EXIT = 500;
+	
 	//SCORE
 	private int currentResumeP1;
 	private int currentLevelP1;
@@ -266,61 +268,20 @@ public class GamePanel extends JPanel {
 	
 	// ----------------------GAMELOOP---------------------------//
 	
-	private void loadScoreMulti() {
-		
-		BufferedReader reader = null;
-		String line = null;
-		
-		final int DIM = 8;
-		String values[] = new String[DIM];
-		
-		try {
-			
-				reader = new BufferedReader(new FileReader("./values/multiCareer.txt"));
-				line = reader.readLine();
-				
-				int i = 0;
-				
-				while(line != null) {
-					
-					StringTokenizer st = new StringTokenizer(line, "");
-					String tmp = null;
-					
-					while(st.hasMoreTokens()) {
-						
-						tmp = st.nextToken();
-							
-							if(tmp.matches("^[0-9]+") && i < values.length)
-								values[i++] = tmp;
-					}
-					
-					line = reader.readLine();
-				}
-			}	
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			((MainFrame)switcher).setCurrentResumeP1(Integer.parseInt(values[2]));
-			((MainFrame)switcher).setCurrentLevelP1(Integer.parseInt(values[3]));
-			((MainFrame)switcher).setUnlockedMapsP1(Integer.parseInt(values[4]));
-			
-			((MainFrame)switcher).setCurrentResumeP2(Integer.parseInt(values[5]));
-			((MainFrame)switcher).setCurrentLevelP2(Integer.parseInt(values[6]));
-			((MainFrame)switcher).setUnlockedMapsP2(Integer.parseInt(values[8]));
-	}
-
-	
 	public void gameLoop() {
 		
 		if(GameManager.offline) {
 			
+			currentResumeP1 = ((MainFrame)switcher).getCurrentResumeP1();
 			game.getPlayersArray().get(0).setResume(currentResumeP1);
+			currentLevelP1 = ((MainFrame)switcher).getCurrentLevelP1();
 			game.getPlayersArray().get(0).setLevel(currentLevelP1);
 			
 			if(game.getPlayersArray().size() > 1) {
 				
+				currentResumeP2 = ((MainFrame)switcher).getCurrentResumeP2();
 				game.getPlayersArray().get(1).setResume(currentResumeP2);
+				currentLevelP2 = ((MainFrame)switcher).getCurrentLevelP2();
 				game.getPlayersArray().get(1).setLevel(currentLevelP2);
 			}
 		}
@@ -515,15 +476,26 @@ public class GamePanel extends JPanel {
 				|| (game.getPlayersArray().size() == 1 && game.getPlayersArray().get(0).getResume() < 0))) {
 			gameOver();
 		} else if (game.getFlag().isHit()) {
-			if (game.isWaitToExit()){
-				gameOver();
+		
+			try {
+				Thread.sleep(EXIT);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+				gameOver();
+			
 		}
 		// WIN
-		else if (game.getEnemy().size() == 0) {
-			System.out.println("win");
-			win();
-		}
+		else 
+			if (game.getEnemy().size() == 0) {
+				try {
+					Thread.sleep(EXIT);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				win();
+			}
+
 	}
 
 	private void changeRotationForIce(Tank t) {
@@ -907,43 +879,40 @@ public class GamePanel extends JPanel {
 	}
 
 	private void powerUpPickUp(Tank t, PowerUp p) {
-		SoundsProvider.playPowerUpPick();
+	    SoundsProvider.playPowerUpPick();
 
-		if (!game.isPresent(t, p)) {
-			p.setTank(t);
-			p.setActivate(true);
-			p.setTime(p.getDuration());
-			game.usePowerUp(p);
-			if(!game.getEffects().contains(p))
-				game.getEffects().add(p);
+	    if (!game.isPresent(t, p)) {
+	      p.setTank(t);
+	      p.setActivate(true);
+	      p.setTime(p.getDuration());
+	      game.usePowerUp(p);
+	      if(!game.getEffects().contains(p))
+	        game.getEffects().add(p);
 
-		} else if (p.getDuration() != 0) {
-			game.sumPowerUp(t, p);
-			game.getPower().remove(p);
-		}
-		t.setNext(null); // da vedere 
-		t.setCurr(null); // da vedere
-	}
+	    } else{
+	      game.sumPowerUp(t, p);
+	      game.getPower().remove(p);
+	    }
+	    t.setNext(null); 
+//	    t.setCurr(null); // da vedere
+	  }
 
 	private void gameOver() {
 
 		((MainFrame)getSwitcher()).setTransparent(true);
+		repaint();
 		game.setExit(true);
 		
 		if(GameManager.offline) {
 			
 			((MainFrame)switcher).setSlide(true);
 			((MainFrame)switcher).setCurrentResumeP1(3);
-			((MainFrame)switcher).setCurrentLevelP1(1);
+			((MainFrame)switcher).setCurrentLevelP1(0);
 			
-			if(game.getPlayersArray().size() == 1)
-				((MainFrame)switcher).setUnlockedMapsP1(1);
-			
-			else { 
-				
-				((MainFrame)switcher).setUnlockedMapsP2(1);
+			if(game.getPlayersArray().size() > 1) { 
+		
 				((MainFrame)switcher).setCurrentResumeP2(3);
-				((MainFrame)switcher).setCurrentLevelP2(1);
+				((MainFrame)switcher).setCurrentLevelP2(0);
 			}
 			
 			SoundsProvider.cancelMove();
@@ -956,8 +925,8 @@ public class GamePanel extends JPanel {
 
 	private void win() {
 
-		repaint();
 		((MainFrame)getSwitcher()).setTransparent(true);
+		repaint();
 		game.setExit(true);
 		
 		if(GameManager.offline) {
@@ -967,21 +936,12 @@ public class GamePanel extends JPanel {
 			currentLevelP1 = game.getPlayersArray().get(0).getLevel();
 			((MainFrame)switcher).setCurrentLevelP1(currentLevelP1);
 
-			
-			if(game.getPlayersArray().size() == 1) {
-				
-				int m = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
-				((MainFrame)switcher).setUnlockedMapsP1(m);
-			}
-			else {
+			if(game.getPlayersArray().size() > 1) {
 
 				currentResumeP2 = game.getPlayersArray().get(1).getResume();
 				((MainFrame)switcher).setCurrentResumeP2(currentResumeP2);
 				currentLevelP2 = game.getPlayersArray().get(1).getLevel();
 				((MainFrame)switcher).setCurrentLevelP2(currentLevelP2);
-
-				int m = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
-				((MainFrame)switcher).setUnlockedMapsP2(m);	
 			}
 		
 		SoundsProvider.cancelMove();
@@ -1069,7 +1029,7 @@ public class GamePanel extends JPanel {
 						game.getPlayersArray().get(a).setCont(35);
 					else
 						game.getPlayersArray().get(a).setCont(30);
-					SoundsProvider.playBulletHit2();
+					SoundsProvider.playHitForCanGo();
 				}
 
 				if (game.getPlayersArray().get(a).getNext() instanceof PowerUp)
@@ -1529,11 +1489,8 @@ public class GamePanel extends JPanel {
 				else if (inc == 5)
 					g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
 				else if (inc > 5 && GameManager.offline) {
-					game.setWaitToExit(true);
 					game.getEffects().remove(game.getEffects().get(i));
 					i--;
-				}else if(inc >5 && !GameManager.offline){
-					game.setWaitToExit(true);
 				}
 			}
 
@@ -1909,10 +1866,58 @@ public class GamePanel extends JPanel {
 
 		paused(g, g2d);
 		
-		if(!GameManager.offline){
-			connectionManager.dispatch(getUpdatePaintComponent(game.isWaitToExit()));
-		}
+		
+		//TODO non serve piu
+//		if(!GameManager.offline){
+//			connectionManager.dispatch(getUpdatePaintComponent(game.isWaitToExit()));
+//		}
 	}
+	
+	//------------------------SCORE MULTI-------------------------//
+	
+	private void loadScoreMulti() {
+		
+		BufferedReader reader = null;
+		String line = null;
+		
+		final int DIM = 7;
+		String values[] = new String[DIM];
+		
+		try {
+			
+				reader = new BufferedReader(new FileReader("./values/multiCareer.txt"));
+				line = reader.readLine();
+				
+				int i = 0;
+				
+				while(line != null) {
+					
+					StringTokenizer st = new StringTokenizer(line, "");
+					String tmp = null;
+					
+					while(st.hasMoreTokens()) {
+						
+						tmp = st.nextToken();
+							
+							if(tmp.matches("^[0-9]+") && i < values.length)
+								values[i++] = tmp;
+					}
+					
+					line = reader.readLine();
+				}
+			}	
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			((MainFrame)switcher).setCurrentResumeP1(Integer.parseInt(values[1]));
+			((MainFrame)switcher).setCurrentLevelP1(Integer.parseInt(values[2]));
+
+			((MainFrame)switcher).setCurrentResumeP2(Integer.parseInt(values[4]));
+			((MainFrame)switcher).setCurrentLevelP2(Integer.parseInt(values[5]));
+			((MainFrame)switcher).setUnlockedMapsP2(Integer.parseInt(values[6]));
+	}
+	
 
 	// -----------------------GET & SET--------------------------//
 

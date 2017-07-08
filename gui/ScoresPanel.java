@@ -6,12 +6,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.StringTokenizer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -36,18 +33,23 @@ public class ScoresPanel extends JPanel {
 	private String value;
 	private String path;
 	private final int SLEEP = 150;
-	private final int DELAY;
+	private JTextField filename;
+	private Timer timer;
+	private boolean complete;
+	private final int SHOW = 500;
 	
 	public ScoresPanel(final int w, final int h, PanelSwitcher switcher, GameManager game, JTextField filename) {
-	
+
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
 	
+		complete = false;
 		value = (String) filename.getText().
 				subSequence(filename.getText().indexOf("stage") + 5, filename.getText().length() - 4);
 		path = (String) filename.getText().subSequence(0, filename.getText().lastIndexOf("/"));
 		this.game = game;
+		this.filename = filename;
 		setSwitcher(switcher);
 
 		occurrence = new int[game.getPlayersArray().size()][OBJECT];
@@ -56,35 +58,12 @@ public class ScoresPanel extends JPanel {
 			setUp1Player();
 		else 
 			setUp2Players();
-
-		DELAY = (8000 * game.getPlayersArray().size());
-		
-		Timer timer = new Timer(DELAY, new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				if( ((MainFrame)getSwitcher()).isSlide()) {
-					
-					writeScore(0);
-					getSwitcher().showMenu();
-				}
-				else {
-					
-					writeScore(Integer.parseInt(value));
-					filename.setText(path + "/stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
-					getSwitcher().showSlide(filename);
-				}
-			}
-		});
-		timer.start();
-		timer.setRepeats(false);
 	}
 	
 	public void setUp1Player() {
 		
 		x = 805;
-		y = 345;
+		y = 315;
 
 		game.getPlayersArray().getFirst().getStatistics().setNewRecord();
 		highScoreP1 = game.getPlayersArray().getFirst().getStatistics().getHighScore();
@@ -102,12 +81,14 @@ public class ScoresPanel extends JPanel {
 	
 		updateHighScore();
 		drawLabelP1();
+		
+		activeTimer();
 	}
 	
 	public void setUp2Players() {
 
 		x = 385;
-		y = 305;
+		y = 295;
 		
 		game.getPlayersArray().getFirst().getStatistics().setNewRecord();
 		highScoreP1 = game.getPlayersArray().getFirst().getStatistics().getHighScore();
@@ -129,9 +110,55 @@ public class ScoresPanel extends JPanel {
 		}
 		
 		updateHighScore();
-		drawLabelP2();
+		drawLabelP2();		
+		
+		activeTimer();
 	}
 		
+	private void activeTimer() {
+		
+		timer = new Timer(500, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					
+				if(complete) {
+	
+					 ((Timer)e.getSource()).stop();
+					
+					if(((MainFrame)getSwitcher()).isSlide()) {
+						
+						writeScore(1);
+						
+						try {
+							Thread.sleep(SHOW);
+							getSwitcher().showMenu();
+							
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}
+						
+					}
+					else {
+						
+						writeScore(Integer.parseInt(value) + 1);
+						filename.setText(path + "/stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
+						
+						try {
+							Thread.sleep(SHOW);
+							getSwitcher().showSlide(filename);
+							
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+		
+		timer.start();
+	}
+
 	public void setOccurrence(PlayerTank p, int j, int k) {
 		
 		switch(k) {
@@ -162,11 +189,11 @@ public class ScoresPanel extends JPanel {
 		stage.setBackground(Color.BLACK);
 		stage.setForeground(Color.WHITE);
 		stage.setText("Stage " + value);
-		stage.setBounds(555, 215, 300, 100);
+		stage.setBounds(555, 185, 300, 100);
 		
 		this.add(stage);
 		
-		for(int i = 0, y = 310; i < OBJECT; i++, y += 65) {
+		for(int i = 0, y = 280; i < OBJECT; i++, y += 65) {
 		
 			JLabel pts = new JLabel();
 			JLabel text = new JLabel();
@@ -180,12 +207,12 @@ public class ScoresPanel extends JPanel {
 				score.setBackground(Color.BLACK);
 				score.setForeground(Color.ORANGE);
 				score.setText(String.valueOf(currScoreP1));
-				score.setBounds(545, 125, 300, 100);
+				score.setBounds(545, 95, 300, 100);
 				this.add(score);
 				
 				text.setForeground(Color.RED);
 				text.setText("I-Player");
-				text.setBounds(365, 125, 300, 100);
+				text.setBounds(365, 95, 300, 100);
 			}
 			else
 				if(i == 2) {
@@ -196,12 +223,12 @@ public class ScoresPanel extends JPanel {
 					hiScore.setBackground(Color.BLACK);
 					hiScore.setForeground(Color.ORANGE);
 					hiScore.setText(String.valueOf(highScoreP1));
-					hiScore.setBounds(895, 125, 300, 100);
+					hiScore.setBounds(895, 95, 300, 100);
 					this.add(hiScore);
 					
 					text.setForeground(Color.RED);
 					text.setText("Hi-Score");
-					text.setBounds(685, 125, 300, 100);
+					text.setBounds(685, 95, 300, 100);
 			}
 			else
 				if(i == 3) {
@@ -209,7 +236,7 @@ public class ScoresPanel extends JPanel {
 					text.setBackground(Color.BLACK);
 					text.setForeground(Color.WHITE);
 					text.setText("Total");
-					text.setBounds(545, 665, 300, 100);
+					text.setBounds(545, 635, 300, 100);
 				}	
 			
 			pts.setFont(text.getFont());
@@ -231,7 +258,7 @@ public class ScoresPanel extends JPanel {
 				try {
 					
 					int positionX = 675;
-					int positionY = 340;
+					int positionY = 310;
 					
 					for(int i = 0, j = 0; j < OBJECT; j++, positionY += 65) {
 					
@@ -283,6 +310,8 @@ public class ScoresPanel extends JPanel {
 						total.setText(String.valueOf(j));
 						total.setBounds(positionX, positionY + 28, 95, 45);
 					}
+					
+					complete = true;
 				}
 				catch(InterruptedException e) {
 						e.printStackTrace();
@@ -298,7 +327,7 @@ public class ScoresPanel extends JPanel {
 		
 		for(int i = 0; i < game.getPlayersArray().size(); i++) {
 		
-			for(int j = 0, posY = 270; j < OBJECT; j++, posY += 65) {
+			for(int j = 0, posY = 260; j < OBJECT; j++, posY += 65) {
 			
 				JLabel pts = new JLabel();
 				JLabel text = new JLabel();
@@ -315,19 +344,19 @@ public class ScoresPanel extends JPanel {
 						if(i == 0) {
 							
 							score.setText(String.valueOf(currScoreP1));
-							text.setText(String.valueOf("I - Player"));
+							text.setText(String.valueOf("I-Player"));
 						}
 						else {
 							
 							score.setText(String.valueOf(currScoreP2));
-							text.setText(String.valueOf("II - Player"));
+							text.setText(String.valueOf("II-Player"));
 						}
 						
-						score.setBounds(385 + k, 105, 300, 100);
+						score.setBounds(385 + k, 95, 300, 100);
 						this.add(score);
 						
 						text.setForeground(Color.RED);
-						text.setBounds(185 + k, 105, 300, 100);
+						text.setBounds(185 + k, 95, 300, 100);
 					}
 					else 
 						if(j == 2) {
@@ -337,13 +366,23 @@ public class ScoresPanel extends JPanel {
 						hiScore.setFont(text.getFont());
 						hiScore.setBackground(Color.BLACK);
 						hiScore.setForeground(Color.ORANGE);
-						hiScore.setText(String.valueOf(highScoreP1));
-						hiScore.setBounds(395 + k, 185, 300, 100);
+						
+						if(i == 0) {
+							
+							hiScore.setText(String.valueOf(highScoreP1));
+							hiScore.setBounds(385 + k, 175, 300, 100);
+						}
+						else {
+							
+							hiScore.setText(String.valueOf(highScoreP2));
+							hiScore.setBounds(385 + k, 175, 300, 100);
+						}
+						
 						this.add(hiScore);
 						
 						text.setForeground(Color.RED);
 						text.setText("Hi-Score");
-						text.setBounds(185 + k, 185, 300, 100);
+						text.setBounds(185 + k, 175, 300, 100);
 					}
 					else
 						if(j == 3) {
@@ -351,7 +390,7 @@ public class ScoresPanel extends JPanel {
 						text.setBackground(Color.BLACK);
 						text.setForeground(Color.WHITE);
 						text.setText("Total");
-						text.setBounds(150 + k, 615, 200, 100);
+						text.setBounds(150 + k, 605, 200, 100);
 					}
 			
 				pts.setFont(MainFrame.customFontB);
@@ -381,7 +420,7 @@ public class ScoresPanel extends JPanel {
 					
 					for(int i = 0; i < occurrence.length; i++) {
 
-						positionY = 340;
+						positionY = 330;
 						
 						for(int j = 0; j < occurrence[i].length; j++, positionY += 65) {
 				
@@ -415,12 +454,12 @@ public class ScoresPanel extends JPanel {
 								points.setText(String.valueOf(currValue * 100 * (j + 1)));
 								
 								if(currValue == 0)
-									points.setBounds(currPosition - 139, positionY - 40, 45, 45);
+									points.setBounds(currPosition - 138, positionY - 40, 45, 45);
 								else
-									points.setBounds(currPosition - 185, positionY - 40, 105, 45);
+									points.setBounds(currPosition - 183, positionY - 40, 105, 45);
 								
 								occur.setText(String.valueOf(currValue));
-								occur.setBounds(currPosition, positionY - 40, 95, 45);
+								occur.setBounds(currPosition, positionY - 40, 85, 45);
 								currValue++;
 								
 							}
@@ -459,6 +498,8 @@ public class ScoresPanel extends JPanel {
 						total2P.setText(String.valueOf(j));
 						total2P.setBounds(positionK, positionY - 22, 95, 45);
 					}
+					
+					complete = true;
 				}
 				catch(InterruptedException e) {
 						e.printStackTrace();
@@ -548,79 +589,19 @@ public class ScoresPanel extends JPanel {
 		}
 	}
 	
-	
-	
 	private void updateMulti() throws IOException {
-	
-		BufferedReader reader = new BufferedReader(new FileReader("./values/multiCareer.txt"));
-		String line = reader.readLine();
-		String scores[] = new String[2];
 		
-		int i = 0;
+		if(((MainFrame)switcher).getHighScoreP1() > highScoreP1)
+			highScoreP1 = ((MainFrame)switcher).getHighScoreP1();
 		
-		while(line != null) {
-			
-			StringTokenizer st = new StringTokenizer(line, "");
-			String tmp = null;
-			
-			while(st.hasMoreTokens()) {
-				
-				tmp = st.nextToken();
-				
-				if(tmp.matches("[0-9]+")) {
-			
-					int a = Integer.parseInt(tmp);
-					
-					if(!(a >= 1 && a <= 24) && i < scores.length)
-						scores[i++] = tmp;
-				}
-			}
-			
-			line = reader.readLine();
-		}
-		
-		reader.close();
-		
-		if((Integer.parseInt(scores[0])) > highScoreP1)
-			highScoreP1 = Integer.parseInt(scores[0]);
-		
-		if((Integer.parseInt(scores[1])) > highScoreP2)
-			highScoreP2 = Integer.parseInt(scores[1]);	
+		if(((MainFrame)switcher).getHighScoreP2() > highScoreP2)
+			highScoreP1 = ((MainFrame)switcher).getHighScoreP2();
 	}
 
 	private void updateSingle() throws IOException {
 		
-		BufferedReader reader = new BufferedReader(new FileReader("./values/singleCareer.txt"));
-		String line = reader.readLine();
-		String scores[] = new String[2];
-		
-		int i = 0;
-		
-		while(line != null) {
-			
-			StringTokenizer st = new StringTokenizer(line, "");
-			String tmp = null;
-			
-			while(st.hasMoreTokens()) {
-				
-				tmp = st.nextToken();
-				
-				if(tmp.matches("[0-9]+")) {
-			
-					int a = Integer.parseInt(tmp);
-					
-					if(!(a >= 1 && a <= 24) && i < scores.length)
-						scores[i++] = tmp;
-				}
-			}
-			
-			line = reader.readLine();
-		}
-		
-		reader.close();
-		
-		if((Integer.parseInt(scores[0])) > highScoreP1)
-			highScoreP1 = Integer.parseInt(scores[0]);
+		if(((MainFrame)switcher).getHighScoreP1() > highScoreP1)
+			highScoreP1 = ((MainFrame)switcher).getHighScoreP1();	
 	}
 	
 	@Override

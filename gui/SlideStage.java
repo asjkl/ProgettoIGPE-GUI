@@ -43,7 +43,7 @@ public class SlideStage extends JLayeredPane {
 			label.setText("Stage " + filename.getText().
 					subSequence(filename.getText().indexOf("stage") + 5, filename.getText().length() - 4));
 		else
-			label.setText("Stage ");
+			label.setText("Custom");
 		
 		label.setBounds((int) (getPreferredSize().getWidth() / 2) - 70,
 				(int) getPreferredSize().getHeight() / 2-50, 300, 100);
@@ -99,15 +99,14 @@ public class SlideStage extends JLayeredPane {
 					if(oldComponent != null)
 						remove(oldComponent);
 						
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}
-						
 						((Timer) e.getSource()).stop();
 					
-						getSwitcher().showGame(filename);
+						try {
+							Thread.sleep(500);
+							getSwitcher().showGame(filename);
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}						
 						
 				} else {
 

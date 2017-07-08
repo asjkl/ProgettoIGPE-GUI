@@ -27,6 +27,7 @@ public class SoundsProvider {
 	private static File stop;
 	private static File tankHit;
 	private static File stageComplete;
+	private static File canGo;
 	
 	private static Clip stageCompleteClip;
 	private static Clip stopClip;
@@ -43,6 +44,7 @@ public class SoundsProvider {
 	private static Clip gameOverClip;
 	public static Clip stageStartClip; //tmp
 	private static Clip tankHitClip;
+	private static Clip canGoClip;
 	
 	static {
 		
@@ -61,11 +63,16 @@ public class SoundsProvider {
 		move = new File("sounds/tankMove.wav");
 		stop = new File("sounds/tankStop.wav");
 		tankHit = new File("sounds/tankHit.wav");
+		canGo = new File("sounds/bulletHit2.wav");
 	}
 	
 	static {
 		
 		try {
+			
+			audio =  AudioSystem.getAudioInputStream(canGo);
+			canGoClip = AudioSystem.getClip();
+			canGoClip.open(audio);
 			
 			audio =  AudioSystem.getAudioInputStream(stageComplete);
 			stageCompleteClip = AudioSystem.getClip();
@@ -138,7 +145,7 @@ public class SoundsProvider {
 		gainControl.setValue(-SettingsPanel.soundValue);
 	}
 	
-	public static void setGainPlayer(Clip clip) {
+	public static void setGainLower(Clip clip) {
 		
 		gainControlPlayer = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 		gainControlPlayer.setValue(-(SettingsPanel.soundValue + 10));
@@ -147,7 +154,7 @@ public class SoundsProvider {
 	public static void playStop() {
 		
 		moveClip.stop();
-		setGainPlayer(stopClip);
+		setGainLower(stopClip);
 		stopClip.start();
 		stopClip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
@@ -159,13 +166,20 @@ public class SoundsProvider {
 	public static void playMove() {
 		
 		stopClip.stop();
-		setGainPlayer(moveClip);
+		setGainLower(moveClip);
 		moveClip.start();
 		moveClip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
 	public static void cancelMove() {
 		moveClip.stop();
+	}
+	
+	public static void playHitForCanGo() {
+		
+		canGoClip.setFramePosition(0);
+		setGainLower(canGoClip);
+		canGoClip.start();
 	}
 	
 	public static void playPause() {

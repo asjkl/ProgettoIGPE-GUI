@@ -14,6 +14,7 @@ public class TranslucentWindow extends JDialog {
 	private JTextField directory;
 	private PanelSwitcher switcher;
 	private Image image;
+	private Timer timer;
 	
     public TranslucentWindow(PanelSwitcher switcher, JTextField filename, Image image) {
     	
@@ -29,7 +30,7 @@ public class TranslucentWindow extends JDialog {
 
 		this.setAlwaysOnTop(true);
 		
-		Timer timer = new Timer(3000, new ActionListener() {
+		timer = new Timer(3000, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -46,6 +47,7 @@ public class TranslucentWindow extends JDialog {
 		
 		timer.setRepeats(false);
 		timer.start();
+		
 		this.setModal(true);
 		this.setUndecorated(true);
 		this.setBackground(new Color(0,0,0,0));

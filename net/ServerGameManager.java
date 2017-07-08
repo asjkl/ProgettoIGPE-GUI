@@ -47,7 +47,8 @@ public class ServerGameManager {
 		
 		if(gameManager!=null){
 			if(split[0].equals("PAINT")){
-				gameManager.setWaitToExit(Boolean.parseBoolean(split[1]));	
+				//TODO non serve piu
+//				gameManager.setWaitToExit(Boolean.parseBoolean(split[1]));	
 			}else if(split[0].equals("EXIT")){
 				disconnetctedClient(split[1]);
 				gameManager.setExit(Boolean.parseBoolean(split[2]));

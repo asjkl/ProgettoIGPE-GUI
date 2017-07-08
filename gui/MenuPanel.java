@@ -598,6 +598,7 @@ public class MenuPanel extends JPanel {
 				line = reader.readLine();
 			}
 			
+			((MainFrame)switcher).setHighScoreP1(Integer.parseInt(values[1]));
 			((MainFrame)switcher).setCurrentResumeP1(Integer.parseInt(values[2]));
 			((MainFrame)switcher).setCurrentLevelP1(Integer.parseInt(values[3]));
 			((MainFrame)switcher).setUnlockedMapsP1(Integer.parseInt(values[4]));
