@@ -189,9 +189,9 @@ public class StagePanelFirst extends JPanel {
 					int tmp = 0;
 					
 					if(path.contains("single"))
-						tmp = ((MainFrame)switcher).getUnlockedMaps1P();
+						tmp = ((MainFrame)switcher).getUnlockedMapsP1();
 					else
-						tmp = ((MainFrame)switcher).getUnlockedMaps2P();
+						tmp = ((MainFrame)switcher).getUnlockedMapsP2();
 							
 					if(j <= tmp) {
 					
@@ -203,7 +203,7 @@ public class StagePanelFirst extends JPanel {
 	                    JTextField directory = new JTextField();
 	                    directory.setText(fileChooser.getCurrentDirectory().toString());
 	                    cursorPosition = 1;
-	                    getSwitcher().showLoading(fileNameMap);
+	                    getSwitcher().showSlide(fileNameMap);
 					}
 					else {
 						
@@ -232,7 +232,7 @@ public class StagePanelFirst extends JPanel {
 			}
 			setLabel(j);
 			maps.get(j).setBounds(posX, posY, 
-					ImageProvider.getMaps1P().get(j - 1).getWidth(null), ImageProvider.getMaps1P().get(j - 1).getHeight(null));
+					ImageProvider.getMapsP1().get(j - 1).getWidth(null), ImageProvider.getMapsP1().get(j - 1).getHeight(null));
 					
 			posX += 245;
 		}
@@ -323,8 +323,8 @@ public class StagePanelFirst extends JPanel {
 			
 				if(i != 0) {
 					
-					if(i <= ((MainFrame)switcher).getUnlockedMaps1P())
-						maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps1P().get(i - 1)));
+					if(i <= ((MainFrame)switcher).getUnlockedMapsP1())
+						maps.get(i).setIcon(new ImageIcon(ImageProvider.getMapsP1().get(i - 1)));
 					
 					else
 						maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
@@ -337,8 +337,8 @@ public class StagePanelFirst extends JPanel {
 				
 				if(i != 0) {
 					
-					if(i <= ((MainFrame)switcher).getUnlockedMaps2P())
-						maps.get(i).setIcon(new ImageIcon(ImageProvider.getMaps2P().get(i - 1)));
+					if(i <= ((MainFrame)switcher).getUnlockedMapsP2())
+						maps.get(i).setIcon(new ImageIcon(ImageProvider.getMapsP2().get(i - 1)));
 					
 					else
 						maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));

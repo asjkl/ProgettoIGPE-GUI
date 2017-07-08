@@ -1175,7 +1175,7 @@ public class ImageProvider {
 		ImageProvider.background1Px = background1Px;
 	}
 
-	public static ArrayList<Image> getMaps2P() {
+	public static ArrayList<Image> getMapsP2() {
 		return maps2P;
 	}
 
@@ -1183,7 +1183,7 @@ public class ImageProvider {
 		ImageProvider.maps2P = maps2P;
 	}
 	
-	public static ArrayList<Image> getMaps1P() {
+	public static ArrayList<Image> getMapsP1() {
 		return maps1P;
 	}
 

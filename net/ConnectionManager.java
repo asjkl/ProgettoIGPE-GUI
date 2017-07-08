@@ -32,6 +32,7 @@ import progettoIGPE.davide.giovanni.unical2016.GUI.ImageProvider;
 import progettoIGPE.davide.giovanni.unical2016.GUI.JFileChooserClass;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
+import progettoIGPE.davide.giovanni.unical2016.GUI.TranslucentWindow;
 
 public class ConnectionManager implements Runnable {
 
@@ -123,10 +124,22 @@ public class ConnectionManager implements Runnable {
 				mainFrame.gamePanel.repaint();
 				mainFrame.play.repaint();
 				if (gameManager.isExit()) {
-					buffer = null;
+					
+					buffer=null;
+					
+					mainFrame.setTransparent(true);
 					SoundsProvider.cancelMove();
 					SoundsProvider.cancelStop();
-					mainFrame.showNetwork();
+					
+					if(gameManager.getNumbersOfEnemiesOnline() == 0) {
+						SoundsProvider.playStageComplete();
+						new TranslucentWindow(mainFrame, null, ImageProvider.getStageComplete());
+					}
+					else {
+						SoundsProvider.playGameOver();
+						new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
+					}
+					
 				} else {
 					buffer = br.readLine();
 				}

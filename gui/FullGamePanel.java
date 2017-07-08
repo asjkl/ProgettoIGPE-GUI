@@ -221,7 +221,7 @@ public class FullGamePanel extends JPanel {
 		g.fillRect(1000, 18, 291, 703);
 		x = 1109;
 		y = 15;
-		for (int i = 0; i < gameManager.getNumbersOfEnemy(); i++) {
+		for (int i = 0; i < gameManager.getNumbersOfEnemiesOnline(); i++) {
 
 			if (i % 3 == 0) {
 

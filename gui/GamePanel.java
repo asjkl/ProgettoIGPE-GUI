@@ -14,7 +14,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -58,10 +62,15 @@ public class GamePanel extends JPanel {
 	private JDialog dialog;
 	private JButton[] buttons;
 	private GameManager game;
-	private int currentResume;
 	private String difficult;
 	private ConnectionManager connectionManager;
 	private String playerName;
+
+	//SCORE
+	private int currentResumeP1;
+	private int currentLevelP1;
+	private int currentResumeP2;
+	private int currentLevelP2;
 	
 	//online
 	public GamePanel(PanelSwitcher switcher, String difficult) {
@@ -138,7 +147,14 @@ public class GamePanel extends JPanel {
 		this.longTime = new Long(0);
 		cursorPositionDialog = 0;
 		tempFPS = 1.5d;
-		currentResume = ((MainFrame)getSwitcher()).getCurrentResume();
+		
+		if(game.getPlayersArray().size() == 1) {
+			
+			currentResumeP1 = ((MainFrame)switcher).getCurrentResumeP1();
+			currentLevelP1 = ((MainFrame)switcher).getCurrentLevelP1();
+		}
+		else 
+			loadScoreMulti();
 
 		this.addKeyListener(new KeyAdapter() {
 
@@ -250,10 +266,63 @@ public class GamePanel extends JPanel {
 	
 	// ----------------------GAMELOOP---------------------------//
 	
+	private void loadScoreMulti() {
+		
+		BufferedReader reader = null;
+		String line = null;
+		
+		final int DIM = 8;
+		String values[] = new String[DIM];
+		
+		try {
+			
+				reader = new BufferedReader(new FileReader("./values/multiCareer.txt"));
+				line = reader.readLine();
+				
+				int i = 0;
+				
+				while(line != null) {
+					
+					StringTokenizer st = new StringTokenizer(line, "");
+					String tmp = null;
+					
+					while(st.hasMoreTokens()) {
+						
+						tmp = st.nextToken();
+							
+							if(tmp.matches("^[0-9]+") && i < values.length)
+								values[i++] = tmp;
+					}
+					
+					line = reader.readLine();
+				}
+			}	
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			((MainFrame)switcher).setCurrentResumeP1(Integer.parseInt(values[2]));
+			((MainFrame)switcher).setCurrentLevelP1(Integer.parseInt(values[3]));
+			((MainFrame)switcher).setUnlockedMapsP1(Integer.parseInt(values[4]));
+			
+			((MainFrame)switcher).setCurrentResumeP2(Integer.parseInt(values[5]));
+			((MainFrame)switcher).setCurrentLevelP2(Integer.parseInt(values[6]));
+			((MainFrame)switcher).setUnlockedMapsP2(Integer.parseInt(values[8]));
+	}
+
+	
 	public void gameLoop() {
 		
-		if(GameManager.offline){
-			game.getPlayersArray().get(0).setResume(currentResume);
+		if(GameManager.offline) {
+			
+			game.getPlayersArray().get(0).setResume(currentResumeP1);
+			game.getPlayersArray().get(0).setLevel(currentLevelP1);
+			
+			if(game.getPlayersArray().size() > 1) {
+				
+				game.getPlayersArray().get(1).setResume(currentResumeP2);
+				game.getPlayersArray().get(1).setLevel(currentLevelP2);
+			}
 		}
 		
 		while (!game.isExit()) {
@@ -607,7 +676,7 @@ public class GamePanel extends JPanel {
 						((MainFrame)getSwitcher()).setTransparent(false);
 						game.setExit(true);
 						dialog.dispose();
-						getSwitcher().showLoading(game.getFilename());
+						getSwitcher().showSlide(game.getFilename());
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
 					}
@@ -860,19 +929,27 @@ public class GamePanel extends JPanel {
 
 		((MainFrame)getSwitcher()).setTransparent(true);
 		game.setExit(true);
-		if(GameManager.offline){
-			((MainFrame)getSwitcher()).setSlide(true);
-			((MainFrame)getSwitcher()).setCurrentResume(3);
 		
+		if(GameManager.offline) {
+			
+			((MainFrame)switcher).setSlide(true);
+			((MainFrame)switcher).setCurrentResumeP1(3);
+			((MainFrame)switcher).setCurrentLevelP1(1);
+			
 			if(game.getPlayersArray().size() == 1)
-				((MainFrame)getSwitcher()).setUnlockedMaps1P(1);
-			else 
-				((MainFrame)getSwitcher()).setUnlockedMaps2P(1);
-		
+				((MainFrame)switcher).setUnlockedMapsP1(1);
+			
+			else { 
+				
+				((MainFrame)switcher).setUnlockedMapsP2(1);
+				((MainFrame)switcher).setCurrentResumeP2(3);
+				((MainFrame)switcher).setCurrentLevelP2(1);
+			}
+			
 			SoundsProvider.cancelMove();
 			SoundsProvider.cancelStop();
 			SoundsProvider.playGameOver();
-			new TranslucentWindow(getSwitcher(), game.getFilename(), fullGamePanel.getValueMap(),
+			new TranslucentWindow(getSwitcher(), game.getFilename(),
 					ImageProvider.getGameOver());
 		}
 	}
@@ -882,27 +959,35 @@ public class GamePanel extends JPanel {
 		repaint();
 		((MainFrame)getSwitcher()).setTransparent(true);
 		game.setExit(true);
+		
 		if(GameManager.offline) {
-				
-			currentResume = game.getPlayersArray().get(0).getResume();
-			((MainFrame)getSwitcher()).setCurrentResume(currentResume);
+			
+			currentResumeP1 = game.getPlayersArray().get(0).getResume();
+			((MainFrame)switcher).setCurrentResumeP1(currentResumeP1);
+			currentLevelP1 = game.getPlayersArray().get(0).getLevel();
+			((MainFrame)switcher).setCurrentLevelP1(currentLevelP1);
 
 			
 			if(game.getPlayersArray().size() == 1) {
+				
 				int m = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
-				((MainFrame)getSwitcher()).setUnlockedMaps1P(m);
+				((MainFrame)switcher).setUnlockedMapsP1(m);
 			}
 			else {
-				
+
+				currentResumeP2 = game.getPlayersArray().get(1).getResume();
+				((MainFrame)switcher).setCurrentResumeP2(currentResumeP2);
+				currentLevelP2 = game.getPlayersArray().get(1).getLevel();
+				((MainFrame)switcher).setCurrentLevelP2(currentLevelP2);
+
 				int m = (Integer.parseInt(fullGamePanel.getValueMap()) + 1);
-				((MainFrame)getSwitcher()).setUnlockedMaps2P(m);
-				
+				((MainFrame)switcher).setUnlockedMapsP2(m);	
 			}
 		
 		SoundsProvider.cancelMove();
 		SoundsProvider.cancelStop();
 		SoundsProvider.playStageComplete();
-			new TranslucentWindow(getSwitcher(), game.getFilename(), fullGamePanel.getValueMap(),
+			new TranslucentWindow(getSwitcher(), game.getFilename(),
 					ImageProvider.getStageComplete());
 		}
 	}

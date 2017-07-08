@@ -3,6 +3,9 @@ package net;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
+
+import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
+
 import java.io.*;
 
 @SuppressWarnings("serial")
@@ -35,7 +38,7 @@ public class Client extends Frame implements Runnable{
 //	port= JOptionPane.showInputDialog(null,"Enter port");
 //	t2 = new TextField(port+":");
 	
-	this.setSize(new Dimension(500,500));
+	this.setSize(new Dimension(500,300));
 	this.setVisible(true);
 	this.setTitle("Chatting Client");
 	
@@ -50,6 +53,22 @@ public class Client extends Frame implements Runnable{
 	to = new TextArea("People Online:\n",50,16);
 	ta.setEditable(false);
 	to.setEditable(false);
+	
+	tf1.setBackground(Color.black);
+	tf2.setBackground(Color.black);
+	ta.setBackground(Color.black);
+	to.setBackground(Color.black);
+	
+	tf1.setForeground(Color.white);
+	tf2.setForeground(Color.white);
+	ta.setForeground(Color.white);
+	to.setForeground(Color.white);
+	
+	tf1.setFont(MainFrame.customFontS);
+	tf2.setFont(MainFrame.customFontS);
+	ta.setFont(MainFrame.customFontS);
+	to.setFont(MainFrame.customFontS);
+
 	tf2.requestFocus();
 	setLayout(new BorderLayout());
 	add("North",tf1);
@@ -134,7 +153,7 @@ public class Client extends Frame implements Runnable{
 				
 				if(name==false){
 					
-					ta.append(message+"n \n");
+					ta.append(message+"\n");
 				}
 				else{
 					String name1 = "";

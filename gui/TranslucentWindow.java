@@ -5,21 +5,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import progettoIGPE.davide.giovanni.unical2016.GameManager;
+
 @SuppressWarnings("serial")
 public class TranslucentWindow extends JDialog {
 
 	private JTextField filename;
 	private JTextField directory;
 	private PanelSwitcher switcher;
-	private String value;
 	private Image image;
 	
-    public TranslucentWindow(PanelSwitcher switcher, JTextField filename, String value, Image image) {
+    public TranslucentWindow(PanelSwitcher switcher, JTextField filename, Image image) {
     	
     	this.setSwitcher(switcher) ;
     	this.setFilename(filename);
     	this.setDirectory(directory);
-    	this.value = value;
     	this.image = image;
 
     	setWindow();
@@ -36,7 +36,11 @@ public class TranslucentWindow extends JDialog {
 				
 				dispose();
 				((MainFrame)getSwitcher()).setTransparent(false);
-				getSwitcher().showScores(value);
+				
+				if(GameManager.offline) 
+					getSwitcher().showScores(filename);
+				else
+					getSwitcher().showNetwork();
 			}
 		});
 		

@@ -24,9 +24,12 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	
 	private boolean transparent;
 	private boolean slide;
-	private int unlockedMaps1P;
-	private int unlockedMaps2P; 
-	private int currentResume;
+	private int unlockedMapsP1;
+	private int unlockedMapsP2;
+	private int resumeP1;
+	private int resumeP2;
+	private int levelP1;
+	private int levelP2;
 //	public static boolean singlePlayer;
 	private GraphicsEnvironment graphicscEnvironment;
 
@@ -82,9 +85,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		timer.setRepeats(false);
 		timer.start();
 		setSlide(true);
-		setCurrentResume(3);
-		setUnlockedMaps1P(1);
-		setUnlockedMaps2P(1);
+		//Solo per player 2
+		setUnlockedMapsP2(1);
 		new SoundsProvider();
 		setFont();
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
@@ -151,8 +153,9 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	@Override
 	public void showMenu() {
 
-		
 		GameManager.offline = false;
+
+		menu.drawScore();
 		
 		if (isSlide()) {
 			slideContainer = new SlideContainer(WIDTH, HEIGHT);
@@ -169,10 +172,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	@Override
-	public void showGame(JTextField path) {
+	public void showGame(JTextField directory) {
 
 		//singleOrMulti(path);
-		gameManager = new GameManager(path);
+		gameManager = new GameManager(directory);
 		gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
 		play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		gamePanel.setFullGamePanel(play);
@@ -195,8 +198,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	@Override
-	public void showScores(String stage) {
-		scores = new ScoresPanel(WIDTH, HEIGHT, this, gameManager, stage);
+	public void showScores(JTextField filename) {
+		scores = new ScoresPanel(WIDTH, HEIGHT, this, gameManager, filename);
 		switchTo(scores);
 	}
 
@@ -206,8 +209,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	@Override
-	public void showLoading(JTextField f) {
-		slideStage = new SlideStage(WIDTH, HEIGHT, this, f);
+	public void showSlide(JTextField filename) {
+		slideStage = new SlideStage(WIDTH, HEIGHT, this, filename);
 		switchTo(slideStage);
 	}
 
@@ -256,28 +259,53 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 //		}
 //	}
 	
-	public int getCurrentResume() {
-		return currentResume;
+	public int getCurrentLevelP1() {
+		return levelP1;
 	}
 
-	public void setCurrentResume(int currentResume) {
-		this.currentResume = currentResume;
+	public void setCurrentLevelP1(int levelP1) {
+		this.levelP1 = levelP1;
+	}
+
+	public int getCurrentLevelP2() {
+		return levelP2;
+	}
+
+	public void setCurrentLevelP2(int levelP2) {
+		this.levelP2 = levelP2;
 	}
 	
-	public int getUnlockedMaps1P() {
-		return unlockedMaps1P;
+	public int getCurrentResumeP2() {
+		return resumeP2;
 	}
 
-	public void setUnlockedMaps1P(int unlockedMaps1P) {
-		this.unlockedMaps1P = unlockedMaps1P;
+	public void setCurrentResumeP2(int resumeP2) {
+		this.resumeP2 = resumeP2;
+	}
+	
+	public int getCurrentResumeP1() {
+		return resumeP1;
 	}
 
-	public int getUnlockedMaps2P() {
-		return unlockedMaps2P;
+	public void setCurrentResumeP1(int resumeP1) {
+		this.resumeP1 = resumeP1;
+	}
+	
+	public int getUnlockedMapsP2() {
+		return unlockedMapsP2;
 	}
 
-	public void setUnlockedMaps2P(int unlockedMaps2P) {
-		this.unlockedMaps2P = unlockedMaps2P;
+	public void setUnlockedMapsP2(int unlockedMapsP2) {
+		this.unlockedMapsP2 = unlockedMapsP2;
+	}
+
+	
+	public int getUnlockedMapsP1() {
+		return unlockedMapsP1;
+	}
+
+	public void setUnlockedMapsP1(int unlockedMapsP1) {
+		this.unlockedMapsP1 = unlockedMapsP1;
 	}
 
 	public boolean isSlide() {

@@ -34,18 +34,20 @@ public class ScoresPanel extends JPanel {
 	private PanelSwitcher switcher;	
 	private GameManager game;
 	private String value;
-	private JTextField filename;
+	private String path;
 	private final int SLEEP = 150;
 	private final int DELAY;
 	
-	public ScoresPanel(final int w, final int h, PanelSwitcher switcher, GameManager game, String value) {
+	public ScoresPanel(final int w, final int h, PanelSwitcher switcher, GameManager game, JTextField filename) {
 	
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
 	
+		value = (String) filename.getText().
+				subSequence(filename.getText().indexOf("stage") + 5, filename.getText().length() - 4);
+		path = (String) filename.getText().subSequence(0, filename.getText().lastIndexOf("/"));
 		this.game = game;
-		this.value = value;
 		setSwitcher(switcher);
 
 		occurrence = new int[game.getPlayersArray().size()][OBJECT];
@@ -70,9 +72,8 @@ public class ScoresPanel extends JPanel {
 				else {
 					
 					writeScore(Integer.parseInt(value));
-					filename = new JTextField();
-					filename.setText("stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
-					getSwitcher().showLoading(filename);
+					filename.setText(path + "/stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
+					getSwitcher().showSlide(filename);
 				}
 			}
 		});
@@ -310,12 +311,22 @@ public class ScoresPanel extends JPanel {
 						score.setFont(text.getFont());
 						score.setBackground(Color.BLACK);
 						score.setForeground(Color.ORANGE);
-						score.setText(String.valueOf(currScoreP1));
+
+						if(i == 0) {
+							
+							score.setText(String.valueOf(currScoreP1));
+							text.setText(String.valueOf("I - Player"));
+						}
+						else {
+							
+							score.setText(String.valueOf(currScoreP2));
+							text.setText(String.valueOf("II - Player"));
+						}
+						
 						score.setBounds(385 + k, 105, 300, 100);
 						this.add(score);
 						
 						text.setForeground(Color.RED);
-						text.setText(String.valueOf(i + 1) + "-Player");
 						text.setBounds(185 + k, 105, 300, 100);
 					}
 					else 
@@ -457,89 +468,159 @@ public class ScoresPanel extends JPanel {
 		}.start();
 	}
 	
-public void writeScore(int value) {
-		
-		BufferedWriter b = null;
-		PrintWriter w = null;
-		
-		int p1, p2, r;
-		
-		if(game.getPlayersArray().size() == 1) 
-			((MainFrame)getSwitcher()).setUnlockedMaps1P(++value);
-		else
-			((MainFrame)getSwitcher()).setUnlockedMaps2P(++value);
-		
-		p1 = ((MainFrame)getSwitcher()).getUnlockedMaps1P();
-		p2 = ((MainFrame)getSwitcher()).getUnlockedMaps2P();
-		r = ((MainFrame)getSwitcher()).getCurrentResume();
+	public void writeScore(int value) {
 		
 		try {
 			
-			w = new PrintWriter("./values.txt");
-			b = new BufferedWriter(w);
-			
-			b.write("P1:\n");
-			b.write(String.valueOf(currScoreP1 + "\n"));
-			b.write(String.valueOf(highScoreP1 + "\n"));
-			b.write("P2:\n");
-			b.write(String.valueOf(currScoreP2 + "\n"));
-			b.write(String.valueOf(highScoreP2 + "\n"));
-			b.write("LIVES:\n");
-			b.write(String.valueOf(r) + "\n");
-			b.write("MAPS:\n");
-			b.write(String.valueOf(p1) + "\n");
-			b.write(String.valueOf(p2));
-			b.flush();
-			b.close();
+			if(path.contains("singleplayer"))
+				writeSingle(value);
+			else
+				if(path.contains("multiplayer"))
+					writeMulti(value);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void updateHighScore() {
+	private void writeMulti(int v) throws IOException {
 		
-		BufferedReader reader = null;
-		String line = null;
-		String scores[] = new String[5];
+		PrintWriter w = new PrintWriter("./values/multiCareer.txt");
+		BufferedWriter b = new BufferedWriter(w);
+		
+		((MainFrame)switcher).setUnlockedMapsP2(v);
+		
+		b.write("P1:\n");
+		b.write("HI-SCORE\n");
+		b.write(String.valueOf(highScoreP1) + "\n");
+		b.write("LIVES\n");
+		b.write(String.valueOf(((MainFrame)switcher).getCurrentResumeP1()) + "\n");
+		b.write("LEVEL\n");
+		b.write(String.valueOf(((MainFrame)switcher).getCurrentLevelP1()) + "\n");
+		b.write("P2:\n");
+		b.write("HI-SCORE\n");
+		b.write(String.valueOf(highScoreP2) + "\n");
+		b.write("LIVES\n");
+		b.write(String.valueOf(((MainFrame)switcher).getCurrentResumeP2()) + "\n");
+		b.write("LEVEL\n");
+		b.write(String.valueOf(((MainFrame)switcher).getCurrentLevelP2()) + "\n");
+		b.write("MAPS\n");
+		b.write(String.valueOf(((MainFrame)switcher).getUnlockedMapsP2()) + "\n");
+		
+		b.flush();
+		b.close();
+	}
+
+	private void writeSingle(int v) throws IOException {
+		
+		PrintWriter w = new PrintWriter("./values/singleCareer.txt");
+		BufferedWriter b = new BufferedWriter(w);
+		
+		((MainFrame)switcher).setUnlockedMapsP1(v);
+		
+		b.write("SCORE\n");
+		b.write(String.valueOf(currScoreP1) + "\n");
+		b.write("HI-SCORE\n");
+		b.write(String.valueOf(highScoreP1) + "\n");
+		b.write("LIVES\n");
+		b.write(String.valueOf(((MainFrame)switcher).getCurrentResumeP1()) + "\n");
+		b.write("LEVEL\n");
+		b.write(String.valueOf(((MainFrame)switcher).getCurrentLevelP1()) + "\n");
+		b.write("MAPS\n");
+		b.write(String.valueOf(((MainFrame)switcher).getUnlockedMapsP1()));
+		
+		b.flush();
+		b.close();
+	}
+
+	private void updateHighScore() {
 		
 		try {
 			
-			reader = new BufferedReader(new FileReader("./values.txt"));
-			line = reader.readLine();
-			
-			int i = 0;
-			
-			while(line != null) {
-				
-				StringTokenizer st = new StringTokenizer(line, "");
-				String tmp = null;
-				
-				while(st.hasMoreTokens()) {
-					
-					tmp = st.nextToken();
-					
-					if(tmp.matches("[0-9]+")) {
-				
-						int a = Integer.parseInt(tmp);
-						
-						if(a > 24 || a == 0)
-							scores[i++] = tmp;
-					}
-				}
-				
-				line = reader.readLine();
-			}
-			
-			if((Integer.parseInt(scores[1])) > highScoreP1)
-				highScoreP1 = Integer.parseInt(scores[1]);
-			
-			if((Integer.parseInt(scores[3])) > highScoreP2)
-				highScoreP2 = Integer.parseInt(scores[3]);
+			if(path.contains("singleplayer"))
+				updateSingle();
+			else
+				if(path.contains("multiplayer"))
+					updateMulti();
 			
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	
+	private void updateMulti() throws IOException {
+	
+		BufferedReader reader = new BufferedReader(new FileReader("./values/multiCareer.txt"));
+		String line = reader.readLine();
+		String scores[] = new String[2];
+		
+		int i = 0;
+		
+		while(line != null) {
+			
+			StringTokenizer st = new StringTokenizer(line, "");
+			String tmp = null;
+			
+			while(st.hasMoreTokens()) {
+				
+				tmp = st.nextToken();
+				
+				if(tmp.matches("[0-9]+")) {
+			
+					int a = Integer.parseInt(tmp);
+					
+					if(!(a >= 1 && a <= 24) && i < scores.length)
+						scores[i++] = tmp;
+				}
+			}
+			
+			line = reader.readLine();
+		}
+		
+		reader.close();
+		
+		if((Integer.parseInt(scores[0])) > highScoreP1)
+			highScoreP1 = Integer.parseInt(scores[0]);
+		
+		if((Integer.parseInt(scores[1])) > highScoreP2)
+			highScoreP2 = Integer.parseInt(scores[1]);	
+	}
+
+	private void updateSingle() throws IOException {
+		
+		BufferedReader reader = new BufferedReader(new FileReader("./values/singleCareer.txt"));
+		String line = reader.readLine();
+		String scores[] = new String[2];
+		
+		int i = 0;
+		
+		while(line != null) {
+			
+			StringTokenizer st = new StringTokenizer(line, "");
+			String tmp = null;
+			
+			while(st.hasMoreTokens()) {
+				
+				tmp = st.nextToken();
+				
+				if(tmp.matches("[0-9]+")) {
+			
+					int a = Integer.parseInt(tmp);
+					
+					if(!(a >= 1 && a <= 24) && i < scores.length)
+						scores[i++] = tmp;
+				}
+			}
+			
+			line = reader.readLine();
+		}
+		
+		reader.close();
+		
+		if((Integer.parseInt(scores[0])) > highScoreP1)
+			highScoreP1 = Integer.parseInt(scores[0]);
 	}
 	
 	@Override

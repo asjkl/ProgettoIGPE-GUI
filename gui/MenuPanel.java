@@ -26,6 +26,7 @@ public class MenuPanel extends JPanel {
 
 	private int cursorPosition;
 	private final int DIM = 6;
+	private final int LENGTH = 5;
 	private final int posY = 65;
 	private final int posX = 125;
 	private JFileChooserClass jfilechooser;
@@ -38,7 +39,7 @@ public class MenuPanel extends JPanel {
 	private JLabel high;
 	private JLabel player;
 	private String values[];
-	private int tmp = -1;
+	private int tmpHiScore;
 	private JButton[] buttonsRoom;
 	private int cursorPositionRoom;
 	private JDialog dialogRoom;
@@ -55,18 +56,15 @@ public class MenuPanel extends JPanel {
 
 		this.dialogRoom = new JDialog();
 		
-		values = new String[DIM + 1];
-		for(int i = 0; i < values.length; i++)
-			values[i] = "0";
-		
+		tmpHiScore = -1;
+		values = new String[LENGTH];
+	
 		high = new JLabel();
 		player = new JLabel();
 		this.dialog = new JDialog();
 		buttons = new ArrayList<>();
 		
-		createButton();
-		drawScore();
-		
+		createButton();		
 	}
 
 	public void createButton() {
@@ -75,7 +73,7 @@ public class MenuPanel extends JPanel {
 
 			final int curRow = i;
 
-			buttons.add(new JButton("fef"));
+			buttons.add(new JButton());
 			buttons.get(i).setBorder(null);
 			buttons.get(i).setOpaque(false);
 			buttons.get(i).setContentAreaFilled(false);
@@ -187,7 +185,7 @@ public class MenuPanel extends JPanel {
 					if(jfilechooser.functionLoadFile()) {
 						setCursorPosition(0);
 						jfilechooser.getFilename().setText(jfilechooser.getFile().toString()+"/"+jfilechooser.getFilename().getText() + ".txt");
-						  getSwitcher().showLoading(jfilechooser.getFilename());
+						  getSwitcher().showSlide(jfilechooser.getFilename());
 					}
 				}
 			});
@@ -399,7 +397,6 @@ public class MenuPanel extends JPanel {
 	}
 	
 	//NEW
-	
 	public void Room() {
 
 		dialogRoom.setSize(new Dimension(250, 250));
@@ -515,10 +512,7 @@ public class MenuPanel extends JPanel {
 					
 					
 					int port = 1234;
-					new net.Server(port);
-					
-					
-						
+					new net.Server(port);	
 				}
 				
 			});
@@ -546,9 +540,10 @@ public class MenuPanel extends JPanel {
 		
 		loadScore();
 		
-		if(tmp < Integer.parseInt(values[1])) {
+		//TODO AGGIUNGER CONTROLLO
+		if(tmpHiScore < Integer.parseInt(values[1])) {
 			
-			tmp = Integer.parseInt(values[1]);
+			tmpHiScore = Integer.parseInt(values[1]);
 			
 			high.setFont(MainFrame.customFontB);
 			high.setBackground(Color.BLACK);
@@ -571,34 +566,41 @@ public class MenuPanel extends JPanel {
 		
 		BufferedReader reader = null;
 		String line = null;
+		boolean flag = false;
 		
 		try {
 			
-			reader = new BufferedReader(new FileReader("./values.txt"));
+			//TODO AGGIUNGERE CONTROLLO
+			reader = new BufferedReader(new FileReader("./values/singleCareer.txt"));
 			line = reader.readLine();
 			
 			int i = 0;
 			
-			while(line != null) {
+			while(line != null && !flag) {
 				
 				StringTokenizer st = new StringTokenizer(line, "");
 				String tmp = null;
 				
-				while(st.hasMoreTokens()) {
+				while(st.hasMoreTokens() && !flag) {
 					
 					tmp = st.nextToken();
 					
-					if(tmp.matches("[0-9]+") && i < values.length) {
-						values[i++] = tmp;
+					if(tmp.equals("P2:"))
+						flag = true;
+					else {
+						
+						if(tmp.matches("^[0-9]+") && i < values.length) {
+							values[i++] = tmp;
+						}
 					}
 				}
 				
 				line = reader.readLine();
 			}
 			
-			((MainFrame)getSwitcher()).setCurrentResume(Integer.parseInt(values[values.length - 3]));
-			((MainFrame)getSwitcher()).setUnlockedMaps1P(Integer.parseInt(values[values.length - 2]));
-			((MainFrame)getSwitcher()).setUnlockedMaps2P(Integer.parseInt(values[values.length - 1]));
+			((MainFrame)switcher).setCurrentResumeP1(Integer.parseInt(values[2]));
+			((MainFrame)switcher).setCurrentLevelP1(Integer.parseInt(values[3]));
+			((MainFrame)switcher).setUnlockedMapsP1(Integer.parseInt(values[4]));
 			
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -607,36 +609,36 @@ public class MenuPanel extends JPanel {
 
 	public void resetScore() {
 		
-		BufferedWriter b = null;
-		PrintWriter w = null;
-		
-		int p1 =((MainFrame)getSwitcher()).getUnlockedMaps1P();
-		int p2 = ((MainFrame)getSwitcher()).getUnlockedMaps2P();
-		int r = ((MainFrame)getSwitcher()).getCurrentResume();
-		
 		try {
 			
-			w = new PrintWriter("./values.txt");
-			b = new BufferedWriter(w);
-			
-			b.write("P1:\n");
-			b.write("0\n");
-			b.write(String.valueOf(values[1] + "\n"));
-			b.write("P2:\n");
-			b.write("0\n");
-			b.write("0\n");
-			b.write("LIVES:\n");
-			b.write(String.valueOf(r) + "\n");
-			b.write("MAPS:\n");
-			b.write(String.valueOf(p1) + "\n");
-			b.write(String.valueOf(p2));
-			b.flush();
-			b.close();
+			loadScore();
+			resetSingle();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private void resetSingle() throws IOException {
+		
+		PrintWriter w = new PrintWriter("./values/singleCareer.txt");
+		BufferedWriter b = new BufferedWriter(w);
+		
+		b.write("SCORE\n");
+		b.write("0\n");
+		b.write("HI-SCORE\n");
+		b.write(values[1] + "\n");
+		b.write("LIVES\n");
+		b.write(String.valueOf(((MainFrame)switcher).getCurrentResumeP1()) + "\n");
+		b.write("LEVEL\n");
+		b.write(String.valueOf(((MainFrame)switcher).getCurrentLevelP1()) + "\n");
+		b.write("MAPS\n");
+		b.write(String.valueOf(((MainFrame)switcher).getUnlockedMapsP1()));
+		
+		b.flush();
+		b.close();
+	}
+	
 	
 	@Override
 	protected void paintComponent(Graphics g) {

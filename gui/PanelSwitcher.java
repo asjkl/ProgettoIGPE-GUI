@@ -13,7 +13,7 @@ public interface PanelSwitcher {
 	
 	void showSecondStage(String p);
 
-	void showScores(String v);
+	void showScores(JTextField f);
 	
 	void showNetwork();
 	
@@ -21,6 +21,6 @@ public interface PanelSwitcher {
 	
 	void showSettings();
 
-	void showLoading(JTextField f);
+	void showSlide(JTextField f);
 
 }
