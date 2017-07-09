@@ -96,10 +96,10 @@ public class ClientManager implements Runnable {
 		String[] split = s.split(":");
 		name=string;
 		server.name.put(split[0], name);
-		if(split.length>1){
-			map.setText(split[1]);
-			difficult=split[2];
-		}	
+//		if(split.length>1){
+//			map.setText(split[1]);
+//			difficult=split[2];
+//		}	
 		server.dispatch(server.getConnectedClientNames());
 		return name;
 	}

@@ -883,7 +883,7 @@ public class GamePanel extends JPanel {
 			if (((game.getPlayersArray().size() > 1
 					&& (game.getPlayersArray().get(0).getResume() <= 0 && game.getPlayersArray().get(1).getResume() <= 0)))
 					|| game.getPlayersArray().size() == 1 && ((game.getPlayersArray().get(0).getResume() <= 0 
-					|| game.getPlayersArray().get(1).getResume() <= 0))) {
+					|| game.getPlayersArray().get(1).getResume() <= 0)) || game.getFlag().isHit()) {
 				gameOver();
 			}
 			else 
@@ -910,12 +910,13 @@ public class GamePanel extends JPanel {
 				((MainFrame)switcher).setCurrentLevelP2(0);
 			}
 			
-			game.setExit(true);
 			SoundsProvider.playGameOver();
 			new TranslucentWindow(getSwitcher(), game.getFilename(),ImageProvider.getGameOver());
 			game.timer.cancel();
 			game.timer2.cancel();
 		}
+		
+		game.setExit(true);
 	}
 
 	private void win() {
@@ -935,13 +936,14 @@ public class GamePanel extends JPanel {
 				currentLevelP2 = game.getPlayersArray().get(1).getLevel();
 				((MainFrame)switcher).setCurrentLevelP2(currentLevelP2);
 			}
-			game.setExit(true);
 			SoundsProvider.playStageComplete();
 			new TranslucentWindow(getSwitcher(), game.getFilename(),ImageProvider.getStageComplete());
 			
 			game.timer.cancel();
 			game.timer2.cancel();
 		}
+		
+		game.setExit(true);
 	}
 
 	private void sounds() {
