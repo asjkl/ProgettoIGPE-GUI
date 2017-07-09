@@ -65,8 +65,7 @@ public class GamePanel extends JPanel {
 	private String difficult;
 	private ConnectionManager connectionManager;
 	private String playerName;
-
-	private final int EXIT = 500;
+	private final int ExitDelay = 500;
 	
 	//SCORE
 	private int currentResumeP1;
@@ -478,7 +477,7 @@ public class GamePanel extends JPanel {
 		} else if (game.getFlag().isHit()) {
 		
 			try {
-				Thread.sleep(EXIT);
+				Thread.sleep(ExitDelay);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -489,7 +488,7 @@ public class GamePanel extends JPanel {
 		else 
 			if (game.getEnemy().size() == 0) {
 				try {
-					Thread.sleep(EXIT);
+					Thread.sleep(ExitDelay);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -881,6 +880,9 @@ public class GamePanel extends JPanel {
 	private void powerUpPickUp(Tank t, PowerUp p) {
 	    SoundsProvider.playPowerUpPick();
 
+	    if(t instanceof PlayerTank)
+	    	((PlayerTank) t).getStatistics().calculate(p);
+	    
 	    if (!game.isPresent(t, p)) {
 	      p.setTank(t);
 	      p.setActivate(true);
@@ -894,7 +896,7 @@ public class GamePanel extends JPanel {
 	      game.getPower().remove(p);
 	    }
 	    t.setNext(null); 
-//	    t.setCurr(null); // da vedere
+	    t.setCurr(null); // da vedere
 	  }
 
 	private void gameOver() {
@@ -1036,6 +1038,7 @@ public class GamePanel extends JPanel {
 				}
 
 				if (game.getPlayersArray().get(a).getNext() instanceof PowerUp)
+//					game.getPlayersArray().get(a).getStatistics().calculate( ((PowerUp) game.getPlayersArray().get(a).getNext()) );
 					powerUpPickUp(game.getPlayersArray().get(a), ((PowerUp) game.getPlayersArray().get(a).getNext()));
 
 			}
@@ -1809,7 +1812,7 @@ public class GamePanel extends JPanel {
 	private void stroke(Graphics g, Graphics2D g2d){
 		if (((MainFrame)getSwitcher()).isTransparent())
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-		g.setColor(Color.DARK_GRAY);
+		g.setColor(Color.GRAY);
 		Stroke oldStroke = g2d.getStroke();
 		g2d.setStroke(new BasicStroke(shift * 2 - 2));
 		g2d.drawRect(1, 1, this.getWidth() - 3, this.getHeight() - 2);

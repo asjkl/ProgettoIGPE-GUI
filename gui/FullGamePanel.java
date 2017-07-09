@@ -32,7 +32,7 @@ public class FullGamePanel extends JPanel {
 		this.switcher = switcher;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setLayout(null);
-		setBackground(Color.DARK_GRAY);
+		setBackground(Color.GRAY);
 		this.gamePanel = gamePanel;
 		this.gameManager = gamePanel.getGame();
 		gamePanel.setFocusable(true);
@@ -61,7 +61,7 @@ public class FullGamePanel extends JPanel {
 		for (int a = 0; a < gameManager.getPlayersArray().size(); a++) {
 			panelOfInfo[a] = new PanelPlayersInfo(gameManager.getPlayersArray().get(a).toString());
 			panelOfInfo[a].setForeground(Color.BLACK);
-			panelOfInfo[a].setBackground(Color.DARK_GRAY);
+			panelOfInfo[a].setBackground(Color.GRAY);
 			panelOfInfo[a].setBounds(14, position, 250, 300);
 			add(panelOfInfo[a]);
 			position += 320;
@@ -217,7 +217,7 @@ public class FullGamePanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		g.setColor(Color.DARK_GRAY);
+		g.setColor(Color.GRAY);
 		g.fillRect(1000, 18, 291, 703);
 		x = 1109;
 		y = 15;

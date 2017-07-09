@@ -100,8 +100,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		settings = new SettingsPanel(WIDTH, HEIGHT, this);
 		images = new ImageProvider();
 		sounds = new SoundsProvider();
-	
-		System.out.println("istanziato tutto");
+
 	}
 	
 	public void switchTo(JComponent component) {
