@@ -622,9 +622,9 @@ public class GamePanel extends JPanel {
 					dialog.dispose();
 					if(!GameManager.offline){
 						if(getGameManager().getPlayersArray().get(0).isDied() && getGameManager().getPlayersArray().get(1).isDied() )
-							connectionManager.dispatch("EXIT"+":"+connectionManager.getPlayerName()+":"+"true");
+							connectionManager.dispatch("EXIT"+":"+connectionManager.getNameOfGame()+":"+"true");
 						else
-							connectionManager.dispatch("EXIT"+":"+connectionManager.getPlayerName()+":"+"false");
+							connectionManager.dispatch("EXIT"+":"+connectionManager.getNameOfGame()+":"+"false");
 					}
 					getSwitcher().showMenu();
 					SoundsProvider.cancelMove();
@@ -868,6 +868,12 @@ public class GamePanel extends JPanel {
 		}
 		 //MULTIPLAYER
 		else if(!GameManager.singlePlayer) {
+			
+			for(int a=0; a<game.getPlayersArray().size(); a++){
+				if(game.getPlayersArray().get(a).getResume()<0 && !game.isExit()){
+					game.getPlayersArray().get(a).setExitOnline(true); 
+				}
+			}
 			
 			if (((game.getPlayersArray().size() > 1
 					&& (game.getPlayersArray().get(0).getResume() <= 0 && game.getPlayersArray().get(1).getResume() <= 0)))

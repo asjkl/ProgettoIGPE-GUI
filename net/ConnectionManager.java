@@ -51,56 +51,61 @@ public class ConnectionManager implements Runnable {
 	@Override
 	public void run() {
 		try {
-			
+
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			pw = new PrintWriter(socket.getOutputStream(), true);
-			pw.println(name);	
+			pw.println(name);
 			String buffer = br.readLine();
-			
+
 			while (!buffer.equals("#START")) {
-				
+
 				final String[] split = buffer.split(";");
 				if (split.length != 0) {
-					for (final String name : split){
+					for (final String name : split) {
 						String[] split1 = name.split(":");
-						if (this.name.equals(split1[1])){
-							nameOfGame=split1[0];
-							
+						if (this.name.equals(split1[1])) {
+							nameOfGame = split1[0];
+
 						}
 					}
 				}
 				buffer = br.readLine();
 			}
-			System.out.println("NOME DATO DAL SERVER "+nameOfGame);
+			System.out.println("NOME DATO DAL SERVER " + nameOfGame);
 			final GameManager gameManager = mainFrame.showNetwork(this, map, difficult);
 			buffer = br.readLine();
 			while (buffer != null) {
-				
+
 				gameManager.parseStatusFromString(buffer);
-				playSounds(gameManager);	
+				playSounds(gameManager);
 				mainFrame.getGamePanel().repaint();
 				mainFrame.getFullGamePanel().repaint();
+
+				if (gameManager.isExit() || ((gameManager.getPlayersArray().get(0).toString().equals(nameOfGame)
+						&& gameManager.getPlayersArray().get(0).isExitOnline())
+						|| (gameManager.getPlayersArray().get(1).toString().equals(nameOfGame)
+								&& gameManager.getPlayersArray().get(1).isExitOnline()))) {
+
+					buffer = null;
 					
-					if (gameManager.isExit()) {
-						
-						buffer=null;
-						
-						mainFrame.setTransparent(true);
-						mainFrame.getGamePanel().repaint();
-						mainFrame.getFullGamePanel().repaint();
-						
-						SoundsProvider.cancelMove();
-						SoundsProvider.cancelStop();
-						
-						if(gameManager.getNumbersOfEnemiesOnline() == 0) {
-							SoundsProvider.playStageComplete();
-							new TranslucentWindow(mainFrame, null, ImageProvider.getStageComplete());
-						}
-						else {
-							SoundsProvider.playGameOver();
-							new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
-						}
-					
+					mainFrame.setTransparent(true);
+					mainFrame.getGamePanel().repaint();
+					mainFrame.getFullGamePanel().repaint();
+
+					SoundsProvider.cancelMove();
+					SoundsProvider.cancelStop();
+
+					if (gameManager.getNumbersOfEnemiesOnline() == 0) {
+						SoundsProvider.playStageComplete();
+						new TranslucentWindow(mainFrame, null, ImageProvider.getStageComplete());
+					} else if( (gameManager.getPlayersArray().get(0).getResume()<0 && gameManager.getPlayersArray().get(1).getResume()<0) || gameManager.flag.isHit()){
+						SoundsProvider.playGameOver();
+						new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
+					}else{
+						mainFrame.setTransparent(false);
+						mainFrame.showMenu();
+					}
+					close();
 				} else {
 					buffer = br.readLine();
 				}
