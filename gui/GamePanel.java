@@ -18,7 +18,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -65,7 +64,7 @@ public class GamePanel extends JPanel {
 	private String difficult;
 	private ConnectionManager connectionManager;
 	private String playerName;
-//	private final int ExitDelay = 500;
+	private final int ExitDelay = 500;
 	
 	//SCORE
 	private int currentResumeP1;
@@ -845,6 +844,10 @@ public class GamePanel extends JPanel {
 	        game.getEffects().add(p);
 
 	    } else{
+	    	
+	    	if(p.getPowerUp() == Power.TIMER)
+	    		game.stopEnemies();
+	    	
 	      game.sumPowerUp(t, p);
 	      game.getPower().remove(p);
 	    }
@@ -863,7 +866,8 @@ public class GamePanel extends JPanel {
 				if (game.getEnemy().size() == 0) 
 					win();
 		}
-		else if(!GameManager.singlePlayer) { //MULTIPLAYER
+		 //MULTIPLAYER
+		else if(!GameManager.singlePlayer) {
 			
 			if (((game.getPlayersArray().size() > 1
 					&& (game.getPlayersArray().get(0).getResume() <= 0 && game.getPlayersArray().get(1).getResume() <= 0)))
@@ -880,8 +884,6 @@ public class GamePanel extends JPanel {
 	
 	private void gameOver() {
 
-		game.setExit(true);
-		
 		if(GameManager.offline) {
 			
 			SoundsProvider.cancelMove();
@@ -899,7 +901,17 @@ public class GamePanel extends JPanel {
 				((MainFrame)switcher).setCurrentLevelP2(0);
 			}
 			
+			
+			
 			SoundsProvider.playGameOver();
+			
+			try {
+				Thread.sleep(ExitDelay);
+			} catch (InterruptedException e) {
+	
+				e.printStackTrace();
+			}
+			
 			new TranslucentWindow(getSwitcher(), game.getFilename(),ImageProvider.getGameOver());
 			game.timer.cancel();
 			game.timer2.cancel();
@@ -909,8 +921,6 @@ public class GamePanel extends JPanel {
 	}
 
 	private void win() {
-		
-		game.setExit(true);
 		
 		if(GameManager.offline) {
 			
@@ -930,6 +940,14 @@ public class GamePanel extends JPanel {
 				currentLevelP2 = game.getPlayersArray().get(1).getLevel();
 				((MainFrame)switcher).setCurrentLevelP2(currentLevelP2);
 			}
+			
+			try {
+				Thread.sleep(ExitDelay);
+			} catch (InterruptedException e) {
+			
+				e.printStackTrace();
+			}
+			
 			SoundsProvider.playStageComplete();
 			new TranslucentWindow(getSwitcher(), game.getFilename(),ImageProvider.getStageComplete());
 			
@@ -1922,7 +1940,6 @@ public class GamePanel extends JPanel {
 			game.getPlayersArray().get(1).setLevel(currentLevelP2);
 	}
 	
-
 	// -----------------------GET & SET--------------------------//
 
 	public GameManager getGame() {

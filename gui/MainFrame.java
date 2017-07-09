@@ -46,18 +46,15 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private FullGamePanel fullGame; 
 	private GameManager gameManager;
 	private GamePanel gamePanel;
-	private SoundsProvider sounds;
-	private ImageProvider images;
 	private SlideStage slideStage;
 	private LoadPanel load;
 
 	public MainFrame() {
 		
-		new ImageProvider();
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
 		this.setSize(new Dimension(WIDTH, HEIGHT));
-
+		new ImageProvider();
 		load = new LoadPanel(WIDTH, HEIGHT, this);
 		this.add(load);
 
@@ -97,8 +94,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
 		editor = new ConstructionPanel(WIDTH, HEIGHT, this);
 		settings = new SettingsPanel(WIDTH, HEIGHT, this);
-		images = new ImageProvider();
-		sounds = new SoundsProvider();
+
 
 	}
 	
@@ -174,8 +170,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	@Override
 	public void showGame(JTextField directory) {
 
-		//singleOrMulti(path);
+		//singleOrMulti(path)
 		gameManager = new GameManager(directory);
+		if(SettingsPanel.normal)
+			gameManager.setMedium(true);
 		gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
 		fullGame = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
 		gamePanel.setFullGamePanel(fullGame);
