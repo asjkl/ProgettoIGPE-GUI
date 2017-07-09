@@ -108,7 +108,7 @@ public class GamePanel extends JPanel {
 				int keyCode = event.getKeyCode();
 				// MULTIPLAYER
 				if (game.getPlayersArray().get(0).getDefaultKeysPlayer().contains(keyCode) && keyCode != 32) {
-					if (!game.pauseOptionDialog && !game.getPlayersArray().get(0).isDied()) {
+					if (!game.pauseOptionDialog) {
 						if (!game.getPlayersArray().get(0).keyBits.get(keyCode) && !game.getPlayersArray().get(0).isPressed())
 							game.getPlayersArray().get(0).setKeyPressedMillis(System.currentTimeMillis());
 					}
@@ -206,7 +206,7 @@ public class GamePanel extends JPanel {
 				if (game.getPlayersArray().size() > 1 && GameManager.offline) {
 					
 					if (game.getPlayersArray().get(0).getDefaultKeysPlayer().contains(keyCode) && keyCode != 32) {
-						if (!game.pauseOptionDialog && !game.getPlayersArray().get(0).isDied()) {
+						if (!game.pauseOptionDialog) {
 							if (!game.getPlayersArray().get(0).keyBits.get(keyCode) && !game.getPlayersArray().get(0).isPressed())
 								game.getPlayersArray().get(0).setKeyPressedMillis(System.currentTimeMillis());
 						}
@@ -223,7 +223,7 @@ public class GamePanel extends JPanel {
 
 				} else { // SINGLEPLAYER
 					if (game.getPlayersArray().get(0).getDefaultKeysPlayer().contains(keyCode) && keyCode != 32) {
-						if (!game.pauseOptionDialog && !game.getPlayersArray().get(0).isDied()) {
+						if (!game.pauseOptionDialog ) {
 							if (!game.getPlayersArray().get(0).keyBits.get(keyCode) && !game.getPlayersArray().get(0).isPressed())
 								game.getPlayersArray().get(0).setKeyPressedMillis(System.currentTimeMillis());
 						}
@@ -620,12 +620,12 @@ public class GamePanel extends JPanel {
 					game.pauseOptionDialog = false;
 					game.setExit(true);
 					dialog.dispose();
-					if(!GameManager.offline){
-						if(getGameManager().getPlayersArray().get(0).isDied() && getGameManager().getPlayersArray().get(1).isDied() )
-							connectionManager.dispatch("EXIT"+":"+connectionManager.getNameOfGame()+":"+"true");
-						else
-							connectionManager.dispatch("EXIT"+":"+connectionManager.getNameOfGame()+":"+"false");
-					}
+//					if(!GameManager.offline){
+//						if(getGameManager().getPlayersArray().get(1).isDied() )
+//							connectionManager.dispatch("EXIT"+":"+connectionManager.getNameOfGame()+":"+"true");
+//						else
+//							connectionManager.dispatch("EXIT"+":"+connectionManager.getNameOfGame()+":"+"false");
+//					}
 					getSwitcher().showMenu();
 					SoundsProvider.cancelMove();
 					SoundsProvider.cancelStop();
@@ -701,14 +701,12 @@ public class GamePanel extends JPanel {
 	private void keyPresses() {
 
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (!game.getPlayersArray().get(a).isDied()) {
 				game.getPlayersArray().get(a).setKeyPressLength(
-						System.currentTimeMillis() - game.getPlayersArray().get(a).getKeyPressedMillis());
-			}
+				System.currentTimeMillis() - game.getPlayersArray().get(a).getKeyPressedMillis());
 		}
 
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (!game.getPlayersArray().get(a).isDied()) {
+		
 				for (int i = 0; i < game.getPlayersArray().get(a).keyBits.size(); i++) {
 					if (game.getPlayersArray().get(a).keyBits.get(i) && firstTime(i, game.getPlayersArray().get(a).getKeys())
 							&& ((a == 0 && game.getPlayersArray().get(0).getDefaultKeysPlayer().contains(i))
@@ -716,11 +714,10 @@ public class GamePanel extends JPanel {
 						game.getPlayersArray().get(a).getKeys().add(i);
 					}
 				}
-			}
 		}
 
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (!game.getPlayersArray().get(a).getKeys().isEmpty() && !game.getPlayersArray().get(a).isDied()) {
+			if (!game.getPlayersArray().get(a).getKeys().isEmpty()) {
 				isKeyPressed(game.getPlayersArray().get(a).getKeys().get(game.getPlayersArray().get(a).getKeys().size() - 1), a);
 				if (a == 0 && game.getPlayersArray().get(a).getKeys()
 						.get(game.getPlayersArray().get(a).getKeys().size() - 1) == 32) { // contemporanemrnate
@@ -1026,7 +1023,7 @@ public class GamePanel extends JPanel {
 
 		// LOGIC
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (!game.getPlayersArray().get(a).isDied()) {
+		
 				if (game.getPlayersArray().get(a).getKeyPressLength() > 120)
 					game.getPlayersArray().get(a).update();
 
@@ -1050,8 +1047,6 @@ public class GamePanel extends JPanel {
 
 				}
 			}
-		}
-
 	}
 
 	private void enemies() {
@@ -1574,7 +1569,7 @@ public class GamePanel extends JPanel {
 	private void paintPlayer(Graphics g, Graphics2D g2d) {
 
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (!game.getPlayersArray().get(a).isDied()) {
+			
 				AffineTransform at = AffineTransform.getTranslateInstance(game.getPlayersArray().get(a).getyGraphics(),
 						game.getPlayersArray().get(a).getxGraphics());
 				rotation(game.getPlayersArray().get(a), game.getPlayersArray().get(a).getTmpDirection());
@@ -1700,7 +1695,6 @@ public class GamePanel extends JPanel {
 						g2d.drawImage(ImageProvider.getShield2(), at, null);
 				}
 			}
-		}
 
 	}
 
