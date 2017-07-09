@@ -886,7 +886,7 @@ public class GamePanel extends JPanel {
 	}
 	
 	private void gameOver() {
-
+		game.setExit(true);
 		if(GameManager.offline) {
 			
 			SoundsProvider.cancelMove();
@@ -920,11 +920,11 @@ public class GamePanel extends JPanel {
 			game.timer2.cancel();
 		}
 		
-		game.setExit(true);
+
 	}
 
 	private void win() {
-		
+		game.setExit(true);
 		if(GameManager.offline) {
 			
 			SoundsProvider.cancelMove();
@@ -958,7 +958,7 @@ public class GamePanel extends JPanel {
 			game.timer2.cancel();
 		}
 		
-		game.setExit(true);
+	
 	}
 
 	private void sounds() {
