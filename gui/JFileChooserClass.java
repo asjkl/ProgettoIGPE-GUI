@@ -2,7 +2,10 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -20,15 +23,25 @@ public class JFileChooserClass {
 	private JTextField filename;
 	private JTextField dir;
 	private File file;
+	private static Font font;
+	private static boolean online;
 		
+	@SuppressWarnings("static-access")
 	public JFileChooserClass(boolean online) {
 		this.chooser=new JFileChooser();
 		this.filename = new JTextField();
 		this.dir=new JTextField();
+		this.online=online;
 		if(!online){
 			this.file=new File("./maps/editor");
 		}else{
 			this.file=new File("./maps/career/multiplayer");
+			try {
+				font=(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f));
+			} catch (FontFormatException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		this.filter = new FileNameExtensionFilter(".txt", "txt");
 		this.chooser.setFileFilter(filter);
@@ -45,7 +58,7 @@ public class JFileChooserClass {
 			this.file=new File("./maps/editor/singleplayer");
 		}
 		chooser.setCurrentDirectory(file);
-		int value = chooser.showSaveDialog(null); 						//
+		int value = chooser.showSaveDialog(null); 						
 		if (value == JFileChooser.APPROVE_OPTION) {
 			dir.setText(chooser.getCurrentDirectory().toString());
 			filename.setText(chooser.getSelectedFile().getName());
@@ -111,7 +124,11 @@ public class JFileChooserClass {
 			if (comp[x] instanceof Container)
 				setFileChooserFont(((Container) comp[x]).getComponents());
 			try {
-				comp[x].setFont(MainFrame.customFontS);
+				if(!online){
+					comp[x].setFont(MainFrame.customFontS);
+				}else{
+					comp[x].setFont(font);
+				}
 			} catch (Exception e) {
 			}
 		}

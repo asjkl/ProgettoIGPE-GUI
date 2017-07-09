@@ -459,7 +459,7 @@ public class GamePanel extends JPanel {
 		
 	GameManager startNetwork(ConnectionManager connectionManager, JTextField filename) {
 		this.connectionManager = connectionManager;
-		playerName = connectionManager.getPlayerName();
+		playerName = connectionManager.getNameOfGame();
 		System.out.println("GamePanel.startNetwork() " + playerName);
 		requestFocus();
 		game = new GameManager(filename, playerName);
@@ -899,7 +899,9 @@ public class GamePanel extends JPanel {
 
 	private void gameOver() {
 
-		((MainFrame)getSwitcher()).setTransparent(true);
+		if(getSwitcher()!=null)		//IL SERVER NON IL SWITCHER
+			((MainFrame)getSwitcher()).setTransparent(true);
+		
 		repaint();
 		game.setExit(true);
 		
@@ -924,8 +926,9 @@ public class GamePanel extends JPanel {
 	}
 
 	private void win() {
-
-		((MainFrame)getSwitcher()).setTransparent(true);
+		
+		if(getSwitcher()!=null)		//IL SERVER NON IL SWITCHER
+			((MainFrame)getSwitcher()).setTransparent(true);
 		repaint();
 		game.setExit(true);
 		

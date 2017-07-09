@@ -21,11 +21,10 @@ public class Server implements Runnable{
 		final Server server2=new Server(1232);
 		new Thread(server1, "game").start();
 		new Thread(server2, "chat").start();
-//		server.startServer();
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked"})
 	@Override
 	public void run() {
 				
@@ -44,14 +43,26 @@ public class Server implements Runnable{
 					Socket socket1 = null;
 					socket1 = serverSocket.accept();
 					gameManagerServer = new ServerGameManager();
-					ClientManager cm1=new ClientManager(socket1, gameManagerServer, "P1");
+					ClientManager cm1=new ClientManager(socket1, gameManagerServer);
 					gameManagerServer.add(cm1);
 			
 					//Player P2
 					Socket socket2 = null;
 					socket2 = serverSocket.accept();
-					ClientManager cm2=new ClientManager(socket2, gameManagerServer,"P2");
+					ClientManager cm2=new ClientManager(socket2, gameManagerServer);
 					gameManagerServer.add(cm2);
+					gameManagerServer.setupClient();
+					System.out.println("STOP");
+					gameManagerServer.lock.lock();
+					while(!gameManagerServer.startGame){
+						try {
+							gameManagerServer.cond.await();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+					gameManagerServer.lock.unlock();
+					System.out.println("START");
 					gameManagerServer.startGame();
 				
 				} catch (IOException e) {

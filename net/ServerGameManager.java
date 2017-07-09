@@ -1,9 +1,15 @@
 package net;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.JTextField;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
@@ -13,14 +19,19 @@ import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
 public class ServerGameManager {
 	private final Set<ClientManager> clients = new HashSet<ClientManager>();
 	private final Set<ClientManager> readyClients = new HashSet<ClientManager>();
+	public HashMap<String,String>name=new HashMap<>();
 	public GameManager gameManager;
 	private GamePanel gamePanel;
 	private String difficult;
 	private JTextField map=new JTextField();
+	
+	public Lock lock=new ReentrantLock();
+	public Condition cond=lock.newCondition();
+	public boolean startGame=false;
 
 	public void add(final ClientManager cm) {
 		clients.add(cm);
-		System.out.println(cm.getName() + " connesso." );
+		System.out.println("connesso." );
 	}
 
 	public void dispatch(final String message) {
@@ -35,7 +46,14 @@ public class ServerGameManager {
 		final StringBuilder sb = new StringBuilder();
 		for (final ClientManager cm : clients) {
 			if (cm.getName() != null) {
-				sb.append(cm.getName());
+				sb.append(cm.getName()+":");
+				for(Map.Entry<String, String> entry : name.entrySet()) {
+					String key = entry.getKey();
+					String names= entry.getValue();	
+					if(names.equals(cm.getName())){
+						sb.append(key);
+					}
+				}
 				sb.append(";");
 			}
 		}	
@@ -75,28 +93,33 @@ public class ServerGameManager {
 	
 	public void setReady(final ClientManager clientManager) {
 		synchronized (readyClients) {
-			readyClients.add(clientManager);		
+			readyClients.add(clientManager);
+			
 			if (readyClients.size() == 2) {
 				dispatch("#START");
 				System.out.println("ServerGameManager.setReady()");
 			}
 		}
 	}
-
-	public void startGame() throws IOException {
+	
+	public void setupClient() throws IOException {
+		ArrayList<String>nameOfPlayers=new ArrayList<>();
+		nameOfPlayers.add("P1");
+		nameOfPlayers.add("P2");
 		final List<String> names = new ArrayList<>();
 		for (final ClientManager cm : clients) {
-			cm.setup();
-			if(!cm.getMap().getText().equals("")){
+			cm.setup(nameOfPlayers.remove(0));
+			new Thread(cm, cm.getName()).start();
+			names.add(cm.getName());
+		}	
+	}
+
+	public void startGame() throws IOException {
+		for (final ClientManager cm : clients) {
+			if(cm.getName().equals("P1")){
 				map.setText(cm.getMap().getText());
-			}
-			
-			if(cm.getDifficult() != null){
 				difficult=cm.getDifficult();
 			}
-			
-			new Thread(cm, cm.toString()).start();
-			names.add(cm.getName());
 		}
 		
 		gameManager = new GameManager(new Runnable() {
@@ -105,7 +128,7 @@ public class ServerGameManager {
 				final String statusToString = gameManager.statusToString();
 				dispatch(statusToString);
 			}
-		}, names, map);
+		}, name, map);
 		gamePanel=new GamePanel(null, difficult);
 		new Thread() {
 			@Override
