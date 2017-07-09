@@ -32,7 +32,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private int resumeP2;
 	private int levelP1;
 	private int levelP2;
-//	public static boolean singlePlayer;
 	private GraphicsEnvironment graphicscEnvironment;
 
 	public NetworkPanel network;
