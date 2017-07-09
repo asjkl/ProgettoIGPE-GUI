@@ -87,7 +87,7 @@ public class ConnectionManager implements Runnable {
 								&& gameManager.getPlayersArray().get(1).isExitOnline()))) {
 
 					buffer = null;
-					
+
 					mainFrame.setTransparent(true);
 					mainFrame.getGamePanel().repaint();
 					mainFrame.getFullGamePanel().repaint();
@@ -98,10 +98,21 @@ public class ConnectionManager implements Runnable {
 					if (gameManager.getNumbersOfEnemiesOnline() == 0) {
 						SoundsProvider.playStageComplete();
 						new TranslucentWindow(mainFrame, null, ImageProvider.getStageComplete());
-					} else if( (gameManager.getPlayersArray().get(0).getResume()<0 && gameManager.getPlayersArray().get(1).getResume()<0) || gameManager.flag.isHit()){
+					} else if ((((gameManager.getPlayersArray().get(0).getResume() < 0
+							&& gameManager.getPlayersArray().get(1).getResume() < 0) || gameManager.flag.isHit())
+							&& !gameManager.getPlayersArray().get(0).isExitOnline()
+							&& !gameManager.getPlayersArray().get(1).isExitOnline())
+							|| (gameManager.getPlayersArray().get(0).getResume() < 0
+									&& gameManager.getPlayersArray().get(0).isExitOnline()
+									&& !gameManager.getPlayersArray().get(1).isExitOnline()
+									&& gameManager.flag.isHit())
+							|| (gameManager.getPlayersArray().get(1).getResume() < 0
+									&& gameManager.getPlayersArray().get(1).isExitOnline()
+									&& !gameManager.getPlayersArray().get(0).isExitOnline()
+									&& gameManager.flag.isHit())) {
 						SoundsProvider.playGameOver();
 						new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
-					}else{
+					} else {
 						mainFrame.setTransparent(false);
 						mainFrame.showMenu();
 					}
