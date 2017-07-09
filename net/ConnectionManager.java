@@ -51,14 +51,14 @@ public class ConnectionManager implements Runnable {
 	@Override
 	public void run() {
 		try {
+			
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			pw = new PrintWriter(socket.getOutputStream(), true);
-			pw.println(name);
-			System.out.println("NOME CHE HAI MESSO NEL PANNELLO "+name);
-			
+			pw.println(name);	
 			String buffer = br.readLine();
+			
 			while (!buffer.equals("#START")) {
-				System.out.println("-> "+buffer);
+				
 				final String[] split = buffer.split(";");
 				if (split.length != 0) {
 					for (final String name : split){
@@ -75,26 +75,31 @@ public class ConnectionManager implements Runnable {
 			final GameManager gameManager = mainFrame.showNetwork(this, map, difficult);
 			buffer = br.readLine();
 			while (buffer != null) {
+				
 				gameManager.parseStatusFromString(buffer);
-				playSounds(gameManager);
-				mainFrame.gamePanel.repaint();
-				mainFrame.play.repaint();
-				if (gameManager.isExit()) {
+				playSounds(gameManager);	
+				mainFrame.getGamePanel().repaint();
+				mainFrame.getFullGamePanel().repaint();
 					
-					buffer=null;
-					
-					mainFrame.setTransparent(true);
-					SoundsProvider.cancelMove();
-					SoundsProvider.cancelStop();
-					
-					if(gameManager.getNumbersOfEnemiesOnline() == 0) {
-						SoundsProvider.playStageComplete();
-						new TranslucentWindow(mainFrame, null, ImageProvider.getStageComplete());
-					}
-					else {
-						SoundsProvider.playGameOver();
-						new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
-					}
+					if (gameManager.isExit()) {
+						
+						buffer=null;
+						
+						mainFrame.setTransparent(true);
+						mainFrame.getGamePanel().repaint();
+						mainFrame.getFullGamePanel().repaint();
+						
+						SoundsProvider.cancelMove();
+						SoundsProvider.cancelStop();
+						
+						if(gameManager.getNumbersOfEnemiesOnline() == 0) {
+							SoundsProvider.playStageComplete();
+							new TranslucentWindow(mainFrame, null, ImageProvider.getStageComplete());
+						}
+						else {
+							SoundsProvider.playGameOver();
+							new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
+						}
 					
 				} else {
 					buffer = br.readLine();

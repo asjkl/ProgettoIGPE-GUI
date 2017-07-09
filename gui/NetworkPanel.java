@@ -103,8 +103,6 @@ public class NetworkPanel extends JPanel {
 		nameTextField.setFont(MainFrame.customFontM);
 		nameTextField.setBounds(640,440,200,40);
 		this.add(nameTextField);
-		
-
 	}
 	
 	private void createButtons() {

@@ -15,7 +15,6 @@ import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
 
 
-
 public class ServerGameManager {
 	private final ArrayList<ClientManager> clients = new ArrayList<>();
 	private final Set<ClientManager> readyClients = new HashSet<ClientManager>();

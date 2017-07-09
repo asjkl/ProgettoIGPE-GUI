@@ -65,7 +65,7 @@ public class GamePanel extends JPanel {
 	private String difficult;
 	private ConnectionManager connectionManager;
 	private String playerName;
-	private final int ExitDelay = 500;
+//	private final int ExitDelay = 500;
 	
 	//SCORE
 	private int currentResumeP1;
@@ -138,6 +138,7 @@ public class GamePanel extends JPanel {
 
 	//offline
 	public GamePanel(final int w, final int h, PanelSwitcher switcher, GameManager game) {
+		
 		this.setPreferredSize(new Dimension(w, h));
 		this.setGame(game);
 		this.shift = 17;
@@ -148,11 +149,13 @@ public class GamePanel extends JPanel {
 		this.longTime = new Long(0);
 		cursorPositionDialog = 0;
 		tempFPS = 1.5d;
-		
+
 		if(game.getPlayersArray().size() == 1) {
 			
 			currentResumeP1 = ((MainFrame)switcher).getCurrentResumeP1();
 			currentLevelP1 = ((MainFrame)switcher).getCurrentLevelP1();
+			game.getPlayersArray().get(0).setResume(currentResumeP1);
+			game.getPlayersArray().get(0).setLevel(currentLevelP1);
 		}
 		else 
 			loadScoreMulti();
@@ -268,24 +271,6 @@ public class GamePanel extends JPanel {
 	// ----------------------GAMELOOP---------------------------//
 	
 	public void gameLoop() {
-		
-		
-		//TODO tolgiere
-		if(GameManager.offline) {
-			
-			currentResumeP1 = ((MainFrame)switcher).getCurrentResumeP1();
-			game.getPlayersArray().get(0).setResume(currentResumeP1);
-			currentLevelP1 = ((MainFrame)switcher).getCurrentLevelP1();
-			game.getPlayersArray().get(0).setLevel(currentLevelP1);
-			
-			if(game.getPlayersArray().size() > 1) {
-				
-				currentResumeP2 = ((MainFrame)switcher).getCurrentResumeP2();
-				game.getPlayersArray().get(1).setResume(currentResumeP2);
-				currentLevelP2 = ((MainFrame)switcher).getCurrentLevelP2();
-				game.getPlayersArray().get(1).setLevel(currentLevelP2);
-			}
-		}
 		
 		while (!game.isExit()) {
 			
@@ -895,10 +880,14 @@ public class GamePanel extends JPanel {
 	
 	private void gameOver() {
 
-		if(getSwitcher()!=null)		//IL SERVER NON IL SWITCHER
-			((MainFrame)getSwitcher()).setTransparent(true);
+		game.setExit(true);
 		
 		if(GameManager.offline) {
+			
+			SoundsProvider.cancelMove();
+			SoundsProvider.cancelStop();
+			((MainFrame)getSwitcher()).setTransparent(true);
+			repaint();
 			
 			((MainFrame)switcher).setSlide(true);
 			((MainFrame)switcher).setCurrentResumeP1(3);
@@ -920,10 +909,15 @@ public class GamePanel extends JPanel {
 	}
 
 	private void win() {
-		if(getSwitcher()!=null)		//IL SERVER NON IL SWITCHER
-			((MainFrame)getSwitcher()).setTransparent(true);
-
+		
+		game.setExit(true);
+		
 		if(GameManager.offline) {
+			
+			SoundsProvider.cancelMove();
+			SoundsProvider.cancelStop();
+			((MainFrame)getSwitcher()).setTransparent(true);
+			repaint();
 			
 			currentResumeP1 = game.getPlayersArray().get(0).getResume();
 			((MainFrame)switcher).setCurrentResumeP1(currentResumeP1);
@@ -1912,6 +1906,20 @@ public class GamePanel extends JPanel {
 			((MainFrame)switcher).setCurrentResumeP2(Integer.parseInt(values[4]));
 			((MainFrame)switcher).setCurrentLevelP2(Integer.parseInt(values[5]));
 			((MainFrame)switcher).setUnlockedMapsP2(Integer.parseInt(values[6]));
+			
+			
+			//ASSEGNAZIONE VALORI AD ENTRAMBI I PLAYER
+			currentResumeP1 = ((MainFrame)switcher).getCurrentResumeP1();
+			game.getPlayersArray().get(0).setResume(currentResumeP1);
+			
+			currentLevelP1 = ((MainFrame)switcher).getCurrentLevelP1();
+			game.getPlayersArray().get(0).setLevel(currentLevelP1);
+			
+			currentResumeP2 = ((MainFrame)switcher).getCurrentResumeP2();
+			game.getPlayersArray().get(1).setResume(currentResumeP2);
+			
+			currentLevelP2 = ((MainFrame)switcher).getCurrentLevelP2();
+			game.getPlayersArray().get(1).setLevel(currentLevelP2);
 	}
 	
 

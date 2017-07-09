@@ -34,22 +34,22 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private int levelP2;
 	private GraphicsEnvironment graphicscEnvironment;
 
-	public NetworkPanel network;
-	public MenuPanel menu;
-	public PlayerPanel player; 
-	public StagePanelFirst firstStage;
-	public StagePanelSecond secondStage;
-	public ScoresPanel scores;
-	public ConstructionPanel editor;
-	public SettingsPanel settings;
-	public SlideContainer slideContainer;
-	public FullGamePanel play; 
-	public GameManager gameManager;
-	public GamePanel gamePanel;
-	public SoundsProvider sounds;
-	public ImageProvider images;
-	public SlideStage slideStage;
-	public LoadPanel load;
+	private NetworkPanel network;
+	private MenuPanel menu;
+	private PlayerPanel player; 
+	private StagePanelFirst firstStage;
+	private StagePanelSecond secondStage;
+	private ScoresPanel scores;
+	private ConstructionPanel editor;
+	private SettingsPanel settings;
+	private SlideContainer slideContainer;
+	private FullGamePanel fullGame; 
+	private GameManager gameManager;
+	private GamePanel gamePanel;
+	private SoundsProvider sounds;
+	private ImageProvider images;
+	private SlideStage slideStage;
+	private LoadPanel load;
 
 	public MainFrame() {
 		
@@ -177,9 +177,9 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		//singleOrMulti(path);
 		gameManager = new GameManager(directory);
 		gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
-		play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
-		gamePanel.setFullGamePanel(play);
-		switchTo(play);
+		fullGame = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
+		gamePanel.setFullGamePanel(fullGame);
+		switchTo(fullGame);
 	}
 
 	@Override
@@ -230,8 +230,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		gamePanel = new GamePanel(this, difficult);
 		gameManager = gamePanel.startNetwork(connectionManager, filename);
 		gamePanel.setGame(gameManager);
-		play = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
-		switchTo(play);
+		fullGame = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
+		switchTo(fullGame);
 		return gameManager;
 	}
 	
@@ -258,6 +258,14 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 //			singlePlayer=true;
 //		}
 //	}
+	
+	public FullGamePanel getFullGamePanel() {
+		return fullGame;
+	}
+	
+	public GamePanel getGamePanel() {
+		return gamePanel;
+	}
 	
 	public int getCurrentLevelP1() {
 		return levelP1;
