@@ -16,7 +16,10 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -65,6 +68,8 @@ public class GamePanel extends JPanel {
 	private ConnectionManager connectionManager;
 	private String playerName;
 	private final int ExitDelay = 500;
+	private ArrayList<JLabel> labelForNameOfPlayers;
+	private ArrayList<Color>labelForNameOfPlayersColor;
 	
 	//SCORE
 	private int currentResumeP1;
@@ -82,6 +87,15 @@ public class GamePanel extends JPanel {
 		this.shift = 17;
 		this.difficult = difficult;
 		this.setSwitcher(switcher);
+		this.labelForNameOfPlayers=new ArrayList<>();
+		this.labelForNameOfPlayersColor=new ArrayList<>();
+		for(int a=0; a<2; a++){
+			JLabel l=new JLabel();
+			add(l);
+			labelForNameOfPlayers.add(l);
+			labelForNameOfPlayersColor.add(chooseColorOfLabel());
+		}
+		
 		this.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -133,6 +147,14 @@ public class GamePanel extends JPanel {
 			}
 		});
 
+	}
+
+	private Color chooseColorOfLabel() {
+		int R = (int)(Math.random()*256);
+		int G = (int)(Math.random()*256);
+		int B= (int)(Math.random()*256);
+		Color color = new Color(R, G, B);
+	return color;
 	}
 
 	//offline
@@ -1694,6 +1716,11 @@ public class GamePanel extends JPanel {
 					else if (game.getPlayersArray().get(a).getCountdown() == 1)
 						g2d.drawImage(ImageProvider.getShield2(), at, null);
 				}
+				
+				labelForNameOfPlayers.get(a).setText(game.getPlayersArray().get(a).getNameOfPlayerTank());
+				labelForNameOfPlayers.get(a).setForeground(labelForNameOfPlayersColor.get(a));
+				labelForNameOfPlayers.get(a).setBounds((int)game.getPlayersArray().get(a).getyGraphics(), (int)game.getPlayersArray().get(a).getxGraphics()-25, 70, 30);
+				labelForNameOfPlayers.get(a).setFont(MainFrame.customFontS);
 			}
 
 	}
