@@ -1,6 +1,8 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 import javax.swing.JTextField;
 
+import net.Client;
+
 public interface PanelSwitcher {
 
 	void showMenu();
@@ -21,7 +23,7 @@ public interface PanelSwitcher {
 	
 	void showSettings();
 	
-	void showLobby();
+	void showLobby(Client client, JTextField ip, JTextField name, JTextField port);
 
 	void showSlide(JTextField f);
 

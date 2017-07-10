@@ -7,13 +7,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import net.ConnectionManager;
+import net.Server;
 
 @SuppressWarnings("serial")
 public class Lobby extends JPanel{
@@ -21,12 +30,17 @@ public class Lobby extends JPanel{
 	private int width;
 	private int height;
 	private PanelSwitcher switcher;
-	private final int DIM = 1;
+	private final int DIM = 2;
 	private int cursorPosition = 0;
 	private JButton arrowLeft, arrowRight;
 	private final ArrayList<JButton> buttons;
 	private int stageShifter = 1;
-	
+	private ArrayList<JRadioButton> level;
+	private ButtonGroup group;
+	private JTextField ipTextField;
+	private JTextField nameTextField;
+	private JTextField portTextField;
+
 	public Lobby(int w, int h, PanelSwitcher switcher) {
 		width=w;
 		height=h;
@@ -39,8 +53,11 @@ public class Lobby extends JPanel{
 		arrowLeft = new JButton();
 		arrowRight = new JButton();
 		buttons = new ArrayList<>();
-		
+		level = new ArrayList<>();
+		group =  new ButtonGroup();
+				
 		createButton();
+		buttons.get(1).setForeground(Color.YELLOW);
 		
 		createChat();
 		
@@ -75,8 +92,27 @@ public class Lobby extends JPanel{
 		difficultPanel.setBounds(520, 130, 200, 200);
 		difficultPanel.setBackground(Color.GRAY);
 		add(difficultPanel);
-	}
 
+			for(int i = 0; i < DIM; i++) {
+				
+				level.add(new JRadioButton());
+				level.get(i).setBackground(null);
+				group.add(level.get(i));
+				if( i == 0) {
+					level.get(i).setBounds(50,50, 20, 20);
+				}
+				else if( i == 1) {
+					level.get(i).setBounds(50, 80, 20, 20);
+				}
+				else {
+					level.get(i).setBounds(50, 110, 20, 20);
+					}
+				
+				difficultPanel.add(level.get(i));
+			}
+		
+	}
+	
 	public void createOnlinePanel() {
 		
 		JPanel onlinePanel = new JPanel();
@@ -112,10 +148,10 @@ public class Lobby extends JPanel{
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				g.drawImage(ImageProvider.getMapsP2().get(stageShifter-1).getScaledInstance(230, 230, java.awt.Image.SCALE_SMOOTH),61,20,  this);
+				g.drawImage(ImageProvider.getMapsP2().get(stageShifter-1),90,40,  this);
 				g.setColor(Color.BLACK);
 				g.setFont(MainFrame.customFontM);
-				g.drawString("Stage " + stageShifter, 135, 282);
+				g.drawString("Stage " + stageShifter, 133, 282);
 			}
 		};
 		
@@ -125,8 +161,8 @@ public class Lobby extends JPanel{
 		add(panel);
 		
 		arrowLeft.setBorder(null);
-		arrowLeft.setIcon(new ImageIcon(ImageProvider.getArrowLeft().getScaledInstance(20, 30, java.awt.Image.SCALE_SMOOTH)));
-		arrowLeft.setBounds(76, 260, 20, 30);
+		arrowLeft.setIcon(new ImageIcon(ImageProvider.getArrowLeft()));
+		arrowLeft.setBounds(76, 260, 30, 40);
 		arrowLeft.setContentAreaFilled(false);
 		arrowLeft.setBorderPainted(false);
 		arrowLeft.setFocusPainted(false);
@@ -147,8 +183,8 @@ public class Lobby extends JPanel{
 		panel.add(arrowLeft);
 	
 		arrowRight.setBorder(null);
-		arrowRight.setIcon(new ImageIcon(ImageProvider.getArrowRight().getScaledInstance(20, 30, java.awt.Image.SCALE_SMOOTH)));
-		arrowRight.setBounds(256, 260, 20, 30);
+		arrowRight.setIcon(new ImageIcon(ImageProvider.getArrowRight()));
+		arrowRight.setBounds(256, 260, 30, 40);
 		arrowRight.setContentAreaFilled(false);
 		arrowRight.setBorderPainted(false);
 		arrowRight.setFocusPainted(false);
@@ -171,7 +207,7 @@ public class Lobby extends JPanel{
 		
 		for(int i = 0; i < DIM; i++) {
 			
-//			final int curRow = i;
+			final int curRow = i;
 			
 			buttons.add(new JButton());
 			buttons.get(i).setBorder(null);
@@ -194,6 +230,7 @@ public class Lobby extends JPanel{
 	        public void keyPressed(KeyEvent e) {
 				
 			boolean enter = false;
+		
 				
 				 if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 	      	         ((JButton) e.getComponent()).doClick();
@@ -205,28 +242,28 @@ public class Lobby extends JPanel{
 	            		  getSwitcher().showNetwork();
 	              }
 	              else 
-//	            	  if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
-//	            	  enter=true;
-//	            		  if(curRow < 1) {
-//	                        
-//	            			  buttons.get(buttons.size() - 1).requestFocus();
-//	            			  setCursorPosition(buttons.size() - 1); 
-//	            			  repaint();
-//		                  }        
-//		                  else {
-//		                    	 
-//	                    	 buttons.get(curRow - 1).requestFocus();
-//	                    	 setCursorPosition(curRow - 1);
-//	                    	 repaint();
-//		                  }
-//	            	}
-//	            	else 
-//		                	if(e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-//		                		 enter=true;
-//	            		  buttons.get((curRow + 1) % buttons.size()).requestFocus();
-//	            		  setCursorPosition((curRow + 1) % buttons.size()); 
-//	            		  repaint();
-//		                	} 
+	            	  if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
+	            	  enter=true;
+	            		  if(curRow < 1) {
+	                        
+	            			  buttons.get(buttons.size() - 1).requestFocus();
+	            			  setCursorPosition(buttons.size() - 1); 
+	            			  repaint();
+		                  }        
+		                  else {
+		                    	 
+	                    	 buttons.get(curRow - 1).requestFocus();
+	                    	 setCursorPosition(curRow - 1);
+	                    	 repaint();
+		                  }
+	            	}
+	            	else 
+		                	if(e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		                		 enter=true;
+	            		  buttons.get((curRow + 1) % buttons.size()).requestFocus();
+	            		  setCursorPosition((curRow + 1) % buttons.size()); 
+	            		  repaint();
+		                	} 
 				 if(enter)
 					 SoundsProvider.playBulletHit1();
 				}   
@@ -252,7 +289,22 @@ public class Lobby extends JPanel{
 				}
 			});
 			break;
+		case 1:
+			buttons.get(j).addActionListener(new ActionListener() {
 
+				@Override
+				public void actionPerformed(ActionEvent e) {	
+					SoundsProvider.playBulletHit1();
+					final Server server1=new Server(1234);
+					new Thread(server1, "game").start();
+					try {
+						connectoToServer();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			break;
 		default:
 			break;
 		}
@@ -265,29 +317,34 @@ public class Lobby extends JPanel{
 			buttons.get(j).setBounds(20, 20, 70, 30);
 			buttons.get(j).setText("Back");
 			break;
-//		case 1:
-//			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-//					(int) (this.getPreferredSize().getHeight()) / 2 - posY, 260, 40);
-//			buttons.get(j).setText("Singleplayer");
-//			break;
-//		case 2:
-//			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-//					(int) (this.getPreferredSize().getHeight()) / 2 , 260, 40);
-//			buttons.get(j).setText("Multiplayer");
-//			break;
+		case 1:
+			buttons.get(j).setBounds(width-250,height-150,100,50);
+			buttons.get(j).setText("Start");
+			break;
+
 		default:
 			break;
 		}
 	}
 
+	protected void connectoToServer() throws Exception {
+		final Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
+		final ConnectionManager connectionManager = new ConnectionManager(socket, nameTextField.getText(),
+				((MainFrame) getSwitcher()));
+		new Thread(connectionManager, "Connection Manager").start();
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
+		if (cursorPosition == 0)
+			g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX() + 85,
+					buttons.get(cursorPosition).getY() - 6, this);
+		else
+			g.drawImage(ImageProvider.getCursorRight(), buttons.get(cursorPosition).getX() - 60,
+					buttons.get(cursorPosition).getY(), this);
 		
-		if(getCursorPosition() == 0)
-			g.drawImage(ImageProvider.getCursorLeft(), 
-					buttons.get(cursorPosition).getX() + 90,buttons.get(cursorPosition).getY() - 8, this);
 	}
 
 	public int getCursorPosition() {
@@ -308,6 +365,30 @@ public class Lobby extends JPanel{
 
 	public void setSwitcher(PanelSwitcher switcher) {
 		this.switcher = switcher;
+	}
+	
+	public JTextField getIpTextField() {
+		return ipTextField;
+	}
+
+	public void setIpTextField(JTextField ipTextField) {
+		this.ipTextField = ipTextField;
+	}
+
+	public JTextField getNameTextField() {
+		return nameTextField;
+	}
+
+	public void setNameTextField(JTextField nameTextField) {
+		this.nameTextField = nameTextField;
+	}
+
+	public JTextField getPortTextField() {
+		return portTextField;
+	}
+
+	public void setPortTextField(JTextField portTextField) {
+		this.portTextField = portTextField;
 	}
 
 }

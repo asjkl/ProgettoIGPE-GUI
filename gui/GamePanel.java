@@ -315,7 +315,6 @@ public class GamePanel extends JPanel {
 	}
 
 	public void logic() {
-
 		// MANAGE KEYS
 		keyPresses();
 

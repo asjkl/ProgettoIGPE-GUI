@@ -40,7 +40,7 @@ public class NetworkPanel extends JPanel {
 	@SuppressWarnings("unused")
 	private WarningDialog warning;
 	private JDialog dialog;
-	private int DIM = 4;
+	private int DIM = 2;
 
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
@@ -188,7 +188,7 @@ public class NetworkPanel extends JPanel {
 				}
 			});
 			break;
-		case 1: // CONNECT
+		case 1: // LOBBY
 			buttons.get(j).addActionListener(new ActionListener() {
 
 				@Override
@@ -198,41 +198,11 @@ public class NetworkPanel extends JPanel {
 						warning = new WarningDialog("Insert name!!", ((MainFrame) getSwitcher()));
 					} else {
 						buttons.get(1).setEnabled(false);
-						new Thread() {
-							@Override
-							public void run() {
-								try {
-									final Server server1=new Server(1234);
-									final Server server2=new Server(1232);
-									new Thread(server1, "game").start();
-									new Thread(server2, "chat").start();
-									connectoToServer();
-								} catch (final Exception e) {
-									showDialog();
-								}
-							};
-						}.start();
+						SoundsProvider.playBulletHit1();
+						final Server server2=new Server(1232);
+						new Thread(server2, "chat").start();	
+						getSwitcher().showLobby(new Client(nameTextField.getText(), ipTextField.getText(), "1232"), ipTextField, nameTextField, portTextField);
 					}
-				}
-			});
-			break;
-		case 2: // chat
-			buttons.get(j).addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					SoundsProvider.playBulletHit1();
-					new Client(nameTextField.getText(), ipTextField.getText(), "1232");
-				}
-			});
-			break;
-		case 3: // Lobby
-			buttons.get(j).addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					SoundsProvider.playBulletHit1();
-					getSwitcher().showLobby();
 				}
 			});
 			break;
@@ -294,26 +264,11 @@ public class NetworkPanel extends JPanel {
 			break;
 		case 1:
 			buttons.get(j).setBounds(600, 570, 150, 35);
-			buttons.get(j).setText("Connect");
-			break;
-		case 2:
-			buttons.get(j).setBounds(615, 630, 200, 35);
-			buttons.get(j).setText("Chat");
-			break;
-		case 3:
-			buttons.get(j).setBounds(540, 690, 450, 35);
-			buttons.get(j).setText("Lobby ( work in progress...)");
+			buttons.get(j).setText("Lobby");
 			break;
 		default:
 			break;
 		}
-	}
-
-	protected void connectoToServer() throws Exception {
-		final Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
-		final ConnectionManager connectionManager = new ConnectionManager(socket, nameTextField.getText(),
-				((MainFrame) getSwitcher()));
-		new Thread(connectionManager, "Connection Manager").start();
 	}
 
 	protected void paintComponent(Graphics g) {
