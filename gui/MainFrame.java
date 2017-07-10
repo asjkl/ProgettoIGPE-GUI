@@ -228,7 +228,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	@Override
 	public void showLobby() {
-		switchTo(lobby);
+		switchTo(lobby); 
 	}
 
 
