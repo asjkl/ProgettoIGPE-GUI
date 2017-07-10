@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.clientChat;
 import net.ConnectionManager;
@@ -39,10 +41,14 @@ public class Lobby extends JPanel{
 	private JTextField ipTextField;
 	private JTextField nameTextField;
 	private JTextField portTextField;
+	private String difficult;
+	private String stage;
 	
 	public Lobby(int w, int h, PanelSwitcher switcher) {
 		width=w;
 		height=h;
+		difficult = "easy";
+		stage = "stage1";
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
@@ -104,7 +110,7 @@ public class Lobby extends JPanel{
 				labels.add(new JLabel());
 				level.add(new JRadioButton());
 				level.get(i).setBackground(null);
-				group.add(level.get(i));
+				
 				if( i == 0) {
 					level.get(i).setBounds(50, 40, 20, 20);
 					labels.get(i).setText("easy");
@@ -117,16 +123,44 @@ public class Lobby extends JPanel{
 				}
 				else {
 					level.get(i).setBounds(50, 140, 20, 20);
-					labels.get(i).setText("difficult");
+					labels.get(i).setText("hard");
 					labels.get(i).setBounds(75, 140, 70, 20);
 					}
 				labels.get(i).setForeground(Color.BLACK);
 				labels.get(i).setFont(MainFrame.customFontS);
 				
+				group.add(level.get(i));
 				difficultPanel.add(level.get(i));
 				difficultPanel.add(labels.get(i));
+				level.get(i).addChangeListener(new ChangeListener() {
+					
+					@Override
+					public void stateChanged(ChangeEvent e) {
+						
+						if(level.get(0).isSelected()) {						
+							
+							difficult="easy";
+						}
+						else
+							if(level.get(1).isSelected()) {
+								
+								difficult="normal";						
+							}
+							else
+								if(level.get(2).isSelected()) {
+									
+									difficult="hard";
+								}
+						
+						repaint();
+						}
+				});	
+				
 			}
 			level.get(0).setSelected(true);
+			
+			
+			
 		
 	}
 	
@@ -160,7 +194,8 @@ public class Lobby extends JPanel{
 				g.drawImage(ImageProvider.getMapsP2().get(stageShifter-1), 45, 20,  this);
 				g.setColor(Color.BLACK);
 				g.setFont(MainFrame.customFontM);
-				g.drawString("Stage " + stageShifter, 90, 238);
+				stage = "stage "+stageShifter;
+				g.drawString( "Stage " + stageShifter, 90, 238);
 			}
 		};
 		
