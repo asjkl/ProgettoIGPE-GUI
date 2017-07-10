@@ -36,7 +36,7 @@ public class clientChat extends JPanel implements Runnable {
 		tf1.setEditable(false);
 		tf2 = new TextField();
 		ta = new TextArea();
-		to = new TextArea("People Online: ", 50, 16);
+		to = new TextArea("People Online: \n", 50, 16);
 		ta.setEditable(false);
 		to.setEditable(false);
 
