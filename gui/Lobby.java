@@ -18,6 +18,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import net.clientChat;
 import net.ConnectionManager;
 import net.Server;
 
@@ -38,7 +39,7 @@ public class Lobby extends JPanel{
 	private JTextField ipTextField;
 	private JTextField nameTextField;
 	private JTextField portTextField;
-
+	
 	public Lobby(int w, int h, PanelSwitcher switcher) {
 		width=w;
 		height=h;
@@ -47,7 +48,7 @@ public class Lobby extends JPanel{
 		this.setLayout(null);
 		
 		setSwitcher(switcher);
-		
+	
 		arrowLeft = new JButton();
 		arrowRight = new JButton();
 		buttons = new ArrayList<>();
@@ -58,7 +59,13 @@ public class Lobby extends JPanel{
 		createButton();
 		buttons.get(1).setForeground(Color.YELLOW);
 		
-		createChat();
+		JLabel chat = new JLabel("Chat: ");
+		chat.setFont(MainFrame.customFontM);
+		chat.setBackground(Color.BLACK);
+		chat.setForeground(Color.WHITE);
+		chat.setBounds(80, height-260, 100, 40);
+		add(chat);
+		
 		
 		JLabel label = new JLabel("Maps: ");
 		label.setFont(MainFrame.customFontM);
@@ -132,24 +139,16 @@ public class Lobby extends JPanel{
 		add(onlinePanel);
 	}
 	
-	public void createChat() {
-		
-		JLabel chat = new JLabel("Chat: ");
-		chat.setFont(MainFrame.customFontM);
-		chat.setBackground(Color.BLACK);
-		chat.setForeground(Color.WHITE);
-		chat.setBounds(80, height-220, 100, 40);
-		
-		add(chat);
-		
+	public void createChat(clientChat client) {
 		
 		JPanel chatPanel = new JPanel();
 		chatPanel.setLayout(null);
-		chatPanel.setBounds(80, height-180, 800, 150);
+		chatPanel.setBounds(80, height-220, 800, 190);
 		chatPanel.setBackground(Color.GRAY);
+		
+		client.setSize(new Dimension(800, 190));
+		chatPanel.add(client);
 		add(chatPanel);
-		
-		
 	}
 	
 	public void createMapsPanel() {
@@ -400,6 +399,8 @@ public class Lobby extends JPanel{
 	public void setPortTextField(JTextField portTextField) {
 		this.portTextField = portTextField;
 	}
+
+
 
 }
 

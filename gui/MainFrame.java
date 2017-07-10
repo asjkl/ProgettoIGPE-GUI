@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
-import net.Client;
-import net.ClientManager;
+import net.clientChat;
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
@@ -228,17 +226,15 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		switchTo(network);
 	}
 	
-
 	@Override
-	public void showLobby(Client client, JTextField ip, JTextField name, JTextField port) {
+	public void showLobby(clientChat client, JTextField ip, JTextField name, JTextField port) {
 		switchTo(lobby); 
 		lobby.setNameTextField(name);
 		lobby.setIpTextField(ip);
 		lobby.setPortTextField(port);
-		lobby.add(client);
+		lobby.createChat(client);
 		lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
 	}
-
 
 	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename, String difficult) {
 		

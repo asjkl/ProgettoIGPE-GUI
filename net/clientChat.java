@@ -11,7 +11,7 @@ import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import java.io.*;
 
 @SuppressWarnings("serial")
-public class Client extends JPanel implements Runnable {
+public class clientChat extends JPanel implements Runnable {
 
 	private TextField tf1;
 	private TextField tf2;
@@ -29,27 +29,14 @@ public class Client extends JPanel implements Runnable {
 	private DataInputStream din;
 	private int count = 0;
 
-	public Client(String name, String host, String port) {
-		// String name= JOptionPane.showInputDialog(null,"Enter Name");
+	public clientChat(String name, String host, String port) {
+
 		tf1 = new TextField(name + ":");
-
-		// host= JOptionPane.showInputDialog(null,"Enter Ip");
-		// t1 = new TextField(host+":");
-		//
-		// port= JOptionPane.showInputDialog(null,"Enter port");
-		// t2 = new TextField(port+":");
-
 		this.setSize(new Dimension(500, 300));
-		// this.setVisible(true);
-		// this.setTitle("Chatting Client");
-
 		tf1.setEditable(false);
-		// t1.setEditable(false);
-		// t2.setEditable(false);
-
 		tf2 = new TextField();
 		ta = new TextArea();
-		to = new TextArea("People Online:\n", 50, 16);
+		to = new TextArea("People Online: ", 50, 16);
 		ta.setEditable(false);
 		to.setEditable(false);
 
@@ -75,12 +62,6 @@ public class Client extends JPanel implements Runnable {
 		add("Center", ta);
 		add("West", to);
 
-		// addWindowListener(new WindowAdapter(){
-		//
-		// public void windowClosing(WindowEvent we){
-		// System.exit(0);
-		// }
-		// });
 
 		tf2.addActionListener(new ActionListener() {
 

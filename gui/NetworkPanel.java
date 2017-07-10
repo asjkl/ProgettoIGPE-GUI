@@ -5,14 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.net.Socket;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -20,9 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import net.Client;
-import net.ConnectionManager;
+import net.clientChat;
 import net.Server;
 import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
@@ -62,7 +57,7 @@ public class NetworkPanel extends JPanel {
 		label.setBackground(Color.BLACK);
 		label.setForeground(Color.WHITE);
 		label.setFont(MainFrame.customFontM);
-		label.setBounds(440, 320, 200, 40);
+		label.setBounds(440, 325, 200, 40);
 		this.add(label);
 
 		ipTextField = new JTextField(10);
@@ -79,7 +74,7 @@ public class NetworkPanel extends JPanel {
 		label2.setBackground(Color.BLACK);
 		label2.setForeground(Color.WHITE);
 		label2.setFont(MainFrame.customFontM);
-		label2.setBounds(440, 380, 200, 40);
+		label2.setBounds(440, 385, 200, 40);
 		this.add(label2);
 		portTextField = new JTextField(10);
 		portTextField.setText("1234");
@@ -95,9 +90,8 @@ public class NetworkPanel extends JPanel {
 		label3.setBackground(Color.BLACK);
 		label3.setForeground(Color.WHITE);
 		label3.setFont(MainFrame.customFontM);
-		label3.setBounds(440, 440, 200, 40);
+		label3.setBounds(440, 445, 200, 40);
 		this.add(label3);
-
 		nameTextField = new JTextField(10);
 		nameTextField.setText("");
 		nameTextField.setBackground(Color.BLACK);
@@ -195,13 +189,14 @@ public class NetworkPanel extends JPanel {
 				public void actionPerformed(final ActionEvent e) {
 					SoundsProvider.playBulletHit1();
 					if (nameTextField.getText().equals("")) {
+						((MainFrame)getSwitcher()).setTransparent(true);
 						warning = new WarningDialog("Insert name!!", ((MainFrame) getSwitcher()));
+						
 					} else {
 						buttons.get(1).setEnabled(false);
-						SoundsProvider.playBulletHit1();
 						final Server server2=new Server(1232);
 						new Thread(server2, "chat").start();	
-						getSwitcher().showLobby(new Client(nameTextField.getText(), ipTextField.getText(), "1232"), ipTextField, nameTextField, portTextField);
+						getSwitcher().showLobby(new clientChat(nameTextField.getText(), ipTextField.getText(), "1232"), ipTextField, nameTextField, portTextField);
 					}
 				}
 			});
@@ -211,49 +206,49 @@ public class NetworkPanel extends JPanel {
 		}
 	}
 
-	private void showDialog() {
-
-		JLabel label = new JLabel("Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText());
-
-		label.setFont(MainFrame.customFontS);
-		label.setBackground(Color.BLACK);
-		label.setForeground(Color.RED);
-		label.setHorizontalAlignment(JLabel.CENTER);
-
-		JPanel panel = new JPanel(new GridLayout(2, 0));
-
-		panel.setBackground(Color.BLACK);
-		panel.setBorder(BorderFactory.createLineBorder(Color.RED));
-
-		JButton ok = new JButton("OK");
-
-		ok.setBorder(null);
-		ok.setContentAreaFilled(false);
-		ok.setBorderPainted(false);
-		ok.setFocusPainted(false);
-		ok.setFont(MainFrame.customFontS);
-		ok.setBackground(Color.BLACK);
-		ok.setForeground(Color.WHITE);
-		ok.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				SoundsProvider.playBulletHit1();
-				dialog.dispose();
-			}
-		});
-
-		panel.add(label);
-		panel.add(ok);
-		panel.setPreferredSize(new Dimension(300, 100));
-		dialog.setContentPane(panel);
-		dialog.setUndecorated(true);
-		dialog.setModal(true);
-		dialog.pack();
-		dialog.setLocationRelativeTo(this);
-		dialog.setVisible(true);
-	}
+//	private void showDialog() {
+//
+//		JLabel label = new JLabel("Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText());
+//
+//		label.setFont(MainFrame.customFontS);
+//		label.setBackground(Color.BLACK);
+//		label.setForeground(Color.RED);
+//		label.setHorizontalAlignment(JLabel.CENTER);
+//
+//		JPanel panel = new JPanel(new GridLayout(2, 0));
+//
+//		panel.setBackground(Color.BLACK);
+//		panel.setBorder(BorderFactory.createLineBorder(Color.RED));
+//
+//		JButton ok = new JButton("OK");
+//
+//		ok.setBorder(null);
+//		ok.setContentAreaFilled(false);
+//		ok.setBorderPainted(false);
+//		ok.setFocusPainted(false);
+//		ok.setFont(MainFrame.customFontS);
+//		ok.setBackground(Color.BLACK);
+//		ok.setForeground(Color.WHITE);
+//		ok.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//
+//				SoundsProvider.playBulletHit1();
+//				dialog.dispose();
+//			}
+//		});
+//
+//		panel.add(label);
+//		panel.add(ok);
+//		panel.setPreferredSize(new Dimension(300, 100));
+//		dialog.setContentPane(panel);
+//		dialog.setUndecorated(true);
+//		dialog.setModal(true);
+//		dialog.pack();
+//		dialog.setLocationRelativeTo(this);
+//		dialog.setVisible(true);
+//	}
 
 	public void setBoundAndText(int j) {
 
