@@ -1724,10 +1724,12 @@ public class GamePanel extends JPanel {
 						g2d.drawImage(ImageProvider.getShield2(), at, null);
 				}
 				
-				labelForNameOfPlayers.get(a).setText(game.getPlayersArray().get(a).getNameOfPlayerTank());
-				labelForNameOfPlayers.get(a).setForeground(labelForNameOfPlayersColor.get(a));
-				labelForNameOfPlayers.get(a).setBounds((int)game.getPlayersArray().get(a).getyGraphics(), (int)game.getPlayersArray().get(a).getxGraphics()-25, 70, 30);
-				labelForNameOfPlayers.get(a).setFont(MainFrame.customFontS);
+				if(!GameManager.offline){
+					labelForNameOfPlayers.get(a).setText(game.getPlayersArray().get(a).getNameOfPlayerTank());
+					labelForNameOfPlayers.get(a).setForeground(labelForNameOfPlayersColor.get(a));
+					labelForNameOfPlayers.get(a).setBounds((int)game.getPlayersArray().get(a).getyGraphics(), (int)game.getPlayersArray().get(a).getxGraphics()-25, 70, 30);
+					labelForNameOfPlayers.get(a).setFont(MainFrame.customFontS);
+				}
 			}
 
 	}
