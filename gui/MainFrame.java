@@ -228,11 +228,15 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	@Override
 	public void showLobby(ClientChat client, JTextField ip, JTextField name, JTextField port) {
 		switchTo(lobby); 
-		lobby.setNameTextField(name);
-		lobby.setIpTextField(ip);
-		lobby.setPortTextField(port);
-		lobby.createChat(client);
-		lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
+		if(!NetworkPanel.openLobby){
+			lobby.setClient(client);
+			lobby.setNameTextField(name);
+			lobby.setIpTextField(ip);
+			lobby.setPortTextField(port);
+			lobby.createChat(client);
+			lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
+			NetworkPanel.openLobby=true;
+		}
 	}
 
 	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename, String difficult) {

@@ -3,7 +3,9 @@ package net;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
+import java.util.ArrayList;
 
+import javax.naming.NamingEnumeration;
 import javax.swing.JPanel;
 
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
@@ -21,6 +23,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 	String host;
 	String port;
+	String name;
 
 	private TextArea ta;
 	private TextArea to;
@@ -28,9 +31,12 @@ public class ClientChat extends JPanel implements Runnable {
 	private DataOutputStream dout;
 	private DataInputStream din;
 	private int count = 0;
+	
+	private ArrayList<String> nameOfClientsOnline;
 
 	public ClientChat(String name, String host, String port) {
-
+		this.setNameOfClientsOnline(new ArrayList<>());
+		this.name=name;
 		tf1 = new TextField(name + ":");
 		this.setSize(new Dimension(500, 300));
 		tf1.setEditable(false);
@@ -108,10 +114,10 @@ public class ClientChat extends JPanel implements Runnable {
 
 					while (i < names.length) {
 						to.append(names[i] + "\n");
+						nameOfClientsOnline.add(names[i]);
 						i++;
 					}
-
-					count++;
+				count++;
 				} else {
 
 					boolean name = true;
@@ -136,13 +142,24 @@ public class ClientChat extends JPanel implements Runnable {
 							name1 = name1 + message.charAt(i);
 							i++;
 						}
+						nameOfClientsOnline.add(name1);
 						to.append(name1 + "\n");
 					}
 				}
+				System.out.println(nameOfClientsOnline);	
 			}
+			
 		} catch (IOException ie) {
 			System.out.println(ie);
 		}
+	}
+
+	public ArrayList<String> getNameOfClientsOnline() {
+		return nameOfClientsOnline;
+	}
+
+	public void setNameOfClientsOnline(ArrayList<String> nameOfClientsOnline) {
+		this.nameOfClientsOnline = nameOfClientsOnline;
 	}
 
 	// public static void main(String args[])

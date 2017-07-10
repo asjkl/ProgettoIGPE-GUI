@@ -37,13 +37,18 @@ public class NetworkPanel extends JPanel {
 	private WarningDialog warning;
 	private JDialog dialog;
 	private int DIM = 2;
-
+	public static boolean openLobby;		//OGNI VOLTA CHE USCIVO DALLA LOBBY MI FACEVA LA NEW DELLA CHAT
+									//E TUTTO IL RESTO
+	private ClientChat client;
+	
+	@SuppressWarnings("static-access")
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
 		this.setSwitcher(switcher);
 		this.setLayout(null);
+		this.openLobby=false;
 		dialog = new JDialog(dialog, "ERROR");
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
@@ -189,15 +194,19 @@ public class NetworkPanel extends JPanel {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					if (nameTextField.getText().equals("")) {
+					if (nameTextField.getText().equals("") && !openLobby) {
 						((MainFrame)getSwitcher()).setTransparent(true);
 						warning = new WarningDialog("Insert name!!", ((MainFrame) getSwitcher()));
 						
 					} else {
 						buttons.get(1).setEnabled(false);
-						final Server server2=new Server(1232);
-						new Thread(server2, "chat").start();	
-						getSwitcher().showLobby(new ClientChat(nameTextField.getText(), ipTextField.getText(), "1232"), ipTextField, nameTextField, portTextField);
+						if(!openLobby){
+							Server server2=new Server(1232);
+							new Thread(server2, "chat").start();	
+							client=new ClientChat(nameTextField.getText(), ipTextField.getText(), "1232");
+						}
+						getSwitcher().showLobby(client,ipTextField, nameTextField, portTextField);
+						
 					}
 				}
 			});
