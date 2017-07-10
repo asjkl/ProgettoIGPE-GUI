@@ -99,17 +99,17 @@ public class ConnectionManager implements Runnable {
 						SoundsProvider.playStageComplete();
 						new TranslucentWindow(mainFrame, null, ImageProvider.getStageComplete());
 					} else if ((((gameManager.getPlayersArray().get(0).getResume() < 0
-							&& gameManager.getPlayersArray().get(1).getResume() < 0) || gameManager.flag.isHit())
+							&& gameManager.getPlayersArray().get(1).getResume() < 0) || GameManager.flag.isHit())
 							&& !gameManager.getPlayersArray().get(0).isExitOnline()
 							&& !gameManager.getPlayersArray().get(1).isExitOnline())
 							|| (gameManager.getPlayersArray().get(0).getResume() < 0
 									&& gameManager.getPlayersArray().get(0).isExitOnline()
 									&& !gameManager.getPlayersArray().get(1).isExitOnline()
-									&& gameManager.flag.isHit())
+									&& GameManager.flag.isHit())
 							|| (gameManager.getPlayersArray().get(1).getResume() < 0
 									&& gameManager.getPlayersArray().get(1).isExitOnline()
 									&& !gameManager.getPlayersArray().get(0).isExitOnline()
-									&& gameManager.flag.isHit())) {
+									&& GameManager.flag.isHit())) {
 						SoundsProvider.playGameOver();
 						new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
 					} else {

@@ -20,6 +20,8 @@ public interface PanelSwitcher {
 	void showConstruction();
 	
 	void showSettings();
+	
+	void showLobby();
 
 	void showSlide(JTextField f);
 

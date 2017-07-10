@@ -128,7 +128,7 @@ public class FullGamePanel extends JPanel {
 			
 			for (int a = 0; a < gameManager.getPlayersArray().size(); a++) {
 				if (gameManager.getPlayersArray().get(a).toString().equals("P1") && player.equals("Player 1")) {
-					if (gameManager.getPlayersArray().get(a).getResume() < 0) {
+					if (gameManager.getPlayersArray().get(a).getResume() <= 0) {
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
 					}
 					if (gameManager.getPlayersArray().get(a).getLevel() == 0) {
@@ -143,12 +143,12 @@ public class FullGamePanel extends JPanel {
 
 					((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
-					if (gameManager.getPlayersArray().get(a).getResume() >= 0)
+					if (gameManager.getPlayersArray().get(a).getResume() > 0)
 						lives = Integer.toString(gameManager.getPlayersArray().get(a).getResume());
 				} else if (gameManager.getPlayersArray().get(a).toString().equals("P2") && player.equals("Player 2")) {
 					if (gameManager.getPlayersArray().size() > 1) {
 
-						if (gameManager.getPlayersArray().get(a).getResume() < 0) {
+						if (gameManager.getPlayersArray().get(a).getResume() <= 0) {
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
 						}
 
@@ -164,7 +164,7 @@ public class FullGamePanel extends JPanel {
 
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
-						if (gameManager.getPlayersArray().get(a).getResume() >= 0)
+						if (gameManager.getPlayersArray().get(a).getResume() > 0)
 							lives = Integer.toString(gameManager.getPlayersArray().get(a).getResume());
 					}
 				}

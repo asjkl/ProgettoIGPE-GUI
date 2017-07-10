@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 
 import net.Client;
 import net.ConnectionManager;
+import net.Server;
 import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
 
@@ -36,9 +37,10 @@ public class NetworkPanel extends JPanel {
 	private int cursorPosition;
 
 	private ArrayList<JButton> buttons;
+	@SuppressWarnings("unused")
 	private WarningDialog warning;
 	private JDialog dialog;
-	private int DIM = 3;
+	private int DIM = 4;
 
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
@@ -200,6 +202,10 @@ public class NetworkPanel extends JPanel {
 							@Override
 							public void run() {
 								try {
+									final Server server1=new Server(1234);
+									final Server server2=new Server(1232);
+									new Thread(server1, "game").start();
+									new Thread(server2, "chat").start();
 									connectoToServer();
 								} catch (final Exception e) {
 									showDialog();
@@ -215,8 +221,18 @@ public class NetworkPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-
+					SoundsProvider.playBulletHit1();
 					new Client(nameTextField.getText(), ipTextField.getText(), "1232");
+				}
+			});
+			break;
+		case 3: // Lobby
+			buttons.get(j).addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					SoundsProvider.playBulletHit1();
+					getSwitcher().showLobby();
 				}
 			});
 			break;
@@ -281,8 +297,12 @@ public class NetworkPanel extends JPanel {
 			buttons.get(j).setText("Connect");
 			break;
 		case 2:
-			buttons.get(j).setBounds(580, 650, 200, 35);
+			buttons.get(j).setBounds(615, 630, 200, 35);
 			buttons.get(j).setText("Chat");
+			break;
+		case 3:
+			buttons.get(j).setBounds(540, 690, 450, 35);
+			buttons.get(j).setText("Lobby ( work in progress...)");
 			break;
 		default:
 			break;

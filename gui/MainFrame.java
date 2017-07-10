@@ -23,7 +23,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public static Font customFontS;
 	
 	private boolean transparent;
-	private boolean slide;
+	private boolean slide; 
 	private int highScoreP1;
 	private int highScoreP2;
 	private int unlockedMapsP1;
@@ -35,6 +35,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private GraphicsEnvironment graphicscEnvironment;
 
 	private NetworkPanel network;
+	private Lobby lobby;
 	private MenuPanel menu;
 	private PlayerPanel player; 
 	private StagePanelFirst firstStage;
@@ -87,6 +88,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		setUnlockedMapsP2(1);
 		new SoundsProvider();
 		setFont();
+		lobby = new Lobby(WIDTH, HEIGHT, this);
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
 		menu = new MenuPanel(WIDTH, HEIGHT, this);
 		player = new PlayerPanel(WIDTH, HEIGHT, this);
@@ -222,6 +224,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		network.getButton(1).setEnabled(true);
 		switchTo(network);
 	}
+	
+
+	@Override
+	public void showLobby() {
+		switchTo(lobby);
+	}
+
 
 	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename, String difficult) {
 		
