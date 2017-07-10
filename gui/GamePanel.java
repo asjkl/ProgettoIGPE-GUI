@@ -462,6 +462,11 @@ public class GamePanel extends JPanel {
 	protected String getUpdatePaintComponent(boolean isWaitToExit){
 		return "PAINT"+":"+isWaitToExit;
 	}
+	
+	protected String getUpdateOptionPanel(String getNameOfGame, boolean exit){
+		return "EXIT"+":"+getNameOfGame+":"+exit;
+	}
+	
 		
 	GameManager startNetwork(ConnectionManager connectionManager, JTextField filename) {
 		this.connectionManager = connectionManager;
@@ -642,12 +647,14 @@ public class GamePanel extends JPanel {
 					game.pauseOptionDialog = false;
 					game.setExit(true);
 					dialog.dispose();
-//					if(!GameManager.offline){
-//						if(getGameManager().getPlayersArray().get(1).isDied() )
-//							connectionManager.dispatch("EXIT"+":"+connectionManager.getNameOfGame()+":"+"true");
-//						else
-//							connectionManager.dispatch("EXIT"+":"+connectionManager.getNameOfGame()+":"+"false");
-//					}
+					if(!GameManager.offline){
+						if(getGameManager().getPlayersArray().get(1).isDied()){
+							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(),true));
+						}
+						else{
+							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(),false));
+						}
+					}
 					getSwitcher().showMenu();
 					SoundsProvider.cancelMove();
 					SoundsProvider.cancelStop();

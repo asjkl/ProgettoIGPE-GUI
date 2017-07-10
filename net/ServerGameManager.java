@@ -146,6 +146,7 @@ public class ServerGameManager {
 			if(gameManager.getPlayersArray().get(a).toString().equals(name)){
 				gameManager.getPlayersArray().get(a).setResume(0);
 				gameManager.destroyPlayerTank(gameManager.getPlayersArray().get(a));
+				gameManager.getPlayersArray().get(a).setExitOnline(true);
 			}
 			if(gameManager.getPlayersArray().get(a).getResume()<0){
 				cont++;
