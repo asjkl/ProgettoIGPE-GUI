@@ -2,7 +2,6 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -157,7 +156,9 @@ public class Lobby extends JPanel {
 
 	public void createOnlinePanel() {
 
-		JPanel onlinePanel = new JPanel() {
+		JPanel onlinePanel;
+		
+		onlinePanel= new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -168,13 +169,13 @@ public class Lobby extends JPanel {
 					if (!client.getNameOfClientsOnline().get(cont).equals("")) {
 						JLabel l = new JLabel(client.getNameOfClientsOnline().get(cont));
 						l.setFont(MainFrame.customFontM);
-						l.setBounds(10, 0 + differenz, 250, 250);
+						l.setBounds(10, differenz, 250, 50);
 						if (cont == 0 || (client.getNameOfClientsOnline().get(0).equals("") && cont==1))
 							l.setForeground(Color.YELLOW);
 						else
 							l.setForeground(Color.BLACK);
 						this.add(l);
-						differenz += 20;
+						differenz += 40;
 					}
 					cont++;
 				}

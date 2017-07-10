@@ -234,6 +234,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			lobby.setIpTextField(ip);
 			lobby.setPortTextField(port);
 			lobby.createChat(client);
+			lobby.createOnlinePanel();
 			lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
 			NetworkPanel.openLobby=true;
 		}
