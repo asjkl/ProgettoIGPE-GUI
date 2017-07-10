@@ -9,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.Socket;
 import java.util.ArrayList;
-
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,8 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import net.ConnectionManager;
 import net.Server;
@@ -36,6 +33,7 @@ public class Lobby extends JPanel{
 	private final ArrayList<JButton> buttons;
 	private int stageShifter = 1;
 	private ArrayList<JRadioButton> level;
+	private ArrayList<JLabel> labels;
 	private ButtonGroup group;
 	private JTextField ipTextField;
 	private JTextField nameTextField;
@@ -54,6 +52,7 @@ public class Lobby extends JPanel{
 		arrowRight = new JButton();
 		buttons = new ArrayList<>();
 		level = new ArrayList<>();
+		labels = new ArrayList<>();
 		group =  new ButtonGroup();
 				
 		createButton();
@@ -93,23 +92,34 @@ public class Lobby extends JPanel{
 		difficultPanel.setBackground(Color.GRAY);
 		add(difficultPanel);
 
-			for(int i = 0; i < DIM; i++) {
+			for(int i = 0; i < 3; i++) {
 				
+				labels.add(new JLabel());
 				level.add(new JRadioButton());
 				level.get(i).setBackground(null);
 				group.add(level.get(i));
 				if( i == 0) {
-					level.get(i).setBounds(50,50, 20, 20);
+					level.get(i).setBounds(50, 40, 20, 20);
+					labels.get(i).setText("easy");
+					labels.get(i).setBounds(75, 40, 70, 20);
 				}
 				else if( i == 1) {
-					level.get(i).setBounds(50, 80, 20, 20);
+					level.get(i).setBounds(50, 90, 20, 20);
+					labels.get(i).setText("normal");
+					labels.get(i).setBounds(75, 90, 70, 20);
 				}
 				else {
-					level.get(i).setBounds(50, 110, 20, 20);
+					level.get(i).setBounds(50, 140, 20, 20);
+					labels.get(i).setText("difficult");
+					labels.get(i).setBounds(75, 140, 70, 20);
 					}
+				labels.get(i).setForeground(Color.BLACK);
+				labels.get(i).setFont(MainFrame.customFontS);
 				
 				difficultPanel.add(level.get(i));
+				difficultPanel.add(labels.get(i));
 			}
+			level.get(0).setSelected(true);
 		
 	}
 	
@@ -148,21 +158,21 @@ public class Lobby extends JPanel{
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				g.drawImage(ImageProvider.getMapsP2().get(stageShifter-1),90,40,  this);
+				g.drawImage(ImageProvider.getMapsP2().get(stageShifter-1), 45, 20,  this);
 				g.setColor(Color.BLACK);
 				g.setFont(MainFrame.customFontM);
-				g.drawString("Stage " + stageShifter, 133, 282);
+				g.drawString("Stage " + stageShifter, 90, 238);
 			}
 		};
 		
 		panel.setLayout(null);
-		panel.setBounds(width-440, 130, 350, 300);
+		panel.setBounds(width-440, 130, 260, 260);
 		panel.setBackground(Color.GRAY);
 		add(panel);
 		
 		arrowLeft.setBorder(null);
-		arrowLeft.setIcon(new ImageIcon(ImageProvider.getArrowLeft()));
-		arrowLeft.setBounds(76, 260, 30, 40);
+		arrowLeft.setIcon(new ImageIcon(ImageProvider.getArrowLeftsmall()));
+		arrowLeft.setBounds(30, 210, 30, 40);
 		arrowLeft.setContentAreaFilled(false);
 		arrowLeft.setBorderPainted(false);
 		arrowLeft.setFocusPainted(false);
@@ -183,8 +193,8 @@ public class Lobby extends JPanel{
 		panel.add(arrowLeft);
 	
 		arrowRight.setBorder(null);
-		arrowRight.setIcon(new ImageIcon(ImageProvider.getArrowRight()));
-		arrowRight.setBounds(256, 260, 30, 40);
+		arrowRight.setIcon(new ImageIcon(ImageProvider.getArrowRightsmall()));
+		arrowRight.setBounds(202, 210, 30, 40);
 		arrowRight.setContentAreaFilled(false);
 		arrowRight.setBorderPainted(false);
 		arrowRight.setFocusPainted(false);

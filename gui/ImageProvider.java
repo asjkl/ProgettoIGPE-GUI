@@ -43,6 +43,8 @@ public class ImageProvider {
 	
 	private static Image arrowRight;
 	private static Image arrowLeft;
+	private static Image arrowRightsmall;
+	private static Image arrowLeftsmall;
 	private static Image selectMap;
 		
 	// powerUps
@@ -449,6 +451,10 @@ public class ImageProvider {
 			setArrowLeft(ImageIO.read(new File("resource/arrowLeft.png")).getScaledInstance(45, 55,
 					java.awt.Image.SCALE_SMOOTH));
 			setArrowRight(ImageIO.read(new File("resource/arrowRight.png")).getScaledInstance(45, 55,
+					java.awt.Image.SCALE_SMOOTH));
+			setArrowLeftsmall(ImageIO.read(new File("resource/arrowLeft.png")).getScaledInstance(20, 30,
+					java.awt.Image.SCALE_SMOOTH));
+			setArrowRightsmall(ImageIO.read(new File("resource/arrowRight.png")).getScaledInstance(20, 30,
 					java.awt.Image.SCALE_SMOOTH));
 			setIconEnemy((ImageIO.read(new File("resource/iconenemy.png")).getScaledInstance(35, 35,
 					java.awt.Image.SCALE_SMOOTH)));
@@ -1301,6 +1307,22 @@ public class ImageProvider {
 
 	public static void setLives(Image lives) {
 		ImageProvider.lives = lives;
+	}
+
+	public static Image getArrowRightsmall() {
+		return arrowRightsmall;
+	}
+
+	public static void setArrowRightsmall(Image arrowRightsmall) {
+		ImageProvider.arrowRightsmall = arrowRightsmall;
+	}
+
+	public static Image getArrowLeftsmall() {
+		return arrowLeftsmall;
+	}
+
+	public static void setArrowLeftsmall(Image arrowLeftsmall) {
+		ImageProvider.arrowLeftsmall = arrowLeftsmall;
 	}
 
 }
