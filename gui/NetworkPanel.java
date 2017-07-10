@@ -17,7 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import net.clientChat;
+
+import net.ClientChat;
 import net.Server;
 import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
@@ -196,7 +197,7 @@ public class NetworkPanel extends JPanel {
 						buttons.get(1).setEnabled(false);
 						final Server server2=new Server(1232);
 						new Thread(server2, "chat").start();	
-						getSwitcher().showLobby(new clientChat(nameTextField.getText(), ipTextField.getText(), "1232"), ipTextField, nameTextField, portTextField);
+						getSwitcher().showLobby(new ClientChat(nameTextField.getText(), ipTextField.getText(), "1232"), ipTextField, nameTextField, portTextField);
 					}
 				}
 			});

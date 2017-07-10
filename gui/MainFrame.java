@@ -6,11 +6,10 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import net.clientChat;
+import net.ClientChat;
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
-@SuppressWarnings("serial")
 public class MainFrame extends JFrame implements PanelSwitcher {
 	
 //  private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
@@ -227,7 +226,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	@Override
-	public void showLobby(clientChat client, JTextField ip, JTextField name, JTextField port) {
+	public void showLobby(ClientChat client, JTextField ip, JTextField name, JTextField port) {
 		switchTo(lobby); 
 		lobby.setNameTextField(name);
 		lobby.setIpTextField(ip);

@@ -11,7 +11,7 @@ import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import java.io.*;
 
 @SuppressWarnings("serial")
-public class clientChat extends JPanel implements Runnable {
+public class ClientChat extends JPanel implements Runnable {
 
 	private TextField tf1;
 	private TextField tf2;
@@ -29,7 +29,7 @@ public class clientChat extends JPanel implements Runnable {
 	private DataInputStream din;
 	private int count = 0;
 
-	public clientChat(String name, String host, String port) {
+	public ClientChat(String name, String host, String port) {
 
 		tf1 = new TextField(name + ":");
 		this.setSize(new Dimension(500, 300));

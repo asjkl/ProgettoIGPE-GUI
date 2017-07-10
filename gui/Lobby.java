@@ -19,8 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import net.clientChat;
+import net.ClientChat;
 import net.ConnectionManager;
 import net.Server;
 
@@ -173,7 +172,7 @@ public class Lobby extends JPanel{
 		add(onlinePanel);
 	}
 	
-	public void createChat(clientChat client) {
+	public void createChat(ClientChat client) {
 		
 		JPanel chatPanel = new JPanel();
 		chatPanel.setLayout(null);
