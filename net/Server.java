@@ -9,6 +9,8 @@ import java.util.Hashtable;
 
 public class Server implements Runnable{
  
+	private boolean exitChat = false;
+	private boolean exitGame = false;
 	int port; 
 	ServerSocket serverSocket;
 	ServerGameManager gameManagerServer;
@@ -35,7 +37,7 @@ public class Server implements Runnable{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		while(true){
+		while(exitGame){
 			if(gameManagerServer==null || gameManagerServer.gameManager.isExit()){
 				System.out.println("SERVER GAME: "+ serverSocket);
 				try {
@@ -76,7 +78,7 @@ public class Server implements Runnable{
 			}
 			System.out.println("SERVER CHAT: "+serverSocket);
 			
-			while(true){
+			while(exitChat){
 				try {
 					Socket s =serverSocket.accept();
 					System.out.println("Connection From "+s);

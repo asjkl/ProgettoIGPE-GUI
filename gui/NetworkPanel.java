@@ -40,6 +40,7 @@ public class NetworkPanel extends JPanel {
 	public static boolean openLobby;		//OGNI VOLTA CHE USCIVO DALLA LOBBY MI FACEVA LA NEW DELLA CHAT
 									//E TUTTO IL RESTO
 	private ClientChat client;
+	private Server serverChat;
 	
 	@SuppressWarnings("static-access")
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
@@ -201,11 +202,11 @@ public class NetworkPanel extends JPanel {
 					} else {
 						buttons.get(1).setEnabled(false);
 						if(!openLobby){
-							Server server2=new Server(1232);
-							new Thread(server2, "chat").start();	
+						    serverChat=new Server(1232);
+							new Thread(serverChat, "chat").start();	
 							client=new ClientChat(nameTextField.getText(), ipTextField.getText(), "1232");
 						}
-						getSwitcher().showLobby(client,ipTextField, nameTextField, portTextField);
+						getSwitcher().showLobby(serverChat, client,ipTextField, nameTextField, portTextField);
 						
 					}
 				}

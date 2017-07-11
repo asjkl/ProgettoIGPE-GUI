@@ -43,6 +43,7 @@ public class Lobby extends JPanel {
 	private String difficult;
 	private String stage;
 	private ClientChat client;
+	private Server serverChat;
 
 	public Lobby(int w, int h, PanelSwitcher switcher) {
 		width = w;
@@ -336,6 +337,15 @@ public class Lobby extends JPanel {
 					SoundsProvider.playBulletHit1();
 					setCursorPosition(0);
 					getSwitcher().showNetwork();
+					
+					//chiude tutto
+					if(client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
+						
+					}
+					else {
+						
+					}
+					
 					repaint();
 				}
 			});
@@ -352,6 +362,7 @@ public class Lobby extends JPanel {
 					//servweer si pul connettere solo se ready dell altro client è true
 					final Server server1 = new Server(1234);
 					new Thread(server1, "game").start();
+					
 					try {
 						connectoToServer();
 					} catch (Exception e1) {
@@ -385,14 +396,15 @@ public class Lobby extends JPanel {
 	protected void connectoToServer() throws Exception {
 		Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
 		ConnectionManager connectionManager = null;
-		System.out.println("name :"+nameTextField.getText());
-		if (client.getClientName().equals(client.getNameOfClientsOnline().get(1))
-				&& client.getNameOfClientsOnline().size() == 3) {
+		
+		if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))
+				&& client.getNameOfClientsOnline().size() == 2) {
 			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()),
 					stage, difficult);
 		} else {
 			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()));
 		}
+		
 		new Thread(connectionManager, "Connection Manager").start();
 	}
 
@@ -455,5 +467,13 @@ public class Lobby extends JPanel {
 
 	public void setClient(ClientChat client) {
 		this.client = client;
+	}
+
+	public Server getServerChat() {
+		return serverChat;
+	}
+
+	public void setServerChat(Server serverChat) {
+		this.serverChat = serverChat;
 	}
 }

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.ClientChat;
 import net.ConnectionManager;
+import net.Server;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 public class MainFrame extends JFrame implements PanelSwitcher {
@@ -226,10 +227,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	@Override
-	public void showLobby(ClientChat client, JTextField ip, JTextField name, JTextField port) {
+	public void showLobby(Server serverChat, ClientChat client, JTextField ip, JTextField name, JTextField port) {
 		switchTo(lobby); 
 		if(!NetworkPanel.openLobby){
 			lobby.setClient(client);
+			lobby.setServerChat(serverChat);
 			lobby.setNameTextField(name);
 			lobby.setIpTextField(ip);
 			lobby.setPortTextField(port);
