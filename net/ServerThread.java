@@ -22,7 +22,7 @@ public class ServerThread extends Thread {
 
 			while (true) {
 				String message = din.readUTF();
-				System.out.println(message);
+				System.out.println(message);	
 				boolean name = true;
 				int len = message.length();
 
@@ -43,6 +43,7 @@ public class ServerThread extends Thread {
 					}
 					Server.OnlineNames = Server.OnlineNames + " ";
 				}
+				server.client.put(socket, Server.OnlineNames);
 				server.sendToAll(message);
 			}
 		} catch (EOFException e) {

@@ -5,8 +5,10 @@ import java.awt.event.*;
 import java.net.*;
 import java.util.ArrayList;
 
+import javax.lang.model.util.ElementFilter;
 import javax.naming.NamingEnumeration;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 
@@ -28,15 +30,30 @@ public class ClientChat extends JPanel implements Runnable {
 	private TextArea ta;
 	private TextArea to;
 	private Socket socket;
-	private DataOutputStream dout;
+	public DataOutputStream dout;
 	private DataInputStream din;
 	private int count = 0;
-	
 	private ArrayList<String> nameOfClientsOnline;
+	private boolean readyP1 = false;
+	private boolean readyP2 = false;
+	private MainFrame mainFrame;
+	
+	private JTextField ipTextField;
+	private JTextField nameTextField;
+	private JTextField portTextField;
+	private String difficult;
+	private String stage;
+	
+	private String name;
 
-	public ClientChat(String name, String host, String port) {
+	public ClientChat(String name, String host, String port, MainFrame mainFrame) {
+		ipTextField=new JTextField();
+		nameTextField=new JTextField();
+		portTextField=new JTextField();
+		this.name=name;
 		this.setNameOfClientsOnline(new ArrayList<>());
-		this.clientName=name;
+		this.mainFrame=mainFrame;
+		this.clientName = name;
 		tf1 = new TextField(name + ":");
 		this.setSize(new Dimension(500, 300));
 		tf1.setEditable(false);
@@ -68,7 +85,6 @@ public class ClientChat extends JPanel implements Runnable {
 		add("Center", ta);
 		add("West", to);
 
-
 		tf2.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
@@ -99,6 +115,25 @@ public class ClientChat extends JPanel implements Runnable {
 		}
 	}
 
+	void setBooleanOfClients(String message) {
+		String[] elements = message.split(" ");
+		if (elements[0].equals("p1") && elements[1].equals("true")) {
+			readyP1 = true;
+		}
+
+		if (elements[0].equals("p1") && elements[1].equals("false")) {
+			readyP1 = false;
+		}
+
+		if (elements[0].equals("p2") && elements[1].equals("true")) {
+			readyP2 = true;
+		}
+
+		if (elements[0].equals("p2") && elements[1].equals("false")) {
+			readyP2 = false;
+		}
+	}
+
 	public void run() {
 
 		try {
@@ -106,53 +141,97 @@ public class ClientChat extends JPanel implements Runnable {
 			while (true) {
 
 				String message = din.readUTF();
-				if (count == 0 && !(message.equals(null))) {
-
-					System.out.println(message);
-					String[] names = message.split(" ");
-					int i = 0;
-
-					while (i < names.length) {
-						if(!names[i].equals(""))  {
-							to.append(names[i] + "\n");
-							nameOfClientsOnline.add(names[i]);
-						}
-						i++;
+				System.out.println("-> " + message);
+				String[] elements = message.split(" ");
+				
+				if(elements[0].contains("connect")){
+					nameTextField.setText(name);
+					ipTextField.setText(elements[1]);
+					portTextField.setText(elements[2]);
+					stage=elements[3];
+					difficult=elements[4];
+					
+					try {
+						connectoToServer();
+					} catch (Exception e1) {
+						e1.printStackTrace();
 					}
-				count++;
+				}
+				
+				
+				
+				if ((elements[0].equals("p1") || elements[0].equals("p2"))
+						&& (elements[1].equals("true") || elements[1].equals("false"))) {
+					setBooleanOfClients(message);
+					System.out.println(readyP1+" "+readyP2);
 				} else {
 
-					boolean name = true;
-					int len = message.length();
+					if (count == 0 && !(message.equals(null))) { // se non ho
+																	// letto
+																	// nulla
 
-					for (int i = 0; i < 6; i++) {
-
-						if (!(message.charAt(len - i - 1) == '^')) {
-							name = false;
-							System.out.println(message.charAt(len - i - 1));
-							break;
-						}
-					}
-
-					if (name == false) {
-
-						ta.append(message + "\n");
-					} else {
-						String name1 = "";
+						String[] names = message.split(" ");
 						int i = 0;
-						while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
-							name1 = name1 + message.charAt(i);
+
+						while (i < names.length) {
+							if (!names[i].equals("")) {
+								to.append(names[i] + "\n");
+								nameOfClientsOnline.add(names[i]);
+							}
 							i++;
 						}
-						nameOfClientsOnline.add(name1);
-						to.append(name1 + "\n");
+						count++;
+					}
+
+					else {
+
+						boolean name = true;
+						int len = message.length();
+
+						for (int i = 0; i < 6; i++) {
+
+							if (!(message.charAt(len - i - 1) == '^')) {
+								name = false;
+								System.out.println(message.charAt(len - i - 1));
+								break;
+							}
+						}
+
+						if (name == false) {
+
+							ta.append(message + "\n");
+						} else {
+							String name1 = "";
+							int i = 0;
+							while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
+								name1 = name1 + message.charAt(i);
+								i++;
+							}
+							nameOfClientsOnline.add(name1);
+							to.append(name1 + "\n");
+						}
 					}
 				}
 			}
-			
+
 		} catch (IOException ie) {
 			System.out.println(ie);
 		}
+	}
+	
+	protected void connectoToServer() throws Exception {
+		Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
+		ConnectionManager connectionManager = null;
+
+		if (getClientName().equals(getNameOfClientsOnline().get(0))
+				&& getNameOfClientsOnline().size() == 2) {
+			connectionManager = new ConnectionManager(socket, nameTextField.getText(), mainFrame,
+					stage, difficult);
+		} else {
+			connectionManager = new ConnectionManager(socket, nameTextField.getText(), mainFrame);
+		}
+
+		new Thread(connectionManager, "Connection Manager").start();
 	}
 
 	public ArrayList<String> getNameOfClientsOnline() {
@@ -162,10 +241,27 @@ public class ClientChat extends JPanel implements Runnable {
 	public void setNameOfClientsOnline(ArrayList<String> nameOfClientsOnline) {
 		this.nameOfClientsOnline = nameOfClientsOnline;
 	}
-	
+
 	public String getClientName() {
 		return clientName;
 	}
+
+	public boolean isReadyP1() {
+		return readyP1;
+	}
+
+	public void setReadyP1(boolean readyP1) {
+		this.readyP1 = readyP1;
+	}
+
+	public boolean isReadyP2() {
+		return readyP2;
+	}
+
+	public void setReadyP2(boolean readyP2) {
+		this.readyP2 = readyP2;
+	}
+
 
 	// public static void main(String args[])
 	// {

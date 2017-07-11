@@ -24,7 +24,7 @@ public interface PanelSwitcher {
 	
 	void showSettings();
 	
-	void showLobby(Server serverChat, ClientChat client, JTextField ip, JTextField name, JTextField port);
+	void showLobby(ClientChat client, JTextField ip, JTextField name, JTextField port);
 
 	void showSlide(JTextField f);
 

@@ -204,9 +204,10 @@ public class NetworkPanel extends JPanel {
 						if(!openLobby){
 						    serverChat=new Server(1232);
 							new Thread(serverChat, "chat").start();	
-							client=new ClientChat(nameTextField.getText(), ipTextField.getText(), "1232");
+							client=new ClientChat(nameTextField.getText(), ipTextField.getText(), "1232", ((MainFrame)getSwitcher()));
 						}
-						getSwitcher().showLobby(serverChat, client,ipTextField, nameTextField, portTextField);
+						nameTextField.setText("");
+						getSwitcher().showLobby(client,ipTextField, nameTextField, portTextField);
 						
 					}
 				}

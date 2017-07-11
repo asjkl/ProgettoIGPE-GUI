@@ -89,7 +89,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		setUnlockedMapsP2(1);
 		new SoundsProvider();
 		setFont();
-		lobby = new Lobby(WIDTH, HEIGHT, this);
+//		lobby = new Lobby(WIDTH, HEIGHT, this);
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
 		menu = new MenuPanel(WIDTH, HEIGHT, this);
 		player = new PlayerPanel(WIDTH, HEIGHT, this);
@@ -227,11 +227,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	@Override
-	public void showLobby(Server serverChat, ClientChat client, JTextField ip, JTextField name, JTextField port) {
+	public void showLobby(ClientChat client, JTextField ip, JTextField name, JTextField port) {
+		lobby = new Lobby(WIDTH, HEIGHT, this);
 		switchTo(lobby); 
 		if(!NetworkPanel.openLobby){
 			lobby.setClient(client);
-			lobby.setServerChat(serverChat);
 			lobby.setNameTextField(name);
 			lobby.setIpTextField(ip);
 			lobby.setPortTextField(port);
