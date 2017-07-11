@@ -102,7 +102,7 @@ public class Lobby extends JPanel {
 		JPanel difficultPanel = new JPanel();
 		difficultPanel.setLayout(null);
 		difficultPanel.setBounds(520, 130, 200, 200);
-		difficultPanel.setBackground(Color.GRAY);
+		difficultPanel.setBackground(Color.DARK_GRAY);
 		add(difficultPanel);
 
 		for (int i = 0; i < 3; i++) {
@@ -163,7 +163,7 @@ public class Lobby extends JPanel {
 				super.paintComponent(g);
 
 				int cont = 0;
-				int y = 30;
+				int y = 40;
 				while (cont < client.getNameOfClientsOnline().size()) {
 					if (!client.getNameOfClientsOnline().get(cont).equals("")) {
 				
@@ -199,7 +199,7 @@ public class Lobby extends JPanel {
 		
 		onlinePanel.setLayout(null);
 		onlinePanel.setBounds(80, 130, 300, 300);
-		onlinePanel.setBackground(Color.GRAY);
+		onlinePanel.setBackground(Color.DARK_GRAY);
 		add(onlinePanel);
 	}
 
@@ -208,7 +208,7 @@ public class Lobby extends JPanel {
 		JPanel chatPanel = new JPanel();
 		chatPanel.setLayout(null);
 		chatPanel.setBounds(80, height - 220, 800, 190);
-		chatPanel.setBackground(Color.GRAY);
+		chatPanel.setBackground(Color.DARK_GRAY);
 
 		client.setSize(new Dimension(800, 190));
 		chatPanel.add(client);
@@ -231,7 +231,7 @@ public class Lobby extends JPanel {
 
 		panel.setLayout(null);
 		panel.setBounds(width - 440, 130, 260, 260);
-		panel.setBackground(Color.GRAY);
+		panel.setBackground(Color.DARK_GRAY);
 		add(panel);
 
 		arrowLeft.setBorder(null);
