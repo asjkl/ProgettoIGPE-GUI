@@ -253,7 +253,7 @@ public class Lobby extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SoundsProvider.playBulletHit1();
-				stageShifter = (stageShifter + 1) % 25;
+				stageShifter = (stageShifter + 1) % 24;
 				repaint();
 			}
 		});
@@ -346,6 +346,10 @@ public class Lobby extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
+					
+					//TODO
+					
+					//servweer si pul connettere solo se ready dell altro client è true
 					final Server server1 = new Server(1234);
 					new Thread(server1, "game").start();
 					try {

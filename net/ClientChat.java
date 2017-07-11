@@ -113,8 +113,10 @@ public class ClientChat extends JPanel implements Runnable {
 					int i = 0;
 
 					while (i < names.length) {
-						to.append(names[i] + "\n");
-						nameOfClientsOnline.add(names[i]);
+						if(!names[i].equals(" "))  {
+							to.append(names[i] + "\n");
+							nameOfClientsOnline.add(names[i]);
+						}
 						i++;
 					}
 				count++;

@@ -58,6 +58,8 @@ public class ServerGameManager {
 	public void received(final String buffer) {
 		final String[] split = buffer.split(":");
 		
+		System.out.println(buffer);
+		
 		if(gameManager!=null){
 			if(split[0].equals("PAINT")){
 				//TODO non serve piu
@@ -125,13 +127,14 @@ public class ServerGameManager {
 			}
 		}, name, map);
 		gamePanel=new GamePanel(null, difficult);
+		gamePanel.setGame(gameManager);
 		new Thread() {
 			@Override
 			public void run() {
 				gamePanel.gameLoop();
 			};
 		}.start();
-		gamePanel.setGame(gameManager);
+		
 	}
 
 	public void disconnetctedClient(String name) {

@@ -145,7 +145,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		} catch (FontFormatException e) {
 			e.printStackTrace();
 		}
-	}
+	} 
 	// -----------------------------override methods-----------------------------------
 
 	@Override

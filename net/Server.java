@@ -28,6 +28,7 @@ public class Server implements Runnable{
 	@Override
 	public void run() {
 				
+	
 		if(Thread.currentThread().getName().equals("game")){
 			try {
 				serverSocket=new ServerSocket(port);
@@ -51,7 +52,9 @@ public class Server implements Runnable{
 					socket2 = serverSocket.accept();
 					ClientManager cm2=new ClientManager(socket2, gameManagerServer);
 					gameManagerServer.add(cm2);
+//					System.out.println("setupClient");
 					gameManagerServer.setupClient();
+//					System.out.println("STARTGAME");
 					gameManagerServer.startGame();
 				
 				} catch (IOException e) {
