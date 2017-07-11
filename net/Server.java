@@ -147,7 +147,7 @@ public class Server implements Runnable {
 		for (Map.Entry<Socket, String> entry : client.entrySet()) {
 			Socket key = entry.getKey();
 			String names = entry.getValue();
-			if (names.equals(name + " ")) {
+			if (names.contains(name)) {
 				removeConnection(key);
 				System.out.println("ESCO " + name);
 				break;

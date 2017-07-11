@@ -7,10 +7,9 @@ public class ServerThread extends Thread {
 
 	private Server server;
 	private Socket socket;
+	private String nameSocket;
 
 	public ServerThread(Server server, Socket socket) {
-
-		System.out.println("Hi");
 		this.server = server;
 		this.socket = socket;
 		this.start();
@@ -22,29 +21,48 @@ public class ServerThread extends Thread {
 
 			while (true) {
 				String message = din.readUTF();
-				System.out.println(message);	
-				boolean name = true;
-				int len = message.length();
 
-				for (int i = 0; i < 6; i++) {
-
-					if (!(message.charAt(len - i - 1) == '^')) {
-						name = false;
-						break;
+				String[] elements = message.split(" ");
+				if (elements[0].equals("EXITALL")) {
+					server.closeServer();
+				} else if (elements[0].equals("EXIT")) {
+					String client = elements[1];
+					server.removeConnection(client);
+					String[] clients = Server.OnlineNames.split(" ");
+					Server.OnlineNames = "";
+					for (String s : clients) {
+						if (!s.equals(client)) {
+							Server.OnlineNames += s;
+							Server.OnlineNames += " ";
+						}
 					}
-				}
+					server.sendToAll("EXIT " + client);
+				} else {
 
-				if (name == true) {
-					int i = 0;
+					boolean name = true;
+					int len = message.length();
 
-					while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
-						Server.OnlineNames = Server.OnlineNames + message.charAt(i);
-						i++;
+					for (int i = 0; i < 6; i++) {
+
+						if (!(message.charAt(len - i - 1) == '^')) {
+							name = false;
+							break;
+						}
 					}
-					Server.OnlineNames = Server.OnlineNames + " ";
+
+					if (name == true) {
+						int i = 0;
+
+						while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
+							nameSocket += message.charAt(i);
+							Server.OnlineNames = Server.OnlineNames + message.charAt(i);
+							i++;
+						}
+						Server.OnlineNames = Server.OnlineNames + " ";
+					}
+					server.client.put(socket, nameSocket);
+					server.sendToAll(message);
 				}
-				server.client.put(socket, Server.OnlineNames);
-				server.sendToAll(message);
 			}
 		} catch (EOFException e) {
 		} catch (IOException ie) {

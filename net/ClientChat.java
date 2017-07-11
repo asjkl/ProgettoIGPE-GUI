@@ -20,7 +20,7 @@ public class ClientChat extends JPanel implements Runnable {
 	private int portChat;
 	private String difficult;
 	private String stage;
-	
+
 	private TextArea ta;
 	private TextArea to;
 	private Socket socket;
@@ -31,15 +31,15 @@ public class ClientChat extends JPanel implements Runnable {
 	private boolean readyP1 = false;
 	private boolean readyP2 = false;
 	private MainFrame mainFrame;
-	
+
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
-		
-		this.host=host;
+
+		this.host = host;
 		this.clientName = name;
-		this.setPortChat(portChat); 
+		this.setPortChat(portChat);
 		this.setNameOfClientsOnline(new ArrayList<>());
-		this.mainFrame=mainFrame;
-		
+		this.mainFrame = mainFrame;
+
 		tf1 = new TextField(name + ":");
 		this.setSize(new Dimension(500, 300));
 		tf1.setEditable(false);
@@ -101,8 +101,6 @@ public class ClientChat extends JPanel implements Runnable {
 		}
 	}
 
-
-
 	public void run() {
 
 		try {
@@ -111,106 +109,109 @@ public class ClientChat extends JPanel implements Runnable {
 
 				String message = din.readUTF();
 				String[] elements = message.split(" ");
-				
-				//-----------------------------------------------
-				
+
+				// -----------------------------------------------
+
 				System.out.println("-> " + message);
-				
-				if(elements.length == 2) {
-								
+
+				if (elements[0].equals("EXIT")) {
+					String client = elements[1];
+					nameOfClientsOnline.remove(client);
+					to.setText("People Online: \n");
+					for (int a = 0; a < nameOfClientsOnline.size(); a++) {
+						to.append(nameOfClientsOnline.get(a) + "\n");
+					}
+				}
+
+				if (elements.length == 2) {
+
 					if (elements[0].equals("p2") && elements[1].equals("true")) {
 						readyP2 = true;
-					}
-					else if (elements[0].equals("p2") && elements[1].equals("false")) {
+					} else if (elements[0].equals("p2") && elements[1].equals("false")) {
 						readyP2 = false;
-					}
-					else if (elements[0].equals("p1") && elements[1].equals("true")) {
+					} else if (elements[0].equals("p1") && elements[1].equals("true")) {
 						readyP1 = true;
-					}
-					else if (elements[0].equals("p1") && elements[1].equals("false")) {
+					} else if (elements[0].equals("p1") && elements[1].equals("false")) {
 						readyP1 = false;
 					}
-					
-				}
-				else if(elements.length == 4) {
-					
-					if(elements[0].contains("connect")){
-	
+
+				} else if (elements.length == 4) {
+
+					if (elements[0].contains("connect")) {
+
 						port = Integer.parseInt(elements[1]);
 						stage = elements[2];
 						difficult = elements[3];
 					}
-					
+
 				}
-				
-				if(readyP1 && readyP2) {  // entrambi si connettono
+
+				if (readyP1 && readyP2) { // entrambi si connettono
 					try {
 						connectoToServer();
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				}
-				
-				
-				//------------------------------------------------
 
-					if (count == 0 && !(message.equals(null))) { 
+				// ------------------------------------------------
 
-						String[] names = message.split(" ");
+				if (count == 0 && !(message.equals(null))) {
+
+					String[] names = message.split(" ");
+					int i = 0;
+
+					while (i < names.length) {
+						if (!names[i].equals("")) {
+							to.append(names[i] + "\n");
+							nameOfClientsOnline.add(names[i]);
+						}
+						i++;
+					}
+					count++;
+				}
+
+				else {
+
+					boolean name = true;
+					int len = message.length();
+
+					for (int i = 0; i < 6; i++) {
+
+						if (!(message.charAt(len - i - 1) == '^')) {
+							name = false;
+							System.out.println(message.charAt(len - i - 1));
+							break;
+						}
+					}
+
+					if (name == false) {
+
+						ta.append(message + "\n");
+					} else {
+						String name1 = "";
 						int i = 0;
-
-						while (i < names.length) {
-							if (!names[i].equals("")) {
-								to.append(names[i] + "\n");
-								nameOfClientsOnline.add(names[i]);
-							}
+						while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
+							name1 = name1 + message.charAt(i);
 							i++;
 						}
-						count++;
-					}
-
-					else {
-
-						boolean name = true;
-						int len = message.length();
-
-						for (int i = 0; i < 6; i++) {
-
-							if (!(message.charAt(len - i - 1) == '^')) {
-								name = false;
-								System.out.println(message.charAt(len - i - 1));
-								break;
-							}
-						}
-
-						if (name == false) {
-
-							ta.append(message + "\n");
-						} else {
-							String name1 = "";
-							int i = 0;
-							while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
-								name1 = name1 + message.charAt(i);
-								i++;
-							}
-							nameOfClientsOnline.add(name1);
-							to.append(name1 + "\n");
-						}
+						nameOfClientsOnline.add(name1);
+						to.append(name1 + "\n");
 					}
 				}
+			}
 
 		} catch (IOException ie) {
 			System.out.println(ie);
 		}
 	}
-	
+
 	protected void connectoToServer() throws Exception {
-		
+
 		Socket socket = new Socket(host, port);
 		ConnectionManager connectionManager = null;
 
-		if (getClientName().equals(getNameOfClientsOnline().get(0))
-				&& getNameOfClientsOnline().size() == 2) {
+		if (getClientName().equals(getNameOfClientsOnline().get(0)) && getNameOfClientsOnline().size() == 2) {
 			connectionManager = new ConnectionManager(socket, clientName, mainFrame, stage, difficult);
 		} else {
 			connectionManager = new ConnectionManager(socket, clientName, mainFrame);
@@ -254,7 +255,6 @@ public class ClientChat extends JPanel implements Runnable {
 	public void setPortChat(int portChat) {
 		this.portChat = portChat;
 	}
-
 
 	// public static void main(String args[])
 	// {

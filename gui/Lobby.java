@@ -165,9 +165,8 @@ public class Lobby extends JPanel {
 				int cont = 0;
 				int y = 40;
 				while (cont < client.getNameOfClientsOnline().size()) {
-					if (!client.getNameOfClientsOnline().get(cont).equals("")) {
-				
-						if (cont == 0 || (client.getNameOfClientsOnline().get(0).equals("") && cont == 1))
+					
+						if (cont == 0)
 							g.setColor(Color.YELLOW);
 						else
 							g.setColor(Color.BLACK);
@@ -189,7 +188,7 @@ public class Lobby extends JPanel {
 						
 						
 						y += 40;
-					}
+					
 					cont++;
 				}
 	
@@ -355,12 +354,24 @@ public class Lobby extends JPanel {
 					System.out.println("-> " + client.getClientName());
 					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 						System.out.println("MOD STA PER USCIRE");
+						try {
+							client.dout.writeUTF("EXITALL");
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 //						serverChat.sendToAll("EXIT");
 //						serverChat.closeServer();
 //						serverChat.setExitChat(true);
 						NetworkPanel.openLobby = false;
 					} else {
 						System.out.println("CLIENT STA PER USCIRE");
+						try {
+							client.dout.writeUTF("EXIT "+client.getClientName());
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 //						serverChat.removeConnection(client.getClientName());
 						NetworkPanel.openLobby = false;
 					}
@@ -446,20 +457,20 @@ public class Lobby extends JPanel {
 		}
 	}
 
-	protected void connectoToServer() throws Exception {
-		Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
-		ConnectionManager connectionManager = null;
-
-		if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))
-				&& client.getNameOfClientsOnline().size() == 2) {
-			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()),
-					stage, difficult);
-		} else {
-			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()));
-		}
-
-		new Thread(connectionManager, "Connection Manager").start();
-	}
+//	protected void connectoToServer() throws Exception {
+//		Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
+//		ConnectionManager connectionManager = null;
+//
+//		if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))
+//				&& client.getNameOfClientsOnline().size() == 2) {
+//			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()),
+//					stage, difficult);
+//		} else {
+//			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()));
+//		}
+//
+//		new Thread(connectionManager, "Connection Manager").start();
+//	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
