@@ -156,12 +156,6 @@ public class Server implements Runnable {
 	}
 
 	public void closeServer() {
-		for (Map.Entry<Socket, String> entry : client.entrySet()) {
-			Socket key = entry.getKey();
-			String value = entry.getValue();
-			System.out.println("TOLGO CLIENT: " + value);
-			removeConnection(key);
-		}
 		try {
 			System.out.println("CHIUDO-SERVERCHAT");
 			serverSocket.close();

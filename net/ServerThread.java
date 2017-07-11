@@ -24,6 +24,8 @@ public class ServerThread extends Thread {
 
 				String[] elements = message.split(" ");
 				if (elements[0].equals("EXITALL")) {
+					server.sendToAll("EXITALL");
+					server.removeConnection(socket);
 					server.closeServer();
 				} else if (elements[0].equals("EXIT")) {
 					String client = elements[1];
@@ -66,9 +68,11 @@ public class ServerThread extends Thread {
 			}
 		} catch (EOFException e) {
 		} catch (IOException ie) {
-			ie.printStackTrace();
+			System.out.println("SOCKET CLOSE");
 		} finally {
-			server.removeConnection(socket);
+			if(socket.isConnected()){
+				server.removeConnection(socket);
+			}
 		}
 	}
 }

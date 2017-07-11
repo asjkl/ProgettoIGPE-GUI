@@ -31,6 +31,7 @@ public class ClientChat extends JPanel implements Runnable {
 	private boolean readyP1 = false;
 	private boolean readyP2 = false;
 	private MainFrame mainFrame;
+	private boolean exitThrad=false;
 
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
 
@@ -105,7 +106,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 		try {
 
-			while (true) {
+			while (!exitThrad) {
 
 				String message = din.readUTF();
 				String[] elements = message.split(" ");
@@ -121,9 +122,10 @@ public class ClientChat extends JPanel implements Runnable {
 					for (int a = 0; a < nameOfClientsOnline.size(); a++) {
 						to.append(nameOfClientsOnline.get(a) + "\n");
 					}
-				}
-
-				if (elements.length == 2) {
+				}else if(elements[0].equals("EXITALL")){
+					exitThrad=true;
+					mainFrame.showNetwork();	
+				}else if (elements.length == 2) {
 
 					if (elements[0].equals("p2") && elements[1].equals("true")) {
 						readyP2 = true;

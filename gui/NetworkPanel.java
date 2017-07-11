@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -203,9 +204,10 @@ public class NetworkPanel extends JPanel {
 					} else {
 						buttons.get(1).setEnabled(false);
 						if(!openLobby){
-						    serverChat=new Server(portChat);
-							new Thread(serverChat, "chat").start();	
-							client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
+							serverChat=new Server(portChat);
+							
+						    new Thread(serverChat, "chat").start();
+						    client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
 						}
 						nameTextField.setText("");
 						getSwitcher().showLobby(client, ipTextField, nameTextField, portTextField);
