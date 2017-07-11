@@ -31,6 +31,7 @@ public class NetworkPanel extends JPanel {
 	private JTextField nameTextField;
 	private JTextField portTextField;
 	private int cursorPosition;
+	private int portChat = 1232;
 
 	private ArrayList<JButton> buttons;
 	@SuppressWarnings("unused")
@@ -202,12 +203,12 @@ public class NetworkPanel extends JPanel {
 					} else {
 						buttons.get(1).setEnabled(false);
 						if(!openLobby){
-						    serverChat=new Server(1232);
+						    serverChat=new Server(portChat);
 							new Thread(serverChat, "chat").start();	
-							client=new ClientChat(nameTextField.getText(), ipTextField.getText(), "1232", ((MainFrame)getSwitcher()));
+							client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
 						}
 						nameTextField.setText("");
-						getSwitcher().showLobby(client,ipTextField, nameTextField, portTextField);
+						getSwitcher().showLobby(client, ipTextField, nameTextField, portTextField);
 						
 					}
 				}

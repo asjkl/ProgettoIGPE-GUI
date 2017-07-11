@@ -144,38 +144,38 @@ public class ConnectionManager implements Runnable {
 	}
 
 	private void playSounds(GameManager game) {
-		if (game.isSoundPowerUp()) {
-			SoundsProvider.playPowerUpAppear();
-		}
-
-		if (game.isExplosion()) {
-			SoundsProvider.playExplosion1();
-			SoundsProvider.playExplosion2();
-		}
-
-		// players
-		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (game.getPlayersArray().get(a).isShot()) {
-				SoundsProvider.playBulletShot();
-			}
-
-			if (!game.getPlayersArray().get(a).isPressed())
-				SoundsProvider.playStop();
-			else
-				SoundsProvider.playMove();
-		}
-
-		// rockets
-		for (int a = 0; a < game.getRocket().size(); a++) {
-			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
-				if (game.getRocket().get(a).getNext() instanceof BrickWall)
-					SoundsProvider.playBulletHit2();
-				else if (game.getRocket().get(a).getNext() instanceof SteelWall
-						|| game.getRocket().get(a).isOnBorder()) {
-					SoundsProvider.playBulletHit1();
-				}
-			}
-		}
+//		if (game.isSoundPowerUp()) {
+//			SoundsProvider.playPowerUpAppear();
+//		}
+//
+//		if (game.isExplosion()) {
+//			SoundsProvider.playExplosion1();
+//			SoundsProvider.playExplosion2();
+//		}
+//
+//		// players
+//		for (int a = 0; a < game.getPlayersArray().size(); a++) {
+//			if (game.getPlayersArray().get(a).isShot()) {
+//				SoundsProvider.playBulletShot();
+//			}
+//
+//			if (!game.getPlayersArray().get(a).isPressed())
+//				SoundsProvider.playStop();
+//			else
+//				SoundsProvider.playMove();
+//		}
+//
+//		// rockets
+//		for (int a = 0; a < game.getRocket().size(); a++) {
+//			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
+//				if (game.getRocket().get(a).getNext() instanceof BrickWall)
+//					SoundsProvider.playBulletHit2();
+//				else if (game.getRocket().get(a).getNext() instanceof SteelWall
+//						|| game.getRocket().get(a).isOnBorder()) {
+//					SoundsProvider.playBulletHit1();
+//				}
+//			}
+//		}
 	}
 
 	public String getNameOfGame() {

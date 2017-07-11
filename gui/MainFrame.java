@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.ClientChat;
 import net.ConnectionManager;
-import net.Server;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 public class MainFrame extends JFrame implements PanelSwitcher {

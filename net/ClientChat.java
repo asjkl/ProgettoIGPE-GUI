@@ -4,14 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 import java.util.ArrayList;
-
-import javax.lang.model.util.ElementFilter;
-import javax.naming.NamingEnumeration;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
-
 import java.io.*;
 
 @SuppressWarnings("serial")
@@ -20,13 +14,13 @@ public class ClientChat extends JPanel implements Runnable {
 	private TextField tf1;
 	private TextField tf2;
 
-	// private TextField t1;
-	// private TextField t2;
-
-	String host;
-	String port;
-	String clientName;
-
+	private String clientName;
+	private String host;
+	private int port;
+	private int portChat;
+	private String difficult;
+	private String stage;
+	
 	private TextArea ta;
 	private TextArea to;
 	private Socket socket;
@@ -38,22 +32,14 @@ public class ClientChat extends JPanel implements Runnable {
 	private boolean readyP2 = false;
 	private MainFrame mainFrame;
 	
-	private JTextField ipTextField;
-	private JTextField nameTextField;
-	private JTextField portTextField;
-	private String difficult;
-	private String stage;
-	
-	private String name;
-
-	public ClientChat(String name, String host, String port, MainFrame mainFrame) {
-		ipTextField=new JTextField();
-		nameTextField=new JTextField();
-		portTextField=new JTextField();
-		this.name=name;
+	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
+		
+		this.host=host;
+		this.clientName = name;
+		this.setPortChat(portChat); 
 		this.setNameOfClientsOnline(new ArrayList<>());
 		this.mainFrame=mainFrame;
-		this.clientName = name;
+		
 		tf1 = new TextField(name + ":");
 		this.setSize(new Dimension(500, 300));
 		tf1.setEditable(false);
@@ -94,7 +80,7 @@ public class ClientChat extends JPanel implements Runnable {
 		});
 
 		try {
-			socket = new Socket(host, Integer.valueOf(port));
+			socket = new Socket(host, Integer.valueOf(portChat));
 			System.out.println("Connected to " + socket);
 			din = new DataInputStream(socket.getInputStream());
 			dout = new DataOutputStream(socket.getOutputStream());
@@ -115,24 +101,7 @@ public class ClientChat extends JPanel implements Runnable {
 		}
 	}
 
-	void setBooleanOfClients(String message) {
-		String[] elements = message.split(" ");
-		if (elements[0].equals("p1") && elements[1].equals("true")) {
-			readyP1 = true;
-		}
 
-		if (elements[0].equals("p1") && elements[1].equals("false")) {
-			readyP1 = false;
-		}
-
-		if (elements[0].equals("p2") && elements[1].equals("true")) {
-			readyP2 = true;
-		}
-
-		if (elements[0].equals("p2") && elements[1].equals("false")) {
-			readyP2 = false;
-		}
-	}
 
 	public void run() {
 
@@ -141,16 +110,40 @@ public class ClientChat extends JPanel implements Runnable {
 			while (true) {
 
 				String message = din.readUTF();
-				System.out.println("-> " + message);
 				String[] elements = message.split(" ");
 				
-				if(elements[0].contains("connect")){
-					nameTextField.setText(name);
-					ipTextField.setText(elements[1]);
-					portTextField.setText(elements[2]);
-					stage=elements[3];
-					difficult=elements[4];
+				//-----------------------------------------------
+				
+				System.out.println("-> " + message);
+				
+				if(elements.length == 2) {
+								
+					if (elements[0].equals("p2") && elements[1].equals("true")) {
+						readyP2 = true;
+					}
+					else if (elements[0].equals("p2") && elements[1].equals("false")) {
+						readyP2 = false;
+					}
+					else if (elements[0].equals("p1") && elements[1].equals("true")) {
+						readyP1 = true;
+					}
+					else if (elements[0].equals("p1") && elements[1].equals("false")) {
+						readyP1 = false;
+					}
 					
+				}
+				else if(elements.length == 4) {
+					
+					if(elements[0].contains("connect")){
+	
+						port = Integer.parseInt(elements[1]);
+						stage = elements[2];
+						difficult = elements[3];
+					}
+					
+				}
+				
+				if(readyP1 && readyP2) {  // entrambi si connettono
 					try {
 						connectoToServer();
 					} catch (Exception e1) {
@@ -159,16 +152,9 @@ public class ClientChat extends JPanel implements Runnable {
 				}
 				
 				
-				
-				if ((elements[0].equals("p1") || elements[0].equals("p2"))
-						&& (elements[1].equals("true") || elements[1].equals("false"))) {
-					setBooleanOfClients(message);
-					System.out.println(readyP1+" "+readyP2);
-				} else {
+				//------------------------------------------------
 
-					if (count == 0 && !(message.equals(null))) { // se non ho
-																	// letto
-																	// nulla
+					if (count == 0 && !(message.equals(null))) { 
 
 						String[] names = message.split(" ");
 						int i = 0;
@@ -212,7 +198,6 @@ public class ClientChat extends JPanel implements Runnable {
 						}
 					}
 				}
-			}
 
 		} catch (IOException ie) {
 			System.out.println(ie);
@@ -220,15 +205,15 @@ public class ClientChat extends JPanel implements Runnable {
 	}
 	
 	protected void connectoToServer() throws Exception {
-		Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
+		
+		Socket socket = new Socket(host, port);
 		ConnectionManager connectionManager = null;
 
 		if (getClientName().equals(getNameOfClientsOnline().get(0))
 				&& getNameOfClientsOnline().size() == 2) {
-			connectionManager = new ConnectionManager(socket, nameTextField.getText(), mainFrame,
-					stage, difficult);
+			connectionManager = new ConnectionManager(socket, clientName, mainFrame, stage, difficult);
 		} else {
-			connectionManager = new ConnectionManager(socket, nameTextField.getText(), mainFrame);
+			connectionManager = new ConnectionManager(socket, clientName, mainFrame);
 		}
 
 		new Thread(connectionManager, "Connection Manager").start();
@@ -260,6 +245,14 @@ public class ClientChat extends JPanel implements Runnable {
 
 	public void setReadyP2(boolean readyP2) {
 		this.readyP2 = readyP2;
+	}
+
+	public int getPortChat() {
+		return portChat;
+	}
+
+	public void setPortChat(int portChat) {
+		this.portChat = portChat;
 	}
 
 
