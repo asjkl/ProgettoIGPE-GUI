@@ -157,32 +157,46 @@ public class Lobby extends JPanel {
 
 	public void createOnlinePanel() {
 
-		JPanel onlinePanel;
-
-		onlinePanel = new JPanel() {
+		JPanel onlinePanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 
 				int cont = 0;
-				int differenz = 0;
+				int y = 30;
 				while (cont < client.getNameOfClientsOnline().size()) {
 					if (!client.getNameOfClientsOnline().get(cont).equals("")) {
-						JLabel l = new JLabel(client.getNameOfClientsOnline().get(cont));
-						l.setFont(MainFrame.customFontM);
-						l.setBounds(10, differenz, 250, 50);
+				
 						if (cont == 0 || (client.getNameOfClientsOnline().get(0).equals("") && cont == 1))
-							l.setForeground(Color.YELLOW);
+							g.setColor(Color.YELLOW);
 						else
-							l.setForeground(Color.BLACK);
-						this.add(l);
-						differenz += 40;
+							g.setColor(Color.BLACK);
+						
+						g.setFont(MainFrame.customFontM);
+						g.drawString(client.getNameOfClientsOnline().get(cont), 30, y);
+						
+						if(client.isReadyP1() && cont == 0) {
+							g.setFont(MainFrame.customFontS);
+							g.setColor(Color.GREEN);
+							g.drawString("ready", 240, y);
+						}
+						
+						else if(client.isReadyP2() && cont == 1) {
+							g.setFont(MainFrame.customFontS);
+							g.setColor(Color.GREEN);
+							g.drawString("ready", 240, y);
+						}
+						
+						
+						y += 40;
 					}
 					cont++;
 				}
-
+	
 			}
 		};
+	
+		
 		onlinePanel.setLayout(null);
 		onlinePanel.setBounds(80, 130, 300, 300);
 		onlinePanel.setBackground(Color.GRAY);
