@@ -52,17 +52,6 @@ public class Server implements Runnable{
 					ClientManager cm2=new ClientManager(socket2, gameManagerServer);
 					gameManagerServer.add(cm2);
 					gameManagerServer.setupClient();
-					System.out.println("STOP");
-					gameManagerServer.lock.lock();
-					while(!gameManagerServer.startGame){
-						try {
-							gameManagerServer.cond.await();
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-					gameManagerServer.lock.unlock();
-					System.out.println("START");
 					gameManagerServer.startGame();
 				
 				} catch (IOException e) {

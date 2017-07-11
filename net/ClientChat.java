@@ -23,7 +23,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 	String host;
 	String port;
-	String name;
+	String clientName;
 
 	private TextArea ta;
 	private TextArea to;
@@ -36,7 +36,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 	public ClientChat(String name, String host, String port) {
 		this.setNameOfClientsOnline(new ArrayList<>());
-		this.name=name;
+		this.clientName=name;
 		tf1 = new TextField(name + ":");
 		this.setSize(new Dimension(500, 300));
 		tf1.setEditable(false);
@@ -146,7 +146,6 @@ public class ClientChat extends JPanel implements Runnable {
 						to.append(name1 + "\n");
 					}
 				}
-				System.out.println(nameOfClientsOnline);	
 			}
 			
 		} catch (IOException ie) {
@@ -160,6 +159,10 @@ public class ClientChat extends JPanel implements Runnable {
 
 	public void setNameOfClientsOnline(ArrayList<String> nameOfClientsOnline) {
 		this.nameOfClientsOnline = nameOfClientsOnline;
+	}
+	
+	public String getClientName() {
+		return clientName;
 	}
 
 	// public static void main(String args[])

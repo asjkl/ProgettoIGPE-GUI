@@ -23,10 +23,6 @@ public class ServerGameManager {
 	private GamePanel gamePanel;
 	private String difficult;
 	private JTextField map=new JTextField();
-	
-	public Lock lock=new ReentrantLock();
-	public Condition cond=lock.newCondition();
-	public boolean startGame=false;
 
 	public void add(final ClientManager cm) {
 		clients.add(cm);

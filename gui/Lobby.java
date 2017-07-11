@@ -157,8 +157,8 @@ public class Lobby extends JPanel {
 	public void createOnlinePanel() {
 
 		JPanel onlinePanel;
-		
-		onlinePanel= new JPanel() {
+
+		onlinePanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -170,7 +170,7 @@ public class Lobby extends JPanel {
 						JLabel l = new JLabel(client.getNameOfClientsOnline().get(cont));
 						l.setFont(MainFrame.customFontM);
 						l.setBounds(10, differenz, 250, 50);
-						if (cont == 0 || (client.getNameOfClientsOnline().get(0).equals("") && cont==1))
+						if (cont == 0 || (client.getNameOfClientsOnline().get(0).equals("") && cont == 1))
 							l.setForeground(Color.YELLOW);
 						else
 							l.setForeground(Color.BLACK);
@@ -209,7 +209,7 @@ public class Lobby extends JPanel {
 				g.drawImage(ImageProvider.getMapsP2().get(stageShifter - 1), 45, 20, this);
 				g.setColor(Color.BLACK);
 				g.setFont(MainFrame.customFontM);
-				stage = "stage " + stageShifter;
+				stage = "stage" + stageShifter;
 				g.drawString("Stage " + stageShifter, 90, 238);
 			}
 		};
@@ -379,9 +379,16 @@ public class Lobby extends JPanel {
 	}
 
 	protected void connectoToServer() throws Exception {
-		final Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
-		final ConnectionManager connectionManager = new ConnectionManager(socket, nameTextField.getText(),
-				((MainFrame) getSwitcher()));
+		Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
+		ConnectionManager connectionManager = null;
+		System.out.println("name :"+nameTextField.getText());
+		if (client.getClientName().equals(client.getNameOfClientsOnline().get(1))
+				&& client.getNameOfClientsOnline().size() == 3) {
+			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()),
+					stage, difficult);
+		} else {
+			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()));
+		}
 		new Thread(connectionManager, "Connection Manager").start();
 	}
 
