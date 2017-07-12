@@ -110,10 +110,10 @@ public class ServerGameManager {
 
 	public void startGame() throws IOException {
 		for (final ClientManager cm : clients) {
-			if(cm.getName().equals("P1")){
-				map.setText(cm.getMap().getText());
-				difficult=cm.getDifficult();
-			}
+			map.setText(cm.getMap().getText());
+			difficult=cm.getDifficult();
+			System.out.println("IO CLIENT HO DATO AL SERVER QUESTE COSE <<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>> "+cm.getName()+" "+map.getText()+" "+difficult);
+			break;
 		}
 		
 		gameManager = new GameManager(new Runnable() {

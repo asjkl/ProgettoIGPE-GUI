@@ -31,16 +31,6 @@ public class ConnectionManager implements Runnable {
 		this.map=new JTextField("./maps/career/multiplayer/" + stage + ".txt");
 		this.difficult=difficult;
 	}
-	
-	//COSTRUTTORE PER P2
-	public ConnectionManager(final Socket socket, final String name, MainFrame mainFrame) {
-		this.socket = socket;
-		this.name = name;
-		this.mainFrame = mainFrame;
-		this.map=null;
-		this.difficult="";
-	}
-	
 
 	public void close() {
 		try {
@@ -63,11 +53,8 @@ public class ConnectionManager implements Runnable {
 
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			pw = new PrintWriter(socket.getOutputStream(), true);
-			if(map!=null && !difficult.equals("")){
-				pw.println(name+":"+map.getText()+":"+difficult);
-			}else{
-				pw.println(name);
-			}
+			pw.println(name+":"+map.getText()+":"+difficult);
+			
 			String buffer = br.readLine();
 
 			while (!buffer.equals("#START")) {

@@ -152,11 +152,12 @@ public class ClientChat extends JPanel implements Runnable {
 
 				} else if (elements.length == 4) {
 
-					if (elements[0].contains("connect")) {
+					if (elements[0].equals("connect")) {
 
 						port = Integer.parseInt(elements[1]);
 						stage = elements[2];
 						difficult = elements[3];
+						
 					}
 
 				}
@@ -185,7 +186,7 @@ public class ClientChat extends JPanel implements Runnable {
 							if (!names[i].equals("")) {
 	//							to.append(names[i] + "\n");
 								nameOfClientsOnline.add(names[i]);
-							}
+							}	
 							i++;
 						}
 						count++;
@@ -231,16 +232,9 @@ public class ClientChat extends JPanel implements Runnable {
 
 
 	protected void connectoToServer() throws Exception {
-
 		Socket socket = new Socket(host, port);
 		ConnectionManager connectionManager = null;
-
-		if (getClientName().equals(getNameOfClientsOnline().get(0)) && getNameOfClientsOnline().size() == 2) {
-			connectionManager = new ConnectionManager(socket, clientName, mainFrame, stage, difficult);
-		} else {
-			connectionManager = new ConnectionManager(socket, clientName, mainFrame);
-		}
-
+		connectionManager = new ConnectionManager(socket, clientName, mainFrame, stage, difficult);
 		new Thread(connectionManager, "Connection Manager").start();
 	}
 
