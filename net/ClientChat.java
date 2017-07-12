@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JPanel;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
+
 import java.io.*;
 
 @SuppressWarnings("serial")
@@ -22,7 +25,7 @@ public class ClientChat extends JPanel implements Runnable {
 	private String stage;
 
 	private TextArea ta;
-	private TextArea to;
+//	private TextArea to;
 	private Socket socket;
 	public DataOutputStream dout;
 	private DataInputStream din;
@@ -32,7 +35,11 @@ public class ClientChat extends JPanel implements Runnable {
 	private boolean readyP2 = false;
 	private MainFrame mainFrame;
 	private boolean exitThrad=false;
-
+	private boolean flag = false;
+	private int countDown = 5;
+	private Timer timer;
+	private TimerTask task;
+	
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
 
 		this.host = host;
@@ -46,31 +53,31 @@ public class ClientChat extends JPanel implements Runnable {
 		tf1.setEditable(false);
 		tf2 = new TextField();
 		ta = new TextArea();
-		to = new TextArea("People Online: \n", 50, 16);
+//		to = new TextArea("People Online: \n", 50, 16);
 		ta.setEditable(false);
-		to.setEditable(false);
+//		to.setEditable(false);
 
 		tf1.setBackground(Color.black);
 		tf2.setBackground(Color.black);
 		ta.setBackground(Color.black);
-		to.setBackground(Color.black);
+//		to.setBackground(Color.black);
 
 		tf1.setForeground(Color.white);
 		tf2.setForeground(Color.white);
 		ta.setForeground(Color.white);
-		to.setForeground(Color.white);
+//		to.setForeground(Color.white);
 
 		tf1.setFont(MainFrame.customFontS);
 		tf2.setFont(MainFrame.customFontS);
 		ta.setFont(MainFrame.customFontS);
-		to.setFont(MainFrame.customFontS);
+//		to.setFont(MainFrame.customFontS);
 
 		tf2.requestFocus();
 		setLayout(new BorderLayout());
 		add("North", tf1);
 		add("South", tf2);
 		add("Center", ta);
-		add("West", to);
+//		add("West", to);
 
 		tf2.addActionListener(new ActionListener() {
 
@@ -90,8 +97,27 @@ public class ClientChat extends JPanel implements Runnable {
 		} catch (IOException e) {
 			System.out.println(e);
 		}
+		
 	}// costruttore
 
+	
+	public class MyTask extends TimerTask {
+
+		public void run() {
+			
+			try {
+				dout.writeUTF(String.valueOf(countDown--));
+				dout.writeUTF(".");
+				dout.writeUTF(".");
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 	private void processMessage(String message) {
 
 		try {
@@ -118,10 +144,10 @@ public class ClientChat extends JPanel implements Runnable {
 				if (elements[0].equals("EXIT")) {
 					String client = elements[1];
 					nameOfClientsOnline.remove(client);
-					to.setText("People Online: \n");
-					for (int a = 0; a < nameOfClientsOnline.size(); a++) {
-						to.append(nameOfClientsOnline.get(a) + "\n");
-					}
+//					to.setText("People Online: \n");
+//					for (int a = 0; a < nameOfClientsOnline.size(); a++) {
+//						to.append(nameOfClientsOnline.get(a) + "\n");
+//					}
 				}else if(elements[0].equals("EXITALL")){
 					exitThrad=true;
 					mainFrame.showNetwork();	
@@ -136,6 +162,7 @@ public class ClientChat extends JPanel implements Runnable {
 					} else if (elements[0].equals("p1") && elements[1].equals("false")) {
 						readyP1 = false;
 					}
+					flag=true;
 
 				} else if (elements.length == 4) {
 
@@ -147,17 +174,28 @@ public class ClientChat extends JPanel implements Runnable {
 					}
 
 				}
-
-				if (readyP1 && readyP2) { // entrambi si connettono
+				
+//				if(readyP1 && readyP2) {
+//					
+//					timer = new Timer();
+//					task = new MyTask();
+//					timer.schedule(task, 1000, 1000);
+//				}
+				
+				if (/*elements[0] == "0" &&*/ readyP1 && readyP2) { // entrambi si connettono
+					
 					try {
 						connectoToServer();
 					} catch (Exception e1) {
 						e1.printStackTrace();
-					}
+					}		
+
+//					timer.cancel();
 				}
 
 				// ------------------------------------------------
 
+				if(!flag) {
 				if (count == 0 && !(message.equals(null))) {
 
 					String[] names = message.split(" ");
@@ -165,7 +203,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 					while (i < names.length) {
 						if (!names[i].equals("")) {
-							to.append(names[i] + "\n");
+//							to.append(names[i] + "\n");
 							nameOfClientsOnline.add(names[i]);
 						}
 						i++;
@@ -198,9 +236,11 @@ public class ClientChat extends JPanel implements Runnable {
 							i++;
 						}
 						nameOfClientsOnline.add(name1);
-						to.append(name1 + "\n");
+//						to.append(name1 + "\n");
 					}
 				}
+				}
+				flag=false;
 			}
 
 		} catch (IOException ie) {

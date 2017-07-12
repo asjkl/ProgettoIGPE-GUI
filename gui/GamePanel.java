@@ -510,11 +510,24 @@ public class GamePanel extends JPanel {
 			}
 		};
 		JPanel text = new JPanel();
-		JPanel buttonspanel = new JPanel(new GridLayout(3, 1, 0, 10));
-		// JPanel buttonspanel = new JPanel(new GridLayout(4, 1, 0, 40));
+		JPanel buttonspanel;
+		String[] buttonTxt;
 		JLabel label = new JLabel("Option");
-		String[] buttonTxt = { "Retry", "Restart", "Menu" };
-		// String[] buttonTxt = { "Retry", "Menu", "Restart", "Exit" };
+		
+		if(GameManager.offline) {
+			 buttonspanel = new JPanel(new GridLayout(3, 1, 0, 10));
+			 buttonTxt = new String[3];
+			 buttonTxt[0] = "Retry";
+			buttonTxt[1] = "Restart";
+			buttonTxt[2] = "Menu";
+		}
+		else {
+			buttonspanel = new JPanel(new GridLayout(2, 1, 0, 10));
+			buttonTxt = new String[2];
+			buttonTxt[0] = "Retry";
+			buttonTxt[1] = "Lobby";
+		}
+	
 		fullpanel.setPreferredSize(new Dimension(250, 250));
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
@@ -535,10 +548,6 @@ public class GamePanel extends JPanel {
 			buttons[i] = new JButton(buttonTxt[i]);
 			buttons[i].setFont(MainFrame.customFontM);
 			buttons[i].setBackground(Color.BLACK);
-			if (i == 1 && !GameManager.offline)
-				buttons[i].setForeground(Color.GRAY);
-			else
-				buttons[i].setForeground(Color.WHITE);
 			buttons[i].setBorder(null);
 			buttons[i].setFocusPainted(false);
 			buttons[i].setContentAreaFilled(false);
@@ -617,7 +626,7 @@ public class GamePanel extends JPanel {
 				}
 			});
 			break;
-		case 1:// RESTART
+		case 1:// RESTART or LOBBY
 			buttons[j].addActionListener(new ActionListener() {
 
 				@Override
@@ -630,6 +639,15 @@ public class GamePanel extends JPanel {
 						game.setExit(true);
 						dialog.dispose();
 						getSwitcher().showSlide(game.getFilename());
+						SoundsProvider.cancelMove();
+						SoundsProvider.cancelStop();
+					}
+					else {
+						SoundsProvider.playBulletHit1();
+						((MainFrame) getSwitcher()).setTransparent(false);
+						game.setExit(true);
+						dialog.dispose();
+						getSwitcher().showLobby();
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
 					}
@@ -660,14 +678,7 @@ public class GamePanel extends JPanel {
 				}
 			});
 			break;
-		/*
-		 * case 3: // EXIT buttons[j].addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * System.exit(0); }
-		 * 
-		 * }); break;
-		 */
+	
 		default:
 			break;
 		}

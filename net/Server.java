@@ -156,6 +156,12 @@ public class Server implements Runnable {
 	}
 
 	public void closeServer() {
+		
+		OnlineNames = "";
+		client.clear();
+		outputStreams.clear();
+		
+		
 		try {
 			System.out.println("CHIUDO-SERVERCHAT");
 			serverSocket.close();

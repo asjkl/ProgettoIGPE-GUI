@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -18,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import net.ClientChat;
 import net.Server;
 import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
@@ -31,16 +29,18 @@ public class NetworkPanel extends JPanel {
 	private JTextField ipTextField;
 	private JTextField nameTextField;
 	private JTextField portTextField;
+
+
 	private int cursorPosition;
 	private int portChat = 1232;
 
 	private ArrayList<JButton> buttons;
 	@SuppressWarnings("unused")
 	private WarningDialog warning;
+
 	private JDialog dialog;
 	private int DIM = 2;
-	public static boolean openLobby;		//OGNI VOLTA CHE USCIVO DALLA LOBBY MI FACEVA LA NEW DELLA CHAT
-									//E TUTTO IL RESTO
+
 	private ClientChat client;
 	private Server serverChat;
 	
@@ -51,7 +51,7 @@ public class NetworkPanel extends JPanel {
 		this.setPreferredSize(new Dimension(w, h));
 		this.setSwitcher(switcher);
 		this.setLayout(null);
-		this.openLobby=false;
+		
 		dialog = new JDialog(dialog, "ERROR");
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
@@ -197,20 +197,20 @@ public class NetworkPanel extends JPanel {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					if (nameTextField.getText().equals("") && !openLobby) {
+					if (nameTextField.getText().equals("")) {
 						((MainFrame)getSwitcher()).setTransparent(true);
 						warning = new WarningDialog("Insert name!!", ((MainFrame) getSwitcher()));
 						
 					} else {
 						buttons.get(1).setEnabled(false);
-						if(!openLobby){
-							serverChat=new Server(portChat);
-							
-						    new Thread(serverChat, "chat").start();
-						    client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
-						}
+		
+						serverChat=new Server(portChat);
+					
+						 new Thread(serverChat, "chat").start();
+						  client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
+						
 						nameTextField.setText("");
-						getSwitcher().showLobby(client, ipTextField, nameTextField, portTextField);
+						getSwitcher().showLobby();
 						
 					}
 				}
@@ -327,5 +327,42 @@ public class NetworkPanel extends JPanel {
 
 	public void setSwitcher(PanelSwitcher switcher) {
 		this.switcher = switcher;
+	}
+	public JTextField getIpTextField() {
+		return ipTextField;
+	}
+
+	public void setIpTextField(JTextField ipTextField) {
+		this.ipTextField = ipTextField;
+	}
+
+	public JTextField getNameTextField() {
+		return nameTextField;
+	}
+
+	public void setNameTextField(JTextField nameTextField) {
+		this.nameTextField = nameTextField;
+	}
+
+	public int getPortChat() {
+		return portChat;
+	}
+
+	public void setPortChat(int portChat) {
+		this.portChat = portChat;
+	}
+	public ClientChat getClient() {
+		return client;
+	}
+
+	public void setClient(ClientChat client) {
+		this.client = client;
+	}
+	public JTextField getPortTextField() {
+		return portTextField;
+	}
+
+	public void setPortTextField(JTextField portTextField) {
+		this.portTextField = portTextField;
 	}
 }

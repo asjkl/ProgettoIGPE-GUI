@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -21,7 +20,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.ClientChat;
-import net.ConnectionManager;
 import net.Server;
 
 @SuppressWarnings("serial")
@@ -191,7 +189,7 @@ public class Lobby extends JPanel {
 					
 					cont++;
 				}
-	
+
 			}
 		};
 	
@@ -363,7 +361,7 @@ public class Lobby extends JPanel {
 //						serverChat.sendToAll("EXIT");
 //						serverChat.closeServer();
 //						serverChat.setExitChat(true);
-						NetworkPanel.openLobby = false;
+					
 					} else {
 						System.out.println("CLIENT STA PER USCIRE");
 						try {
@@ -373,7 +371,7 @@ public class Lobby extends JPanel {
 							e1.printStackTrace();
 						}
 //						serverChat.removeConnection(client.getClientName());
-						NetworkPanel.openLobby = false;
+					
 					}
 					getSwitcher().showNetwork();
 					repaint();
@@ -390,7 +388,7 @@ public class Lobby extends JPanel {
 					// se sono P1
 					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 						if (client.isReadyP2()) {
-							
+								
 						//	1) mando il messaggio a tutti 
 							try {
 								client.dout.writeUTF("p1 true");
@@ -403,7 +401,7 @@ public class Lobby extends JPanel {
 							final Server server1 = new Server(1234);
 							new Thread(server1, "game").start();
 							
-						// do il via libero al connect ( tutti i client )
+						//  3) do il via libero al connect ( tutti i client )
 							try {
 								client.dout.writeUTF("connect"+" "+portTextField.getText()+" "+stage+" "+difficult);
 							} catch (IOException e1) {
@@ -457,25 +455,11 @@ public class Lobby extends JPanel {
 		}
 	}
 
-//	protected void connectoToServer() throws Exception {
-//		Socket socket = new Socket(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
-//		ConnectionManager connectionManager = null;
-//
-//		if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))
-//				&& client.getNameOfClientsOnline().size() == 2) {
-//			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()),
-//					stage, difficult);
-//		} else {
-//			connectionManager = new ConnectionManager(socket, nameTextField.getText(), ((MainFrame) getSwitcher()));
-//		}
-//
-//		new Thread(connectionManager, "Connection Manager").start();
-//	}
-
 	@Override
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
+		
 		if (cursorPosition == 0)
 			g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX() + 85,
 					buttons.get(cursorPosition).getY() - 6, this);
