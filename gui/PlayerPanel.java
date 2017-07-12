@@ -16,8 +16,8 @@ import javax.swing.SwingConstants;
 public class PlayerPanel extends JPanel {
 	
 	private final int DIM = 3;
-	private final int posY = 70;
-	private final int posX = 120;
+	private final int posY = 65;
+	private final int posX = 125;
 	private int cursorPosition;
 	private PanelSwitcher switcher;
 	private final ArrayList<JButton> buttons;
@@ -158,13 +158,13 @@ public class PlayerPanel extends JPanel {
 			buttons.get(j).setText("Back");
 			break;
 		case 1:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2) - posX,
-					(int) (this.getPreferredSize().getHeight() / 2) - posY, 260, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY, 260, 40);
 			buttons.get(j).setText("Singleplayer");
 			break;
 		case 2:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()/ 2) - posX,
-					(int) (this.getPreferredSize().getHeight() / 2) , 260, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 , 260, 40);
 			buttons.get(j).setText("Multiplayer");
 			break;
 		default:
@@ -179,10 +179,10 @@ public class PlayerPanel extends JPanel {
 		
 		if(getCursorPosition() == 0)
 			g.drawImage(ImageProvider.getCursorLeft(), 
-					buttons.get(cursorPosition).getX() + 90, buttons.get(cursorPosition).getY() - 8, this);
+					buttons.get(cursorPosition).getX() + 90,buttons.get(cursorPosition).getY() - 8, this);
 		else
 			g.drawImage(ImageProvider.getCursorRight(), 
-					buttons.get(cursorPosition).getX() - posY, buttons.get(cursorPosition).getY() - 5, this);
+					buttons.get(cursorPosition).getX() - 65,buttons.get(cursorPosition).getY() - 5, this);
 	}
 	
 	public int getCursorPosition() {

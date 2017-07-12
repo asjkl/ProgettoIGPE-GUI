@@ -40,8 +40,8 @@ public class StagePanelFirst extends JPanel {
 		this.setLayout(null);
 		
 		path = "";
-		posY = 40;
-		posX = 215;
+		posY = 25;
+		posX = 200;
 		cursorPosition = 1;
 		
 		arrowRight = new JButton();
@@ -227,7 +227,7 @@ public class StagePanelFirst extends JPanel {
 		
 			if(j == 5 || j == 9) {
 				
-				posX = 215;
+				posX = 200;
 				posY += 225;
 			}
 			setLabel(j);

@@ -27,8 +27,8 @@ public class MenuPanel extends JPanel {
 	private int cursorPosition;
 	private final int DIM = 6;
 	private final int LENGTH = 5;
-	private final int posY = 70;
-	private final int posX = 120;
+	private final int posY = 65;
+	private final int posX = 125;
 	private JFileChooserClass jfilechooser;
 	private PanelSwitcher switcher;
 	private final ArrayList<JButton> buttons;
@@ -184,7 +184,7 @@ public class MenuPanel extends JPanel {
 					
 					if(jfilechooser.functionLoadFile()) {
 						setCursorPosition(0);
-						jfilechooser.getFilename().setText(jfilechooser.getFile().toString() + "/" + jfilechooser.getFilename().getText() + ".txt");
+						jfilechooser.getFilename().setText(jfilechooser.getFile().toString()+"/"+jfilechooser.getFilename().getText() + ".txt");
 						  getSwitcher().showSlide(jfilechooser.getFilename());
 					}
 				}
@@ -238,33 +238,33 @@ public class MenuPanel extends JPanel {
 
 		switch (j) {
 		case 0:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2) - posX,
-					(int) (this.getPreferredSize().getHeight() / 2) - posY + (posY * j), 255, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 255, 40);
 			buttons.get(j).setText("Play");
 			break;
 		case 1:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2) - posX,
-					(int) (this.getPreferredSize().getHeight() / 2) - posY + (posY * j), 270, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 270, 40);
 			buttons.get(j).setText("Network");
 			break;
 		case 2:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2) - posX,
-					(int) (this.getPreferredSize().getHeight() / 2) - posY + (posY * j), 380, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 380, 40);
 			buttons.get(j).setText("Custom Maps");
 			break;
 		case 3:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2) - posX,
-					(int) (this.getPreferredSize().getHeight() / 2) - posY + (posY * j), 380, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 380, 40);
 			buttons.get(j).setText("Construction");
 			break;
 		case 4:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2) - posX,
-					(int) (this.getPreferredSize().getHeight() / 2) - posY + (posY * j), 250, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 250, 40);
 			buttons.get(j).setText("Settings");
 			break;
 		case 5:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2) - posX,
-					(int) (this.getPreferredSize().getHeight() / 2) - posY + (posY * j), 135, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 135, 40);
 			buttons.get(j).setText("Exit");
 		default:
 			break;
@@ -540,6 +540,7 @@ public class MenuPanel extends JPanel {
 		
 		loadScore();
 		
+		//TODO AGGIUNGER CONTROLLO
 		if(tmpHiScore < Integer.parseInt(values[1])) {
 			
 			tmpHiScore = Integer.parseInt(values[1]);
@@ -548,14 +549,14 @@ public class MenuPanel extends JPanel {
 			high.setBackground(Color.BLACK);
 			high.setForeground(Color.WHITE);
 			high.setText("Hi - " + values[1]);
-			high.setBounds(495, 0, 500, 100);
+			high.setBounds(500, 0, 500, 100);
 		}
 		
 		player.setFont(MainFrame.customFontB);
 		player.setBackground(Color.BLACK);
 		player.setForeground(Color.WHITE);
 		player.setText("I - " + values[0]);
-		player.setBounds(210, 0, 500, 100);
+		player.setBounds(190, 0, 500, 100);
 		
 		this.add(player);
 		this.add(high);
@@ -569,6 +570,7 @@ public class MenuPanel extends JPanel {
 		
 		try {
 			
+			//TODO AGGIUNGERE CONTROLLO
 			reader = new BufferedReader(new FileReader("./values/singleCareer.txt"));
 			line = reader.readLine();
 			
@@ -651,12 +653,11 @@ public class MenuPanel extends JPanel {
 			g2d.fill(getBounds());
 		}
 
-		g.drawImage(ImageProvider.getTitle(), (int) (this.getPreferredSize().getWidth() / 2) - (ImageProvider.getTitle().getWidth(null) / 2),
-				75, null);
+		g.drawImage(ImageProvider.getTitle(), 175, 75, null);
 		
 		if(!hide)
 			g.drawImage(ImageProvider.getCursorRight(),
-					buttons.get(cursorPosition).getX() - posY, buttons.get(cursorPosition).getY() - 4, this);
+					buttons.get(cursorPosition).getX() - 70, buttons.get(cursorPosition).getY() - 4, this);
 	}
 
 	public int getCursorPosition() {
