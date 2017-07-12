@@ -43,6 +43,7 @@ public class NetworkPanel extends JPanel {
 
 	private ClientChat client;
 	private Server serverChat;
+	protected int lengthMaxName=10;
 	
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
@@ -200,7 +201,10 @@ public class NetworkPanel extends JPanel {
 						((MainFrame)getSwitcher()).setTransparent(true);
 						warning = new WarningDialog("Insert name!!", ((MainFrame) getSwitcher()));
 						
-					} else {
+					} else if(nameTextField.getText().length()> lengthMaxName){ 
+						((MainFrame)getSwitcher()).setTransparent(true);
+						warning = new WarningDialog("Insert name min "+lengthMaxName+" !!", ((MainFrame) getSwitcher()));						
+					}else {
 						buttons.get(1).setEnabled(false);
 		
 						serverChat=new Server(portChat);

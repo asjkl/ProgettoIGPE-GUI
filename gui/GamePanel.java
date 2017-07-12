@@ -317,7 +317,7 @@ public class GamePanel extends JPanel {
 	public void logic() {
 		// MANAGE KEYS
 		keyPresses();
-
+		
 		// UPDATE ROCKETS
 		rockets();
 
@@ -651,15 +651,6 @@ public class GamePanel extends JPanel {
 						game.pauseOptionDialog = false;
 						game.setExit(true);
 						dialog.dispose();
-						if (!GameManager.offline) {
-							if (getGameManager().getPlayersArray().get(1).isDied()) {
-								connectionManager
-										.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
-							} else {
-								connectionManager
-										.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
-							}
-						}
 						getSwitcher().showMenu();
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
@@ -678,6 +669,13 @@ public class GamePanel extends JPanel {
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.setExit(true);
 						dialog.dispose();
+						if (getGameManager().getPlayersArray().get(1).isDied()) {
+							connectionManager
+									.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
+						} else {
+							connectionManager
+									.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
+						}
 						getSwitcher().showLobby();
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();

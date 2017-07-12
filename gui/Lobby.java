@@ -445,6 +445,7 @@ public class Lobby extends JPanel {
 							}
 							
 						//  2) creo il server
+							
 							final Server server1 = new Server(1234);
 							new Thread(server1, "game").start();
 							
