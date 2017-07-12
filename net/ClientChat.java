@@ -36,7 +36,7 @@ public class ClientChat extends JPanel implements Runnable {
 	private MainFrame mainFrame;
 	private boolean exitThrad=false;
 	private boolean flag = true;
-	private String points = "...............";
+	private String points = "..............................";
 
 	
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
@@ -162,7 +162,8 @@ public class ClientChat extends JPanel implements Runnable {
 				}
 			
 				if (elements.length == 1 && elements[0].equals(points+"StartGame") && readyP1 && readyP2) { // entrambi si connettono
-					
+					readyP1=false;
+					readyP2=false;
 					try {
 						connectoToServer();
 					} catch (Exception e1) {

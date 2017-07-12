@@ -1112,13 +1112,11 @@ public class GamePanel extends JPanel {
 				game.getEnemy().get(a).setxGraphics(game.getEnemy().get(a).getX() * tile);
 				game.getEnemy().get(a).setyGraphics(game.getEnemy().get(a).getY() * tile);
 
-				if (GameManager.offline) {
-					// EASY
-					if (SettingsPanel.easy)
+					if ( (GameManager.offline && SettingsPanel.easy) || (!GameManager.offline && difficult.equals("easy")))
 						game.getEnemy().get(a).easy();
-					else if (SettingsPanel.normal)
+					else if ((GameManager.offline && SettingsPanel.normal) || (!GameManager.offline && difficult.equals("normal")))
 						game.getEnemy().get(a).medium();
-					else if (SettingsPanel.hard) {
+					else if ((GameManager.offline && SettingsPanel.hard) || (!GameManager.offline && difficult.equals("hard"))) {
 						game.getEnemy().get(a).difficult(GameManager.flag.getX(), GameManager.flag.getY());
 
 						if (!game.getEnemy().get(a).isHasApath()) {
@@ -1126,22 +1124,6 @@ public class GamePanel extends JPanel {
 							game.getEnemy().get(a).difficult(player.getX(), player.getY());
 						}
 					}
-
-				} else {
-
-					if (difficult.equals("easy"))
-						game.getEnemy().get(a).easy();
-					else if (difficult.equals("normal"))
-						game.getEnemy().get(a).medium();
-					else if (difficult.equals("hard")) {
-						game.getEnemy().get(a).difficult(GameManager.flag.getX(), GameManager.flag.getY());
-
-						if (!game.getEnemy().get(a).isHasApath()) {
-							PlayerTank player = game.getPlayersArray().get(game.getEnemy().get(a).getRandomObject());
-							game.getEnemy().get(a).difficult(player.getX(), player.getY());
-						}
-					}
-				}
 
 				game.getEnemy().get(a).setTmpDirection(game.getEnemy().get(a).getDirection());
 
