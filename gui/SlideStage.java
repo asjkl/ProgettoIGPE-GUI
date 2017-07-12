@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
+import progettoIGPE.davide.giovanni.unical2016.GameManager;
+
 @SuppressWarnings("serial")
 public class SlideStage extends JLayeredPane {
 
@@ -24,10 +26,15 @@ public class SlideStage extends JLayeredPane {
 	private PanelSwitcher switcher;
 	private JTextField filename;
 	private ArrayList<JPanel> panels = new ArrayList<>();
-
+	private int WIDTH, HEIGHT;
+	
 	public SlideStage(final int w, final int h, PanelSwitcher switcher, JTextField filename) {
-		
+		WIDTH = w;
+		HEIGHT = h;
 		SoundsProvider.playStageStart();
+		
+		
+
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
 		this.setLayout(null);
@@ -58,9 +65,20 @@ public class SlideStage extends JLayeredPane {
 			panels.get(i).setBackground(Color.GRAY);
 		}
 		
+		instantiate();
 		this.add(panels.get(0), panels.get(1));
 	}
 
+	// BISOGNA FARLI DURANTE IL CARICAMENTO
+	public void instantiate() {
+		((MainFrame)switcher).setGameManager(new GameManager(filename));
+		if(SettingsPanel.normal)
+			((MainFrame)switcher).getGameManager().setMedium(true);
+		((MainFrame)switcher).setGamePanel(new GamePanel(((MainFrame)switcher).getGameWidth(), ((MainFrame)switcher).getGameHeight(), ((MainFrame)switcher), ((MainFrame)switcher).getGameManager()));
+		((MainFrame)switcher).setFullGame(new FullGamePanel(WIDTH, HEIGHT, ((MainFrame)switcher).getGameWidth(), ((MainFrame)switcher).getGameHeight(), ((MainFrame)switcher), ((MainFrame)switcher).getGamePanel()));
+		((MainFrame)switcher).getGamePanel().setFullGamePanel(((MainFrame)switcher).getFullGame());
+	}
+	
 	public void add(Component component1, Component component2) {
 
 		this.add(component1);
@@ -103,7 +121,7 @@ public class SlideStage extends JLayeredPane {
 					
 						try {
 							Thread.sleep(500);
-							getSwitcher().showGame(filename);
+							getSwitcher().showGame();
 						} catch (InterruptedException e1) {
 							e1.printStackTrace();
 						}						

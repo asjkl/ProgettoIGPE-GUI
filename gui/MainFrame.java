@@ -48,6 +48,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private GameManager gameManager;
 	private GamePanel gamePanel;
 	private SlideStage slideStage;
+
+
 	private LoadPanel load;
 
 	public MainFrame() {
@@ -170,16 +172,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	@Override
-	public void showGame(JTextField directory) {
-
-		//singleOrMulti(path)
-		gameManager = new GameManager(directory);
-		if(SettingsPanel.normal)
-			gameManager.setMedium(true);
-		gamePanel = new GamePanel(gameWidth, gameHeight, this, gameManager);
-		fullGame = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
-		gamePanel.setFullGamePanel(fullGame);
-		switchTo(fullGame);
+	public void showGame() {
+		switchTo(fullGame); // tutte le new ora li fa lo slideStage
 	}
 
 	@Override
@@ -252,28 +246,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	//---------------------------------SET & GET---------------------------------------------
-
-	
-//	private void singleOrMulti(JTextField filename) {
-//		File career=null;
-//		career = new File("./maps/career/singleplayer/" + filename.getText());
-//		if(!career.exists()){
-//			career = new File("./maps/career/multiplayer/" + filename.getText());
-//			if(!career.exists()){
-//				career=new File("./maps/editor/multiplayer/" + filename.getText());
-//				if(!career.exists()){
-//					career=new File("./maps/editor/singleplayer/" + filename.getText());
-//					singlePlayer=true;
-//				}else{
-//					singlePlayer=false;
-//				}
-//			}else{
-//				singlePlayer=false;
-//			}
-//		}else{
-//			singlePlayer=true;
-//		}
-//	}
 	
 	public FullGamePanel getFullGamePanel() {
 		return fullGame;
@@ -359,6 +331,42 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		return transparent;
 	}
 
+	public int getWIDTH() {
+		return WIDTH;
+	}
+
+	public int getHEIGHT() {
+		return HEIGHT;
+	}
+
+	public int getGameWidth() {
+		return gameWidth;
+	}
+
+	public int getGameHeight() {
+		return gameHeight;
+	}
+
+	public FullGamePanel getFullGame() {
+		return fullGame;
+	}
+
+	public void setFullGame(FullGamePanel fullGame) {
+		this.fullGame = fullGame;
+	}
+
+	public GameManager getGameManager() {
+		return gameManager;
+	}
+
+	public void setGameManager(GameManager gameManager) {
+		this.gameManager = gameManager;
+	}
+
+	public void setGamePanel(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
+	}
+	
 	public void setTransparent(boolean transparent) {
 		this.transparent = transparent;
 	}

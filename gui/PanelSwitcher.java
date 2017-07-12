@@ -7,7 +7,7 @@ public interface PanelSwitcher {
 	
 	void showPlayer();
 	
-	void showGame(JTextField f);
+	void showGame();
 	
 	void showFirstStage(String p);
 	

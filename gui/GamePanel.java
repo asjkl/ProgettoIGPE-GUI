@@ -408,38 +408,32 @@ public class GamePanel extends JPanel {
 
 		// ANIMATION PLAYER
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (noIntersectPlayerWithEnemy(a)) {
-				((Tank) game.getPlayersArray().get(a)).updateRect();
-				if (game.getPlayersArray().get(a).isPressed() && game.getPlayersArray().get(a).getKeyPressLength() != 0
-						&& game.getPlayersArray().get(a).getKeyPressLength() > 120) {
-					if (!game.getPlayersArray().get(a).isOldDirection()) {
-						game.getPlayersArray().get(a)
-								.setCont(contFPS(game.getPlayersArray().get(a),
-										game.getPlayersArray().get(a).getTmpDirection(),
-										game.getPlayersArray().get(a).getCont(),
-										game.returnSpeed(game.getPlayersArray().get(a).getSpeed(),
-												game.getPlayersArray().get(a)),
-										end));
-					} else {
-						game.getPlayersArray().get(a)
-								.setCont(contFPS(game.getPlayersArray().get(a), game.getPlayersArray().get(a).getOldD(),
-										game.getPlayersArray().get(a).getCont(),
-										game.returnSpeed(game.getPlayersArray().get(a).getSpeed(),
-												game.getPlayersArray().get(a)),
-										end));
-					}
-				}
-
-				if (game.getPlayersArray().get(a).getCont() >= tile) {
-					game.getPlayersArray().get(a).setxGraphics(game.getPlayersArray().get(a).getX() * tile);
-					game.getPlayersArray().get(a).setyGraphics(game.getPlayersArray().get(a).getY() * tile);
-					game.getPlayersArray().get(a).FPS();
-					if (game.getPlayersArray().get(a).isOldDirection())
-						game.getPlayersArray().get(a).setOldDirection(false);
-					game.getPlayersArray().get(a).setOld(game.getPlayersArray().get(a).getTmpDirection());
-					game.getPlayersArray().get(a).setPressed(false);
+			((Tank) game.getPlayersArray().get(a)).updateRect();
+			if (game.getPlayersArray().get(a).isPressed() && game.getPlayersArray().get(a).getKeyPressLength() != 0
+					&& game.getPlayersArray().get(a).getKeyPressLength() > 120) {
+				if (!game.getPlayersArray().get(a).isOldDirection()) {
+					game.getPlayersArray().get(a).setCont(contFPS(game.getPlayersArray().get(a),
+							game.getPlayersArray().get(a).getTmpDirection(), game.getPlayersArray().get(a).getCont(),
+							game.returnSpeed(game.getPlayersArray().get(a).getSpeed(), game.getPlayersArray().get(a)),
+							end));
+				} else {
+					game.getPlayersArray().get(a).setCont(contFPS(game.getPlayersArray().get(a),
+							game.getPlayersArray().get(a).getOldD(), game.getPlayersArray().get(a).getCont(),
+							game.returnSpeed(game.getPlayersArray().get(a).getSpeed(), game.getPlayersArray().get(a)),
+							end));
 				}
 			}
+
+			if (game.getPlayersArray().get(a).getCont() >= tile) {
+				game.getPlayersArray().get(a).setxGraphics(game.getPlayersArray().get(a).getX() * tile);
+				game.getPlayersArray().get(a).setyGraphics(game.getPlayersArray().get(a).getY() * tile);
+				game.getPlayersArray().get(a).FPS();
+				if (game.getPlayersArray().get(a).isOldDirection())
+					game.getPlayersArray().get(a).setOldDirection(false);
+				game.getPlayersArray().get(a).setOld(game.getPlayersArray().get(a).getTmpDirection());
+				game.getPlayersArray().get(a).setPressed(false);
+			}
+
 		}
 
 	}
@@ -494,10 +488,9 @@ public class GamePanel extends JPanel {
 	}
 
 	public void option() {
-		
+
 		dialog.setPreferredSize(new Dimension(250, 280));
-	
-		
+
 		JPanel fullpanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -506,19 +499,19 @@ public class GamePanel extends JPanel {
 					g.drawImage(ImageProvider.getCursorRight(), 30, 82, this);
 				} else if (cursorPositionDialog == 1) {
 					g.drawImage(ImageProvider.getCursorRight(), 30, 128, this);
-				} else if (cursorPositionDialog == 2){
+				} else if (cursorPositionDialog == 2) {
 					g.drawImage(ImageProvider.getCursorRight(), 30, 174, this);
-				}else {
+				} else {
 					g.drawImage(ImageProvider.getCursorRight(), 30, 217, this);
 				}
 			}
 		};
-		
+
 		JPanel text = new JPanel();
 		JPanel buttonspanel = new JPanel(new GridLayout(4, 1));
-		String[] buttonTxt = {"Retry", "Restart", "Menu", "Lobby"};
+		String[] buttonTxt = { "Retry", "Restart", "Menu", "Lobby" };
 		JLabel label = new JLabel("Option");
-	
+
 		fullpanel.setPreferredSize(new Dimension(250, 350));
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
@@ -531,7 +524,7 @@ public class GamePanel extends JPanel {
 		text.setMaximumSize(new Dimension(200, 70)); // set max = pref
 		text.setBackground(Color.BLACK);
 		text.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		for (int i = 0; i < buttonTxt.length; i++) {
 
 			final int curRow = i;
@@ -544,22 +537,22 @@ public class GamePanel extends JPanel {
 			buttons[i].setContentAreaFilled(false);
 			buttons[i].setBorderPainted(false);
 			buttons[i].setFocusPainted(false);
-			
-			if(GameManager.offline) {
-				if(i==3) {
+
+			if (GameManager.offline) {
+				if (i == 3) {
 					buttons[i].setForeground(Color.DARK_GRAY);
-				}else {
+				} else {
 					buttons[i].setForeground(Color.WHITE);
 				}
 			}
-			if(!GameManager.offline) {
-				if(i==1 || i == 2) {
+			if (!GameManager.offline) {
+				if (i == 1 || i == 2) {
 					buttons[i].setForeground(Color.DARK_GRAY);
-				}else {
+				} else {
 					buttons[i].setForeground(Color.WHITE);
 				}
 			}
-			
+
 			buttons[i].addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -596,7 +589,7 @@ public class GamePanel extends JPanel {
 			buttonspanel.add(buttons[i]);
 			optionActionListener(i);
 		}
-		
+
 		buttonspanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttonspanel.setPreferredSize(new Dimension(100, 180));
 		buttonspanel.setBackground(Color.BLACK);
@@ -627,7 +620,7 @@ public class GamePanel extends JPanel {
 				}
 			});
 			break;
-		case 1:// RESTART 
+		case 1:// RESTART
 			buttons[j].addActionListener(new ActionListener() {
 
 				@Override
@@ -652,7 +645,7 @@ public class GamePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					if(GameManager.offline) {
+					if (GameManager.offline) {
 						SoundsProvider.playBulletHit1();
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.pauseOptionDialog = false;
@@ -660,9 +653,11 @@ public class GamePanel extends JPanel {
 						dialog.dispose();
 						if (!GameManager.offline) {
 							if (getGameManager().getPlayersArray().get(1).isDied()) {
-								connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
+								connectionManager
+										.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
 							} else {
-								connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
+								connectionManager
+										.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
 							}
 						}
 						getSwitcher().showMenu();
@@ -677,8 +672,8 @@ public class GamePanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-			
-					if(!GameManager.offline) {
+
+					if (!GameManager.offline) {
 						SoundsProvider.playBulletHit1();
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.setExit(true);
@@ -1112,18 +1107,20 @@ public class GamePanel extends JPanel {
 				game.getEnemy().get(a).setxGraphics(game.getEnemy().get(a).getX() * tile);
 				game.getEnemy().get(a).setyGraphics(game.getEnemy().get(a).getY() * tile);
 
-					if ( (GameManager.offline && SettingsPanel.easy) || (!GameManager.offline && difficult.equals("easy")))
-						game.getEnemy().get(a).easy();
-					else if ((GameManager.offline && SettingsPanel.normal) || (!GameManager.offline && difficult.equals("normal")))
-						game.getEnemy().get(a).medium();
-					else if ((GameManager.offline && SettingsPanel.hard) || (!GameManager.offline && difficult.equals("hard"))) {
-						game.getEnemy().get(a).difficult(GameManager.flag.getX(), GameManager.flag.getY());
+				if ((GameManager.offline && SettingsPanel.easy) || (!GameManager.offline && difficult.equals("easy")))
+					game.getEnemy().get(a).easy();
+				else if ((GameManager.offline && SettingsPanel.normal)
+						|| (!GameManager.offline && difficult.equals("normal")))
+					game.getEnemy().get(a).medium();
+				else if ((GameManager.offline && SettingsPanel.hard)
+						|| (!GameManager.offline && difficult.equals("hard"))) {
+					game.getEnemy().get(a).difficult(GameManager.flag.getX(), GameManager.flag.getY());
 
-						if (!game.getEnemy().get(a).isHasApath()) {
-							PlayerTank player = game.getPlayersArray().get(game.getEnemy().get(a).getRandomObject());
-							game.getEnemy().get(a).difficult(player.getX(), player.getY());
-						}
+					if (!game.getEnemy().get(a).isHasApath()) {
+						PlayerTank player = game.getPlayersArray().get(game.getEnemy().get(a).getRandomObject());
+						game.getEnemy().get(a).difficult(player.getX(), player.getY());
 					}
+				}
 
 				game.getEnemy().get(a).setTmpDirection(game.getEnemy().get(a).getDirection());
 
@@ -1183,16 +1180,6 @@ public class GamePanel extends JPanel {
 			}
 
 		}
-	}
-
-	private boolean noIntersectPlayerWithEnemy(int a) {
-		for (int x = 0; x < game.getEnemy().size(); x++) {
-			if (game.getEnemy().get(x).isAppearsInTheMap()
-					&& game.getEnemy().get(x).rect.intersects(game.getPlayersArray().get(a).rect)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	// -----------------------PAINT----------------------------//
@@ -1717,15 +1704,15 @@ public class GamePanel extends JPanel {
 						g2d.drawImage(ImageProvider.getShield2(), at, null);
 				}
 			}
-			
-			if(!GameManager.offline){
+
+			if (!GameManager.offline) {
 				if (!game.getPlayersArray().get(a).isDied()) {
 					labelForNameOfPlayers.get(a).setText(game.getPlayersArray().get(a).getNameOfPlayerTank());
 					labelForNameOfPlayers.get(a).setForeground(labelForNameOfPlayersColor.get(a));
 					labelForNameOfPlayers.get(a).setBounds((int) game.getPlayersArray().get(a).getyGraphics(),
 							(int) game.getPlayersArray().get(a).getxGraphics() - 25, 70, 30);
 					labelForNameOfPlayers.get(a).setFont(MainFrame.customFontS);
-				}else{
+				} else {
 					labelForNameOfPlayers.get(a).setText("");
 				}
 			}
