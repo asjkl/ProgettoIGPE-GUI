@@ -494,41 +494,32 @@ public class GamePanel extends JPanel {
 	}
 
 	public void option() {
-
-		dialog.setPreferredSize(new Dimension(250, 250));
+		
+		dialog.setPreferredSize(new Dimension(250, 280));
+	
+		
 		JPanel fullpanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				if (cursorPositionDialog == 0) {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 80, this);
+					g.drawImage(ImageProvider.getCursorRight(), 30, 82, this);
 				} else if (cursorPositionDialog == 1) {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 133, this);
-				} else {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 185, this);
+					g.drawImage(ImageProvider.getCursorRight(), 30, 128, this);
+				} else if (cursorPositionDialog == 2){
+					g.drawImage(ImageProvider.getCursorRight(), 30, 174, this);
+				}else {
+					g.drawImage(ImageProvider.getCursorRight(), 30, 217, this);
 				}
 			}
 		};
-		JPanel text = new JPanel();
-		JPanel buttonspanel;
-		String[] buttonTxt;
-		JLabel label = new JLabel("Option");
 		
-		if(GameManager.offline) {
-			 buttonspanel = new JPanel(new GridLayout(3, 1, 0, 10));
-			 buttonTxt = new String[3];
-			 buttonTxt[0] = "Retry";
-			buttonTxt[1] = "Restart";
-			buttonTxt[2] = "Menu";
-		}
-		else {
-			buttonspanel = new JPanel(new GridLayout(2, 1, 0, 10));
-			buttonTxt = new String[2];
-			buttonTxt[0] = "Retry";
-			buttonTxt[1] = "Lobby";
-		}
+		JPanel text = new JPanel();
+		JPanel buttonspanel = new JPanel(new GridLayout(4, 1));
+		String[] buttonTxt = {"Retry", "Restart", "Menu", "Lobby"};
+		JLabel label = new JLabel("Option");
 	
-		fullpanel.setPreferredSize(new Dimension(250, 250));
+		fullpanel.setPreferredSize(new Dimension(250, 350));
 		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fullpanel.setBackground(Color.BLACK);
 		buttons = new JButton[buttonTxt.length];
@@ -540,8 +531,7 @@ public class GamePanel extends JPanel {
 		text.setMaximumSize(new Dimension(200, 70)); // set max = pref
 		text.setBackground(Color.BLACK);
 		text.setAlignmentX(Component.CENTER_ALIGNMENT);
-		buttonspanel.setBackground(Color.BLACK);
-
+		
 		for (int i = 0; i < buttonTxt.length; i++) {
 
 			final int curRow = i;
@@ -549,21 +539,34 @@ public class GamePanel extends JPanel {
 			buttons[i].setFont(MainFrame.customFontM);
 			buttons[i].setBackground(Color.BLACK);
 			buttons[i].setBorder(null);
+			buttons[i].setForeground(Color.WHITE);
 			buttons[i].setFocusPainted(false);
 			buttons[i].setContentAreaFilled(false);
 			buttons[i].setBorderPainted(false);
 			buttons[i].setFocusPainted(false);
+			
+			if(GameManager.offline) {
+				if(i==3) {
+					buttons[i].setForeground(Color.DARK_GRAY);
+				}else {
+					buttons[i].setForeground(Color.WHITE);
+				}
+			}
+			if(!GameManager.offline) {
+				if(i==1 || i == 2) {
+					buttons[i].setForeground(Color.DARK_GRAY);
+				}else {
+					buttons[i].setForeground(Color.WHITE);
+				}
+			}
+			
 			buttons[i].addKeyListener(new KeyAdapter() {
 
 				@Override
 				public void keyPressed(KeyEvent e) {
 
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
 						((JButton) e.getComponent()).doClick();
-						if (GameManager.offline) {
-							dialog.dispose();
-						}
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.pauseOptionDialog = false;
@@ -591,13 +594,11 @@ public class GamePanel extends JPanel {
 			});
 
 			buttonspanel.add(buttons[i]);
-			buttonspanel.setBackground(Color.BLACK);
 			optionActionListener(i);
 		}
-
-		buttonspanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		buttonspanel.setPreferredSize(new Dimension(100, 150));
-		buttonspanel.setMaximumSize(new Dimension(100, 150));
+		
+		buttonspanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		buttonspanel.setPreferredSize(new Dimension(100, 180));
 		buttonspanel.setBackground(Color.BLACK);
 		fullpanel.add(text);
 		fullpanel.add(buttonspanel);
@@ -626,7 +627,7 @@ public class GamePanel extends JPanel {
 				}
 			});
 			break;
-		case 1:// RESTART or LOBBY
+		case 1:// RESTART 
 			buttons[j].addActionListener(new ActionListener() {
 
 				@Override
@@ -642,7 +643,42 @@ public class GamePanel extends JPanel {
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
 					}
-					else {
+				}
+			});
+			break;
+		case 2: // MENU
+			buttons[j].addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					if(GameManager.offline) {
+						SoundsProvider.playBulletHit1();
+						((MainFrame) getSwitcher()).setTransparent(false);
+						game.pauseOptionDialog = false;
+						game.setExit(true);
+						dialog.dispose();
+						if (!GameManager.offline) {
+							if (getGameManager().getPlayersArray().get(1).isDied()) {
+								connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
+							} else {
+								connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
+							}
+						}
+						getSwitcher().showMenu();
+						SoundsProvider.cancelMove();
+						SoundsProvider.cancelStop();
+					}
+				}
+			});
+			break;
+		case 3: // LOBBY
+			buttons[j].addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+			
+					if(!GameManager.offline) {
 						SoundsProvider.playBulletHit1();
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.setExit(true);
@@ -654,31 +690,6 @@ public class GamePanel extends JPanel {
 				}
 			});
 			break;
-		case 2: // MENU
-			buttons[j].addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					SoundsProvider.playBulletHit1();
-					((MainFrame) getSwitcher()).setTransparent(false);
-					game.pauseOptionDialog = false;
-					game.setExit(true);
-					dialog.dispose();
-					if (!GameManager.offline) {
-						if (getGameManager().getPlayersArray().get(1).isDied()) {
-							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
-						} else {
-							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
-						}
-					}
-					getSwitcher().showMenu();
-					SoundsProvider.cancelMove();
-					SoundsProvider.cancelStop();
-				}
-			});
-			break;
-	
 		default:
 			break;
 		}

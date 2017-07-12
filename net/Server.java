@@ -20,6 +20,7 @@ public class Server implements Runnable {
 	ServerGameManager gameManagerServer;
 	public static String OnlineNames = "";
 	public HashMap<Socket, String> client = new HashMap<>();
+	
 
 	public static void main(String[] args) throws IOException {
 		final Server server1 = new Server(1234);
@@ -28,7 +29,7 @@ public class Server implements Runnable {
 		new Thread(server2, "chat").start();
 	}
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
 
@@ -72,6 +73,8 @@ public class Server implements Runnable {
 				}
 			}
 		} else {
+			
+		
 			try {
 				serverSocket = new ServerSocket(port);
 			} catch (IOException e1) {
@@ -80,6 +83,9 @@ public class Server implements Runnable {
 			System.out.println("SERVER CHAT: " + serverSocket);
 
 			while (!exitChat) {
+				
+				
+				System.out.println("--------------------------------------------------");
 				try {
 					Socket s = serverSocket.accept();
 					System.out.println("Connection From " + s);
@@ -110,6 +116,7 @@ public class Server implements Runnable {
 		this.port = port;
 	}
 
+	
 	@SuppressWarnings("rawtypes")
 	Enumeration getOutputStreams() {
 		return outputStreams.elements();

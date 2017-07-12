@@ -9,6 +9,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,7 +45,10 @@ public class Lobby extends JPanel {
 	private String difficult;
 	private String stage;
 	private ClientChat client;
-
+	private int countDown = 5;
+	private Timer timer;
+	private TimerTask task;
+	
 	public Lobby(int w, int h, PanelSwitcher switcher) {
 		width = w;
 		height = h;
@@ -96,6 +102,31 @@ public class Lobby extends JPanel {
 		createDifficultPanel();
 	}
 
+	
+	public class MyTask extends TimerTask {
+
+		public void run() {
+			
+			if(client.isReadyP1() && client.isReadyP2() && client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
+				try {
+					client.dout.writeUTF(String.valueOf(client.getPoints() + countDown--));	 // <- "..............5"
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (countDown < 0) {
+				try {
+					client.dout.writeUTF(String.valueOf(client.getPoints() + "StartGame"));	 // <- "..............5"
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				this.cancel();
+			}
+			
+		}
+	}
+	
 	public void createDifficultPanel() {
 		JPanel difficultPanel = new JPanel();
 		difficultPanel.setLayout(null);
@@ -164,26 +195,33 @@ public class Lobby extends JPanel {
 				int y = 40;
 				while (cont < client.getNameOfClientsOnline().size()) {
 					
-						if (cont == 0)
+						if (client.getClientName().equals(client.getNameOfClientsOnline().get(cont)))
 							g.setColor(Color.YELLOW);
 						else
 							g.setColor(Color.BLACK);
 						
 						g.setFont(MainFrame.customFontM);
-						g.drawString(client.getNameOfClientsOnline().get(cont), 30, y);
+						g.drawString(client.getNameOfClientsOnline().get(cont), 32, y);
 						
+						
+						//scritta ready
 						if(client.isReadyP1() && cont == 0) {
 							g.setFont(MainFrame.customFontS);
 							g.setColor(Color.GREEN);
-							g.drawString("ready", 240, y);
+							g.drawString("ready", 245, y);
 						}
-						
 						else if(client.isReadyP2() && cont == 1) {
 							g.setFont(MainFrame.customFontS);
 							g.setColor(Color.GREEN);
-							g.drawString("ready", 240, y);
+							g.drawString("ready", 245, y);
 						}
 						
+						//Scritta Moderatore
+						if(cont == 0) {
+							g.setFont(MainFrame.customFontM);
+							g.setColor(Color.YELLOW);
+							g.drawString("M", 5, y);
+						}
 						
 						y += 40;
 					
@@ -210,6 +248,15 @@ public class Lobby extends JPanel {
 		client.setSize(new Dimension(800, 190));
 		chatPanel.add(client);
 		add(chatPanel);
+		
+		
+		
+		// solo moderatore avvia timer che manda messaggi
+		if(client.getClientName().equals(client.getNameOfClientsOnline().get(0))){
+			timer =  new Timer();
+			task = new MyTask();
+			timer.schedule(task, 1000, 1000);
+		}
 	}
 
 	public void createMapsPanel() {

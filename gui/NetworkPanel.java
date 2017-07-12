@@ -44,7 +44,6 @@ public class NetworkPanel extends JPanel {
 	private ClientChat client;
 	private Server serverChat;
 	
-	@SuppressWarnings("static-access")
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
 		this.setBackground(Color.BLACK);

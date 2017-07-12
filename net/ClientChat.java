@@ -35,10 +35,9 @@ public class ClientChat extends JPanel implements Runnable {
 	private boolean readyP2 = false;
 	private MainFrame mainFrame;
 	private boolean exitThrad=false;
-	private boolean flag = false;
-	private int countDown = 5;
-	private Timer timer;
-	private TimerTask task;
+	private boolean flag = true;
+	private String points = "...............";
+
 	
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
 
@@ -100,24 +99,7 @@ public class ClientChat extends JPanel implements Runnable {
 		
 	}// costruttore
 
-	
-	public class MyTask extends TimerTask {
 
-		public void run() {
-			
-			try {
-				dout.writeUTF(String.valueOf(countDown--));
-				dout.writeUTF(".");
-				dout.writeUTF(".");
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	
 	private void processMessage(String message) {
 
 		try {
@@ -155,14 +137,18 @@ public class ClientChat extends JPanel implements Runnable {
 
 					if (elements[0].equals("p2") && elements[1].equals("true")) {
 						readyP2 = true;
+						flag=false;
 					} else if (elements[0].equals("p2") && elements[1].equals("false")) {
 						readyP2 = false;
+						flag=false;
 					} else if (elements[0].equals("p1") && elements[1].equals("true")) {
 						readyP1 = true;
+						flag=false;
 					} else if (elements[0].equals("p1") && elements[1].equals("false")) {
 						readyP1 = false;
+						flag=false;
 					}
-					flag=true;
+				
 
 				} else if (elements.length == 4) {
 
@@ -174,15 +160,8 @@ public class ClientChat extends JPanel implements Runnable {
 					}
 
 				}
-				
-//				if(readyP1 && readyP2) {
-//					
-//					timer = new Timer();
-//					task = new MyTask();
-//					timer.schedule(task, 1000, 1000);
-//				}
-				
-				if (/*elements[0] == "0" &&*/ readyP1 && readyP2) { // entrambi si connettono
+			
+				if (elements.length == 1 && elements[0].equals(points+"StartGame") && readyP1 && readyP2) { // entrambi si connettono
 					
 					try {
 						connectoToServer();
@@ -190,63 +169,65 @@ public class ClientChat extends JPanel implements Runnable {
 						e1.printStackTrace();
 					}		
 
-//					timer.cancel();
+				
 				}
 
 				// ------------------------------------------------
 
-				if(!flag) {
-				if (count == 0 && !(message.equals(null))) {
-
-					String[] names = message.split(" ");
-					int i = 0;
-
-					while (i < names.length) {
-						if (!names[i].equals("")) {
-//							to.append(names[i] + "\n");
-							nameOfClientsOnline.add(names[i]);
-						}
-						i++;
-					}
-					count++;
-				}
-
-				else {
-
-					boolean name = true;
-					int len = message.length();
-
-					for (int i = 0; i < 6; i++) {
-
-						if (!(message.charAt(len - i - 1) == '^')) {
-							name = false;
-							System.out.println(message.charAt(len - i - 1));
-							break;
-						}
-					}
-
-					if (name == false) {
-
-						ta.append(message + "\n");
-					} else {
-						String name1 = "";
+				if(flag) {
+					if (count == 0 && !(message.equals(null))) {
+	
+						String[] names = message.split(" ");
 						int i = 0;
-						while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
-							name1 = name1 + message.charAt(i);
+	
+						while (i < names.length) {
+							if (!names[i].equals("")) {
+	//							to.append(names[i] + "\n");
+								nameOfClientsOnline.add(names[i]);
+							}
 							i++;
 						}
-						nameOfClientsOnline.add(name1);
-//						to.append(name1 + "\n");
+						count++;
+					}
+	
+					else {
+	
+						boolean name = true;
+						int len = message.length();
+	
+						for (int i = 0; i < 6; i++) {
+	
+							if (!(message.charAt(len - i - 1) == '^')) {
+								name = false;
+								System.out.println(message.charAt(len - i - 1));
+								break;
+							}
+						}
+	
+						if (name == false) {
+	
+							ta.append(message + "\n");
+						} else {
+							String name1 = "";
+							int i = 0;
+							while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
+								name1 = name1 + message.charAt(i);
+								i++;
+							}
+							nameOfClientsOnline.add(name1);
+//							to.append(name1 + "\n");
+						}
 					}
 				}
-				}
-				flag=false;
+				flag=true;
 			}
 
 		} catch (IOException ie) {
 			System.out.println(ie);
 		}
 	}
+	
+
 
 	protected void connectoToServer() throws Exception {
 
@@ -297,6 +278,15 @@ public class ClientChat extends JPanel implements Runnable {
 	public void setPortChat(int portChat) {
 		this.portChat = portChat;
 	}
+	public String getPoints() {
+		return points;
+	}
+
+
+	public void setPoints(String points) {
+		this.points = points;
+	}
+
 
 	// public static void main(String args[])
 	// {
