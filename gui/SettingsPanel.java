@@ -242,6 +242,7 @@ public class SettingsPanel extends JPanel {
 	    }
 	}
 
+	//TODO bisogna tenerlo?
 	public void setBoundRadioButton(int j) {
 		
 		switch (j) {

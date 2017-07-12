@@ -165,10 +165,7 @@ public class GamePanel extends JPanel {
 
 		if (game.getPlayersArray().size() == 1) {
 
-			currentResumeP1 = ((MainFrame) switcher).getCurrentResumeP1();
-			currentLevelP1 = ((MainFrame) switcher).getCurrentLevelP1();
-			game.getPlayersArray().get(0).setResume(currentResumeP1);
-			game.getPlayersArray().get(0).setLevel(currentLevelP1);
+			loadScoreSingle();
 		} else
 			loadScoreMulti();
 
@@ -1911,6 +1908,51 @@ public class GamePanel extends JPanel {
 
 	// ------------------------SCORE MULTI-------------------------//
 
+	private void loadScoreSingle() {
+		
+		BufferedReader reader = null;
+		String line = null;
+
+		final int DIM = 5;
+		String values[] = new String[DIM];
+
+		try {
+
+			reader = new BufferedReader(new FileReader("./values/singleCareer.txt"));
+			line = reader.readLine();
+
+			int i = 0;
+
+			while (line != null) {
+
+				StringTokenizer st = new StringTokenizer(line, "");
+				String tmp = null;
+
+				while (st.hasMoreTokens()) {
+
+					tmp = st.nextToken();
+
+					if (tmp.matches("^[0-9]+") && i < values.length)
+						values[i++] = tmp;
+				}
+
+				line = reader.readLine();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		((MainFrame) switcher).setCurrentResumeP1(Integer.parseInt(values[2]));
+		((MainFrame) switcher).setCurrentLevelP1(Integer.parseInt(values[3]));
+		((MainFrame) switcher).setUnlockedMapsP1(Integer.parseInt(values[4]));
+		
+		currentResumeP1 = ((MainFrame) switcher).getCurrentResumeP1();
+		game.getPlayersArray().get(0).setResume(currentResumeP1);
+		
+		currentLevelP1 = ((MainFrame) switcher).getCurrentLevelP1();
+		game.getPlayersArray().get(0).setLevel(currentLevelP1);
+	}
+	
 	private void loadScoreMulti() {
 
 		BufferedReader reader = null;

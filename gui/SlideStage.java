@@ -23,7 +23,7 @@ public class SlideStage extends JLayeredPane {
 	private JLabel label;
 	private PanelSwitcher switcher;
 	private JTextField filename;
-	private ArrayList<JPanel> panels = new ArrayList<>();
+	private ArrayList<JPanel> panels;
 
 	public SlideStage(final int w, final int h, PanelSwitcher switcher, JTextField filename) {
 		
@@ -36,6 +36,7 @@ public class SlideStage extends JLayeredPane {
 		this.filename = filename;
 		this.setSwitcher(switcher);
 		
+		panels = new ArrayList<>();
 		label = new JLabel();
 		label.setFont(MainFrame.customFontB);
 			
@@ -46,7 +47,7 @@ public class SlideStage extends JLayeredPane {
 			label.setText("Custom");
 		
 		label.setBounds((int) (getPreferredSize().getWidth() / 2) - 70,
-				(int) getPreferredSize().getHeight() / 2-50, 300, 100);
+				(int) getPreferredSize().getHeight() / 2 - 50, 300, 100);
 		label.setBackground(Color.GRAY);
 		label.setForeground(Color.BLACK);
 		this.add(label);
