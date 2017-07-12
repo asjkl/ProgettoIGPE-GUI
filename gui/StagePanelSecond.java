@@ -37,8 +37,8 @@ public class StagePanelSecond extends JPanel {
 		this.setBackground(Color.GRAY);
 		this.setLayout(null);
 	
-		posY = 25;
-		posX = 200;
+		posY = 40;
+		posX = 215;
 		cursorPosition = 0;
 		
 		path = "";
@@ -177,11 +177,11 @@ public class StagePanelSecond extends JPanel {
 						
 			if(j == 4 || j == 8) {
 				
-				posX = 200;
+				posX = 215;
 				posY += 225;
 			}
-			int k = (j + 13)-1;
-			setLabel(k+1);
+			int k = (j + 13) - 1;
+			setLabel(k + 1);
 			maps.get(j).setBounds(posX, posY, 
 					ImageProvider.getMapsP1().get(k).getWidth(null), ImageProvider.getMapsP1().get(k).getHeight(null));
 			

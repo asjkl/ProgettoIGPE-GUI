@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.ImageProducer;
+
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
@@ -29,7 +31,8 @@ public class LoadPanel extends JPanel {
 	public void setProgressBar() {
 		
 		progressBar = new JProgressBar();
-		progressBar.setBounds(1100, 700, 225, 50);
+		progressBar.setBounds((int) this.getPreferredSize().getWidth() - (ImageProvider.getLoading().getWidth(null) + 190), 
+				(int) this.getPreferredSize().getHeight() - (ImageProvider.getLoading().getWidth(null) + 70), ImageProvider.getLoading().getWidth(null), ImageProvider.getLoading().getHeight(null));
 		progressBar.setOpaque(false);
 		progressBar.setBorderPainted(false);
 		this.add(progressBar, BorderLayout.NORTH);
@@ -38,7 +41,8 @@ public class LoadPanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(ImageProvider.getBattleCity(), 450, 250, null);
+		g.drawImage(ImageProvider.getBattleCity(),(int) (this.getPreferredSize().getWidth() / 2) - (ImageProvider.getBattleCity().getWidth(null) / 2),
+				(int) (this.getPreferredSize().getHeight() / 2) - (ImageProvider.getBattleCity().getWidth(null) / 4), null);
 		g.drawImage(ImageProvider.getLoading(), progressBar.getX(), progressBar.getY(), this);
 	}
 	
