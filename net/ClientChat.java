@@ -4,8 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.JPanel;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 
@@ -36,7 +34,7 @@ public class ClientChat extends JPanel implements Runnable {
 	private MainFrame mainFrame;
 	private boolean exitThrad=false;
 	private boolean flag = true;
-	private String points = "..............................";
+	private String points = "........................................";
 
 	
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {

@@ -641,6 +641,8 @@ public class GamePanel extends JPanel {
 						getSwitcher().showSlide(game.getFilename());
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
+						game.timer.cancel();
+						game.timer2.cancel();
 					}
 				}
 			});
@@ -660,6 +662,8 @@ public class GamePanel extends JPanel {
 						getSwitcher().showMenu();
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
+						game.timer.cancel();
+						game.timer2.cancel();
 					}
 				}
 			});
@@ -682,6 +686,8 @@ public class GamePanel extends JPanel {
 						}
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
+						game.timer.cancel();
+						game.timer2.cancel();
 					}
 				}
 			});
@@ -1830,7 +1836,6 @@ public class GamePanel extends JPanel {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private void printLines(Graphics g, Graphics2D g2d) {
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));
 		for (int i = 0; i <= game.getHeight(); i++) {

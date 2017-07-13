@@ -106,7 +106,7 @@ public class Lobby extends JPanel {
 	public class MyTask extends TimerTask {
 
 		public void run() {
-			System.out.println("TIMER "+countDown);
+	
 			if(client.isReadyP1() && client.isReadyP2() && client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 				try {
 					client.dout.writeUTF(String.valueOf(client.getPoints() + countDown--));	 // <- "..............5"
@@ -218,9 +218,11 @@ public class Lobby extends JPanel {
 						
 						//Scritta Moderatore
 						if(cont == 0) {
-							g.setFont(MainFrame.customFontM);
+							g.setFont(MainFrame.customFontS);
 							g.setColor(Color.YELLOW);
-							g.drawString("M", 5, y);
+							g.setFont(g.getFont().deriveFont(10.0f));
+							g.drawRect(2, y-18, 12, 12);
+							g.drawString("M", 5, y-8);
 						}
 						
 						y += 40;
