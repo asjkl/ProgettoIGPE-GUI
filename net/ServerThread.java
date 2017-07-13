@@ -26,7 +26,9 @@ public class ServerThread extends Thread {
 				if (elements[0].equals("EXITALL")) {
 					server.sendToAll("EXITALL");
 					server.removeConnection(socket);
+					server.setExitChat(true);
 					server.closeServer();
+					break;
 				} else if (elements[0].equals("EXIT")) {
 					String client = elements[1];
 					server.removeConnection(client);

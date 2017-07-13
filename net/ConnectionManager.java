@@ -114,7 +114,7 @@ public class ConnectionManager implements Runnable {
 						new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
 					} else {
 						mainFrame.setTransparent(false);
-						mainFrame.showMenu();
+						mainFrame.showLobby(false);
 					}
 					close();
 				} else {

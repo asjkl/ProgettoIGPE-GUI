@@ -208,12 +208,12 @@ public class NetworkPanel extends JPanel {
 						buttons.get(1).setEnabled(false);
 		
 						serverChat=new Server(portChat);
-					
-						 new Thread(serverChat, "chat").start();
-						  client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
 						
+						new Thread(serverChat, "chat").start();
+						client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
+
 						nameTextField.setText("");
-						getSwitcher().showLobby();
+						getSwitcher().showLobby(false);
 						
 					}
 				}

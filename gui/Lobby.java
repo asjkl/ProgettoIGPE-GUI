@@ -106,7 +106,7 @@ public class Lobby extends JPanel {
 	public class MyTask extends TimerTask {
 
 		public void run() {
-			
+			System.out.println("TIMER "+countDown);
 			if(client.isReadyP1() && client.isReadyP2() && client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 				try {
 					client.dout.writeUTF(String.valueOf(client.getPoints() + countDown--));	 // <- "..............5"
@@ -399,6 +399,7 @@ public class Lobby extends JPanel {
 					System.out.println("-> " + client.getClientName());
 					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 						System.out.println("MOD STA PER USCIRE");
+						timer.cancel();
 						try {
 							client.dout.writeUTF("EXITALL");
 						} catch (IOException e1) {

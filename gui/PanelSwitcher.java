@@ -21,7 +21,7 @@ public interface PanelSwitcher {
 	
 	void showSettings();
 	
-	void showLobby();
+	void showLobby(boolean gamePanelExit);
 
 	void showSlide(JTextField f);
 

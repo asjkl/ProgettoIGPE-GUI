@@ -676,7 +676,6 @@ public class GamePanel extends JPanel {
 							connectionManager
 									.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
 						}
-						getSwitcher().showLobby();
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
 					}
@@ -1122,8 +1121,10 @@ public class GamePanel extends JPanel {
 
 				game.getEnemy().get(a).setTmpDirection(game.getEnemy().get(a).getDirection());
 
-				if (game.isShotEnabled() && GameManager.currentTime % 2 == 0)
+				if (game.isShotEnabled() && game.getEnemy().get(a).getShotTimeEverySecond() == 1){
 					game.createRocketTank(game.getEnemy().get(a).getDirection(), game.getEnemy().get(a));
+					game.getEnemy().get(a).setShotTimeEverySecond(0);
+				}
 			}
 		}
 		for (int a = 0; a < game.getEnemy().size(); a++) {

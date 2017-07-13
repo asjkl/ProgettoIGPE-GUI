@@ -220,19 +220,20 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	@Override
-	public void showLobby() {
-		lobby = new Lobby(WIDTH, HEIGHT, this);
-		switchTo(lobby); 
-	
+	public void showLobby(boolean gamePanelExit) {
+		if(!gamePanelExit){
+			lobby = new Lobby(WIDTH, HEIGHT, this);
 			lobby.setClient(network.getClient());
+			System.out.println("................................................1 "+network.getClient()+" "+network.getClient().getNameOfClientsOnline().size());
 			lobby.setNameTextField(network.getNameTextField());
 			lobby.setIpTextField(network.getIpTextField());
 			lobby.setPortTextField(network.getPortTextField());
+			System.out.println("................................................2 "+network.getClient()+" "+network.getClient().getNameOfClientsOnline().size());
 			lobby.createChat(network.getClient());
 			lobby.createOnlinePanel();
-			lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
-	
-		
+		}
+		switchTo(lobby); 
+		lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
 	}
 
 	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename, String difficult) {
