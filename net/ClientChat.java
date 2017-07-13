@@ -4,8 +4,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
+import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
 
 import java.io.*;
 
@@ -21,7 +27,7 @@ public class ClientChat extends JPanel implements Runnable {
 	private int portChat;
 	private String difficult;
 	private String stage;
-
+	private JDialog dialog;
 	private TextArea ta;
 //	private TextArea to;
 	private Socket socket;
@@ -44,7 +50,7 @@ public class ClientChat extends JPanel implements Runnable {
 		this.setPortChat(portChat);
 		this.setNameOfClientsOnline(new ArrayList<>());
 		this.mainFrame = mainFrame;
-
+		dialog = new JDialog(dialog, "ERROR");	
 		tf1 = new TextField(name + ":");
 		this.setSize(new Dimension(500, 300));
 		tf1.setEditable(false);
@@ -92,7 +98,7 @@ public class ClientChat extends JPanel implements Runnable {
 			new Thread(this).start();
 			processMessage(tf1.getText() + "^^^^^^");
 		} catch (IOException e) {
-			System.out.println(e);
+			showDialog();
 		}
 		
 	}// costruttore
@@ -227,6 +233,49 @@ public class ClientChat extends JPanel implements Runnable {
 		}
 	}
 	
+	private void showDialog() {
+
+		JLabel label = new JLabel("Impossible to connect to " + host );
+
+		label.setFont(MainFrame.customFontS);
+		label.setBackground(Color.BLACK);
+		label.setForeground(Color.RED);
+		label.setHorizontalAlignment(JLabel.CENTER);
+
+		JPanel panel = new JPanel(new GridLayout(2, 0));
+
+		panel.setBackground(Color.BLACK);
+		panel.setBorder(BorderFactory.createLineBorder(Color.RED));
+
+		JButton ok = new JButton("OK");
+
+		ok.setBorder(null);
+		ok.setContentAreaFilled(false);
+		ok.setBorderPainted(false);
+		ok.setFocusPainted(false);
+		ok.setFont(MainFrame.customFontS);
+		ok.setBackground(Color.BLACK);
+		ok.setForeground(Color.WHITE);
+		ok.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				SoundsProvider.playBulletHit1();
+				dialog.dispose();
+			}
+		});
+
+		panel.add(label);
+		panel.add(ok);
+		panel.setPreferredSize(new Dimension(300, 100));
+		dialog.setContentPane(panel);
+		dialog.setUndecorated(true);
+		dialog.setModal(true);
+		dialog.pack();
+		dialog.setLocationRelativeTo(this);
+		dialog.setVisible(true);
+	}	
 
 
 	protected void connectoToServer() throws Exception {

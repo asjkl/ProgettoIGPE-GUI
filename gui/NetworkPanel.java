@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -38,7 +37,6 @@ public class NetworkPanel extends JPanel {
 	@SuppressWarnings("unused")
 	private WarningDialog warning;
 
-	private JDialog dialog;
 	private int DIM = 2;
 
 	private ClientChat client;
@@ -52,7 +50,6 @@ public class NetworkPanel extends JPanel {
 		this.setSwitcher(switcher);
 		this.setLayout(null);
 		
-		dialog = new JDialog(dialog, "ERROR");
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
 
@@ -224,49 +221,6 @@ public class NetworkPanel extends JPanel {
 		}
 	}
 
-//	private void showDialog() {
-//
-//		JLabel label = new JLabel("Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText());
-//
-//		label.setFont(MainFrame.customFontS);
-//		label.setBackground(Color.BLACK);
-//		label.setForeground(Color.RED);
-//		label.setHorizontalAlignment(JLabel.CENTER);
-//
-//		JPanel panel = new JPanel(new GridLayout(2, 0));
-//
-//		panel.setBackground(Color.BLACK);
-//		panel.setBorder(BorderFactory.createLineBorder(Color.RED));
-//
-//		JButton ok = new JButton("OK");
-//
-//		ok.setBorder(null);
-//		ok.setContentAreaFilled(false);
-//		ok.setBorderPainted(false);
-//		ok.setFocusPainted(false);
-//		ok.setFont(MainFrame.customFontS);
-//		ok.setBackground(Color.BLACK);
-//		ok.setForeground(Color.WHITE);
-//		ok.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//
-//				SoundsProvider.playBulletHit1();
-//				dialog.dispose();
-//			}
-//		});
-//
-//		panel.add(label);
-//		panel.add(ok);
-//		panel.setPreferredSize(new Dimension(300, 100));
-//		dialog.setContentPane(panel);
-//		dialog.setUndecorated(true);
-//		dialog.setModal(true);
-//		dialog.pack();
-//		dialog.setLocationRelativeTo(this);
-//		dialog.setVisible(true);
-//	}
 
 	public void setBoundAndText(int j) {
 
