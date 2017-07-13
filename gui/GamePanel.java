@@ -1393,6 +1393,9 @@ public class GamePanel extends JPanel {
 					}
 				}
 
+//				g.drawRect((int)game.getEnemy().get(i).rect.getY(),(int) game.getEnemy().get(i).rect.getX(), (int)game.getEnemy().get(i).rect.getWidth(), (int)game.getEnemy().get(i).rect.getHeight());
+
+				
 				if (game.getEnemy().get(i).getNext() instanceof PowerUp
 						&& !(((PowerUp) game.getEnemy().get(i).getNext()).getPowerUp() == Power.HELMET)
 						&& ((PowerUp) game.getEnemy().get(i).getNext()).getBefore() instanceof Tree) {
@@ -1700,6 +1703,8 @@ public class GamePanel extends JPanel {
 						}
 					}
 				}
+				
+//				g.drawRect((int)game.getPlayersArray().get(a).rect.getY(),(int) game.getPlayersArray().get(a).rect.getX(), (int)game.getPlayersArray().get(a).rect.getWidth(), (int)game.getPlayersArray().get(a).rect.getHeight());
 
 				// EFFETTO SPAWN E PROTEZIONE
 				if (game.getPlayersArray().get(a).isReadyToSpawn() || game.getPlayersArray().get(a).isProtection()) {
@@ -1871,7 +1876,7 @@ public class GamePanel extends JPanel {
 
 		g.translate(shift, shift);
 
-		// printLines(g, g2d);
+		 printLines(g, g2d);
 
 		paintWater(g);
 
