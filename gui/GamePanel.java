@@ -317,7 +317,7 @@ public class GamePanel extends JPanel {
 	public void logic() {
 		// MANAGE KEYS
 		keyPresses();
-		
+
 		// UPDATE ROCKETS
 		rockets();
 
@@ -408,32 +408,38 @@ public class GamePanel extends JPanel {
 
 		// ANIMATION PLAYER
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			((Tank) game.getPlayersArray().get(a)).updateRect();
-			if (game.getPlayersArray().get(a).isPressed() && game.getPlayersArray().get(a).getKeyPressLength() != 0
-					&& game.getPlayersArray().get(a).getKeyPressLength() > 120) {
-				if (!game.getPlayersArray().get(a).isOldDirection()) {
-					game.getPlayersArray().get(a).setCont(contFPS(game.getPlayersArray().get(a),
-							game.getPlayersArray().get(a).getTmpDirection(), game.getPlayersArray().get(a).getCont(),
-							game.returnSpeed(game.getPlayersArray().get(a).getSpeed(), game.getPlayersArray().get(a)),
-							end));
-				} else {
-					game.getPlayersArray().get(a).setCont(contFPS(game.getPlayersArray().get(a),
-							game.getPlayersArray().get(a).getOldD(), game.getPlayersArray().get(a).getCont(),
-							game.returnSpeed(game.getPlayersArray().get(a).getSpeed(), game.getPlayersArray().get(a)),
-							end));
+			if (noIntersectPlayerWithEnemy(a)) {
+				((Tank) game.getPlayersArray().get(a)).updateRect();
+				if (game.getPlayersArray().get(a).isPressed() && game.getPlayersArray().get(a).getKeyPressLength() != 0
+						&& game.getPlayersArray().get(a).getKeyPressLength() > 120) {
+					if (!game.getPlayersArray().get(a).isOldDirection()) {
+						game.getPlayersArray().get(a)
+								.setCont(contFPS(game.getPlayersArray().get(a),
+										game.getPlayersArray().get(a).getTmpDirection(),
+										game.getPlayersArray().get(a).getCont(),
+										game.returnSpeed(game.getPlayersArray().get(a).getSpeed(),
+												game.getPlayersArray().get(a)),
+										end));
+					} else {
+						game.getPlayersArray().get(a)
+								.setCont(contFPS(game.getPlayersArray().get(a), game.getPlayersArray().get(a).getOldD(),
+										game.getPlayersArray().get(a).getCont(),
+										game.returnSpeed(game.getPlayersArray().get(a).getSpeed(),
+												game.getPlayersArray().get(a)),
+										end));
+					}
+				}
+
+				if (game.getPlayersArray().get(a).getCont() >= tile) {
+					game.getPlayersArray().get(a).setxGraphics(game.getPlayersArray().get(a).getX() * tile);
+					game.getPlayersArray().get(a).setyGraphics(game.getPlayersArray().get(a).getY() * tile);
+					game.getPlayersArray().get(a).FPS();
+					if (game.getPlayersArray().get(a).isOldDirection())
+						game.getPlayersArray().get(a).setOldDirection(false);
+					game.getPlayersArray().get(a).setOld(game.getPlayersArray().get(a).getTmpDirection());
+					game.getPlayersArray().get(a).setPressed(false);
 				}
 			}
-
-			if (game.getPlayersArray().get(a).getCont() >= tile) {
-				game.getPlayersArray().get(a).setxGraphics(game.getPlayersArray().get(a).getX() * tile);
-				game.getPlayersArray().get(a).setyGraphics(game.getPlayersArray().get(a).getY() * tile);
-				game.getPlayersArray().get(a).FPS();
-				if (game.getPlayersArray().get(a).isOldDirection())
-					game.getPlayersArray().get(a).setOldDirection(false);
-				game.getPlayersArray().get(a).setOld(game.getPlayersArray().get(a).getTmpDirection());
-				game.getPlayersArray().get(a).setPressed(false);
-			}
-
 		}
 
 	}
@@ -670,11 +676,9 @@ public class GamePanel extends JPanel {
 						game.setExit(true);
 						dialog.dispose();
 						if (getGameManager().getPlayersArray().get(1).isDied()) {
-							connectionManager
-									.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
+							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
 						} else {
-							connectionManager
-									.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
+							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
 						}
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
@@ -1121,7 +1125,7 @@ public class GamePanel extends JPanel {
 
 				game.getEnemy().get(a).setTmpDirection(game.getEnemy().get(a).getDirection());
 
-				if (game.isShotEnabled() && game.getEnemy().get(a).getShotTimeEverySecond() == 1){
+				if (game.isShotEnabled() && game.getEnemy().get(a).getShotTimeEverySecond() == 1) {
 					game.createRocketTank(game.getEnemy().get(a).getDirection(), game.getEnemy().get(a));
 					game.getEnemy().get(a).setShotTimeEverySecond(0);
 				}
@@ -1179,6 +1183,16 @@ public class GamePanel extends JPanel {
 			}
 
 		}
+	}
+
+	private boolean noIntersectPlayerWithEnemy(int a) {
+		for (int x = 0; x < game.getEnemy().size(); x++) {
+			if (game.getEnemy().get(x).isAppearsInTheMap()
+					&& game.getEnemy().get(x).rect.intersects(game.getPlayersArray().get(a).rect)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// -----------------------PAINT----------------------------//
