@@ -1836,15 +1836,18 @@ public class GamePanel extends JPanel {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void printLines(Graphics g, Graphics2D g2d) {
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));
+		if (!((MainFrame) getSwitcher()).isTransparent())
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .2f));
 		for (int i = 0; i <= game.getHeight(); i++) {
 
 			g.drawLine(0, i * tile, game.getWidth() * tile, i * tile);
 			g.drawLine(i * tile, 0, i * tile, game.getHeight() * tile);
 
 		}
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+		if (!((MainFrame) getSwitcher()).isTransparent())
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 	}
 
 	private void paused(Graphics g, Graphics2D g2d) {
@@ -1881,7 +1884,7 @@ public class GamePanel extends JPanel {
 
 		g.translate(shift, shift);
 
-		 printLines(g, g2d);
+//		printLines(g, g2d);
 
 		paintWater(g);
 
@@ -1917,10 +1920,6 @@ public class GamePanel extends JPanel {
 
 		paused(g, g2d);
 
-		// TODO non serve piu
-		// if(!GameManager.offline){
-		// connectionManager.dispatch(getUpdatePaintComponent(game.isWaitToExit()));
-		// }
 	}
 
 	// ------------------------SCORE MULTI-------------------------//
