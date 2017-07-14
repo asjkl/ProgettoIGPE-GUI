@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.*;
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
@@ -46,6 +44,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private GraphicsEnvironment graphicscEnvironment;
 	private GraphicsDevice device;
 	public boolean fullscreen;
+	public boolean pressF11=false;
 
 	private NetworkPanel network;
 	private Lobby lobby;
@@ -70,14 +69,18 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 		  .addKeyEventDispatcher(new KeyEventDispatcher() {
-		      @Override
+		      @SuppressWarnings("static-access")
+			@Override
 		      public boolean dispatchKeyEvent(KeyEvent e) {
-		    	  if(e.getKeyCode() == e.VK_F11){
+		    	  if(e.getKeyCode() == e.VK_F11 && !pressF11){
 						if(!fullscreen)
-						mainScreenTurnOn();
+							mainScreenTurnOn();
 						else
-						mainScreenTurnOff();
-					}
+							mainScreenTurnOff();
+						pressF11=true;
+		    	  }else{
+		    		  pressF11=false;
+		    	  }
 		        return false;
 		      }
 		});
@@ -116,23 +119,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		setVisible(true);
 	}
 	
-//	public void keyPressed(KeyEvent e) {
-//		if(e.getKeyCode() == e.VK_F11){
-//			if(!fullscreen)
-//			  mainScreenTurnOn();
-//			else
-//			  mainScreenTurnOff();
-//		}
-////		else System.out.println(e.getKeyCode()+"\n");
-//	} 
-//	
-//	public void keyReleased(KeyEvent arg0) {
-//	}
-//	
-//	public void keyTyped(KeyEvent arg0) {
-//	
-//	}
-//	
 	//---------------------------------------------------------------------------------
 
 	private void instantiate() {
