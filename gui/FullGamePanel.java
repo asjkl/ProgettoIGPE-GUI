@@ -24,8 +24,6 @@ public class FullGamePanel extends JPanel {
 	public int shift = 17;
 	PanelSwitcher switcher;
 
-
-
 	public FullGamePanel(final int WIDTH, int HEIGHT, int gameWidth, int gameHeight, PanelSwitcher switcher,
 			GamePanel gamePanel) {
 
@@ -36,7 +34,7 @@ public class FullGamePanel extends JPanel {
 		this.gamePanel = gamePanel;
 		this.gameManager = gamePanel.getGame();
 		gamePanel.setFocusable(true);
-		gamePanel.setBounds(282 - shift, 32 - shift, gameWidth + shift * 2 + 3, gameHeight + shift * 2);
+		gamePanel.setBounds(322 - shift, 32 - shift, gameWidth + shift * 2 + 3, gameHeight + shift * 2);
 		if (GameManager.offline)
 			valueMap = gameManager.getFilename().getText().replaceAll("[^0-9]", "");	
 		createInfoLabel();
