@@ -1,8 +1,10 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -83,7 +85,6 @@ public class Lobby extends JPanel {
 		label.setBounds(width - 440, 90, 100, 40);
 		add(label);
 
-		createMapsPanel();
 
 		JLabel online = new JLabel("Online: ");
 		online.setFont(MainFrame.customFontM);
@@ -99,10 +100,9 @@ public class Lobby extends JPanel {
 		difficult.setBounds(520, 90, 130, 40);
 		add(difficult);
 
-		createDifficultPanel();
+		
 	}
 
-	
 	public class MyTask extends TimerTask {
 
 		public void run() {
@@ -128,7 +128,18 @@ public class Lobby extends JPanel {
 	}
 	
 	public void createDifficultPanel() {
-		JPanel difficultPanel = new JPanel();
+		
+		JPanel difficultPanel = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g;
+				if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+				}	
+			}
+		};
+		
 		difficultPanel.setLayout(null);
 		difficultPanel.setBounds(520, 130, 200, 200);
 		difficultPanel.setBackground(Color.DARK_GRAY);
@@ -159,11 +170,14 @@ public class Lobby extends JPanel {
 			group.add(level.get(i));
 			difficultPanel.add(level.get(i));
 			difficultPanel.add(labels.get(i));
-			level.get(i).addChangeListener(new ChangeListener() {
+			
+			if(client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
+				level.get(i).addChangeListener(new ChangeListener() {
 
 				@Override
 				public void stateChanged(ChangeEvent e) {
 
+					if(client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
 					if (level.get(0).isSelected()) {
 
 						difficult = "easy";
@@ -178,7 +192,8 @@ public class Lobby extends JPanel {
 					repaint();
 				}
 			});
-
+			if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1)))
+				level.get(i).setEnabled(false);
 		}
 		level.get(0).setSelected(true);
 
@@ -254,7 +269,7 @@ public class Lobby extends JPanel {
 		
 		
 		// solo moderatore avvia timer che manda messaggi
-		if(client.getClientName().equals(client.getNameOfClientsOnline().get(0))){
+		if(client.getNameOfClientsOnline().size()>0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0))){
 			timer =  new Timer();
 			task = new MyTask();
 			timer.schedule(task, 1000, 1000);
@@ -267,6 +282,10 @@ public class Lobby extends JPanel {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g;
+				if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+				}	
 				g.drawImage(ImageProvider.getMapsP2().get(stageShifter - 1), 45, 20, this);
 				g.setColor(Color.BLACK);
 				g.setFont(MainFrame.customFontM);
@@ -287,6 +306,7 @@ public class Lobby extends JPanel {
 		arrowLeft.setBorderPainted(false);
 		arrowLeft.setFocusPainted(false);
 
+	if(client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
 		arrowLeft.addActionListener(new ActionListener() {
 
 			@Override
@@ -308,7 +328,8 @@ public class Lobby extends JPanel {
 		arrowRight.setContentAreaFilled(false);
 		arrowRight.setBorderPainted(false);
 		arrowRight.setFocusPainted(false);
-
+	
+	if(client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
 		arrowRight.addActionListener(new ActionListener() {
 
 			@Override
@@ -318,8 +339,13 @@ public class Lobby extends JPanel {
 				repaint();
 			}
 		});
-
+		
 		panel.add(arrowRight);
+		
+		if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
+			arrowLeft.setEnabled(false);
+			arrowRight.setEnabled(false);
+		}
 
 	}
 
@@ -569,4 +595,9 @@ public class Lobby extends JPanel {
 	public void setClient(ClientChat client) {
 		this.client = client;
 	}
+	
+	public ClientChat getClient() {
+		return client;
+	}
+
 }

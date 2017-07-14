@@ -15,7 +15,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	
 	private final int WIDTH = 1300;
 	private final int HEIGHT = 740;
-	
+
 	private final int gameWidth = WIDTH - 565;
   	private final int gameHeight = HEIGHT - 40;
  
@@ -265,6 +265,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	
 	@Override
 	public void showLobby(boolean gamePanelExit) {
+		
 		if(!gamePanelExit){
 			lobby = new Lobby(WIDTH, HEIGHT, this);
 			lobby.setClient(network.getClient());
@@ -273,8 +274,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			lobby.setIpTextField(network.getIpTextField());
 			lobby.setPortTextField(network.getPortTextField());
 			System.out.println("................................................2 "+network.getClient()+" "+network.getClient().getNameOfClientsOnline().size());
-			lobby.createChat(network.getClient());
+			//ancora nn abbiamo il client dentro la lobby quindi settiamo le cosi qui furori
+			lobby.createChat(lobby.getClient());
 			lobby.createOnlinePanel();
+			lobby.createDifficultPanel();
+			lobby.createMapsPanel();
 		}
 		switchTo(lobby); 
 		lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
