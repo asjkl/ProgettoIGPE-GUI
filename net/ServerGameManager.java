@@ -54,14 +54,9 @@ public class ServerGameManager {
 
 	public void received(final String buffer) {
 		final String[] split = buffer.split(":");
-		
-		System.out.println(buffer);
-		
+				
 		if(gameManager!=null){
-			if(split[0].equals("PAINT")){
-				//TODO non serve piu
-//				gameManager.setWaitToExit(Boolean.parseBoolean(split[1]));	
-			}else if(split[0].equals("EXIT")){
+			if(split[0].equals("EXIT")){
 				disconnetctedClient(split[1]);
 				gameManager.setExit(Boolean.parseBoolean(split[2]));
 			}else{

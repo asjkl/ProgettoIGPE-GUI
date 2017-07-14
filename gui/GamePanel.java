@@ -290,28 +290,37 @@ public class GamePanel extends JPanel {
 		while (!game.isExit()) {
 
 			if (!game.paused) {
+				
 				start = System.nanoTime();
 
 				logic();
 				graphic();
-
+				
 				if (game.runnable != null)
 					game.runnable.run();
-
+				
 				longTime = (System.nanoTime() - start);
 				end = (double) (longTime.doubleValue() / 1000000);
-
+				
 			} else if (game.paused || game.pauseOptionDialog) {
-				SoundsProvider.cancelMove();
-				SoundsProvider.cancelStop();
+				if (game.runnable != null)
+					game.runnable.run();
+				if(GameManager.offline){		//IL SERVER NON LO DEVE RIPRODURRE IL SUONO
+					SoundsProvider.cancelMove();
+					SoundsProvider.cancelStop();
+				}
 			}
-			repaint();
-			if (fullGamePanel != null)
-				fullGamePanel.repaint();
+			
+			if(GameManager.offline){			//IL SERVER NON LO DEVE DISEGNARE
+				repaint();
+				if (fullGamePanel != null)
+					fullGamePanel.repaint();
+			}
 		}
 		repaint();
 		if (fullGamePanel != null)
 			fullGamePanel.repaint();
+	
 	}
 
 	public void logic() {

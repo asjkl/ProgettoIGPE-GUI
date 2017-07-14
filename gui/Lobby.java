@@ -438,20 +438,22 @@ public class Lobby extends JPanel {
 					// se sono P1
 					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 						if (client.isReadyP2()) {
-								
-						//	1) mando il messaggio a tutti 
+							
+						
+						//  1) creo il server
+							
+							final Server server1 = new Server(1234);
+							new Thread(server1, "game").start();
+							
+							
+						//	2) mando il messaggio a tutti 
 							try {
 								client.dout.writeUTF("p1 true");
 							} catch (IOException e2) {
 								// TODO Auto-generated catch block
 								e2.printStackTrace();
 							}
-							
-						//  2) creo il server
-							
-							final Server server1 = new Server(1234);
-							new Thread(server1, "game").start();
-							
+										
 						//  3) do il via libero al connect ( tutti i client )
 							try {
 								client.dout.writeUTF("connect"+" "+portTextField.getText()+" "+stage+" "+difficult);
