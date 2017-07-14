@@ -3,6 +3,7 @@ package progettoIGPE.davide.giovanni.unical2016.GUI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComponent;
@@ -92,4 +93,10 @@ public class SlideContainer extends JLayeredPane {
 	public static void setReady(boolean ready) {
 		SlideContainer.ready = ready;
 	}
+	
+//	@Override
+//	protected void paintComponent(Graphics g) {
+//		// TODO Auto-generated method stub
+//		super.paintComponent(g);
+//	}
 }
