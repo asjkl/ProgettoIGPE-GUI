@@ -1444,9 +1444,10 @@ public class GamePanel extends JPanel {
 	}
 
 	private void paintRocket(Graphics g, Graphics2D g2d) {
+		synchronized (this) {
 		if (!GameManager.offline)
 			game.lock.lock();
-		synchronized (this) {
+	
 			for (int i = 0; i < game.getRocket().size(); i++) {
 
 				if (GameManager.offline && game.getRocket().get(i).getNext() instanceof PowerUp) {
@@ -1472,9 +1473,10 @@ public class GamePanel extends JPanel {
 								game.getRocket().get(i).getX() * tile, null);
 					}
 			}
+			if (!GameManager.offline)
+				game.lock.unlock();
 		}
-		if (!GameManager.offline)
-			game.lock.unlock();
+	
 	}
 
 	private void paintWater(Graphics g) {
@@ -1615,10 +1617,11 @@ public class GamePanel extends JPanel {
 					i--;
 				}
 			}
+			if (!GameManager.offline)
+				game.lock.lock();
+			}
 		}
-		if (!GameManager.offline)
-			game.lock.lock();
-		}
+		
 	}
 
 	private void paintPlayer(Graphics g, Graphics2D g2d) {
