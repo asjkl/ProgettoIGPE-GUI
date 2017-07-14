@@ -6,7 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import javax.swing.JTextField;
+
+import progettoIGPE.davide.giovanni.unical2016.BrickWall;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
+import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
+import progettoIGPE.davide.giovanni.unical2016.SteelWall;
 import progettoIGPE.davide.giovanni.unical2016.GUI.ImageProvider;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
@@ -127,38 +131,42 @@ public class ConnectionManager implements Runnable {
 	}
 
 	private void playSounds(GameManager game) {
-//		if (game.isSoundPowerUp()) {
-//			SoundsProvider.playPowerUpAppear();
-//		}
-//
-//		if (game.isExplosion()) {
-//			SoundsProvider.playExplosion1();
-//			SoundsProvider.playExplosion2();
-//		}
-//
-//		// players
-//		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-//			if (game.getPlayersArray().get(a).isShot()) {
-//				SoundsProvider.playBulletShot();
-//			}
-//
-//			if (!game.getPlayersArray().get(a).isPressed())
-//				SoundsProvider.playStop();
-//			else
-//				SoundsProvider.playMove();
-//		}
-//
-//		// rockets
-//		for (int a = 0; a < game.getRocket().size(); a++) {
-//			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
-//				if (game.getRocket().get(a).getNext() instanceof BrickWall)
-//					SoundsProvider.playBulletHit2();
-//				else if (game.getRocket().get(a).getNext() instanceof SteelWall
-//						|| game.getRocket().get(a).isOnBorder()) {
-//					SoundsProvider.playBulletHit1();
-//				}
-//			}
-//		}
+		if(!game.getPlayersArray().get(0).canGo){
+			SoundsProvider.playHitForCanGo();
+		}
+		
+		if (game.isSoundPowerUp()) {
+			SoundsProvider.playPowerUpAppear();
+		}
+
+		if (game.isExplosion()) {
+			SoundsProvider.playExplosion1();
+			SoundsProvider.playExplosion2();
+		}
+
+		// players
+		for (int a = 0; a < game.getPlayersArray().size(); a++) {
+			if (game.getPlayersArray().get(a).isShot()) {
+				SoundsProvider.playBulletShot();
+			}
+
+			if (!game.getPlayersArray().get(a).isPressed())
+				SoundsProvider.playStop();
+			else
+				SoundsProvider.playMove();
+		}
+
+		// rockets
+		for (int a = 0; a < game.getRocket().size(); a++) {
+			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
+				if (game.getRocket().get(a).getNext() instanceof BrickWall)
+					SoundsProvider.playBulletHit2();
+				else if (game.getRocket().get(a).getNext() instanceof SteelWall
+						|| game.getRocket().get(a).isOnBorder()) {
+					SoundsProvider.playBulletHit1();
+				}
+			}
+		}
 	}
 
 	public String getNameOfGame() {
