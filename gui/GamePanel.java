@@ -1486,6 +1486,10 @@ public class GamePanel extends JPanel {
 
 	private void paintEffects(Graphics g, Graphics g2d) {
 
+		
+		synchronized (this) {
+			
+		
 		for (int i = 0; i < game.getEffects().size(); i++) {
 
 			int X, Y, pixel, inc;
@@ -1605,6 +1609,7 @@ public class GamePanel extends JPanel {
 					i--;
 				}
 			}
+		}
 		}
 	}
 

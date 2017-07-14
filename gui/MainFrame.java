@@ -12,9 +12,18 @@ import progettoIGPE.davide.giovanni.unical2016.GameManager;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements PanelSwitcher {
 	
-	private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
-	private final int WIDTH = (int) screenSize.getWidth();
-	private final int HEIGHT = (int) screenSize.getHeight();
+	//PER FULLSCREEN TOLGIERE COMMENTO
+	
+//	private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
+//	private final int WIDTH = (int) screenSize.getWidth();
+//	private final int HEIGHT = (int) screenSize.getHeight();
+	
+	//E COMMENTARE SOTTO
+	
+	private final int WIDTH = 1300;
+	private final int HEIGHT = 740;
+	
+	
 	private final int gameWidth = WIDTH - 632;
   	private final int gameHeight = HEIGHT - 68;
  
@@ -59,10 +68,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		load = new LoadPanel(WIDTH, HEIGHT, this);
 		
 		this.add(load);
-		this.setUndecorated(true);
+//		this.setUndecorated(true);
 		this.setResizable(false);
 		this.pack();
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
