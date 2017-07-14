@@ -58,6 +58,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private GamePanel gamePanel;
 	private SlideStage slideStage;
 	private LoadPanel load;
+	private FullScreen full;
 
 	public MainFrame() {
 		
@@ -65,7 +66,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		this.setTitle("BATTLE CITY UNICAL");
 		this.setSize(new Dimension(WIDTH, HEIGHT));
 		new ImageProvider();
-		load = new LoadPanel(WIDTH, HEIGHT, this);
+		full = new FullScreen(this);
+		load = new LoadPanel(WIDTH, HEIGHT, this, full);
 		
 		this.add(load);
 //		this.setUndecorated(true);
@@ -97,9 +99,9 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		setSlide(true);
 		new SoundsProvider();
 		setFont();
-//		lobby = new Lobby(WIDTH, HEIGHT, this);
+
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
-		menu = new MenuPanel(WIDTH, HEIGHT, this);
+		menu = new MenuPanel(WIDTH, HEIGHT, this, full);
 		player = new PlayerPanel(WIDTH, HEIGHT, this);
 		firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
 		secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);

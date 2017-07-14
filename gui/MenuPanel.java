@@ -46,9 +46,12 @@ public class MenuPanel extends JPanel {
 	private int cursorPositionRoom;
 	private JDialog dialogRoom;
 	private MyListener myListener;
+	private FullScreen full;
 
-	public MenuPanel(final int w, final int h, PanelSwitcher switcher) {
+	public MenuPanel(final int w, final int h, PanelSwitcher switcher, FullScreen full) {
 
+		this.full=full;
+		
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);

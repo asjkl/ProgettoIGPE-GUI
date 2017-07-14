@@ -13,10 +13,12 @@ public class LoadPanel extends JPanel {
 
 	private JProgressBar progressBar;
 	private PanelSwitcher switcher;
+	private FullScreen full;
 	
 	//LOAD
-	 public LoadPanel(final int w, final int h, PanelSwitcher switcher) {
+	 public LoadPanel(final int w, final int h, PanelSwitcher switcher, FullScreen full) {
 			
+		this.full=full;
 		this.setPreferredSize(new Dimension(w, h));
 		this.setLayout(new BorderLayout());
 		this.setBackground(Color.BLACK);
