@@ -7,20 +7,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.event.MouseInputAdapter;
 
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel {
 	
 	private final int DIM = 3;
-	private final int posY = 65;
-	private final int posX = 125;
+	private final int posY = 70;
+	private final int posX = 120;
 	private int cursorPosition;
 	private PanelSwitcher switcher;
 	private final ArrayList<JButton> buttons;
+	private MyListener myListener;
 
 	public PlayerPanel(final int w, final int h, PanelSwitcher switcher) {
 		
@@ -31,6 +34,7 @@ public class PlayerPanel extends JPanel {
 		setSwitcher(switcher);
 		setCursorPosition(1);
 		
+		myListener = new MyListener();
 		buttons = new ArrayList<>();
 		createButton();
 	}
@@ -49,6 +53,8 @@ public class PlayerPanel extends JPanel {
 			buttons.get(i).setForeground(Color.WHITE);
 			buttons.get(i).setBackground(Color.BLACK);
 			buttons.get(i).setHorizontalAlignment( SwingConstants.LEFT );
+			buttons.get(i).addMouseListener(myListener);
+			buttons.get(i).addMouseMotionListener(myListener);
 			
 			if(i == 0)
 				buttons.get(i).setFont(MainFrame.customFontM);
@@ -204,4 +210,36 @@ public class PlayerPanel extends JPanel {
 	public void setSwitcher(PanelSwitcher switcher) {
 		this.switcher = switcher;
 	}
+	
+	private class MyListener extends MouseInputAdapter {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+
+			if(e.getComponent().getY() == buttons.get(0).getY())
+				cursorPosition = 0;
+			else
+				if(e.getComponent().getY() == buttons.get(1).getY())
+					cursorPosition = 1;
+			else
+				if(e.getComponent().getY() == buttons.get(2).getY())
+					cursorPosition = 2;
+			repaint();
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+		
+			if(e.getComponent().getY() == buttons.get(0).getY())
+				cursorPosition = 0;
+			else
+				if(e.getComponent().getY() == buttons.get(1).getY())
+					cursorPosition = 1;
+			else
+				if(e.getComponent().getY() == buttons.get(2).getY())
+					cursorPosition = 2;
+			repaint();
+		}
+	}
+	
 }

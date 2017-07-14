@@ -81,7 +81,6 @@ public class ScoresPanel extends JPanel {
 	
 		updateHighScore();
 		drawLabelP1();
-		
 		activeTimer();
 	}
 	
@@ -111,7 +110,6 @@ public class ScoresPanel extends JPanel {
 		
 		updateHighScore();
 		drawLabelP2();		
-		
 		activeTimer();
 	}
 		
@@ -121,40 +119,40 @@ public class ScoresPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					
+				
+			try {
+				
 				if(complete) {
 	
 					 ((Timer)e.getSource()).stop();
 					
-					if(((MainFrame)getSwitcher()).isSlide()) {
-						
-						writeScore(1);
-						
-						try {
-							Thread.sleep(SHOW);
-							getSwitcher().showMenu();
-							
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
+						 if(path.contains("single") || path.contains("multi")) {
+						 
+							if(((MainFrame)getSwitcher()).isSlide()) {
+								
+								writeScore(0);
+								Thread.sleep(SHOW);
+								getSwitcher().showMenu();
+							}
+							else {
+								
+								writeScore(Integer.parseInt(value) + 1);
+								filename.setText(path + "/stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
+								Thread.sleep(SHOW);
+								getSwitcher().showSlide(filename);
+							}
 						}
-						
-					}
-					else {
-						
-						writeScore(Integer.parseInt(value) + 1);
-						filename.setText(path + "/stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
-						
-						try {
-							Thread.sleep(SHOW);
-							getSwitcher().showSlide(filename);
-							
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}
-					}
+				else {			
+					Thread.sleep(SHOW);
+					getSwitcher().showConstruction();
 				}
+			}//if(complete)	
+			
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
 			}
-		});
+		}
+	});
 		
 		timer.start();
 	}
@@ -288,7 +286,7 @@ public class ScoresPanel extends JPanel {
 							if(currValue == 0)
 								points.setBounds(positionX - 199, positionY, 45, 45);
 							else
-								points.setBounds(positionX - 245, positionY, 105, 45);
+								points.setBounds(positionX - 245, positionY, 120, 45);
 							
 							occur.setText(String.valueOf(currValue));
 							occur.setBounds(positionX, positionY, 95, 45);
@@ -529,7 +527,8 @@ public class ScoresPanel extends JPanel {
 		PrintWriter w = new PrintWriter("./values/multiCareer.txt");
 		BufferedWriter b = new BufferedWriter(w);
 		
-		((MainFrame)switcher).setUnlockedMapsP2(v);
+		if(((MainFrame)switcher).getUnlockedMapsP2() < v)
+			((MainFrame)switcher).setUnlockedMapsP2(v);
 		
 		b.write("P1:\n");
 		b.write("HI-SCORE\n");
@@ -557,7 +556,9 @@ public class ScoresPanel extends JPanel {
 		PrintWriter w = new PrintWriter("./values/singleCareer.txt");
 		BufferedWriter b = new BufferedWriter(w);
 		
-		((MainFrame)switcher).setUnlockedMapsP1(v);
+		if(((MainFrame)switcher).getUnlockedMapsP1() < v)
+			((MainFrame)switcher).setUnlockedMapsP1(v);
+
 		
 		b.write("SCORE\n");
 		b.write(String.valueOf(currScoreP1) + "\n");

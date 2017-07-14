@@ -7,8 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -16,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.MouseInputAdapter;
 
 @SuppressWarnings("serial")
 public class StagePanelFirst extends JPanel {
@@ -24,7 +30,6 @@ public class StagePanelFirst extends JPanel {
 	private int posX;
 	private final int DIM = 13;
 	private int cursorPosition;
-	
 	private String path;
 	private File file;
 	private JFileChooser fileChooser;
@@ -32,6 +37,7 @@ public class StagePanelFirst extends JPanel {
 	private JButton arrowRight;
 	private ArrayList<JButton> maps;
 	private PanelSwitcher switcher;
+	private MyListener myListener;
 	
 	public StagePanelFirst(final int w, final int h, PanelSwitcher switcher) {
 	
@@ -40,10 +46,11 @@ public class StagePanelFirst extends JPanel {
 		this.setLayout(null);
 		
 		path = "";
-		posY = 25;
-		posX = 200;
+		posY = 50;
+		posX = 225;
 		cursorPosition = 1;
 		
+		myListener = new MyListener();
 		arrowRight = new JButton();
 		maps = new ArrayList<>();
 		
@@ -53,6 +60,55 @@ public class StagePanelFirst extends JPanel {
 		setSwitcher(switcher);
 		createButton();
 		createArrowButton();
+		loadMaps();
+	}
+	
+	private void loadMaps() {
+		
+		String directory = null;
+		
+		if(path.contains("single"))
+			directory = "./values/singleCareer.txt";
+		else
+			directory = "./values/multiCareer.txt";
+		
+		BufferedReader reader = null;
+		String line = null;
+		String value = null;
+	
+		try {
+
+			reader = new BufferedReader(new FileReader(directory));
+			line = reader.readLine();
+
+			while (line != null) {
+
+				StringTokenizer st = new StringTokenizer(line, "");
+				String tmp = null;
+
+				while (st.hasMoreTokens()) {
+
+					tmp = st.nextToken();
+			
+					if(tmp.matches("^[0-9]+")) {
+						
+						int m = Integer.parseInt(tmp);
+						
+						if (m >= 1 && m <= 24)
+							value = tmp;
+					}
+				}
+
+				line = reader.readLine();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(path.contains("single"))
+			((MainFrame)switcher).setUnlockedMapsP1(Integer.parseInt(value));
+		else
+			((MainFrame)switcher).setUnlockedMapsP2(Integer.parseInt(value));
 	}
 	
 	public void createButton() {
@@ -74,6 +130,8 @@ public class StagePanelFirst extends JPanel {
 				maps.get(i).setHorizontalAlignment( SwingConstants.LEFT);
 			}
 			
+			maps.get(i).addMouseListener(myListener);
+			maps.get(i).addMouseMotionListener(myListener);
 			setBoundAndText(i);	
 			maps.get(i).addKeyListener(new KeyAdapter() {
 	               
@@ -105,7 +163,6 @@ public class StagePanelFirst extends JPanel {
 		                    	 
 	                			  maps.get(curRow - 1).requestFocus();
 	                			  cursorPosition = curRow - 1;
-	                			  
 	                		  }
 	                   }
 	                   else 
@@ -173,9 +230,8 @@ public class StagePanelFirst extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					
 					SoundsProvider.playBulletHit1();
-					cursorPosition = 1;
-					repaint();
 					getSwitcher().showPlayer();
+					cursorPosition = 1;
 				}
 			});
 			break;
@@ -202,13 +258,8 @@ public class StagePanelFirst extends JPanel {
 	                    
 	                    JTextField directory = new JTextField();
 	                    directory.setText(fileChooser.getCurrentDirectory().toString());
-	                    cursorPosition = 1;
 	                    getSwitcher().showSlide(fileNameMap);
-					}
-					else {
-						
-						cursorPosition = j;
-	                    repaint();
+	                    cursorPosition = 1;
 					}
 				}
 			});
@@ -227,8 +278,8 @@ public class StagePanelFirst extends JPanel {
 		
 			if(j == 5 || j == 9) {
 				
-				posX = 200;
-				posY += 225;
+				posX = 225;
+				posY += posX;
 			}
 			setLabel(j);
 			maps.get(j).setBounds(posX, posY, 
@@ -258,6 +309,8 @@ public class StagePanelFirst extends JPanel {
 		arrowRight.setContentAreaFilled(false);
 		arrowRight.setBorderPainted(false);
 		arrowRight.setFocusPainted(false);
+		arrowRight.addMouseListener(myListener);
+		arrowRight.addMouseMotionListener(myListener);
 		arrowRight.addKeyListener(new KeyAdapter() {
             
 			@Override
@@ -279,7 +332,6 @@ public class StagePanelFirst extends JPanel {
 						 maps.get(9).requestFocus();
 						 cursorPosition = 9;	
 				}
-				repaint();
 			}
 		});
 		
@@ -288,8 +340,8 @@ public class StagePanelFirst extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				cursorPosition = 1;
 				getSwitcher().showSecondStage(path);
+				cursorPosition = 1;
 			}
 		});
 		
@@ -307,17 +359,15 @@ public class StagePanelFirst extends JPanel {
 		}
 		else 
 			if(cursorPosition == -1) {
-			 
 				g.drawImage(ImageProvider.getCursorRight(), (int) this.getPreferredSize().getWidth() - 130 , 
 					(int) this.getPreferredSize().getHeight() / 2 - 8, null);
 		}
 		else {
-			
 			g.drawImage(ImageProvider.getCursorLeft(), 
 					maps.get(cursorPosition).getX() + 80,maps.get(cursorPosition).getY() - 8, this);	
 		}
 		
-	if(path.contains("single")) { 
+		if(path.contains("single")) { 
 			
 			for(int i = 0;i < maps.size(); i++) {
 			
@@ -370,5 +420,52 @@ public class StagePanelFirst extends JPanel {
 
 	public void setCursorPosition(int cursorPosition) {
 		this.cursorPosition = cursorPosition;
+	}
+	
+	private class MyListener extends MouseInputAdapter {
+
+		private boolean flag = false;
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+
+			for(int i = 0; i < DIM; i++) {
+			
+				if(e.getComponent().getX() == maps.get(i).getX()) {
+				
+					cursorPosition = i;
+					flag = true;
+					break;
+				}
+			}
+			
+			if(!flag)
+				cursorPosition = -1;
+			
+			repaint();
+			
+			flag = false;
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+				
+			for(int i = 0; i < DIM; i++) {
+				
+				if(e.getComponent().getX() == maps.get(i).getX()) {
+			
+					cursorPosition = i;
+					flag = true;
+					break;
+				}
+			}
+			
+			if(!flag)
+				cursorPosition = -1;
+			
+			repaint();
+		
+			flag = false;
+		}
 	}
 }

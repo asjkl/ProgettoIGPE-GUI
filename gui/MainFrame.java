@@ -12,11 +12,11 @@ import progettoIGPE.davide.giovanni.unical2016.GameManager;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements PanelSwitcher {
 	
-//  private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
-	private final int WIDTH = 1300;
-	private final int HEIGHT = 740;
-	private final int gameWidth = WIDTH - 565;
-  	private final int gameHeight = HEIGHT - 40;
+	private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
+	private final int WIDTH = (int) screenSize.getWidth();
+	private final int HEIGHT = (int) screenSize.getHeight();
+	private final int gameWidth = WIDTH - 632;
+  	private final int gameHeight = HEIGHT - 68;
  
 	public static Font customFontM;
 	public static Font customFontB;
@@ -48,8 +48,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private GameManager gameManager;
 	private GamePanel gamePanel;
 	private SlideStage slideStage;
-
-
 	private LoadPanel load;
 
 	public MainFrame() {
@@ -59,12 +57,14 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		this.setSize(new Dimension(WIDTH, HEIGHT));
 		new ImageProvider();
 		load = new LoadPanel(WIDTH, HEIGHT, this);
+		
 		this.add(load);
-
-//		this.setResizable(false);
+		this.setUndecorated(true);
+		this.setResizable(false);
 		this.pack();
-//		this.setLocationRelativeTo(null);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
 	}
 
 	public static void main(String[] args) {
@@ -86,8 +86,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		timer.setRepeats(false);
 		timer.start();
 		setSlide(true);
-		//Solo per player 2
-		setUnlockedMapsP2(1);
 		new SoundsProvider();
 		setFont();
 //		lobby = new Lobby(WIDTH, HEIGHT, this);
@@ -98,8 +96,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
 		editor = new ConstructionPanel(WIDTH, HEIGHT, this);
 		settings = new SettingsPanel(WIDTH, HEIGHT, this);
-
-
 	}
 	
 	public void switchTo(JComponent component) {

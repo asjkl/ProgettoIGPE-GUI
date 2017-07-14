@@ -145,9 +145,18 @@ public class ConstructionPanel extends JPanel {
 			buttons.get(i).setForeground(Color.WHITE);
 			buttons.get(i).setBackground(Color.BLACK);
 			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
-
 			setBoundAndText(i);
-
+			buttons.get(i).addMouseListener(new MouseInputAdapter() {
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+				
+					if(e.getComponent().getY() == buttons.get(curRow).getY()) {
+						cursorPosition = curRow;
+						repaint();
+					}
+				}
+			});
 			buttons.get(i).addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -211,8 +220,8 @@ public class ConstructionPanel extends JPanel {
 			this.add(buttons.get(i));
 		}
 
-		addMouseListener(myListener);
-		addMouseMotionListener(myListener);
+		this.addMouseListener(myListener);
+		this.addMouseMotionListener(myListener);
 	}
 
 	public void addActionListener(int j) {
@@ -438,6 +447,17 @@ public class ConstructionPanel extends JPanel {
 			bts[i].setFocusPainted(false);
 			bts[i].setBorder(null);
 			bts[i].setFocusPainted(false);
+			bts[i].addMouseListener(new MouseInputAdapter() {
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+				
+					if(e.getComponent().getY() == bts[curRow].getY()) {
+						cursorPositionDialog = curRow;
+						repaint();
+					}
+				}
+			});
 			bts[i].addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -1088,6 +1108,7 @@ public class ConstructionPanel extends JPanel {
 
 	private class MyListener extends MouseInputAdapter {
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 			if (type != TypeMatrix.DEFAULT) {
 				int col = (int) (e.getX() / tile) - 4;
@@ -1241,6 +1262,7 @@ public class ConstructionPanel extends JPanel {
 			repaint();
 		}
 
+		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (type != TypeMatrix.DEFAULT) {
 				int col = (int) (e.getX() / tile) - 4;

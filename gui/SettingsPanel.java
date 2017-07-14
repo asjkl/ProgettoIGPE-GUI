@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -15,6 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.MouseInputAdapter;
 
 @SuppressWarnings("serial")
 public class SettingsPanel extends JPanel {
@@ -69,6 +71,17 @@ public class SettingsPanel extends JPanel {
 			buttons.get(i).setForeground(Color.WHITE);
 			setBoundsAndText(i);
 			addActionListener(i);
+			buttons.get(i).addMouseListener(new MouseInputAdapter() {
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+				
+					if(e.getComponent().getY() == buttons.get(curRow).getY()) {
+						cursorPosition = curRow;
+						repaint();
+					}
+				}
+			});
 			buttons.get(i).addKeyListener(new KeyAdapter() {
 			
 				@Override

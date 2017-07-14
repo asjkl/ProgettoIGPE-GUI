@@ -26,15 +26,10 @@ public class SlideStage extends JLayeredPane {
 	private PanelSwitcher switcher;
 	private JTextField filename;
 	private ArrayList<JPanel> panels = new ArrayList<>();
-	private int WIDTH, HEIGHT;
 	
 	public SlideStage(final int w, final int h, PanelSwitcher switcher, JTextField filename) {
-		WIDTH = w;
-		HEIGHT = h;
+		
 		SoundsProvider.playStageStart();
-		
-		
-
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
 		this.setLayout(null);
@@ -43,20 +38,7 @@ public class SlideStage extends JLayeredPane {
 		this.filename = filename;
 		this.setSwitcher(switcher);
 		
-		label = new JLabel();
-		label.setFont(MainFrame.customFontB);
-			
-		if(filename.getText().contains("career"))
-			label.setText("Stage " + filename.getText().
-					subSequence(filename.getText().indexOf("stage") + 5, filename.getText().length() - 4));
-		else
-			label.setText("Custom");
-		
-		label.setBounds((int) (getPreferredSize().getWidth() / 2) - 70,
-				(int) getPreferredSize().getHeight() / 2-50, 300, 100);
-		label.setBackground(Color.GRAY);
-		label.setForeground(Color.BLACK);
-		this.add(label);
+		setLabel();
 		
 		for(int i = 0; i < 2; i++) {
 			
@@ -66,14 +48,34 @@ public class SlideStage extends JLayeredPane {
 		}
 		
 		instantiate();
-		this.add(panels.get(0), panels.get(1));
+		add(panels.get(0), panels.get(1));
+	}
+
+	private void setLabel() {
+		
+		label = new JLabel();
+		label.setFont(MainFrame.customFontB);
+		
+		if(filename.getText().contains("career"))
+			label.setText("Stage " + filename.getText().
+					subSequence(filename.getText().indexOf("stage") + 5, filename.getText().length() - 4));
+		else
+			label.setText("Custom");
+		
+		label.setBounds((int) (getPreferredSize().getWidth() / 2 - 50),
+				(int) getPreferredSize().getHeight() / 2 - 50, 300, 100);
+		label.setBackground(Color.GRAY);
+		label.setForeground(Color.BLACK);
+		this.add(label);
 	}
 
 	// BISOGNA FARLI DURANTE IL CARICAMENTO
 	public void instantiate() {
+		
 		((MainFrame)switcher).setGameManager(new GameManager(filename));
 		if(SettingsPanel.normal)
 			((MainFrame)switcher).getGameManager().setMedium(true);
+		
 		((MainFrame)switcher).setGamePanel(new GamePanel(((MainFrame)switcher).getGameWidth(), ((MainFrame)switcher).getGameHeight(), ((MainFrame)switcher), ((MainFrame)switcher).getGameManager()));
 		((MainFrame)switcher).setFullGame(new FullGamePanel(WIDTH, HEIGHT, ((MainFrame)switcher).getGameWidth(), ((MainFrame)switcher).getGameHeight(), ((MainFrame)switcher), ((MainFrame)switcher).getGamePanel()));
 		((MainFrame)switcher).getGamePanel().setFullGamePanel(((MainFrame)switcher).getFullGame());

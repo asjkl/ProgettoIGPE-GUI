@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -24,6 +25,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.MouseInputAdapter;
+
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.AbstractDynamicObject;
 import progettoIGPE.davide.giovanni.unical2016.AbstractStaticObject;
@@ -165,10 +168,7 @@ public class GamePanel extends JPanel {
 
 		if (game.getPlayersArray().size() == 1) {
 
-			currentResumeP1 = ((MainFrame) switcher).getCurrentResumeP1();
-			currentLevelP1 = ((MainFrame) switcher).getCurrentLevelP1();
-			game.getPlayersArray().get(0).setResume(currentResumeP1);
-			game.getPlayersArray().get(0).setLevel(currentLevelP1);
+			loadScoreSingle();
 		} else
 			loadScoreMulti();
 
@@ -543,6 +543,17 @@ public class GamePanel extends JPanel {
 			buttons[i].setContentAreaFilled(false);
 			buttons[i].setBorderPainted(false);
 			buttons[i].setFocusPainted(false);
+			buttons[i].addMouseListener(new MouseInputAdapter() {
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+				
+					if(e.getComponent().getY() == buttons[curRow].getY()) {
+						cursorPositionDialog = curRow;
+						repaint();
+					}
+				}
+			});
 
 			if (GameManager.offline) {
 				if (i == 3) {
@@ -1924,6 +1935,47 @@ public class GamePanel extends JPanel {
 
 	// ------------------------SCORE MULTI-------------------------//
 
+	private void loadScoreSingle() {
+		
+		BufferedReader reader = null;
+		String line = null;
+
+		final int DIM = 5;
+		String values[] = new String[DIM];
+
+		try {
+
+			reader = new BufferedReader(new FileReader("./values/singleCareer.txt"));
+			line = reader.readLine();
+
+			int i = 0;
+
+			while (line != null) {
+
+				StringTokenizer st = new StringTokenizer(line, "");
+				String tmp = null;
+
+				while (st.hasMoreTokens()) {
+
+					tmp = st.nextToken();
+
+					if (tmp.matches("^[0-9]+") && i < values.length)
+						values[i++] = tmp;
+				}
+
+				line = reader.readLine();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		currentResumeP1 = ((MainFrame) switcher).getCurrentResumeP1();
+		game.getPlayersArray().get(0).setResume(currentResumeP1);
+		
+		currentLevelP1 = ((MainFrame) switcher).getCurrentLevelP1();
+		game.getPlayersArray().get(0).setLevel(currentLevelP1);
+	}
+	
 	private void loadScoreMulti() {
 
 		BufferedReader reader = null;
@@ -1963,7 +2015,6 @@ public class GamePanel extends JPanel {
 
 		((MainFrame) switcher).setCurrentResumeP2(Integer.parseInt(values[4]));
 		((MainFrame) switcher).setCurrentLevelP2(Integer.parseInt(values[5]));
-		((MainFrame) switcher).setUnlockedMapsP2(Integer.parseInt(values[6]));
 
 		// ASSEGNAZIONE VALORI AD ENTRAMBI I PLAYER
 		currentResumeP1 = ((MainFrame) switcher).getCurrentResumeP1();

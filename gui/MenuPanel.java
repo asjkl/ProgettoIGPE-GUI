@@ -1,6 +1,7 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -27,8 +29,8 @@ public class MenuPanel extends JPanel {
 	private int cursorPosition;
 	private final int DIM = 6;
 	private final int LENGTH = 5;
-	private final int posY = 65;
-	private final int posX = 125;
+	private final int posY = 70;
+	private final int posX = 120;
 	private JFileChooserClass jfilechooser;
 	private PanelSwitcher switcher;
 	private final ArrayList<JButton> buttons;
@@ -43,6 +45,7 @@ public class MenuPanel extends JPanel {
 	private JButton[] buttonsRoom;
 	private int cursorPositionRoom;
 	private JDialog dialogRoom;
+	private MyListener myListener;
 
 	public MenuPanel(final int w, final int h, PanelSwitcher switcher) {
 
@@ -50,19 +53,19 @@ public class MenuPanel extends JPanel {
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
 
-		this.jfilechooser = new JFileChooserClass(false);
+		jfilechooser = new JFileChooserClass(false);
 		setSwitcher(switcher);
 		setCursorPosition(0);
 
-		this.dialogRoom = new JDialog();
-		
+		dialogRoom = new JDialog();
 		tmpHiScore = -1;
 		values = new String[LENGTH];
 	
 		high = new JLabel();
 		player = new JLabel();
-		this.dialog = new JDialog();
+		dialog = new JDialog();
 		buttons = new ArrayList<>();
+		myListener = new MyListener();
 		
 		createButton();		
 	}
@@ -83,9 +86,9 @@ public class MenuPanel extends JPanel {
 			buttons.get(i).setForeground(Color.WHITE);
 			buttons.get(i).setBackground(Color.BLACK);
 			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
-
+			buttons.get(i).addMouseListener(myListener);
+			buttons.get(i).addMouseMotionListener(myListener);
 			setBoundAndText(i);
-
 			buttons.get(i).addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -239,32 +242,32 @@ public class MenuPanel extends JPanel {
 		switch (j) {
 		case 0:
 			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 255, 40);
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 120, 40);
 			buttons.get(j).setText("Play");
 			break;
 		case 1:
 			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 270, 40);
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 200, 40);
 			buttons.get(j).setText("Network");
 			break;
 		case 2:
 			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 380, 40);
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 300, 40);
 			buttons.get(j).setText("Custom Maps");
 			break;
 		case 3:
 			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 380, 40);
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 300, 40);
 			buttons.get(j).setText("Construction");
 			break;
 		case 4:
 			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 250, 40);
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 180, 40);
 			buttons.get(j).setText("Settings");
 			break;
 		case 5:
 			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 135, 40);
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 120, 40);
 			buttons.get(j).setText("Exit");
 		default:
 			break;
@@ -313,6 +316,17 @@ public class MenuPanel extends JPanel {
 			bts[i].setContentAreaFilled(false);
 			bts[i].setBorderPainted(false);
 			bts[i].setFocusPainted(false);
+			bts[i].addMouseListener(new MouseInputAdapter() {
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+				
+					if(e.getComponent().getY() == bts[curRow].getY()) {
+						cursorPositionDialog = curRow;
+						repaint();
+					}
+				}
+			});
 			bts[i].addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -539,8 +553,7 @@ public class MenuPanel extends JPanel {
 	public void drawScore() {
 		
 		loadScore();
-		
-		//TODO AGGIUNGER CONTROLLO
+
 		if(tmpHiScore < Integer.parseInt(values[1])) {
 			
 			tmpHiScore = Integer.parseInt(values[1]);
@@ -549,7 +562,7 @@ public class MenuPanel extends JPanel {
 			high.setBackground(Color.BLACK);
 			high.setForeground(Color.WHITE);
 			high.setText("Hi - " + values[1]);
-			high.setBounds(500, 0, 500, 100);
+			high.setBounds(475, 0, 500, 100);
 		}
 		
 		player.setFont(MainFrame.customFontB);
@@ -570,7 +583,6 @@ public class MenuPanel extends JPanel {
 		
 		try {
 			
-			//TODO AGGIUNGERE CONTROLLO
 			reader = new BufferedReader(new FileReader("./values/singleCareer.txt"));
 			line = reader.readLine();
 			
@@ -640,7 +652,6 @@ public class MenuPanel extends JPanel {
 		b.close();
 	}
 	
-	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -678,5 +689,36 @@ public class MenuPanel extends JPanel {
 
 	public void setSwitcher(PanelSwitcher switcher) {
 		this.switcher = switcher;
+	}
+	
+	private class MyListener extends MouseInputAdapter {
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+
+			for(int i = 0; i < DIM; i++) {
+				
+				if(e.getComponent().getY() == buttons.get(i).getY()) {
+					cursorPosition = i;
+					break;
+				}
+			}
+			
+			repaint();
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+		
+			for(int i = 0; i < DIM; i++) {
+				
+				if(e.getComponent().getY() == buttons.get(i).getY()) {
+					cursorPosition = i;
+					break;
+				}
+			}
+			
+			repaint();
+		}
 	}
 }

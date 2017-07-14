@@ -67,7 +67,7 @@ public class Server implements Runnable {
 				}
 
 				try {
-					Thread.sleep(1100);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

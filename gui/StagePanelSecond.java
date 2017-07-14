@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
@@ -15,6 +16,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.MouseInputAdapter;
 
 @SuppressWarnings("serial")
 public class StagePanelSecond extends JPanel {
@@ -22,7 +24,7 @@ public class StagePanelSecond extends JPanel {
 	private int posY;
 	private int posX;
 	private final int DIM = 12;
-	private int cursorPosition ;
+	private int cursorPosition;
 	private String path;
 	private File file;
 	private JFileChooser fileChooser;
@@ -30,6 +32,7 @@ public class StagePanelSecond extends JPanel {
 	private JButton arrowLeft;
 	private ArrayList<JButton> maps;
 	private PanelSwitcher switcher;
+	private MyListener myListener;
 	
 	public StagePanelSecond(final int w, final int h, PanelSwitcher switcher) {
 	
@@ -37,11 +40,12 @@ public class StagePanelSecond extends JPanel {
 		this.setBackground(Color.GRAY);
 		this.setLayout(null);
 	
-		posY = 25;
-		posX = 200;
+		posY = 50;
+		posX = 225;
 		cursorPosition = 0;
 		
 		path = "";
+		myListener = new MyListener();
 		arrowLeft = new JButton();
 		maps = new ArrayList<>();
 		
@@ -65,6 +69,8 @@ public class StagePanelSecond extends JPanel {
 			maps.get(i).setContentAreaFilled(false);
 			maps.get(i).setBorderPainted(false);
 			maps.get(i).setFocusPainted(false);
+			maps.get(i).addMouseListener(myListener);
+			maps.get(i).addMouseMotionListener(myListener);
 			maps.get(i).addKeyListener(new KeyAdapter() {
 	               
 				@Override
@@ -162,12 +168,8 @@ public class StagePanelSecond extends JPanel {
 	                    
 	                    JTextField directory=new JTextField();
 	                    directory.setText(fileChooser.getCurrentDirectory().toString());
-	                    cursorPosition = 0;
 	                    getSwitcher().showSlide(fileNameMap);
-					}
-					else {
-						cursorPosition = j;
-                    	repaint();
+	                    cursorPosition = 0;
 					}
 				}
 			});
@@ -177,11 +179,11 @@ public class StagePanelSecond extends JPanel {
 						
 			if(j == 4 || j == 8) {
 				
-				posX = 200;
-				posY += 225;
+				posX = 225;
+				posY += posX;
 			}
-			int k = (j + 13)-1;
-			setLabel(k+1);
+			int k = (j + 13) - 1;
+			setLabel(k + 1);
 			maps.get(j).setBounds(posX, posY, 
 					ImageProvider.getMapsP1().get(k).getWidth(null), ImageProvider.getMapsP1().get(k).getHeight(null));
 			
@@ -208,6 +210,8 @@ public class StagePanelSecond extends JPanel {
 		arrowLeft.setContentAreaFilled(false);
 		arrowLeft.setBorderPainted(false);
 		arrowLeft.setFocusPainted(false);
+		arrowLeft.addMouseListener(myListener);
+		arrowLeft.addMouseMotionListener(myListener);
 		arrowLeft.addKeyListener(new KeyAdapter() {
             
 			@Override
@@ -229,9 +233,6 @@ public class StagePanelSecond extends JPanel {
 						 maps.get(3).requestFocus();
 						 cursorPosition = 3;
 			     }
-				
-			 repaint();
-			 
 			}
 		});
 		
@@ -239,8 +240,9 @@ public class StagePanelSecond extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				cursorPosition = 0;
+				
 				getSwitcher().showFirstStage(path);
+				cursorPosition = 0;
 			}
 		});	
 		this.add(arrowLeft);
@@ -252,7 +254,6 @@ public class StagePanelSecond extends JPanel {
 		
 		//cursor
 		if(cursorPosition == -1) {
-			
 			g.drawImage(ImageProvider.getCursorLeft(), 85, 
 					(int) this.getPreferredSize().getHeight() / 2 - 8, this);
 		}	
@@ -262,21 +263,21 @@ public class StagePanelSecond extends JPanel {
 					maps.get(cursorPosition).getX() - 5, maps.get(cursorPosition).getY() - 5, this);
 		}
 		
-	if(path.contains("single")) {
+		if(path.contains("single")) {
 			
 			for(int i = 0; i < maps.size(); i++) {
 				
-				if((i + DIM) <= ((MainFrame)switcher).getUnlockedMapsP1())
+				if((i + DIM) < ((MainFrame)switcher).getUnlockedMapsP1())
 					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMapsP1().get(i + DIM)));
 				else
 					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
 			}
-	}
-	else {
+		}
+		else {
 		
 			for(int i = 0; i < maps.size(); i++) {
 				
-				if((i + DIM) <= ((MainFrame)switcher).getUnlockedMapsP2())
+				if((i + DIM) < ((MainFrame)switcher).getUnlockedMapsP2())
 					maps.get(i).setIcon(new ImageIcon(ImageProvider.getMapsP2().get(i + DIM)));
 				else
 					maps.get(i).setIcon(new ImageIcon(ImageProvider.getLocked()));
@@ -307,6 +308,52 @@ public class StagePanelSecond extends JPanel {
 	public void setCursorPosition(int cursorPosition) {
 		this.cursorPosition = cursorPosition;
 	}
+	
+	private class MyListener extends MouseInputAdapter {
 
+		private boolean flag = false;
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+
+			for(int i = 0; i < DIM; i++) {
+			
+				if(e.getComponent().getX() == maps.get(i).getX()) {
+					
+					cursorPosition = i;
+					flag = true;
+					break;
+				}
+			}
+			
+			if(!flag)
+				cursorPosition = -1;
+			
+			repaint();
+			
+			flag = false;
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+		
+			for(int i = 0; i < DIM; i++) {
+				
+				if(e.getComponent().getX() == maps.get(i).getX()) {
+					
+					cursorPosition = i;
+					flag = true;
+					break;
+				}
+			}
+		
+			if(!flag)
+				cursorPosition = -1;
+			
+			repaint();
+			
+			flag = false;
+		}
+	}	
 }
 
