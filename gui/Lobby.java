@@ -37,7 +37,7 @@ public class Lobby extends JPanel {
 	private int cursorPosition = 0;
 	private JButton arrowLeft, arrowRight;
 	private final ArrayList<JButton> buttons;
-	private int stageShifter = 1;
+//	private int stageShifter = 1;
 	private ArrayList<JRadioButton> level;
 	private ArrayList<JLabel> labels;
 	private ButtonGroup group;
@@ -135,7 +135,22 @@ public class Lobby extends JPanel {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g;
 				if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
-					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+					
+					if(client.getUpdateDifficultRealTime().equals("easy")) {
+						level.get(0).setSelected(true);
+						level.get(1).setSelected(false);
+						level.get(2).setSelected(false);
+					}else if(client.getUpdateDifficultRealTime().equals("normal")) {
+						level.get(1).setSelected(true);
+						level.get(0).setSelected(false);
+						level.get(2).setSelected(false);
+						
+					}else {
+						level.get(2).setSelected(true);
+						level.get(0).setSelected(false);
+						level.get(1).setSelected(false);
+					}
 				}	
 			}
 		};
@@ -179,21 +194,30 @@ public class Lobby extends JPanel {
 
 					if(client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
 					if (level.get(0).isSelected()) {
-
 						difficult = "easy";
 					} else if (level.get(1).isSelected()) {
-
 						difficult = "normal";
 					} else if (level.get(2).isSelected()) {
-
 						difficult = "hard";
 					}
-
 					repaint();
+					
+					try {
+						client.dout.writeUTF("#difficult# "+difficult);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
-			if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1)))
-				level.get(i).setEnabled(false);
+			if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
+		
+				level.get(i).setBorder(null);
+				level.get(i).setOpaque(false);
+				level.get(i).setContentAreaFilled(false);
+				level.get(i).setBorderPainted(false);
+				level.get(i).setFocusPainted(false);
+			}
 		}
 		level.get(0).setSelected(true);
 
@@ -284,13 +308,14 @@ public class Lobby extends JPanel {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g;
 				if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
-					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 				}	
-				g.drawImage(ImageProvider.getMapsP2().get(stageShifter - 1), 45, 20, this);
+		
+				g.drawImage(ImageProvider.getMapsP2().get(client.getUpdateStageRealTime() - 1), 45, 20, this);
 				g.setColor(Color.BLACK);
 				g.setFont(MainFrame.customFontM);
-				stage = "stage" + stageShifter;
-				g.drawString("Stage " + stageShifter, 90, 238);
+				stage = "stage" + client.getUpdateStageRealTime();
+				g.drawString("Stage " + client.getUpdateStageRealTime(), 90, 238);
 			}
 		};
 
@@ -312,12 +337,20 @@ public class Lobby extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SoundsProvider.playBulletHit1();
-				if (stageShifter == 1)
-					stageShifter = 24;
-				else
-					stageShifter = (stageShifter - 1);
+				if (client.getUpdateStageRealTime() == 1) {
+					client.setUpdateStageRealTime(24);
+				}
+				else {
+					client.setUpdateStageRealTime(client.getUpdateStageRealTime() - 1);
+				}
 				repaint();
 
+				try {
+					client.dout.writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		panel.add(arrowLeft);
@@ -335,8 +368,18 @@ public class Lobby extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SoundsProvider.playBulletHit1();
-				stageShifter = (stageShifter + 1) % 24;
+				if(client.getUpdateStageRealTime() < 23)
+					client.setUpdateStageRealTime((client.getUpdateStageRealTime() + 1) % 24);
+				else
+					client.setUpdateStageRealTime(1);
 				repaint();
+				
+				try {
+					client.dout.writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		

@@ -39,10 +39,14 @@ public class ClientChat extends JPanel implements Runnable {
 	private boolean readyP2 = false;
 	private MainFrame mainFrame;
 	private boolean exitThrad=false;
-	private boolean flag = true;
+	private boolean notShowInChat = true;
 	private String points = "........................................";
+	private int updateStageRealTime = 1; //stage 1 di default
+	private String updateDifficultRealTime="easy";
 
 	
+
+
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
 
 		this.host = host;
@@ -141,16 +145,16 @@ public class ClientChat extends JPanel implements Runnable {
 
 					if (elements[0].equals("p2") && elements[1].equals("true")) {
 						readyP2 = true;
-						flag=false;
+						notShowInChat=false;
 					} else if (elements[0].equals("p2") && elements[1].equals("false")) {
 						readyP2 = false;
-						flag=false;
+						notShowInChat=false;
 					} else if (elements[0].equals("p1") && elements[1].equals("true")) {
 						readyP1 = true;
-						flag=false;
+						notShowInChat=false;
 					} else if (elements[0].equals("p1") && elements[1].equals("false")) {
 						readyP1 = false;
-						flag=false;
+						notShowInChat=false;
 					}
 				
 
@@ -177,10 +181,20 @@ public class ClientChat extends JPanel implements Runnable {
 
 				
 				}
+				
+				if(elements[0].equals("#stage#")) {
+					setUpdateStageRealTime(Integer.valueOf(elements[1]));
+					notShowInChat=false;
+				}
+				
+				else if(elements[0].equals("#difficult#")) {
+					updateDifficultRealTime=(elements[1]);
+					notShowInChat=false;
+				}
 
 				// ------------------------------------------------
 
-				if(flag) {
+				if(notShowInChat) {
 					if (count == 0 && !(message.equals(null))) {
 	
 						String[] names = message.split(" ");
@@ -225,7 +239,7 @@ public class ClientChat extends JPanel implements Runnable {
 						}
 					}
 				}
-				flag=true;
+				notShowInChat=true;
 			}
 
 		} catch (IOException ie) {
@@ -329,6 +343,24 @@ public class ClientChat extends JPanel implements Runnable {
 		this.points = points;
 	}
 
+
+	public int getUpdateStageRealTime() {
+		return updateStageRealTime;
+	}
+
+
+	public void setUpdateStageRealTime(int updateStageRealTime) {
+		this.updateStageRealTime = updateStageRealTime;
+	}
+
+	public String getUpdateDifficultRealTime() {
+		return updateDifficultRealTime;
+	}
+
+
+	public void setUpdateDifficultRealTime(String updateDifficultRealTime) {
+		this.updateDifficultRealTime = updateDifficultRealTime;
+	}
 
 	// public static void main(String args[])
 	// {

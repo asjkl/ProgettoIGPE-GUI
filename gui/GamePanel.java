@@ -324,6 +324,7 @@ public class GamePanel extends JPanel {
 	}
 
 	public void logic() {
+		
 		// MANAGE KEYS
 		keyPresses();
 
@@ -1877,8 +1878,7 @@ public class GamePanel extends JPanel {
 
 	private void paused(Graphics g, Graphics2D g2d) {
 		if (game.paused && (System.currentTimeMillis() / 400) % 2 == 0) {
-			g2d.drawImage(ImageProvider.getPause(), this.getWidth() / 2 - (70 + shift), getHeight() / 2 - (45 + shift),
-					null);
+			g2d.drawImage(ImageProvider.getPause(), this.getWidth() / 2 - (70 + shift), getHeight() / 2 - (45 + shift),null);
 		}
 	}
 
