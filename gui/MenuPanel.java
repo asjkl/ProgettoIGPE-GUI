@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 @SuppressWarnings("serial")
-public class MenuPanel extends JPanel {
+public class MenuPanel extends JPanel{
 
 	private int cursorPosition;
 	private final int DIM = 6;
@@ -46,16 +46,13 @@ public class MenuPanel extends JPanel {
 	private int cursorPositionRoom;
 	private JDialog dialogRoom;
 	private MyListener myListener;
-	private FullScreen full;
 
-	public MenuPanel(final int w, final int h, PanelSwitcher switcher, FullScreen full) {
+	public MenuPanel(final int w, final int h, PanelSwitcher switcher) {
 
-		this.full=full;
-		
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
-
+	
 		jfilechooser = new JFileChooserClass(false);
 		setSwitcher(switcher);
 		setCursorPosition(0);

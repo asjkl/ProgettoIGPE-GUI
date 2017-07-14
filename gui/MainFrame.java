@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.*;
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
@@ -19,7 +22,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 //	private final int HEIGHT = (int) screenSize.getHeight();
 	
 	//E COMMENTARE SOTTO
-	
 	private final int WIDTH = 1300;
 	private final int HEIGHT = 740;
 	
@@ -42,6 +44,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private int levelP1;
 	private int levelP2;
 	private GraphicsEnvironment graphicscEnvironment;
+	private GraphicsDevice device;
+	public boolean fullscreen;
 
 	private NetworkPanel network;
 	private Lobby lobby;
@@ -58,20 +62,32 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private GamePanel gamePanel;
 	private SlideStage slideStage;
 	private LoadPanel load;
-	private FullScreen full;
 
 	public MainFrame() {
-		
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
 		this.setSize(new Dimension(WIDTH, HEIGHT));
-		new ImageProvider();
-		full = new FullScreen(this);
-		load = new LoadPanel(WIDTH, HEIGHT, this, full);
+		
+		KeyboardFocusManager.getCurrentKeyboardFocusManager()
+		  .addKeyEventDispatcher(new KeyEventDispatcher() {
+		      @Override
+		      public boolean dispatchKeyEvent(KeyEvent e) {
+		    	  if(e.getKeyCode() == e.VK_F11){
+						if(!fullscreen)
+						mainScreenTurnOn();
+						else
+						mainScreenTurnOff();
+					}
+		        return false;
+		      }
+		});
+		
+
+		load = new LoadPanel(WIDTH, HEIGHT, this);
 		
 		this.add(load);
-//		this.setUndecorated(true);
 		this.setResizable(false);
+//		addKeyListener(this);
 		this.pack();
 //		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,10 +98,46 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		MainFrame main = new MainFrame();
 		main.instantiate();
 	}
+	
+	//------------------------------------FULLSCREEN-----------------------------------
+	
+	public void mainScreenTurnOn() {
+		dispose(); 
+		setUndecorated(true);
+		device.setFullScreenWindow(this);
+		fullscreen = true;
+	}
+	
+	public void mainScreenTurnOff() {
+		fullscreen = false;
+		device.setFullScreenWindow(null);
+		dispose();
+		setUndecorated(false);
+		setVisible(true);
+	}
+	
+//	public void keyPressed(KeyEvent e) {
+//		if(e.getKeyCode() == e.VK_F11){
+//			if(!fullscreen)
+//			  mainScreenTurnOn();
+//			else
+//			  mainScreenTurnOff();
+//		}
+////		else System.out.println(e.getKeyCode()+"\n");
+//	} 
+//	
+//	public void keyReleased(KeyEvent arg0) {
+//	}
+//	
+//	public void keyTyped(KeyEvent arg0) {
+//	
+//	}
+//	
+	//---------------------------------------------------------------------------------
 
 	private void instantiate() {
 	
-		Timer timer = new Timer(9000, new ActionListener() {
+		Timer timer = new Timer(8000, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -93,20 +145,26 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			}
 		});
 	
+		new ImageProvider();
+		new SoundsProvider();
+		graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		device = graphicscEnvironment.getDefaultScreenDevice();
 		transparent = false;
 		timer.setRepeats(false);
 		timer.start();
 		setSlide(true);
+		new ImageProvider();
 		new SoundsProvider();
 		setFont();
 
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
-		menu = new MenuPanel(WIDTH, HEIGHT, this, full);
+		menu = new MenuPanel(WIDTH, HEIGHT, this);
 		player = new PlayerPanel(WIDTH, HEIGHT, this);
 		firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
 		secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
 		editor = new ConstructionPanel(WIDTH, HEIGHT, this);
 		settings = new SettingsPanel(WIDTH, HEIGHT, this);
+		
 	}
 	
 	public void switchTo(JComponent component) {
