@@ -1328,8 +1328,7 @@ public class GamePanel extends JPanel {
 	}
 
 	private void paintEnemy(Graphics g, Graphics2D g2d) {
-		if (!GameManager.offline)
-			game.lock.lock();
+
 		for (int i = 0; i < game.getEnemy().size(); i++) {
 
 			// EFFETTO NASCITA ENEMY
@@ -1430,8 +1429,6 @@ public class GamePanel extends JPanel {
 				}
 			}
 		}
-		if (!GameManager.offline)
-			game.lock.unlock();
 	}
 
 	private void paintIce(Graphics g) {
@@ -1444,10 +1441,8 @@ public class GamePanel extends JPanel {
 	}
 
 	private void paintRocket(Graphics g, Graphics2D g2d) {
+
 		synchronized (this) {
-		if (!GameManager.offline)
-			game.lock.lock();
-	
 			for (int i = 0; i < game.getRocket().size(); i++) {
 
 				if (GameManager.offline && game.getRocket().get(i).getNext() instanceof PowerUp) {
@@ -1473,10 +1468,7 @@ public class GamePanel extends JPanel {
 								game.getRocket().get(i).getX() * tile, null);
 					}
 			}
-			if (!GameManager.offline)
-				game.lock.unlock();
 		}
-	
 	}
 
 	private void paintWater(Graphics g) {
@@ -1493,11 +1485,11 @@ public class GamePanel extends JPanel {
 	}
 
 	private void paintEffects(Graphics g, Graphics g2d) {
+
 		
 		synchronized (this) {
 			
-		if (!GameManager.offline)
-			game.lock.lock();
+		
 		for (int i = 0; i < game.getEffects().size(); i++) {
 
 			int X, Y, pixel, inc;
@@ -1617,11 +1609,8 @@ public class GamePanel extends JPanel {
 					i--;
 				}
 			}
-			if (!GameManager.offline)
-				game.lock.lock();
-			}
 		}
-		
+		}
 	}
 
 	private void paintPlayer(Graphics g, Graphics2D g2d) {
@@ -1773,9 +1762,6 @@ public class GamePanel extends JPanel {
 
 	private void paintFlagBrickSteelPower(Graphics g) {
 
-		if (!GameManager.offline)
-			game.lock.lock();
-		
 		for (int a = 0; a < game.getMatrix().getRow(); a++) {
 			for (int b = 0; b < game.getMatrix().getColumn(); b++) {
 
@@ -1864,8 +1850,6 @@ public class GamePanel extends JPanel {
 				}
 			}
 		}
-		if (!GameManager.offline)
-			game.lock.unlock();
 	}
 
 	@SuppressWarnings("unused")
@@ -1915,24 +1899,40 @@ public class GamePanel extends JPanel {
 		stroke(g, g2d);
 
 		g.translate(shift, shift);
-		
+
 //		printLines(g, g2d);
 
 		paintWater(g);
 
 		paintIce(g);
 
+		if (!GameManager.offline)
+			game.lock.lock();
 		paintFlagBrickSteelPower(g);
-	
+		if (!GameManager.offline)
+			game.lock.unlock();
+
+		if (!GameManager.offline)
+			game.lock.lock();
 		paintEnemy(g, g2d);
+		if (!GameManager.offline)
+			game.lock.unlock();
 
 		paintPlayer(g, g2d);
 
+		if (!GameManager.offline)
+			game.lock.lock();
 		paintRocket(g, g2d);
+		if (!GameManager.offline)
+			game.lock.unlock();
 
 		paintTrees(g);
 
+		if (!GameManager.offline)
+			game.lock.lock();
 		paintEffects(g, g2d);
+		if (!GameManager.offline)
+			game.lock.unlock();
 
 		paused(g, g2d);
 
@@ -2066,3 +2066,4 @@ public class GamePanel extends JPanel {
 	}
 
 }
+
