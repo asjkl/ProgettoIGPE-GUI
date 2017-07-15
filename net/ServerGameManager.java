@@ -1,26 +1,34 @@
 package net;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.swing.JTextField;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
 
-
 public class ServerGameManager {
-	private final ArrayList<ClientManager> clients = new ArrayList<>();
-	private final Set<ClientManager> readyClients = new HashSet<ClientManager>();
-	public HashMap<String,String>name=new HashMap<>();
+	private final ArrayList<ClientManager> clients;
+	private final Set<ClientManager> readyClients;
+	public HashMap<String,String>name;
 	public GameManager gameManager;
 	private GamePanel gamePanel;
 	private String difficult;
-	private JTextField map=new JTextField();
+	private JTextField map;
+	private ServerSocket server;
 
+	public ServerGameManager(ServerSocket server) {
+		this.server=server;
+		this.clients = new ArrayList<>();
+		this.readyClients = new HashSet<ClientManager>();
+		this.name=new HashMap<>();
+		this.map=new JTextField();
+	}
+	
 	public void add(final ClientManager cm) {
 		clients.add(cm);
 		System.out.println("connesso." );
@@ -123,6 +131,12 @@ public class ServerGameManager {
 			@Override
 			public void run() {
 				gamePanel.gameLoop();
+				System.out.println("CHIUSO_SERVERGAME");
+				try {
+					server.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			};
 		}.start();
 	}

@@ -128,7 +128,6 @@ public class ConnectionManager implements Runnable {
 					} 
 					mainFrame.setTransparent(false);
 					mainFrame.showLobby(false);
-					
 					close();
 				} else {
 					buffer = br.readLine();

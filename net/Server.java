@@ -14,13 +14,11 @@ public class Server implements Runnable {
 	@SuppressWarnings("rawtypes")
 	private Hashtable outputStreams = new Hashtable();
 	private boolean exitChat = false;
-	private boolean exitGame = false;
 	int port;
 	ServerSocket serverSocket;
 	ServerGameManager gameManagerServer;
 	public static String OnlineNames = "";
 	public HashMap<Socket, String> client = new HashMap<>();
-	
 
 	public static void main(String[] args) throws IOException {
 		final Server server1 = new Server(1234);
@@ -36,63 +34,45 @@ public class Server implements Runnable {
 		if (Thread.currentThread().getName().equals("game")) {
 			try {
 				serverSocket = new ServerSocket(port);
+				System.out.println("SERVER GAME -> " + serverSocket);
+
+				// Player P1
+				Socket socket1 = null;
+				socket1 = serverSocket.accept();
+				gameManagerServer = new ServerGameManager(serverSocket);
+				ClientManager cm1 = new ClientManager(socket1, gameManagerServer);
+				gameManagerServer.add(cm1);
+
+				// Player P2
+				Socket socket2 = null;
+				socket2 = serverSocket.accept();
+				ClientManager cm2 = new ClientManager(socket2, gameManagerServer);
+				gameManagerServer.add(cm2);
+				gameManagerServer.setupClient();
+				gameManagerServer.startGame();
+
 			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			while (!exitGame) {
-				if (gameManagerServer == null || gameManagerServer.gameManager.isExit()) {
-					System.out.println("SERVER GAME -> " + serverSocket);
+				if (serverSocket!=null && !serverSocket.isClosed()) {
+					System.out.println("CHIUSO_SERVERGAME");
 					try {
-
-						// Player P1
-						Socket socket1 = null;
-						socket1 = serverSocket.accept();
-						gameManagerServer = new ServerGameManager();
-						ClientManager cm1 = new ClientManager(socket1, gameManagerServer);
-						gameManagerServer.add(cm1);
-
-						// Player P2
-						Socket socket2 = null;
-						socket2 = serverSocket.accept();
-						ClientManager cm2 = new ClientManager(socket2, gameManagerServer);
-						gameManagerServer.add(cm2);
-						gameManagerServer.setupClient();
-						gameManagerServer.startGame();
-
+						serverSocket.close();
 					} catch (IOException e) {
-						if(!serverSocket.isClosed()){
-							System.out.println("CHIUSO_SERVERGAME");
-							try {
-								serverSocket.close();
-							} catch (IOException e1) {
-								e1.printStackTrace();
-							}
-						}
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
-
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
-			
+
 		} else {
-			
-		
+
 			try {
 				serverSocket = new ServerSocket(port);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			System.out.println("SERVER CHAT -> " + serverSocket);
 
-			while (!exitChat) {
-				
-				
-				System.out.println("--------------------------------------------------");
-				try {
+				System.out.println("SERVER CHAT -> " + serverSocket);
+
+				while (!exitChat) {
+
+					System.out.println("--------------------------------------------------");
 					Socket s = serverSocket.accept();
 					System.out.println("Connessione per socket " + s);
 					DataOutputStream dout = null;
@@ -100,17 +80,16 @@ public class Server implements Runnable {
 					outputStreams.put(s, dout);
 					dout.writeUTF(OnlineNames);
 					new ServerThread(this, s);
-
-				} catch (IOException e) {
-					if (!serverSocket.isClosed()) {
-						try {
-							serverSocket.close();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						System.out.println("CHIUSO_SERVERCHAT");
+				}
+			} catch (IOException e1) {
+				if (serverSocket!=null && !serverSocket.isClosed()) {
+					try {
+						serverSocket.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					System.out.println("CHIUSO_SERVERCHAT");
 				}
 			}
 		}
@@ -121,7 +100,6 @@ public class Server implements Runnable {
 		this.port = port;
 	}
 
-	
 	@SuppressWarnings("rawtypes")
 	Enumeration getOutputStreams() {
 		return outputStreams.elements();
@@ -129,13 +107,14 @@ public class Server implements Runnable {
 
 	public void sendToAll(String message) {
 		synchronized (outputStreams) {
-			
-			for (@SuppressWarnings("rawtypes") Enumeration e = getOutputStreams(); e.hasMoreElements();) {
+
+			for (@SuppressWarnings("rawtypes")
+			Enumeration e = getOutputStreams(); e.hasMoreElements();) {
 				DataOutputStream dout = (DataOutputStream) e.nextElement();
 				try {
 					dout.writeUTF(message);
 				} catch (IOException ie) {
-//					System.out.println(ie);
+					// System.out.println(ie);
 				}
 			}
 		}
@@ -168,12 +147,11 @@ public class Server implements Runnable {
 	}
 
 	public void closeServer() {
-		
+
 		OnlineNames = "";
 		client.clear();
 		outputStreams.clear();
-		
-		
+
 		try {
 			System.out.println("CHIUDO-SERVERCHAT");
 			serverSocket.close();
