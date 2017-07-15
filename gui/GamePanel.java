@@ -19,6 +19,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -76,6 +80,11 @@ public class GamePanel extends JPanel {
 	private int currentLevelP1;
 	private int currentResumeP2;
 	private int currentLevelP2;
+
+	//SERVONO PER SINCRONIZZARE I DUE THREAD.... 1) IL THREAD DELLA LOGCA 2) IL THREAD CHE INVIA I DATI AI CLIENT
+	private Lock lock;
+	private Condition cond;
+	private boolean send;
 
 	// online
 	public GamePanel(PanelSwitcher switcher, String difficult) {
@@ -149,6 +158,30 @@ public class GamePanel extends JPanel {
 						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
 			}
 		});
+
+		lock = new ReentrantLock();
+		cond = lock.newCondition();
+		send = false;
+		if (switcher == null) {					//LO FAI CREARE SOLO AL SERVER GAME
+			new Thread() {
+				public void run() {
+					while (true) {
+						lock.lock();
+						while (!send) {
+							try {
+								cond.await();
+							} catch (InterruptedException e) {
+
+								e.printStackTrace();
+							}
+						}
+						game.runnable.run();
+						send = false;
+						lock.unlock();
+					}
+				};
+			}.start();
+		}
 	}
 
 	// offline
@@ -289,22 +322,27 @@ public class GamePanel extends JPanel {
 		while (!game.isExit()) {
 
 			if (!game.paused) {
-
+				if(!GameManager.offline)
+					lock.lock();
+				
 				start = System.nanoTime();
-
+				
 				logic();
 				graphic();
-
-				if (game.runnable != null)
-					game.runnable.run();
-
+				
+				if(!GameManager.offline){
+					send = true;
+					cond.signalAll();
+				}
+				
 				longTime = (System.nanoTime() - start);
 				end = (double) (longTime.doubleValue() / 1000000);
 
+				if(!GameManager.offline)
+					lock.unlock();
+		
 			} else if (game.paused || game.pauseOptionDialog) {
-				if (game.runnable != null)
-					game.runnable.run();
-				if (GameManager.offline) { // IL SERVER NON LO DEVE RIPRODURRE
+				if (GameManager.offline) { 	// IL SERVER NON LO DEVE RIPRODURRE
 											// IL SUONO
 					SoundsProvider.cancelMove();
 					SoundsProvider.cancelStop();
@@ -317,6 +355,17 @@ public class GamePanel extends JPanel {
 					fullGamePanel.repaint();
 
 			}
+			
+//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
+			/////////////////////////////
+//			try {
+//				Thread.sleep(9);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			////////////////////////////
+//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
 		}
 		repaint();
 		if (fullGamePanel != null)
@@ -489,7 +538,6 @@ public class GamePanel extends JPanel {
 	}
 
 	// --------------------------------------------------------------------------
-
 	private void changeRotationForIce(Tank t) {
 
 		if (t.getOldD() == Direction.UP) {
@@ -747,6 +795,25 @@ public class GamePanel extends JPanel {
 		return contFPSobject;
 	}
 
+	
+	//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
+//	private double contFPS(AbstractStaticObject object, Direction dir, double contFPSobject, double pixel,double delta) {
+//	
+//		contFPSobject += pixel;
+//		
+//		if (dir == Direction.LEFT) {
+//			object.setyGraphics(object.getyGraphics() - pixel);
+//		} else if (dir == Direction.RIGHT) {
+//			object.setyGraphics(object.getyGraphics() + pixel);
+//		} else if (dir == Direction.UP) {
+//			object.setxGraphics(object.getxGraphics() - pixel);
+//		} else if (dir == Direction.DOWN) {
+//			object.setxGraphics(object.getxGraphics() + pixel);
+//		}
+//		return contFPSobject;
+//	}
+	//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
+	
 	private void extend(Direction d, PlayerTank player) {
 
 		if (!player.isPressed()) {
@@ -1222,7 +1289,6 @@ public class GamePanel extends JPanel {
 	}
 
 	// -----------------------PAINT----------------------------//
-
 	private boolean powerUpShovelActive(int a, int b) {
 		int x = game.getFlag().getX();
 		int y = game.getFlag().getY();
@@ -1951,7 +2017,6 @@ public class GamePanel extends JPanel {
 	}
 
 	// ------------------------SCORE MULTI-------------------------//
-
 	private void loadScoreSingle() {
 
 		BufferedReader reader = null;
@@ -2048,7 +2113,6 @@ public class GamePanel extends JPanel {
 	}
 
 	// -----------------------GET & SET--------------------------//
-
 	public GameManager getGame() {
 		return game;
 	}
