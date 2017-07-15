@@ -1,22 +1,32 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
+
+import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 @SuppressWarnings("serial")
 public class SettingsPanel extends JPanel {
@@ -27,19 +37,20 @@ public class SettingsPanel extends JPanel {
 	
 	private float currValue;
 	private int cursorPosition;
-	private final int DIM = 3;
+	private final int DIM = 4;
 	private PanelSwitcher switcher;
 	private JSlider sound;
 	private ArrayList<JRadioButton> level;
 	private ArrayList<JButton> buttons;
 	private ButtonGroup group;
+	private JDialog dialogKeyBoard;
 
 	public SettingsPanel(final int w, final int h, PanelSwitcher switcher) {
 
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
-		
+		this.dialogKeyBoard = new JDialog();
 		hide = false;
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
@@ -69,6 +80,7 @@ public class SettingsPanel extends JPanel {
 			buttons.get(i).setFocusPainted(false);
 			buttons.get(i).setBackground(Color.BLACK);
 			buttons.get(i).setForeground(Color.WHITE);
+			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
 			setBoundsAndText(i);
 			addActionListener(i);
 			buttons.get(i).addMouseListener(new MouseInputAdapter() {
@@ -156,6 +168,9 @@ public class SettingsPanel extends JPanel {
 			buttons.get(j).setBounds(265, 370, 200, 100);
 			buttons.get(j).setText("Level");
 			break;
+		case 3:
+			buttons.get(j).setBounds(265, 470, 200, 100);
+			buttons.get(j).setText("Keys");
 		default:
 			break;
 		}
@@ -205,11 +220,75 @@ public class SettingsPanel extends JPanel {
 				}
 			});
 			break;
+		case 3:
+			buttons.get(j).addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {	
+					SoundsProvider.playBulletHit1();
+					cursorPosition = j;
+					repaint();
+					keyboard();
+					
+				}
+			});
+			break;
 		default:
 			break;
 		}
 	}
 	
+	public void keyboard() {
+
+		dialogKeyBoard.setPreferredSize(new Dimension(1236, 530));
+		
+		JPanel p = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paintComponent(g);
+				
+				g.drawImage(ImageProvider.getKeyboard(), 0, 0, null);
+			}
+		};
+		p.setBackground(Color.BLACK);
+		p.setLayout(null);
+		p.setBorder(BorderFactory.createLineBorder(Color.RED));
+		JButton b = new JButton("Close");
+		b.setFont(MainFrame.customFontM);
+		b.setBackground(Color.BLACK);
+		
+		b.setBorder(null);
+		b.setOpaque(false);
+		b.setContentAreaFilled(false);
+		b.setBorderPainted(false);
+		b.setFocusPainted(false);
+		b.setForeground(Color.WHITE);
+		b.setBackground(Color.BLACK);
+		b.setHorizontalAlignment(SwingConstants.LEFT);
+		b.setBounds(1160, 10, 80, 35);
+		b.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SoundsProvider.playBulletHit1();
+				dialogKeyBoard.dispose();
+	
+			}
+		});
+		
+		p.add(b);
+		
+		dialogKeyBoard.add(p);
+		dialogKeyBoard.setUndecorated(true);
+		// dialog.setResizable(true);
+		dialogKeyBoard.setModal(true);
+		dialogKeyBoard.pack();
+		dialogKeyBoard.setLocationRelativeTo(this);
+		dialogKeyBoard.setVisible(true);
+
+	}
+
 	public void createRadioButtons() {
 
 		for(int i = 0; i < DIM; i++) {

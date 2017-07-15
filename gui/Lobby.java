@@ -187,29 +187,30 @@ public class Lobby extends JPanel {
 			difficultPanel.add(labels.get(i));
 			
 			if(client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
-				level.get(i).addChangeListener(new ChangeListener() {
-
-				@Override
-				public void stateChanged(ChangeEvent e) {
-
-					if(client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
-					if (level.get(0).isSelected()) {
-						difficult = "easy";
-					} else if (level.get(1).isSelected()) {
-						difficult = "normal";
-					} else if (level.get(2).isSelected()) {
-						difficult = "hard";
-					}
-					repaint();
+				level.get(i).addActionListener(new ActionListener() {
 					
-					try {
-						client.dout.writeUTF("#difficult# "+difficult);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if(client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
+							if (level.get(0).isSelected()) {
+								difficult = "easy";
+							} else if (level.get(1).isSelected()) {
+								difficult = "normal";
+							} else if (level.get(2).isSelected()) {
+								difficult = "hard";
+							}
+							repaint();
+							
+							try {
+								client.dout.writeUTF("#difficult# "+difficult);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						
 					}
-				}
-			});
+				});
+	
 			if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
 		
 				level.get(i).setBorder(null);

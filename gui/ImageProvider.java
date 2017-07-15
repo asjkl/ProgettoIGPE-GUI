@@ -155,10 +155,11 @@ public class ImageProvider {
 	private static Image gameOver;
 	private static Image lives;
 	
+	private static Image keyboard;
+	
 	static {
 		try {
-
-			//TODO 			
+	
 			maps1P.add((ImageIO.read(new File("resource/map1.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
 			maps1P.add((ImageIO.read(new File("resource/map2.png")).getScaledInstance(getMapsXY(), getMapsXY(),
@@ -307,6 +308,7 @@ public class ImageProvider {
 			setShovelx((ImageIO.read(new File("resource/shovel.png")).getScaledInstance(50, 50,
 					java.awt.Image.SCALE_SMOOTH)));
 			
+			setKeyboard((ImageIO.read(new File("resource/keyboard.png"))));
 			
 			setShovel((ImageIO.read(new File("resource/shovel.png")).getScaledInstance(getTile(), getTile(),
 					java.awt.Image.SCALE_SMOOTH)));
@@ -1323,6 +1325,14 @@ public class ImageProvider {
 
 	public static void setArrowLeftsmall(Image arrowLeftsmall) {
 		ImageProvider.arrowLeftsmall = arrowLeftsmall;
+	}
+
+	public static Image getKeyboard() {
+		return keyboard;
+	}
+
+	public static void setKeyboard(Image keyboard) {
+		ImageProvider.keyboard = keyboard;
 	}
 
 }
