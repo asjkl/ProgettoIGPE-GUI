@@ -135,9 +135,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		new ImageProvider();
 		new SoundsProvider();
 		setFont();
-
+		
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
 		menu = new MenuPanel(WIDTH, HEIGHT, this);
+		menu.drawScore();
 		player = new PlayerPanel(WIDTH, HEIGHT, this);
 		firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
 		secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
@@ -199,7 +200,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 		GameManager.offline = false;
 
-		menu.drawScore();
+	
 		
 		if (isSlide()) {
 			slideContainer = new SlideContainer(WIDTH, HEIGHT);

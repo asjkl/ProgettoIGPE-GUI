@@ -363,7 +363,7 @@ public class GamePanel extends JPanel {
 			
 			if(!GameManager.offline){
 				try {
-					Thread.sleep(9);
+					Thread.sleep(12);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -1158,7 +1158,7 @@ public class GamePanel extends JPanel {
 					if (game.getPlayersArray().get(a).getNext() instanceof Tank)
 						game.getPlayersArray().get(a).setCont(35);
 					else
-						game.getPlayersArray().get(a).setCont(30);
+						game.getPlayersArray().get(a).setCont(32);
 					SoundsProvider.playHitForCanGo();
 				}
 
