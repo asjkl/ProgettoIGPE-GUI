@@ -320,12 +320,13 @@ public class GamePanel extends JPanel {
 	public void gameLoop() {
 
 		while (!game.isExit()) {
-
 			if (!game.paused) {
+				
 				if(!GameManager.offline)
 					lock.lock();
 				
-				start = System.nanoTime();
+				if(GameManager.offline)
+					start = System.nanoTime();
 				
 				logic();
 				graphic();
@@ -335,12 +336,16 @@ public class GamePanel extends JPanel {
 					cond.signalAll();
 				}
 				
-				longTime = (System.nanoTime() - start);
-				end = (double) (longTime.doubleValue() / 1000000);
-
+				if(GameManager.offline){
+					longTime = (System.nanoTime() - start);
+					end = (double) (longTime.doubleValue() / 1000000);
+				}
+					
 				if(!GameManager.offline)
 					lock.unlock();
 		
+			
+				
 			} else if (game.paused || game.pauseOptionDialog) {
 				if (GameManager.offline) { 	// IL SERVER NON LO DEVE RIPRODURRE
 											// IL SUONO
@@ -356,16 +361,13 @@ public class GamePanel extends JPanel {
 
 			}
 			
-//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
-			/////////////////////////////
-//			try {
-//				Thread.sleep(9);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-			////////////////////////////
-//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
+			if(!GameManager.offline){
+				try {
+					Thread.sleep(9);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		repaint();
 		if (fullGamePanel != null)
@@ -777,43 +779,27 @@ public class GamePanel extends JPanel {
 		}
 	}
 
-	private double contFPS(AbstractStaticObject object, Direction dir, double contFPSobject, double pixel,
-			double delta) {
+	private double contFPS(AbstractStaticObject object, Direction dir, double contFPSobject, double pixel, double delta) {
+	
+		//ONLINE
+		if(GameManager.offline)
+			pixel = ((pixel / tempFPS) * delta);
+		
+		contFPSobject += pixel;
+		
 		if (dir == Direction.LEFT) {
-			contFPSobject += (pixel / tempFPS) * delta;
-			object.setyGraphics(object.getyGraphics() - ((pixel / tempFPS) * delta));
+			object.setyGraphics(object.getyGraphics() - pixel);
 		} else if (dir == Direction.RIGHT) {
-			contFPSobject += (pixel / tempFPS) * delta;
-			object.setyGraphics(object.getyGraphics() + ((pixel / tempFPS) * delta));
+			object.setyGraphics(object.getyGraphics() + pixel);
 		} else if (dir == Direction.UP) {
-			contFPSobject += (pixel / tempFPS) * delta;
-			object.setxGraphics(object.getxGraphics() - ((pixel / tempFPS) * delta));
+			object.setxGraphics(object.getxGraphics() - pixel);
 		} else if (dir == Direction.DOWN) {
-			contFPSobject += (pixel / tempFPS) * delta;
-			object.setxGraphics(object.getxGraphics() + ((pixel / tempFPS) * delta));
+			object.setxGraphics(object.getxGraphics() + pixel);
 		}
+		
 		return contFPSobject;
 	}
 
-	
-	//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
-//	private double contFPS(AbstractStaticObject object, Direction dir, double contFPSobject, double pixel,double delta) {
-//	
-//		contFPSobject += pixel;
-//		
-//		if (dir == Direction.LEFT) {
-//			object.setyGraphics(object.getyGraphics() - pixel);
-//		} else if (dir == Direction.RIGHT) {
-//			object.setyGraphics(object.getyGraphics() + pixel);
-//		} else if (dir == Direction.UP) {
-//			object.setxGraphics(object.getxGraphics() - pixel);
-//		} else if (dir == Direction.DOWN) {
-//			object.setxGraphics(object.getxGraphics() + pixel);
-//		}
-//		return contFPSobject;
-//	}
-	//++++++++++++++++++++++++++++++//VERSIONE TEST CON SLEEP//++++++++++++++++++++++++++++++//
-	
 	private void extend(Direction d, PlayerTank player) {
 
 		if (!player.isPressed()) {
