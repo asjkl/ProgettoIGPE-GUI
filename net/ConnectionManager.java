@@ -125,10 +125,10 @@ public class ConnectionManager implements Runnable {
 									&& GameManager.flag.isHit())) {
 						SoundsProvider.playGameOver();
 						new TranslucentWindow(mainFrame, null, ImageProvider.getGameOver());
-					} else {
-						mainFrame.setTransparent(false);
-						mainFrame.showLobby(false);
-					}
+					} 
+					mainFrame.setTransparent(false);
+					mainFrame.showLobby(false);
+					
 					close();
 				} else {
 					buffer = br.readLine();
