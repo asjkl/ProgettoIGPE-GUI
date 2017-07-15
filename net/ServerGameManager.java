@@ -86,7 +86,7 @@ public class ServerGameManager {
 			
 			if (readyClients.size() == 2) {
 				dispatch("#START");
-				System.out.println("ServerGameManager.setReady()");
+				System.out.println("ServerGame PRONTO!");
 			}
 		}
 	}
@@ -107,7 +107,6 @@ public class ServerGameManager {
 		for (final ClientManager cm : clients) {
 			map.setText(cm.getMap().getText());
 			difficult=cm.getDifficult();
-			System.out.println("IO CLIENT HO DATO AL SERVER QUESTE COSE <<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>> "+cm.getName()+" "+map.getText()+" "+difficult);
 			break;
 		}
 		
@@ -145,6 +144,6 @@ public class ServerGameManager {
 		if(cont==2){
 			gamePanel.gameOverOrWin();
 		}
-		System.out.println("Client disconnected: " + name);
+		System.out.println("CLIENTE DISCONNESSO: " + name);
 	}
 }

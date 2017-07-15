@@ -294,7 +294,7 @@ public class Lobby extends JPanel {
 		
 		
 		// solo moderatore avvia timer che manda messaggi
-		if(client.getNameOfClientsOnline().size()>0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0))){
+		if(client.getClientName().equals(client.getNameOfClientsOnline().get(0))){
 			timer =  new Timer();
 			task = new MyTask();
 			timer.schedule(task, 1000, 1000);
@@ -349,7 +349,6 @@ public class Lobby extends JPanel {
 				try {
 					client.dout.writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -378,7 +377,6 @@ public class Lobby extends JPanel {
 				try {
 					client.dout.writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -425,8 +423,28 @@ public class Lobby extends JPanel {
 						((JButton) e.getComponent()).doClick();
 					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						enter = true;
+						SoundsProvider.playBulletHit1();
 						setCursorPosition(1);
+
+						// chiude tutto
+						if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
+							timer.cancel();
+							try {
+								client.dout.writeUTF("EXITALL");
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+						
+						} else {
+							try {
+								client.dout.writeUTF("EXIT "+client.getClientName());
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+						
+						}
 						getSwitcher().showNetwork();
+						
 					} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
 						enter = true;
 						if (curRow < 1) {
@@ -468,29 +486,20 @@ public class Lobby extends JPanel {
 					setCursorPosition(0);
 
 					// chiude tutto
-					System.out.println("-> " + client.getClientName());
 					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
-						System.out.println("MOD STA PER USCIRE");
 						timer.cancel();
 						try {
 							client.dout.writeUTF("EXITALL");
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-//						serverChat.sendToAll("EXIT");
-//						serverChat.closeServer();
-//						serverChat.setExitChat(true);
 					
 					} else {
-						System.out.println("CLIENT STA PER USCIRE");
 						try {
 							client.dout.writeUTF("EXIT "+client.getClientName());
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-//						serverChat.removeConnection(client.getClientName());
 					
 					}
 					getSwitcher().showNetwork();
@@ -520,7 +529,6 @@ public class Lobby extends JPanel {
 							try {
 								client.dout.writeUTF("p1 true");
 							} catch (IOException e2) {
-								// TODO Auto-generated catch block
 								e2.printStackTrace();
 							}
 										
@@ -528,7 +536,6 @@ public class Lobby extends JPanel {
 							try {
 								client.dout.writeUTF("connect"+" "+portTextField.getText()+" "+stage+" "+difficult);
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 						}
@@ -540,14 +547,12 @@ public class Lobby extends JPanel {
 							try {
 								client.dout.writeUTF("p2 true");
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 						} else {
 							try {
 								client.dout.writeUTF("p2 false");
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 						}

@@ -135,7 +135,7 @@ public class ConnectionManager implements Runnable {
 				}
 			}
 		} catch (final IOException e) {
-			System.out.println("Connection closed");
+			System.out.println("Connessione chiusa");
 		}
 	}
 

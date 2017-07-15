@@ -44,8 +44,6 @@ public class ClientChat extends JPanel implements Runnable {
 	private int updateStageRealTime = 1; //stage 1 di default
 	private String updateDifficultRealTime="easy";
 
-	
-
 
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
 
@@ -96,7 +94,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 		try {
 			socket = new Socket(host, Integer.valueOf(portChat));
-			System.out.println("Connected to " + socket);
+			System.out.println("Connessione per " + clientName);
 			din = new DataInputStream(socket.getInputStream());
 			dout = new DataOutputStream(socket.getOutputStream());
 			new Thread(this).start();
@@ -114,7 +112,7 @@ public class ClientChat extends JPanel implements Runnable {
 			dout.writeUTF(tf1.getText() + ":" + message);
 			tf2.setText(" ");
 		} catch (IOException ie) {
-			System.out.println(ie);
+//			System.out.println(ie);
 		}
 	}
 
@@ -129,7 +127,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 				// -----------------------------------------------
 
-				System.out.println("-> " + message);
+//				System.out.println("-> " + message);
 
 				if (elements[0].equals("EXIT")) {
 					String client = elements[1];
@@ -219,7 +217,7 @@ public class ClientChat extends JPanel implements Runnable {
 	
 							if (!(message.charAt(len - i - 1) == '^')) {
 								name = false;
-								System.out.println(message.charAt(len - i - 1));
+//								System.out.println(message.charAt(len - i - 1));
 								break;
 							}
 						}
@@ -243,7 +241,7 @@ public class ClientChat extends JPanel implements Runnable {
 			}
 
 		} catch (IOException ie) {
-			System.out.println(ie);
+//			System.out.println(ie);
 		}
 	}
 	
@@ -298,6 +296,15 @@ public class ClientChat extends JPanel implements Runnable {
 		ConnectionManager connectionManager = null;
 		connectionManager = new ConnectionManager(socket, clientName, mainFrame, stage, difficult);
 		new Thread(connectionManager, "Connection Manager").start();
+	}
+	
+	public boolean isPresentInTheArrayOfClientOnline() {
+		for(int a=0; a<nameOfClientsOnline.size(); a++){
+			if(nameOfClientsOnline.get(a).equals(clientName)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public ArrayList<String> getNameOfClientsOnline() {
@@ -371,6 +378,7 @@ public class ClientChat extends JPanel implements Runnable {
 	public void setSocket(Socket socket) {
 		this.socket = socket;
 	}
+
 
 	// public static void main(String args[])
 	// {

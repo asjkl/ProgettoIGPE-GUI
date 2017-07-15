@@ -41,7 +41,7 @@ public class Server implements Runnable {
 			}
 			while (!exitGame) {
 				if (gameManagerServer == null || gameManagerServer.gameManager.isExit()) {
-					System.out.println("SERVER GAME: " + serverSocket);
+					System.out.println("SERVER GAME -> " + serverSocket);
 					try {
 
 						// Player P1
@@ -56,13 +56,18 @@ public class Server implements Runnable {
 						socket2 = serverSocket.accept();
 						ClientManager cm2 = new ClientManager(socket2, gameManagerServer);
 						gameManagerServer.add(cm2);
-						// System.out.println("setupClient");
 						gameManagerServer.setupClient();
-						// System.out.println("STARTGAME");
 						gameManagerServer.startGame();
 
 					} catch (IOException e) {
-						e.printStackTrace();
+						if(!serverSocket.isClosed()){
+							System.out.println("CHIUSO_SERVERGAME");
+							try {
+								serverSocket.close();
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+						}
 					}
 				}
 
@@ -81,7 +86,7 @@ public class Server implements Runnable {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			System.out.println("SERVER CHAT: " + serverSocket);
+			System.out.println("SERVER CHAT -> " + serverSocket);
 
 			while (!exitChat) {
 				
@@ -89,12 +94,11 @@ public class Server implements Runnable {
 				System.out.println("--------------------------------------------------");
 				try {
 					Socket s = serverSocket.accept();
-					System.out.println("Connection From " + s);
+					System.out.println("Connessione per socket " + s);
 					DataOutputStream dout = null;
 					dout = new DataOutputStream(s.getOutputStream());
 					outputStreams.put(s, dout);
 					dout.writeUTF(OnlineNames);
-					System.out.println(OnlineNames);
 					new ServerThread(this, s);
 
 				} catch (IOException e) {
@@ -131,7 +135,7 @@ public class Server implements Runnable {
 				try {
 					dout.writeUTF(message);
 				} catch (IOException ie) {
-					System.out.println(ie);
+//					System.out.println(ie);
 				}
 			}
 		}
@@ -141,7 +145,7 @@ public class Server implements Runnable {
 
 		synchronized (outputStreams) {
 
-			System.out.println("Removing connection to " + s);
+			System.out.println("RIMOZION CONNESSION PER " + s);
 			outputStreams.remove(s);
 			try {
 				s.close();

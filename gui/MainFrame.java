@@ -264,16 +264,16 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	@Override
-	public void showLobby(boolean gamePanelExit) {
+	public void showLobby(boolean gamePanelExit){
 		
 		if(!gamePanelExit){
-			lobby = new Lobby(WIDTH, HEIGHT, this);
+			lobby = new Lobby(WIDTH, HEIGHT, this);	
 			lobby.setClient(network.getClient());
-			System.out.println("................................................1 "+network.getClient()+" "+network.getClient().getNameOfClientsOnline().size());
 			lobby.setNameTextField(network.getNameTextField());
 			lobby.setIpTextField(network.getIpTextField());
 			lobby.setPortTextField(network.getPortTextField());
-			System.out.println("................................................2 "+network.getClient()+" "+network.getClient().getNameOfClientsOnline().size());
+			
+			while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){System.out.println("In Attesa di essere inserito nella lista online");}
 			//ancora nn abbiamo il client dentro la lobby quindi settiamo le cosi qui furori
 			lobby.createChat(lobby.getClient());
 			lobby.createOnlinePanel();
