@@ -287,44 +287,45 @@ public class GamePanel extends JPanel {
 	public void gameLoop() {
 
 		while (!game.isExit()) {
-			synchronized(this) {
+
 			if (!game.paused) {
-				
+
 				start = System.nanoTime();
 
 				logic();
 				graphic();
-				
+
 				if (game.runnable != null)
 					game.runnable.run();
-				
+
 				longTime = (System.nanoTime() - start);
 				end = (double) (longTime.doubleValue() / 1000000);
-				
+
 			} else if (game.paused || game.pauseOptionDialog) {
 				if (game.runnable != null)
 					game.runnable.run();
-				if(GameManager.offline){		//IL SERVER NON LO DEVE RIPRODURRE IL SUONO
+				if (GameManager.offline) { // IL SERVER NON LO DEVE RIPRODURRE
+											// IL SUONO
 					SoundsProvider.cancelMove();
 					SoundsProvider.cancelStop();
 				}
 			}
-			
-			if(GameManager.offline){			//IL SERVER NON LO DEVE DISEGNARE
+
+			if (GameManager.offline) { // IL SERVER NON LO DEVE DISEGNARE
 				repaint();
 				if (fullGamePanel != null)
 					fullGamePanel.repaint();
-			}
+
 			}
 		}
 		repaint();
 		if (fullGamePanel != null)
 			fullGamePanel.repaint();
-	
+
 	}
 
 	public void logic() {
-		
+
 		// MANAGE KEYS
 		keyPresses();
 
@@ -554,11 +555,11 @@ public class GamePanel extends JPanel {
 			buttons[i].setBorderPainted(false);
 			buttons[i].setFocusPainted(false);
 			buttons[i].addMouseListener(new MouseInputAdapter() {
-				
+
 				@Override
 				public void mousePressed(MouseEvent e) {
-				
-					if(e.getComponent().getY() == buttons[curRow].getY()) {
+
+					if (e.getComponent().getY() == buttons[curRow].getY()) {
 						cursorPositionDialog = curRow;
 						repaint();
 					}
@@ -1418,9 +1419,11 @@ public class GamePanel extends JPanel {
 					}
 				}
 
-//				g.drawRect((int)game.getEnemy().get(i).rect.getY(),(int) game.getEnemy().get(i).rect.getX(), (int)game.getEnemy().get(i).rect.getWidth(), (int)game.getEnemy().get(i).rect.getHeight());
+				// g.drawRect((int)game.getEnemy().get(i).rect.getY(),(int)
+				// game.getEnemy().get(i).rect.getX(),
+				// (int)game.getEnemy().get(i).rect.getWidth(),
+				// (int)game.getEnemy().get(i).rect.getHeight());
 
-				
 				if (game.getEnemy().get(i).getNext() instanceof PowerUp
 						&& !(((PowerUp) game.getEnemy().get(i).getNext()).getPowerUp() == Power.HELMET)
 						&& ((PowerUp) game.getEnemy().get(i).getNext()).getBefore() instanceof Tree) {
@@ -1494,130 +1497,128 @@ public class GamePanel extends JPanel {
 
 	private void paintEffects(Graphics g, Graphics g2d) {
 
-		
 		synchronized (this) {
-			
-		
-		for (int i = 0; i < game.getEffects().size(); i++) {
 
-			int X, Y, pixel, inc;
-			X = (int) game.getEffects().get(i).getxGraphics();
-			Y = (int) game.getEffects().get(i).getyGraphics();
+			for (int i = 0; i < game.getEffects().size(); i++) {
 
-			// ROCKET boom
-			if (game.getEffects().get(i) instanceof Rocket) {
-				inc = ((Rocket) game.getEffects().get(i)).getInc();
-				pixel = 10;
-				switch (((Rocket) game.getEffects().get(i)).getDirection()) {
-				case UP:
-					X += pixel;
-					break;
-				case DOWN:
-					X -= pixel;
-					break;
-				case LEFT:
-					Y += pixel;
-					break;
-				case RIGHT:
-					Y -= pixel;
-					break;
-				default:
-					break;
+				int X, Y, pixel, inc;
+				X = (int) game.getEffects().get(i).getxGraphics();
+				Y = (int) game.getEffects().get(i).getyGraphics();
+
+				// ROCKET boom
+				if (game.getEffects().get(i) instanceof Rocket) {
+					inc = ((Rocket) game.getEffects().get(i)).getInc();
+					pixel = 10;
+					switch (((Rocket) game.getEffects().get(i)).getDirection()) {
+					case UP:
+						X += pixel;
+						break;
+					case DOWN:
+						X -= pixel;
+						break;
+					case LEFT:
+						Y += pixel;
+						break;
+					case RIGHT:
+						Y -= pixel;
+						break;
+					default:
+						break;
+					}
+
+					if (inc == 1)
+						g.drawImage(ImageProvider.getRocketExplosion1(), Y, X, null);
+					else if (inc == 2)
+						g.drawImage(ImageProvider.getRocketExplosion2(), Y, X, null);
+					else if (inc == 3)
+						g.drawImage(ImageProvider.getRocketExplosion3(), Y, X, null);
+					else if (inc > 3 && GameManager.offline) {
+						game.getEffects().remove(game.getEffects().get(i));
+						i--;
+					}
 				}
 
-				if (inc == 1)
-					g.drawImage(ImageProvider.getRocketExplosion1(), Y, X, null);
-				else if (inc == 2)
-					g.drawImage(ImageProvider.getRocketExplosion2(), Y, X, null);
-				else if (inc == 3)
-					g.drawImage(ImageProvider.getRocketExplosion3(), Y, X, null);
-				else if (inc > 3 && GameManager.offline) {
-					game.getEffects().remove(game.getEffects().get(i));
-					i--;
+				// FLAG boom
+				else if (game.getEffects().get(i) instanceof Flag) {
+
+					inc = ((Flag) game.getEffects().get(i)).getInc();
+					pixel = 17;
+
+					if (inc == 1)
+						g.drawImage(ImageProvider.getBigExplosion1(), Y - pixel, X - pixel, null);
+					else if (inc == 2)
+						g.drawImage(ImageProvider.getBigExplosion2(), Y - pixel, X - pixel, null);
+					else if (inc == 3)
+						g.drawImage(ImageProvider.getBigExplosion3(), Y - pixel, X - pixel, null);
+					else if (inc == 4)
+						g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
+					else if (inc == 5)
+						g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
+					else if (inc > 5 && GameManager.offline) {
+						game.getEffects().remove(game.getEffects().get(i));
+						i--;
+					}
 				}
-			}
 
-			// FLAG boom
-			else if (game.getEffects().get(i) instanceof Flag) {
+				// ENEMY & PLAYER boom
+				else if (game.getEffects().get(i) instanceof Tank) {
 
-				inc = ((Flag) game.getEffects().get(i)).getInc();
-				pixel = 17;
+					inc = ((Tank) game.getEffects().get(i)).getInc();
+					pixel = 17;
 
-				if (inc == 1)
-					g.drawImage(ImageProvider.getBigExplosion1(), Y - pixel, X - pixel, null);
-				else if (inc == 2)
-					g.drawImage(ImageProvider.getBigExplosion2(), Y - pixel, X - pixel, null);
-				else if (inc == 3)
-					g.drawImage(ImageProvider.getBigExplosion3(), Y - pixel, X - pixel, null);
-				else if (inc == 4)
-					g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
-				else if (inc == 5)
-					g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
-				else if (inc > 5 && GameManager.offline) {
-					game.getEffects().remove(game.getEffects().get(i));
-					i--;
-				}
-			}
+					if (inc == 1)
+						g.drawImage(ImageProvider.getBigExplosion1(), Y - pixel, X - pixel, null);
+					else if (inc == 2)
+						g.drawImage(ImageProvider.getBigExplosion2(), Y - pixel, X - pixel, null);
+					else if (inc == 3)
+						g.drawImage(ImageProvider.getBigExplosion3(), Y - pixel, X - pixel, null);
+					else if (inc == 4)
+						g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
+					else if (inc == 5)
+						g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
 
-			// ENEMY & PLAYER boom
-			else if (game.getEffects().get(i) instanceof Tank) {
-
-				inc = ((Tank) game.getEffects().get(i)).getInc();
-				pixel = 17;
-
-				if (inc == 1)
-					g.drawImage(ImageProvider.getBigExplosion1(), Y - pixel, X - pixel, null);
-				else if (inc == 2)
-					g.drawImage(ImageProvider.getBigExplosion2(), Y - pixel, X - pixel, null);
-				else if (inc == 3)
-					g.drawImage(ImageProvider.getBigExplosion3(), Y - pixel, X - pixel, null);
-				else if (inc == 4)
-					g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
-				else if (inc == 5)
-					g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
-
-				// ONLY PLAYER
-				else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank) {
-					game.getEffects().remove(game.getEffects().get(i));
-					i--;
-				}
-				// ONLY ENEMY POINTS
-				else if (game.getEffects().get(i) instanceof EnemyTank) {
-					if (((EnemyTank) game.getEffects().get(i)).getInc() > 5
-							&& ((EnemyTank) game.getEffects().get(i)).getInc() < 12) {
-						if (game.getEffects().get(i) instanceof BasicTank) {
-							g.drawImage(ImageProvider.getPoints100(), game.getEffects().get(i).getY() * tile,
-									game.getEffects().get(i).getX() * tile, null);
-						} else if (game.getEffects().get(i) instanceof PowerTank) {
-							g.drawImage(ImageProvider.getPoints300(), game.getEffects().get(i).getY() * tile,
-									game.getEffects().get(i).getX() * tile, null);
-						} else if (game.getEffects().get(i) instanceof ArmorTank) {
-							g.drawImage(ImageProvider.getPoints400(), game.getEffects().get(i).getY() * tile,
-									game.getEffects().get(i).getX() * tile, null);
-						} else if (game.getEffects().get(i) instanceof FastTank) {
-							g.drawImage(ImageProvider.getPoints200(), game.getEffects().get(i).getY() * tile,
-									game.getEffects().get(i).getX() * tile, null);
+					// ONLY PLAYER
+					else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank) {
+						game.getEffects().remove(game.getEffects().get(i));
+						i--;
+					}
+					// ONLY ENEMY POINTS
+					else if (game.getEffects().get(i) instanceof EnemyTank) {
+						if (((EnemyTank) game.getEffects().get(i)).getInc() > 5
+								&& ((EnemyTank) game.getEffects().get(i)).getInc() < 12) {
+							if (game.getEffects().get(i) instanceof BasicTank) {
+								g.drawImage(ImageProvider.getPoints100(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof PowerTank) {
+								g.drawImage(ImageProvider.getPoints300(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof ArmorTank) {
+								g.drawImage(ImageProvider.getPoints400(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							} else if (game.getEffects().get(i) instanceof FastTank) {
+								g.drawImage(ImageProvider.getPoints200(), game.getEffects().get(i).getY() * tile,
+										game.getEffects().get(i).getX() * tile, null);
+							}
+						} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12) {
+							game.getEffects().remove(game.getEffects().get(i));
+							i--;
 						}
-					} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12) {
+					}
+				}
+
+				// PowerUp points
+				else if (game.getEffects().get(i) instanceof PowerUp) {
+					if (((PowerUp) game.getEffects().get(i)).getInc() > 5
+							&& ((PowerUp) game.getEffects().get(i)).getInc() < 12) {
+						g.drawImage(ImageProvider.getPoints500(), game.getEffects().get(i).getY() * tile,
+								game.getEffects().get(i).getX() * tile, null);
+					}
+					if (((PowerUp) game.getEffects().get(i)).getInc() >= 12) {
 						game.getEffects().remove(game.getEffects().get(i));
 						i--;
 					}
 				}
 			}
-
-			// PowerUp points
-			else if (game.getEffects().get(i) instanceof PowerUp) {
-				if (((PowerUp) game.getEffects().get(i)).getInc() > 5
-						&& ((PowerUp) game.getEffects().get(i)).getInc() < 12) {
-					g.drawImage(ImageProvider.getPoints500(), game.getEffects().get(i).getY() * tile,
-							game.getEffects().get(i).getX() * tile, null);
-				}
-				if (((PowerUp) game.getEffects().get(i)).getInc() >= 12) {
-					game.getEffects().remove(game.getEffects().get(i));
-					i--;
-				}
-			}
-		}
 		}
 	}
 
@@ -1733,8 +1734,11 @@ public class GamePanel extends JPanel {
 						}
 					}
 				}
-				
-//				g.drawRect((int)game.getPlayersArray().get(a).rect.getY(),(int) game.getPlayersArray().get(a).rect.getX(), (int)game.getPlayersArray().get(a).rect.getWidth(), (int)game.getPlayersArray().get(a).rect.getHeight());
+
+				// g.drawRect((int)game.getPlayersArray().get(a).rect.getY(),(int)
+				// game.getPlayersArray().get(a).rect.getX(),
+				// (int)game.getPlayersArray().get(a).rect.getWidth(),
+				// (int)game.getPlayersArray().get(a).rect.getHeight());
 
 				// EFFETTO SPAWN E PROTEZIONE
 				if (game.getPlayersArray().get(a).isReadyToSpawn() || game.getPlayersArray().get(a).isProtection()) {
@@ -1876,7 +1880,8 @@ public class GamePanel extends JPanel {
 
 	private void paused(Graphics g, Graphics2D g2d) {
 		if (game.paused && (System.currentTimeMillis() / 400) % 2 == 0) {
-			g2d.drawImage(ImageProvider.getPause(), this.getWidth() / 2 - (70 + shift), getHeight() / 2 - (45 + shift),null);
+			g2d.drawImage(ImageProvider.getPause(), this.getWidth() / 2 - (70 + shift), getHeight() / 2 - (45 + shift),
+					null);
 		}
 	}
 
@@ -1907,7 +1912,7 @@ public class GamePanel extends JPanel {
 
 		g.translate(shift, shift);
 
-//		printLines(g, g2d);
+		// printLines(g, g2d);
 
 		paintWater(g);
 
@@ -1948,7 +1953,7 @@ public class GamePanel extends JPanel {
 	// ------------------------SCORE MULTI-------------------------//
 
 	private void loadScoreSingle() {
-		
+
 		BufferedReader reader = null;
 		String line = null;
 
@@ -1980,14 +1985,14 @@ public class GamePanel extends JPanel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		currentResumeP1 = ((MainFrame) switcher).getCurrentResumeP1();
 		game.getPlayersArray().get(0).setResume(currentResumeP1);
-		
+
 		currentLevelP1 = ((MainFrame) switcher).getCurrentLevelP1();
 		game.getPlayersArray().get(0).setLevel(currentLevelP1);
 	}
-	
+
 	private void loadScoreMulti() {
 
 		BufferedReader reader = null;
@@ -2073,4 +2078,3 @@ public class GamePanel extends JPanel {
 	}
 
 }
-
