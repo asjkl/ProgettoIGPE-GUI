@@ -149,7 +149,6 @@ public class GamePanel extends JPanel {
 						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
 			}
 		});
-
 	}
 
 	// offline
@@ -288,7 +287,7 @@ public class GamePanel extends JPanel {
 	public void gameLoop() {
 
 		while (!game.isExit()) {
-
+			synchronized(this) {
 			if (!game.paused) {
 				
 				start = System.nanoTime();
@@ -315,6 +314,7 @@ public class GamePanel extends JPanel {
 				repaint();
 				if (fullGamePanel != null)
 					fullGamePanel.repaint();
+			}
 			}
 		}
 		repaint();
@@ -707,8 +707,6 @@ public class GamePanel extends JPanel {
 						}
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
-						game.timer.cancel();
-						game.timer2.cancel();
 					}
 				}
 			});

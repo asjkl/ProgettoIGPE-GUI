@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
+
 import javax.swing.JTextField;
 
 import progettoIGPE.davide.giovanni.unical2016.BrickWall;
@@ -34,6 +36,11 @@ public class ConnectionManager implements Runnable {
 		this.mainFrame = mainFrame;
 		this.map=new JTextField("./maps/career/multiplayer/" + stage + ".txt");
 		this.difficult=difficult;
+		try {
+			socket.setTcpNoDelay(true);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void close() {
@@ -45,6 +52,7 @@ public class ConnectionManager implements Runnable {
 
 	public void dispatch(final String message) {
 		pw.println(message);
+		pw.flush();
 	}
 
 	public String getPlayerName() {
@@ -58,6 +66,7 @@ public class ConnectionManager implements Runnable {
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			pw.println(name+":"+map.getText()+":"+difficult);
+			pw.flush();
 			
 			String buffer = br.readLine();
 

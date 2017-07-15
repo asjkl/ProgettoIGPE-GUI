@@ -224,7 +224,8 @@ public class NetworkPanel extends JPanel {
 						client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
 
 						nameTextField.setText("");
-						getSwitcher().showLobby(false);
+						if(client.getSocket().isConnected())
+							getSwitcher().showLobby(false);
 						
 					}
 				}

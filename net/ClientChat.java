@@ -104,12 +104,12 @@ public class ClientChat extends JPanel implements Runnable {
 		} catch (IOException e) {
 			showDialog();
 		}
-		
+			
 	}// costruttore
 
 
 	private void processMessage(String message) {
-
+		
 		try {
 			dout.writeUTF(tf1.getText() + ":" + message);
 			tf2.setText(" ");
@@ -277,6 +277,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 				SoundsProvider.playBulletHit1();
 				dialog.dispose();
+				mainFrame.showNetwork();
 			}
 		});
 
@@ -360,6 +361,15 @@ public class ClientChat extends JPanel implements Runnable {
 
 	public void setUpdateDifficultRealTime(String updateDifficultRealTime) {
 		this.updateDifficultRealTime = updateDifficultRealTime;
+	}
+	
+	public Socket getSocket() {
+		return socket;
+	}
+
+
+	public void setSocket(Socket socket) {
+		this.socket = socket;
 	}
 
 	// public static void main(String args[])

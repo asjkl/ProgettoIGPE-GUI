@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
+import java.net.SocketException;
 
 import javax.swing.JTextField;
 
@@ -32,12 +32,18 @@ public class ClientManager implements Runnable {
 		this.socket = socket;
 		this.server = server;
 		this.map=new JTextField();
+		try {
+			socket.setTcpNoDelay(true);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
 //		this.dialog = new JDialog();
 	}
 
 	public void dispatch(final String message) {
 		if (printer != null && message != null) {
 			printer.println(message);
+			printer.flush();
 		}
 	}
 

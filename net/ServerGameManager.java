@@ -126,7 +126,6 @@ public class ServerGameManager {
 				gamePanel.gameLoop();
 			};
 		}.start();
-		
 	}
 
 	public void disconnetctedClient(String name) {
