@@ -110,9 +110,12 @@ public class Lobby extends JPanel {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				SoundsProvider.playOnlineStart();
+			
 			}
 			
 			if (countDown < 0) {
+				SoundsProvider.playOnlineEnd();
 				try {
 					client.dout.writeUTF(String.valueOf(client.getPoints() + "StartGame"));	 // <- "..............5"
 				} catch (IOException e) {

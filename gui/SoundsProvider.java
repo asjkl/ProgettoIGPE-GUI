@@ -28,6 +28,8 @@ public class SoundsProvider {
 	private static File tankHit;
 	private static File stageComplete;
 	private static File canGo;
+	private static File onlineStart;
+	private static File onlineEnd;
 	
 	private static Clip stageCompleteClip;
 	private static Clip stopClip;
@@ -45,9 +47,14 @@ public class SoundsProvider {
 	public static Clip stageStartClip; //tmp
 	private static Clip tankHitClip;
 	private static Clip canGoClip;
+	private static Clip onlineStartClip;
+	private static Clip onlineEndClip;
+	
 	
 	static {
 		
+		onlineEnd = new File("sounds/onlineEnd.wav");
+		onlineStart = new File("sounds/onlineStart.wav");
 		stageComplete = new File("sounds/stageComplete.wav");
 		stageStart = new File("sounds/stageStart.wav");
 		gameOver = new File("sounds/gameOver.wav");
@@ -69,6 +76,13 @@ public class SoundsProvider {
 	static {
 		
 		try {
+			audio =  AudioSystem.getAudioInputStream(onlineEnd);
+			onlineEndClip = AudioSystem.getClip();
+			onlineEndClip.open(audio);
+
+			audio =  AudioSystem.getAudioInputStream(onlineStart);
+			onlineStartClip = AudioSystem.getClip();
+			onlineStartClip.open(audio);
 			
 			audio =  AudioSystem.getAudioInputStream(canGo);
 			canGoClip = AudioSystem.getClip();
@@ -180,6 +194,20 @@ public class SoundsProvider {
 		canGoClip.setFramePosition(0);
 		setGainLower(canGoClip);
 		canGoClip.start();
+	}
+	
+	public static void playOnlineEnd() {
+		
+		onlineEndClip.setFramePosition(0);
+		setGainLower(onlineEndClip);
+		onlineEndClip.start();
+	}
+	
+	public static void playOnlineStart() {
+		
+		onlineStartClip.setFramePosition(0);
+		setGainLower(onlineStartClip);
+		onlineStartClip.start();
 	}
 	
 	public static void playPause() {
