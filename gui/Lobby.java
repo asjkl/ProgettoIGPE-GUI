@@ -288,8 +288,6 @@ public class Lobby extends JPanel {
 		chatPanel.add(client);
 		add(chatPanel);
 		
-		
-		
 		// solo moderatore avvia timer che manda messaggi
 		if(client.getClientName().equals(client.getNameOfClientsOnline().get(0))){
 			timer =  new Timer();

@@ -33,9 +33,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private int resumeP2;
 	private int levelP1;
 	private int levelP2;
-	private String d = "";
-	private int s = 1;
-	
+
 	//FullScreen
 	private GraphicsEnvironment graphicscEnvironment;
 	private GraphicsDevice device;
@@ -202,22 +200,12 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		lobby.setNameTextField(network.getNameTextField());
 		lobby.setIpTextField(network.getIpTextField());
 		lobby.setPortTextField(network.getPortTextField());
-		while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){}
+		while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){System.out.println("ok");}
 		lobby.createChat(lobby.getClient());
 		lobby.createOnlinePanel();
 		lobby.createDifficultPanel();
 		lobby.createMapsPanel();
 		
-		if(lobby.getClient().getClientName().equals(lobby.getClient().getNameOfClientsOnline().get(0))) {
-			d = lobby.getClient().getUpdateDifficultRealTime();
-			s = lobby.getClient().getUpdateStageRealTime();
-		}
-//		else if(lobby.getClient().getClientName().equals(lobby.getClient().getNameOfClientsOnline().get(1))){
-//			lobby.getClient().setUpdateDifficultRealTime(d);
-//			lobby.getClient().setUpdateStageRealTime(s);
-//			lobby.setDifficult(d);
-//			lobby.setStage("stage"+String.valueOf(s));
-//		}
 	}
 	// -----------------------------override methods-----------------------------------
 
