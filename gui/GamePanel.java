@@ -81,11 +81,6 @@ public class GamePanel extends JPanel {
 	private int currentResumeP2;
 	private int currentLevelP2;
 
-	//SERVONO PER SINCRONIZZARE I DUE THREAD.... 1) IL THREAD DELLA LOGCA 2) IL THREAD CHE INVIA I DATI AI CLIENT
-	private Lock lock;
-	private Condition cond;
-	private boolean send;
-
 	// online
 	public GamePanel(PanelSwitcher switcher, String difficult) {
 		this.tile = 35;
@@ -158,30 +153,6 @@ public class GamePanel extends JPanel {
 						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.pauseOptionDialog, game.paused));
 			}
 		});
-
-		lock = new ReentrantLock();
-		cond = lock.newCondition();
-		send = false;
-		if (switcher == null) {					//LO FAI CREARE SOLO AL SERVER GAME
-			new Thread() {
-				public void run() {
-					while (true) {
-						lock.lock();
-						while (!send) {
-							try {
-								cond.await();
-							} catch (InterruptedException e) {
-
-								e.printStackTrace();
-							}
-						}
-						game.runnable.run();
-						send = false;
-						lock.unlock();
-					}
-				};
-			}.start();
-		}
 	}
 
 	// offline
@@ -322,30 +293,20 @@ public class GamePanel extends JPanel {
 		while (!game.isExit()) {
 			if (!game.paused) {
 				
-				if(!GameManager.offline)
-					lock.lock();
-				
+
 				if(GameManager.offline)
 					start = System.nanoTime();
 				
 				logic();
 				graphic();
-				
-				if(!GameManager.offline){
-					send = true;
-					cond.signalAll();
-				}
-				
+				if(!GameManager.offline)
+					game.runnable.run();
+
 				if(GameManager.offline){
 					longTime = (System.nanoTime() - start);
 					end = (double) (longTime.doubleValue() / 1000000);
 				}
-					
-				if(!GameManager.offline)
-					lock.unlock();
-		
-			
-				
+	
 			} else if (game.paused || game.pauseOptionDialog) {
 				if (GameManager.offline) { 	// IL SERVER NON LO DEVE RIPRODURRE
 											// IL SUONO
@@ -363,7 +324,7 @@ public class GamePanel extends JPanel {
 			
 			if(!GameManager.offline){
 				try {
-					Thread.sleep(12);
+					Thread.sleep(8);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -21,7 +21,7 @@ public class ServerThread extends Thread {
 
 			while (true) {
 				String message = din.readUTF();
-
+				
 				String[] elements = message.split(" ");
 				if (elements[0].equals("EXITALL")) {
 					server.sendToAll("EXITALL");
@@ -55,17 +55,27 @@ public class ServerThread extends Thread {
 					}
 
 					if (name == true) {
-						int i = 0;
-
-						while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
-							nameSocket += message.charAt(i);
-							Server.OnlineNames = Server.OnlineNames + message.charAt(i);
-							i++;
+						String nameSocket=searchName(message);
+						int cont=0;
+						
+						String[] clients = Server.OnlineNames.split(" ");
+						for (String s : clients) {
+							System.out.println("******* "+s+" "+nameSocket);
+							if (s.equals(nameSocket)) {
+								cont++;			
+							}
 						}
-						Server.OnlineNames = Server.OnlineNames + " ";
-					}
-					server.client.put(socket, nameSocket);
-					server.sendToAll(message);
+						
+						if(cont<1){
+							Server.OnlineNames+=nameSocket+" ";
+							server.client.put(socket, nameSocket);
+							server.sendToAll(message);
+						}else{
+							server.sendToSocket(socket, "ERRORNAME");
+							server.removeConnection(socket);
+							break;
+						}
+					}			
 				}
 			}
 		} catch (EOFException e) {
@@ -76,5 +86,15 @@ public class ServerThread extends Thread {
 				server.removeConnection(socket);
 			}
 		}
+	}
+	
+	private String searchName(String message){
+		String name1 = "";
+		int i = 0;
+		while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
+			name1 = name1 + message.charAt(i);
+			i++;
+		}
+		return name1;
 	}
 }

@@ -515,7 +515,7 @@ public class Lobby extends JPanel {
 					SoundsProvider.playBulletHit1();
 
 					// se sono P1
-					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
+					if (!client.isStartGame() && client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 						if (client.isReadyP2()) {
 							
 						
@@ -542,7 +542,7 @@ public class Lobby extends JPanel {
 					}
 
 					// se sono P2
-					else if (client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
+					else if (!client.isStartGame() && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
 						if (!client.isReadyP2()) {
 							try {
 								client.dout.writeUTF("p2 true");
