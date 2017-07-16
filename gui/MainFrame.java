@@ -274,7 +274,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			lobby.setIpTextField(network.getIpTextField());
 			lobby.setPortTextField(network.getPortTextField());
 			
-			while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){System.out.println("In Attesa di essere inserito nella lista online");}
+			while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){}
 			//ancora nn abbiamo il client dentro la lobby quindi settiamo le cosi qui furori
 			lobby.createChat(lobby.getClient());
 			lobby.createOnlinePanel();
