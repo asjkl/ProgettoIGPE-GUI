@@ -52,7 +52,7 @@ public class Server implements Runnable {
 				gameManagerServer.startGame();
 
 			} catch (IOException e1) {
-				if (serverSocket!=null && !serverSocket.isClosed()) {
+				if (serverSocket != null && !serverSocket.isClosed()) {
 					System.out.println("CHIUSO_SERVERGAME");
 					try {
 						serverSocket.close();
@@ -82,7 +82,7 @@ public class Server implements Runnable {
 					new ServerThread(this, s);
 				}
 			} catch (IOException e1) {
-				if (serverSocket!=null && !serverSocket.isClosed()) {
+				if (serverSocket != null && !serverSocket.isClosed()) {
 					try {
 						serverSocket.close();
 					} catch (IOException e) {
@@ -120,11 +120,20 @@ public class Server implements Runnable {
 		}
 	}
 
+	public void sendToSocket(Socket socket, String string) {
+		DataOutputStream dout = (DataOutputStream) outputStreams.get(socket);
+		try {
+			dout.writeUTF(string);
+		} catch (IOException ie) {
+
+		}
+	}
+
 	public void removeConnection(Socket s) {
 
 		synchronized (outputStreams) {
 
-			System.out.println("RIMOZION CONNESSION PER " + s);
+			System.out.println("RIMOZIONE CONNESSION PER " + s);
 			outputStreams.remove(s);
 			try {
 				s.close();
@@ -140,7 +149,6 @@ public class Server implements Runnable {
 			String names = entry.getValue();
 			if (names.contains(name)) {
 				removeConnection(key);
-				System.out.println("ESCO " + name);
 				break;
 			}
 		}

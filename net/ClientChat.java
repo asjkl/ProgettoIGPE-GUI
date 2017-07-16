@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
+import progettoIGPE.davide.giovanni.unical2016.GUI.WarningDialog;
 
 import java.io.*;
 
@@ -168,6 +169,12 @@ public class ClientChat extends JPanel implements Runnable {
 
 				}
 			
+				if(elements[0].equals("ERRORNAME")){
+					exitThrad=true;
+					new WarningDialog(clientName+" is present in this Lobby", mainFrame);
+					mainFrame.showNetwork();
+				}
+				
 				if (elements.length == 1 && elements[0].equals(points+"StartGame") && readyP1 && readyP2) { // entrambi si connettono
 					readyP1=false;
 					readyP2=false;

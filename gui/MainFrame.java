@@ -202,6 +202,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		lobby.setNameTextField(network.getNameTextField());
 		lobby.setIpTextField(network.getIpTextField());
 		lobby.setPortTextField(network.getPortTextField());
+		while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){}
 		lobby.createChat(lobby.getClient());
 		lobby.createOnlinePanel();
 		lobby.createDifficultPanel();

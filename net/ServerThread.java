@@ -8,6 +8,7 @@ public class ServerThread extends Thread {
 	private Server server;
 	private Socket socket;
 	private String nameSocket;
+	private boolean no=false;
 
 	public ServerThread(Server server, Socket socket) {
 		this.server = server;
@@ -21,7 +22,7 @@ public class ServerThread extends Thread {
 
 			while (true) {
 				String message = din.readUTF();
-
+				System.out.println(message);
 				String[] elements = message.split(" ");
 				if (elements[0].equals("EXITALL")) {
 					server.sendToAll("EXITALL");
@@ -55,26 +56,48 @@ public class ServerThread extends Thread {
 					}
 
 					if (name == true) {
-						int i = 0;
+						nameSocket = searchName(message);
+						int cont = 0;
 
-						while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
-							nameSocket += message.charAt(i);
-							Server.OnlineNames = Server.OnlineNames + message.charAt(i);
-							i++;
+						String[] clients = Server.OnlineNames.split(" ");
+						for (String s : clients) {
+							if (s.equals(nameSocket)) {
+								cont++;
+							}
 						}
-						Server.OnlineNames = Server.OnlineNames + " ";
+
+						if (cont < 1) {
+							Server.OnlineNames += nameSocket + " ";
+						} else {
+							server.sendToSocket(socket, "ERRORNAME");
+							server.removeConnection(socket);
+							no=true;
+							break;
+						}
 					}
-					server.client.put(socket, nameSocket);
-					server.sendToAll(message);
+					if(!no){
+						server.client.put(socket, nameSocket);
+						server.sendToAll(message);
+					}
 				}
 			}
 		} catch (EOFException e) {
 		} catch (IOException ie) {
 			System.out.println("SOCKET CLOSE");
 		} finally {
-			if(socket.isConnected()){
+			if (socket.isConnected()) {
 				server.removeConnection(socket);
 			}
 		}
+	}
+
+	private String searchName(String message) {
+		String name1 = "";
+		int i = 0;
+		while (!(message.charAt(i) == ':' && message.charAt(i + 1) == ':')) {
+			name1 = name1 + message.charAt(i);
+			i++;
+		}
+		return name1;
 	}
 }
