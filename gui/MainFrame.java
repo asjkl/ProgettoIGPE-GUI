@@ -33,6 +33,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private int resumeP2;
 	private int levelP1;
 	private int levelP2;
+	private String d = "";
+	private int s = 1;
 	
 	//FullScreen
 	private GraphicsEnvironment graphicscEnvironment;
@@ -193,6 +195,29 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			e.printStackTrace();
 		}
 	} 
+	
+	private void manageLooby() {
+		lobby = new Lobby(WIDTH, HEIGHT, this);	
+		lobby.setClient(network.getClient());
+		lobby.setNameTextField(network.getNameTextField());
+		lobby.setIpTextField(network.getIpTextField());
+		lobby.setPortTextField(network.getPortTextField());
+		lobby.createChat(lobby.getClient());
+		lobby.createOnlinePanel();
+		lobby.createDifficultPanel();
+		lobby.createMapsPanel();
+		
+		if(lobby.getClient().getClientName().equals(lobby.getClient().getNameOfClientsOnline().get(0))) {
+			d = lobby.getClient().getUpdateDifficultRealTime();
+			s = lobby.getClient().getUpdateStageRealTime();
+		}
+//		else if(lobby.getClient().getClientName().equals(lobby.getClient().getNameOfClientsOnline().get(1))){
+//			lobby.getClient().setUpdateDifficultRealTime(d);
+//			lobby.getClient().setUpdateStageRealTime(s);
+//			lobby.setDifficult(d);
+//			lobby.setStage("stage"+String.valueOf(s));
+//		}
+	}
 	// -----------------------------override methods-----------------------------------
 
 	@Override
@@ -200,8 +225,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 		GameManager.offline = false;
 
-	
-		
 		if (isSlide()) {
 			slideContainer = new SlideContainer(WIDTH, HEIGHT);
 			slideContainer.add(menu);
@@ -268,18 +291,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public void showLobby(boolean gamePanelExit){
 		
 		if(!gamePanelExit){
-			lobby = new Lobby(WIDTH, HEIGHT, this);	
-			lobby.setClient(network.getClient());
-			lobby.setNameTextField(network.getNameTextField());
-			lobby.setIpTextField(network.getIpTextField());
-			lobby.setPortTextField(network.getPortTextField());
-			
-			while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){}
-			//ancora nn abbiamo il client dentro la lobby quindi settiamo le cosi qui furori
-			lobby.createChat(lobby.getClient());
-			lobby.createOnlinePanel();
-			lobby.createDifficultPanel();
-			lobby.createMapsPanel();
+			manageLooby();
 		}
 		switchTo(lobby); 
 		lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra

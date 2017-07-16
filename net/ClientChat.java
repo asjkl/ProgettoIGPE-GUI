@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
-import progettoIGPE.davide.giovanni.unical2016.GUI.WarningDialog;
 
 import java.io.*;
 
@@ -44,8 +43,7 @@ public class ClientChat extends JPanel implements Runnable {
 	private String points = "........................................";
 	private int updateStageRealTime = 1; //stage 1 di default
 	private String updateDifficultRealTime="easy";
-	private boolean startGame;
-	private WarningDialog errorName;
+
 
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
 
@@ -126,10 +124,10 @@ public class ClientChat extends JPanel implements Runnable {
 
 				String message = din.readUTF();
 				String[] elements = message.split(" ");
-				
+
 				// -----------------------------------------------
 
-//				System.out.println("-----------------------------------> " + message);
+//				System.out.println("-> " + message);
 
 				if (elements[0].equals("EXIT")) {
 					String client = elements[1];
@@ -168,16 +166,6 @@ public class ClientChat extends JPanel implements Runnable {
 						
 					}
 
-				}
-				
-				if(elements[0].equals("ERRORNAME")){
-					exitThrad=true;
-					errorName=new WarningDialog(clientName+" is present in this Lobby", mainFrame);
-					mainFrame.showNetwork();
-				}
-				
-				if(elements.length == 1 && elements[0].equals(points+"5")){
-					startGame=true;
 				}
 			
 				if (elements.length == 1 && elements[0].equals(points+"StartGame") && readyP1 && readyP2) { // entrambi si connettono
@@ -221,7 +209,7 @@ public class ClientChat extends JPanel implements Runnable {
 					}
 	
 					else {
-						
+	
 						boolean name = true;
 						int len = message.length();
 	
@@ -389,16 +377,6 @@ public class ClientChat extends JPanel implements Runnable {
 
 	public void setSocket(Socket socket) {
 		this.socket = socket;
-	}
-
-
-	public boolean isStartGame() {
-		return startGame;
-	}
-
-
-	public void setStartGame(boolean startGame) {
-		this.startGame = startGame;
 	}
 
 

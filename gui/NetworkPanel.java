@@ -197,9 +197,6 @@ public class NetworkPanel extends JPanel {
 				public void actionPerformed(final ActionEvent e) {
 					SoundsProvider.playBulletHit1();
 					cursorPosition = 1;
-					ipTextField.setText("127.0.0.1");
-					portTextField.setText("1234");
-					nameTextField.setText("");
 					getSwitcher().showMenu();
 
 				}
@@ -225,7 +222,7 @@ public class NetworkPanel extends JPanel {
 						
 						new Thread(serverChat, "chat").start();
 						client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
-						
+
 						nameTextField.setText("");
 						if(client.getSocket().isConnected())
 							getSwitcher().showLobby(false);
