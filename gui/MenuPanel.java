@@ -26,27 +26,24 @@ import java.util.StringTokenizer;
 @SuppressWarnings("serial")
 public class MenuPanel extends JPanel{
 
-	private int cursorPosition;
-	private final int DIM = 6;
-	private final int LENGTH = 5;
-	private final int posY = 70;
-	private final int posX = 120;
-	private JFileChooserClass jfilechooser;
-	private PanelSwitcher switcher;
-	private final ArrayList<JButton> buttons;
+	private int DIM;
+	private int LENGTH;
+	private int posY;
+	private int posX;
 	private JDialog dialog;
 	private JButton[] bts;
-	private int cursorPositionDialog = 0;
-	private boolean hide = false;
+	private boolean hide;
 	private JLabel high;
 	private JLabel player;
 	private String values[];
 	private int tmpHiScore;
-	private JButton[] buttonsRoom;
-	private int cursorPositionRoom;
-	private JDialog dialogRoom;
+	private int cursorPosition;
+	private PanelSwitcher switcher;
 	private MyListener myListener;
-
+	private int cursorPositionDialog;
+	private JFileChooserClass jfilechooser;
+	private final ArrayList<JButton> buttons;
+	
 	public MenuPanel(final int w, final int h, PanelSwitcher switcher) {
 
 		this.setPreferredSize(new Dimension(w, h));
@@ -56,8 +53,12 @@ public class MenuPanel extends JPanel{
 		jfilechooser = new JFileChooserClass(false);
 		setSwitcher(switcher);
 		setCursorPosition(0);
-
-		dialogRoom = new JDialog();
+		DIM = 6;
+		LENGTH = 5;
+		posY = 70;
+		posX = 120;
+		cursorPositionDialog = 0;
+		hide = false;
 		tmpHiScore = -1;
 		values = new String[LENGTH];
 	
@@ -409,146 +410,6 @@ public class MenuPanel extends JPanel{
 			break;
 		}
 	}
-	
-	//NEW
-	public void Room() {
-
-		dialogRoom.setSize(new Dimension(250, 250));
-		JPanel fullpanel = new JPanel() {
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				if (cursorPositionRoom == 0) {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 80, this);
-				} else if (cursorPositionRoom == 1) {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 133, this);
-				} else {
-					g.drawImage(ImageProvider.getCursorRight(), 30, 185, this);
-				}
-			}
-		};
-		JPanel text = new JPanel();
-		JPanel buttonspanel = new JPanel(new GridLayout(3, 1, 0, 10));
-//		JLabel label = new JLabel("Room");
-		String[] buttonTxt = { "Server", "Client"};
-		fullpanel.setPreferredSize(new Dimension(250, 250));
-		fullpanel.setBorder(BorderFactory.createLineBorder(Color.RED));
-		fullpanel.setBackground(Color.BLACK);
-		buttonsRoom = new JButton[buttonTxt.length];
-//		label.setFont(MainFrame.customFontB);
-//		label.setForeground(Color.RED);
-//		label.setBorder(null);
-//		text.add(label);
-		text.setPreferredSize(new Dimension(200, 70));
-		text.setMaximumSize(new Dimension(200, 70)); // set max = pref
-		text.setBackground(Color.BLACK);
-		text.setAlignmentX(Component.CENTER_ALIGNMENT);
-		buttonspanel.setBackground(Color.BLACK);
-
-		for (int i = 0; i < buttonTxt.length; i++) {
-
-			final int curRow = i;
-			buttonsRoom[i] = new JButton(buttonTxt[i]);
-			buttonsRoom[i].setFont(MainFrame.customFontM);
-			buttonsRoom[i].setBackground(Color.BLACK);
-			buttonsRoom[i].setForeground(Color.WHITE);
-			buttonsRoom[i].setBorder(null);
-			buttonsRoom[i].setFocusPainted(false);
-			buttonsRoom[i].setContentAreaFilled(false);
-			buttonsRoom[i].setBorderPainted(false);
-			buttonsRoom[i].setFocusPainted(false);
-			buttonsRoom[i].addKeyListener(new KeyAdapter() {
-
-				@Override
-				public void keyPressed(KeyEvent e) {
-
-					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-							((JButton) e.getComponent()).doClick();
-							
-					} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-						cursorPositionRoom = 0;
-						((MainFrame)getSwitcher()).setTransparent(false);
-						dialogRoom.dispose();
-					}
-
-					else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
-						SoundsProvider.playBulletHit1();
-						if (curRow < 1) {
-							buttonsRoom[buttonsRoom.length - 1].requestFocus();
-							cursorPositionRoom = buttonsRoom.length - 1;
-
-						} else {
-							buttonsRoom[curRow - 1].requestFocus();
-							cursorPositionRoom = curRow - 1;
-
-						}
-					} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-						SoundsProvider.playBulletHit1();
-						buttonsRoom[(curRow + 1) % buttonsRoom.length].requestFocus();
-						cursorPositionRoom = (curRow + 1) % buttonsRoom.length;
-					}
-				}
-			});
-
-			buttonspanel.add(buttonsRoom[i]);
-			buttonspanel.setBackground(Color.BLACK);
-			RoomActionListener(i);
-		}
-
-		buttonspanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		buttonspanel.setPreferredSize(new Dimension(100, 150));
-		buttonspanel.setMaximumSize(new Dimension(100, 150));
-		buttonspanel.setBackground(Color.BLACK);
-		fullpanel.add(text);
-		fullpanel.add(buttonspanel);
-		dialogRoom.setContentPane(fullpanel);
-		dialogRoom.setUndecorated(true);
-		dialogRoom.setModal(true);
-		dialogRoom.pack();
-		dialogRoom.setLocationRelativeTo(this);
-		dialogRoom.setVisible(true);
-	
-	}
-	
-	public void RoomActionListener(int j) {
-
-		switch (j) {
-		case 0: 
-			buttonsRoom[j].addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					setCursorPosition(j);
-					SoundsProvider.playBulletHit1();
-					((MainFrame)getSwitcher()).setTransparent(false);
-					getSwitcher().showNetwork();
-					dialogRoom.dispose();
-					
-					
-					int port = 1234;
-					new net.Server(port);	
-				}
-				
-			});
-			break;
-		case 1:
-			buttonsRoom[j].addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SoundsProvider.playBulletHit1();
-				
-					((MainFrame)getSwitcher()).setTransparent(false);
-					getSwitcher().showNetwork();
-					dialogRoom.dispose();
-				}
-			});
-			break;				
-		default:
-			break;
-		}
-	}
-	
 	
 	public void drawScore() {
 		

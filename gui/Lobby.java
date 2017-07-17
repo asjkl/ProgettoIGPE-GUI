@@ -24,40 +24,43 @@ import javax.swing.SwingConstants;
 import net.ClientChat;
 import net.Server;
 
+
 @SuppressWarnings("serial")
 public class Lobby extends JPanel {
 
 	private int width;
 	private int height;
 	private PanelSwitcher switcher;
-	private final int DIM = 2;
-	private int cursorPosition = 0;
-	private JButton arrowLeft, arrowRight;
-	private final ArrayList<JButton> buttons;
-//	private int stageShifter = 1;
-	private ArrayList<JRadioButton> level;
-	private ArrayList<JLabel> labels;
-	private ButtonGroup group;
-	private JTextField ipTextField;
-	private JTextField nameTextField;
-	private JTextField portTextField;
+	private int DIM;
+	private int cursorPosition;
 	private String difficult;
 	private String stage;
 	private ClientChat client;
-	private int countDown = 5;
+	private int countDown;
 	private Timer timer;
 	private TimerTask task;
+	private ButtonGroup group;
+	private JTextField ipTextField;
+	private ArrayList<JLabel> labels;
+	private JTextField nameTextField;
+	private JTextField portTextField;
+	private JButton arrowLeft, arrowRight;
+	private ArrayList<JRadioButton> level;
+	private final ArrayList<JButton> buttons;
 	
 	public Lobby(int w, int h, PanelSwitcher switcher) {
+		
+		this.setPreferredSize(new Dimension(w, h));
+		this.setBackground(Color.BLACK);
+		this.setLayout(null);
+		setSwitcher(switcher);
 		width = w;
 		height = h;
 		difficult = "easy";
 		stage = "stage1";
-		this.setPreferredSize(new Dimension(w, h));
-		this.setBackground(Color.BLACK);
-		this.setLayout(null);
-
-		setSwitcher(switcher);
+		DIM = 2;
+		cursorPosition = 0;
+		countDown = 5;
 
 		arrowLeft = new JButton();
 		arrowRight = new JButton();

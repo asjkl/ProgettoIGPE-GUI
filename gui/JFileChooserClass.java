@@ -18,26 +18,26 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class JFileChooserClass {
 	
 	private JFileChooser chooser;
-	private FileNameExtensionFilter filter;
-	private File[] filesInDirectory;
 	private JTextField filename;
 	private JTextField dir;
 	private File file;
 	private static Font font;
 	private static boolean online;
+	private File[] filesInDirectory;
+	private FileNameExtensionFilter filter;
 		
 	@SuppressWarnings("static-access")
 	public JFileChooserClass(boolean online) {
 		this.chooser=new JFileChooser();
 		this.filename = new JTextField();
 		this.dir=new JTextField();
-		this.online=online;
+		this.setOnline(online);
 		if(!online){
 			this.file=new File("./maps/editor");
 		}else{
 			this.file=new File("./maps/career/multiplayer");
 			try {
-				font=(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f));
+				setFont((Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f)));
 			} catch (FontFormatException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -124,10 +124,10 @@ public class JFileChooserClass {
 			if (comp[x] instanceof Container)
 				setFileChooserFont(((Container) comp[x]).getComponents());
 			try {
-				if(!online){
+				if(!isOnline()){
 					comp[x].setFont(MainFrame.customFontS);
 				}else{
-					comp[x].setFont(font);
+					comp[x].setFont(getFont());
 				}
 			} catch (Exception e) {
 			}
@@ -168,6 +168,22 @@ public class JFileChooserClass {
 
 	public void setFile(File file) {
 		this.file = file;
+	}
+
+	public static Font getFont() {
+		return font;
+	}
+
+	public static void setFont(Font font) {
+		JFileChooserClass.font = font;
+	}
+
+	public static boolean isOnline() {
+		return online;
+	}
+
+	public static void setOnline(boolean online) {
+		JFileChooserClass.online = online;
 	}
 
 }

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 import net.ConnectionManager;
+import progettoIGPE.davide.giovanni.unical2016.Flag;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 @SuppressWarnings("serial")
@@ -33,12 +34,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private int resumeP2;
 	private int levelP1;
 	private int levelP2;
+	private Flag flag;
 
 	//FullScreen
 	private GraphicsEnvironment graphicscEnvironment;
 	private GraphicsDevice device;
-	public boolean fullscreen;
-	public boolean pressF11=false;
+	private boolean fullscreen;
+	private boolean pressF11=false;
 
 	private NetworkPanel network;
 	private Lobby lobby;
@@ -142,7 +144,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		player = new PlayerPanel(WIDTH, HEIGHT, this);
 		firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
 		secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
-		editor = new ConstructionPanel(WIDTH, HEIGHT, this);
+		editor = new ConstructionPanel(WIDTH, HEIGHT, this, flag);
 		settings = new SettingsPanel(WIDTH, HEIGHT, this);
 		
 	}
@@ -207,6 +209,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		lobby.createMapsPanel();
 		
 	}
+	
 	// -----------------------------override methods-----------------------------------
 
 	@Override
@@ -420,5 +423,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	
 	public void setTransparent(boolean transparent) {
 		this.transparent = transparent;
+	}
+
+	public Flag getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Flag flag) {
+		this.flag = flag;
 	}
 }

@@ -21,7 +21,7 @@ public class SlideStage extends JLayeredPane {
 	private final int DELAY = 5;
 	private final int DELTA_Y = 2;
 	private Component oldComponent;
-	boolean flag = false;
+	private boolean flag;
 	private JLabel label;
 	private PanelSwitcher switcher;
 	private JTextField filename;
@@ -34,7 +34,7 @@ public class SlideStage extends JLayeredPane {
 		this.setPreferredSize(new Dimension(w, h));
 		this.setLayout(null);
 		this.setOpaque(true);
-		
+		flag = false;
 		this.filename = filename;
 		this.setSwitcher(switcher);
 		
@@ -73,6 +73,7 @@ public class SlideStage extends JLayeredPane {
 	public void instantiate() {
 		
 		((MainFrame)switcher).setGameManager(new GameManager(filename));
+		((MainFrame)switcher).setFlag(((MainFrame)switcher).getGameManager().getFlag());
 		if(SettingsPanel.normal)
 			((MainFrame)switcher).getGameManager().setMedium(true);
 		
@@ -147,5 +148,13 @@ public class SlideStage extends JLayeredPane {
 
 	public void setSwitcher(PanelSwitcher switcher) {
 		this.switcher = switcher;
+	}
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
 	}	
 }

@@ -8,11 +8,12 @@ public class ServerThread extends Thread {
 	private Server server;
 	private Socket socket;
 	private String nameSocket;
-	private boolean no=false;
+	private boolean no;
 
 	public ServerThread(Server server, Socket socket) {
 		this.server = server;
 		this.socket = socket;
+		no=false;
 		this.start();
 	}
 
@@ -68,6 +69,8 @@ public class ServerThread extends Thread {
 
 						if (cont < 1) {
 							server.setOnlineNames(server.getOnlineNames() + nameSocket + " " );
+							server.sendToAll(message);
+							server.sendToSocket(socket, "OKNAME");
 						} else {
 							server.sendToSocket(socket, "ERRORNAME");
 							server.removeConnection(socket);
@@ -77,7 +80,8 @@ public class ServerThread extends Thread {
 					}
 					if(!no){
 						server.getClient().put(socket, nameSocket);
-						server.sendToAll(message);
+						if(!name)
+							server.sendToAll(message);
 					}
 				}
 			}

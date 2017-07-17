@@ -46,61 +46,77 @@ import progettoIGPE.davide.giovanni.unical2016.World;
 @SuppressWarnings("serial")
 public class ConstructionPanel extends JPanel {
 
-	private int height = 20;
-	private int width = 21;
-	private int tile = 30;
-
-	private int contBasic = 0;
-	private int contArmor = 0;
-	private int contFast = 0;
-	private int contPower = 0;
-	private int contFlag = 0;
-	private int contPlayerP1 = 0;
-	private int contPlayerP2 = 0;
-
-	// se prima di salvare si dimentica qualcosa
-	private boolean isFlag = false;
-	private boolean isPlayer = false;
-	private boolean isEnemy = false;
+	private int height;
+	private int width;
+	private int tile;
+	
+	private int contBasic;
+	private int contArmor;
+	private int contFast;
+	private int contPower;
+	private int contFlag;
+	private int contPlayerP1;
+	private int contPlayerP2;
+	
+	private boolean isFlag;
+	private boolean isPlayer;
+	private boolean isEnemy ;
 
 	private TypeMatrix[][] matrix;
-	private TypeMatrix type = TypeMatrix.EMPTY;
+	private TypeMatrix type;
 	private ArrayList<Rectangle> positionLabel;
 	private ArrayList<Rectangle> positionCont;
 	private ArrayList<JButton> buttons;
 
-	private final int DIM = 4;
+	private int DIM;
 	private int cursorPosition;
-
-	private int positionXObject = 850;
-	private int positionYObject = 380;
-	private boolean selection = false;
-	private int totEnemyIntoMap = 20;
-	private int totEnemyForType = 20;
-
+	private int positionXObject;
+	private int positionYObject;
+	private boolean selection;
+	private int totEnemyIntoMap;
+	private int totEnemyForType;
 	private PanelSwitcher switcher;
 	private JFileChooserClass jfilechooser;
-	private boolean saveFile = false;
+	private boolean saveFile;
 	private MyListener myListener;
-
-	private ArrayList<JLabel> numberOfEnemyPaint = new ArrayList<>();
-	private String stringOfEnemy = new String();
-
-	private JDialog dialog = new JDialog();
+	private ArrayList<JLabel> numberOfEnemyPaint;
+	private String stringOfEnemy;
+	private JDialog dialog;
 	private JButton[] bts;
-	private int cursorPositionDialog = 0;
-	private boolean hide = false;
-	private static Flag flag;
-
-	@SuppressWarnings("unused")
+	private int cursorPositionDialog;
+	private boolean hide;
+	private Flag flag;
 	private WarningDialog warning;
 
-	public ConstructionPanel(final int w, final int h, PanelSwitcher switcher) {
+	public ConstructionPanel(final int w, final int h, PanelSwitcher switcher, Flag flag) {
 
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
 
+		this.height = 20;
+		this.width = 21;
+		this.tile = 30;
+		this.contBasic = contArmor = contFast = contPower = contFlag = contPlayerP1 = contPlayerP2 = 0;
+
+		// se prima di salvare si dimentica qualcosa
+		this.flag=flag;
+		this.isFlag = false;
+		this.isPlayer = false;
+		this.isEnemy = false;
+		this.type = TypeMatrix.EMPTY;
+		this.DIM = 4;
+		this.positionXObject = 850;
+		this.positionYObject = 380;
+		this.selection = false;
+		this.totEnemyIntoMap = 20;
+		this.totEnemyForType = 20;
+		this.saveFile = false;
+		this.numberOfEnemyPaint = new ArrayList<>();
+		this.stringOfEnemy = new String();
+		this.dialog = new JDialog();
+		this.cursorPositionDialog = 0;
+		this.hide = false;
 		this.matrix = new TypeMatrix[height][width];
 		this.positionLabel = new ArrayList<>();
 		this.positionCont = new ArrayList<>();
@@ -117,8 +133,8 @@ public class ConstructionPanel extends JPanel {
 			this.add(numberOfEnemyPaint.get(i));
 		}
 
-		myListener = new MyListener();
-		jfilechooser = new JFileChooserClass(false);
+		this.myListener = new MyListener();
+		this.jfilechooser = new JFileChooserClass(false);
 
 		setSwitcher(switcher);
 		setCursorPosition(1);
@@ -342,10 +358,10 @@ public class ConstructionPanel extends JPanel {
 	protected boolean numbersMaxOfEnemy() {
 		if ((contArmor + contBasic + contFast + contPower) > 20
 				&& ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))) {
-			warning = new WarningDialog("Numbers total Enemies is 20 with SinglePlayer!",((MainFrame)switcher));
+			setWarning(new WarningDialog("Numbers total Enemies is 20 with SinglePlayer!",((MainFrame)switcher)));
 			return false;
 		} else if ((contArmor + contBasic + contFast + contPower) > 40 && contPlayerP1 == 1 && contPlayerP2 == 1) {
-			warning = new WarningDialog("Numbers total Enemies is 40 with MultiPlayer!", ((MainFrame)switcher));
+			setWarning(new WarningDialog("Numbers total Enemies is 40 with MultiPlayer!", ((MainFrame)switcher)));
 			return false;
 		}
 
@@ -362,7 +378,7 @@ public class ConstructionPanel extends JPanel {
 			return true;
 		}
 		((MainFrame)getSwitcher()).setTransparent(true);
-		warning = new WarningDialog("Can't found path to Flag!",((MainFrame)switcher));
+		setWarning(new WarningDialog("Can't found path to Flag!",((MainFrame)switcher)));
 		return false;
 	}
 
@@ -371,31 +387,31 @@ public class ConstructionPanel extends JPanel {
 			for (int b = 0; b < width; b++) {
 				switch (matrix[a][b]) {
 				case EMPTY:
-					world.world[a][b] = null;
+					world.getWorld()[a][b] = null;
 					break;
 				case STEELWALL:
-					world.world[a][b] = new SteelWall(a, b, world, 4);
+					world.getWorld()[a][b] = new SteelWall(a, b, world, 4);
 					break;
 				case ICE:
-					world.world[a][b] = new Ice(a, b, world);
+					world.getWorld()[a][b] = new Ice(a, b, world);
 					break;
 				case TREE:
-					world.world[a][b] = new Tree(a, b, world);
+					world.getWorld()[a][b] = new Tree(a, b, world);
 					break;
 				case BRICKWALL:
-					world.world[a][b] = new BrickWall(a, b, world, 2);
+					world.getWorld()[a][b] = new BrickWall(a, b, world, 2);
 					break;
 				case WATER:
-					world.world[a][b] = new Water(a, b, world);
+					world.getWorld()[a][b] = new Water(a, b, world);
 					break;
 				case PLAYER1:
-					world.world[a][b] = new PlayerTank(a, b, world, "P1");
+					world.getWorld()[a][b] = new PlayerTank(a, b, world, "P1");
 					break;
 				case PLAYER2:
-					world.world[a][b] = new PlayerTank(a, b, world, "P2");
+					world.getWorld()[a][b] = new PlayerTank(a, b, world, "P2");
 					break;
 				case FLAG:
-					world.world[a][b] = new Flag(a, b, world);
+					world.getWorld()[a][b] = new Flag(a, b, world);
 					flag = new Flag(a, b, world);
 					break;
 				default:
@@ -1119,7 +1135,7 @@ public class ConstructionPanel extends JPanel {
 							&& type != TypeMatrix.EMPTY) {
 						matrix[row][col] = type;
 						((MainFrame)getSwitcher()).setTransparent(true);
-						warning = new WarningDialog("Warning! Cannot manage spawn positions.", matrix, ((MainFrame)getSwitcher()));
+						setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix, ((MainFrame)getSwitcher())));
 					} else {
 
 						if (matrix[row][col] == TypeMatrix.FLAG) {
@@ -1272,7 +1288,7 @@ public class ConstructionPanel extends JPanel {
 						&& type != TypeMatrix.EMPTY) {
 					matrix[row][col] = type;
 					((MainFrame)getSwitcher()).setTransparent(true);
-					warning = new WarningDialog("Warning! Cannot manage spawn positions.", matrix, ((MainFrame)getSwitcher()));
+					setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix, ((MainFrame)getSwitcher())));
 				}
 
 				else if ((col < width && row < height && col >= 0 && row >= 0) && type != TypeMatrix.FLAG
@@ -1326,5 +1342,13 @@ public class ConstructionPanel extends JPanel {
 
 	public void setTotEnemyIntoMap(int totEnemyIntoMap) {
 		this.totEnemyIntoMap = totEnemyIntoMap;
+	}
+
+	public WarningDialog getWarning() {
+		return warning;
+	}
+
+	public void setWarning(WarningDialog warning) {
+		this.warning = warning;
 	}
 }

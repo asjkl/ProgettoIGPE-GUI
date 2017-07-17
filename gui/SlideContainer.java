@@ -93,9 +93,4 @@ public class SlideContainer extends JLayeredPane {
 		SlideContainer.ready = ready;
 	}
 	
-//	@Override
-//	protected void paintComponent(Graphics g) {
-//		// TODO Auto-generated method stub
-//		super.paintComponent(g);
-//	}
 }

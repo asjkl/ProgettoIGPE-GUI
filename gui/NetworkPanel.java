@@ -29,18 +29,21 @@ import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
 public class NetworkPanel extends JPanel {
 
 	private PanelSwitcher switcher;
+	private final String defaultPort = "1234";
+	private final String defaultIp = "127.0.0.1";
+	private final String defaultName = "";
+	private final String defaultPortChat = "1232";
 	private JTextField ipTextField;
 	private JTextField nameTextField;
 	private JTextField portTextField;
 	private int cursorPosition;
-	private int portChat = 1232;
 	private ArrayList<JButton> buttons;
 	private WarningDialog warning;
 	private JDialog dialog;
-	private int DIM = 2;
+	private int DIM;
 	private ClientChat client;
 	private Server serverChat;
-	protected int lengthMaxName=10;
+	private int lengthMaxName;
 	
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
@@ -48,7 +51,8 @@ public class NetworkPanel extends JPanel {
 		this.setPreferredSize(new Dimension(w, h));
 		this.setSwitcher(switcher);
 		this.setLayout(null);
-		
+		lengthMaxName=10;
+		DIM = 2;
 		dialog = new JDialog(dialog, "ERROR");
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
@@ -67,7 +71,7 @@ public class NetworkPanel extends JPanel {
 		this.add(label);
 
 		ipTextField = new JTextField(10);
-		ipTextField.setText("127.0.0.1");
+		ipTextField.setText(defaultIp);
 		ipTextField.setBackground(Color.BLACK);
 		ipTextField.setForeground(Color.WHITE);
 		ipTextField.setFont(MainFrame.customFontM);
@@ -83,7 +87,7 @@ public class NetworkPanel extends JPanel {
 		label2.setBounds(440, 385, 200, 40);
 		this.add(label2);
 		portTextField = new JTextField(10);
-		portTextField.setText("1234");
+		portTextField.setText(defaultPort);
 		portTextField.setBackground(Color.BLACK);
 		portTextField.setForeground(Color.WHITE);
 		portTextField.setFont(MainFrame.customFontM);
@@ -99,7 +103,7 @@ public class NetworkPanel extends JPanel {
 		label3.setBounds(440, 445, 200, 40);
 		this.add(label3);
 		nameTextField = new JTextField(10);
-		nameTextField.setText("");
+		nameTextField.setText(defaultName);
 		nameTextField.setBackground(Color.BLACK);
 		nameTextField.setForeground(Color.WHITE);
 		nameTextField.setFont(MainFrame.customFontM);
@@ -144,6 +148,9 @@ public class NetworkPanel extends JPanel {
 					if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						SoundsProvider.playBulletHit1();
 						cursorPosition = 1;
+						ipTextField.setText(defaultIp);
+						portTextField.setText(defaultPort);
+						nameTextField.setText(defaultName);
 						getSwitcher().showMenu();
 						repaint();
 					} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -192,6 +199,9 @@ public class NetworkPanel extends JPanel {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 					SoundsProvider.playBulletHit1();
+					ipTextField.setText(defaultIp);
+					portTextField.setText(defaultPort);
+					nameTextField.setText(defaultName);
 					cursorPosition = 1;
 					getSwitcher().showMenu();
 
@@ -204,7 +214,7 @@ public class NetworkPanel extends JPanel {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					if (nameTextField.getText().equals("")) {
+					if (nameTextField.getText().equals(defaultName)) {
 						((MainFrame)getSwitcher()).setTransparent(true);
 						setWarning(new WarningDialog("Insert name!!", ((MainFrame) getSwitcher())));
 						
@@ -214,23 +224,12 @@ public class NetworkPanel extends JPanel {
 					}else {
 						buttons.get(1).setEnabled(false);
 		
-						serverChat=new Server(portChat);
+						serverChat=new Server(Integer.valueOf(defaultPortChat));
 						
 						new Thread(serverChat, "chat").start();
-						client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
+						client=new ClientChat(nameTextField.getText(), ipTextField.getText(), Integer.valueOf(defaultPortChat), ((MainFrame)getSwitcher()));
 
-						nameTextField.setText("");
-					
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}
-						
-						if(client.getSocket().isConnected() && !client.isExitThrad())
-							getSwitcher().showLobby(false);
-						else
-							((MainFrame)getSwitcher()).setTransparent(true);
+						nameTextField.setText(defaultName);
 					}
 				}
 			});
@@ -318,14 +317,6 @@ public class NetworkPanel extends JPanel {
 
 	public void setNameTextField(JTextField nameTextField) {
 		this.nameTextField = nameTextField;
-	}
-
-	public int getPortChat() {
-		return portChat;
-	}
-
-	public void setPortChat(int portChat) {
-		this.portChat = portChat;
 	}
 
 	public ClientChat getClient() {

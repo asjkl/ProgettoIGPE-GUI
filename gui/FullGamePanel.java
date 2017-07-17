@@ -13,16 +13,16 @@ import progettoIGPE.davide.giovanni.unical2016.Power;
 
 @SuppressWarnings("serial")
 public class FullGamePanel extends JPanel {
-
-	public GameManager gameManager;
-	public GamePanel gamePanel;
-	private String valueMap;
-	private JLabel labelValueMap;
-	private PanelPlayersInfo[] panelOfInfo;
+	
 	private int x;
 	private int y;
-	public int shift = 17;
-	PanelSwitcher switcher;
+	private int shift = 17;
+	private PanelSwitcher switcher;
+	private String valueMap;
+	private JLabel labelValueMap;
+	private GamePanel gamePanel;
+	private GameManager gameManager;
+	private PanelPlayersInfo[] panelOfInfo;
 
 	public FullGamePanel(final int WIDTH, int HEIGHT, int gameWidth, int gameHeight, PanelSwitcher switcher,GamePanel gamePanel) {
 
@@ -31,7 +31,7 @@ public class FullGamePanel extends JPanel {
 		setBackground(Color.GRAY);
 		this.switcher = switcher;
 		
-		this.gamePanel = gamePanel;
+		this.setGamePanel(gamePanel);
 		this.gameManager = gamePanel.getGame();
 		gamePanel.setFocusable(true);
 //		gamePanel.setBounds(322 - shift, 32 - shift, gameWidth + shift * 2 + 3, gameHeight + shift * 2);
@@ -246,5 +246,13 @@ public class FullGamePanel extends JPanel {
 
 	public void setSwitcher(PanelSwitcher switcher) {
 		this.switcher = switcher;
+	}
+
+	public GamePanel getGamePanel() {
+		return gamePanel;
+	}
+
+	public void setGamePanel(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
 	}
 }

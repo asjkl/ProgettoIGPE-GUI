@@ -10,11 +10,11 @@ import progettoIGPE.davide.giovanni.unical2016.GameManager;
 @SuppressWarnings("serial")
 public class TranslucentWindow extends JDialog {
 
+	private Image image;
+	private Timer timer;
 	private JTextField filename;
 	private JTextField directory;
 	private PanelSwitcher switcher;
-	private Image image;
-	private Timer timer;
 	
     public TranslucentWindow(PanelSwitcher switcher, JTextField filename, Image image) {
     	

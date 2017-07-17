@@ -12,9 +12,10 @@ import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class WarningDialog extends JDialog{
-	JPanel p;
-	JLabel l;
-	MainFrame mainframe;
+	
+	private JPanel p;
+	private JLabel l;
+	private MainFrame mainframe;
 	
 	public WarningDialog(String text, TypeMatrix[][] matrix, MainFrame mainframe) {
 		this.mainframe = mainframe;
@@ -33,8 +34,6 @@ public class WarningDialog extends JDialog{
 		setVisible(true);
 	}
 	
-
-
 	public WarningDialog(String text, MainFrame mainframe){
 		this.mainframe = mainframe;
 		init(text);
@@ -66,6 +65,7 @@ public class WarningDialog extends JDialog{
 		pack();
 		setLocationRelativeTo(mainframe);
 	}
+	
 	public MainFrame getMainframe() {
 		return mainframe;
 	}

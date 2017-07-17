@@ -122,7 +122,7 @@ public class ClientChat extends JPanel implements Runnable {
 
 				// -----------------------------------------------
 
-//				System.out.println("-> " + message);
+				System.out.println("-> " + message);
 
 				if (elements[0].equals("EXIT")) {
 					String client = elements[1];
@@ -162,10 +162,18 @@ public class ClientChat extends JPanel implements Runnable {
 					}
 
 				}
+				
+				if(elements[0].equals("OKNAME")){
+					
+					mainFrame.showLobby(false);
+					notShowInChat=true;
+				}
 			
 				if(elements[0].equals("ERRORNAME")){
 					exitThrad=true;
+					mainFrame.setTransparent(true);
 					new WarningDialog(clientName+" is already present in the Lobby. Try again!", mainFrame);
+					mainFrame.setTransparent(false);
 					mainFrame.showNetwork();
 				
 				}

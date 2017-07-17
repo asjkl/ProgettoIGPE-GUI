@@ -7,16 +7,13 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-
 @SuppressWarnings("serial")
 public class LoadPanel extends JPanel {
 
 	private JProgressBar progressBar;
 	private PanelSwitcher switcher;
 
-	
-	//LOAD
-	 public LoadPanel(final int w, final int h, PanelSwitcher switcher) {
+	public LoadPanel(final int w, final int h, PanelSwitcher switcher) {
 			
 		this.setPreferredSize(new Dimension(w, h));
 		this.setLayout(new BorderLayout());

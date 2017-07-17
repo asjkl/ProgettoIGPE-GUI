@@ -548,7 +548,6 @@ public class ImageProvider {
 		return shovel;
 	}
 
-
 	public static void setShovel(Image shovel) {
 		ImageProvider.shovel = shovel;
 	}
@@ -576,8 +575,6 @@ public class ImageProvider {
 	public static Image getShovelx() {
 		return shovelx;
 	}
-
-	
 
 	public static Image getStar() {
 		return star;
@@ -607,11 +604,9 @@ public class ImageProvider {
 		return title;
 	}
 
-
 	public static void setTitle(Image title) {
 		ImageProvider.title = title;
 	}
-	
 	
 	public static Image getIce() {
 		return ice;
@@ -1038,7 +1033,6 @@ public class ImageProvider {
 		player1B_s3 = player1b_s3;
 	}
 	
-
 	public static Image getBigExplosion1() {
 		return bigExplosion1;
 	}

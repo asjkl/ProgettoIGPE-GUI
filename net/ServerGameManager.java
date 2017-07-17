@@ -76,11 +76,11 @@ public class ServerGameManager {
 				for(int a=0; a<gameManager.getPlayersArray().size(); a++){
 					if(gameManager.getPlayersArray().get(a).toString().equals(split[0])){
 						if(split[2].equals("YES")){
-							gameManager.getPlayersArray().get(a).keyBits.set(Integer.valueOf(split[1]));
+							gameManager.getPlayersArray().get(a).getKeyBits().set(Integer.valueOf(split[1]));
 							gameManager.getPlayersArray().get(a).setKeyPressedMillis(Long.parseLong(split[3]));
 						}
 						else if(split[2].equals("NO")){
-							gameManager.getPlayersArray().get(a).keyBits.clear(Integer.valueOf(split[1]));
+							gameManager.getPlayersArray().get(a).getKeyBits().clear(Integer.valueOf(split[1]));
 							gameManager.getPlayersArray().get(a).setReleaseKeyRocket(Boolean.parseBoolean(split[4]));
 						}
 					}
