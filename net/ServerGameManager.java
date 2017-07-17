@@ -12,10 +12,11 @@ import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
 
 public class ServerGameManager {
+	
 	private final ArrayList<ClientManager> clients;
 	private final Set<ClientManager> readyClients;
-	public HashMap<String,String>name;
-	public GameManager gameManager;
+	private HashMap<String,String>name;
+	private GameManager gameManager;
 	private GamePanel gamePanel;
 	private String difficult;
 	private JTextField map;
@@ -69,8 +70,8 @@ public class ServerGameManager {
 				gameManager.setExit(Boolean.parseBoolean(split[2]));
 			}else{
 				//BOOLEANE DI SISTEMA
-				gameManager.pauseOptionDialog=Boolean.parseBoolean(split[5]);
-				gameManager.paused=Boolean.parseBoolean(split[6]);
+				gameManager.setPauseOptionDialog(Boolean.parseBoolean(split[5]));
+				gameManager.setPaused(Boolean.parseBoolean(split[6]));
 				
 				for(int a=0; a<gameManager.getPlayersArray().size(); a++){
 					if(gameManager.getPlayersArray().get(a).toString().equals(split[0])){
@@ -160,5 +161,29 @@ public class ServerGameManager {
 			gamePanel.gameOverOrWin();
 		}
 		System.out.println("CLIENTE DISCONNESSO: " + name);
+	}
+	
+	public GameManager getGameManager() {
+		return gameManager;
+	}
+
+	public void setGameManager(GameManager gameManager) {
+		this.gameManager = gameManager;
+	}
+
+	public GamePanel getGamePanel() {
+		return gamePanel;
+	}
+
+	public void setGamePanel(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
+	}
+
+	public HashMap<String, String> getName() {
+		return name;
+	}
+
+	public void setName(HashMap<String, String> name) {
+		this.name = name;
 	}
 }

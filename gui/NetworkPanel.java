@@ -35,13 +35,9 @@ public class NetworkPanel extends JPanel {
 	private int cursorPosition;
 	private int portChat = 1232;
 	private ArrayList<JButton> buttons;
-	
-	@SuppressWarnings("unused")
 	private WarningDialog warning;
-
 	private JDialog dialog;
 	private int DIM = 2;
-
 	private ClientChat client;
 	private Server serverChat;
 	protected int lengthMaxName=10;
@@ -210,11 +206,11 @@ public class NetworkPanel extends JPanel {
 					SoundsProvider.playBulletHit1();
 					if (nameTextField.getText().equals("")) {
 						((MainFrame)getSwitcher()).setTransparent(true);
-						warning = new WarningDialog("Insert name!!", ((MainFrame) getSwitcher()));
+						setWarning(new WarningDialog("Insert name!!", ((MainFrame) getSwitcher())));
 						
 					} else if(nameTextField.getText().length()> lengthMaxName){ 
 						((MainFrame)getSwitcher()).setTransparent(true);
-						warning = new WarningDialog("Insert a maximum of "+lengthMaxName+" characters!", ((MainFrame) getSwitcher()));						
+						setWarning(new WarningDialog("Insert a maximum of "+lengthMaxName+" characters!", ((MainFrame) getSwitcher())));						
 					}else {
 						buttons.get(1).setEnabled(false);
 		
@@ -225,9 +221,8 @@ public class NetworkPanel extends JPanel {
 
 						nameTextField.setText("");
 					
-						//importanete
 						try {
-							Thread.sleep(10);
+							Thread.sleep(500);
 						} catch (InterruptedException e1) {
 							e1.printStackTrace();
 						}
@@ -332,6 +327,7 @@ public class NetworkPanel extends JPanel {
 	public void setPortChat(int portChat) {
 		this.portChat = portChat;
 	}
+
 	public ClientChat getClient() {
 		return client;
 	}
@@ -339,11 +335,22 @@ public class NetworkPanel extends JPanel {
 	public void setClient(ClientChat client) {
 		this.client = client;
 	}
+	
 	public JTextField getPortTextField() {
 		return portTextField;
 	}
 
 	public void setPortTextField(JTextField portTextField) {
 		this.portTextField = portTextField;
+	}
+
+
+	public WarningDialog getWarning() {
+		return warning;
+	}
+
+
+	public void setWarning(WarningDialog warning) {
+		this.warning = warning;
 	}
 }

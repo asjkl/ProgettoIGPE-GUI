@@ -1,6 +1,5 @@
 package net;
 
-
 import java.io.BufferedReader;
 
 import java.io.IOException;
@@ -11,8 +10,6 @@ import java.net.SocketException;
 
 import javax.swing.JTextField;
 
-
-
 public class ClientManager implements Runnable {
 	
 	private BufferedReader reader;
@@ -20,14 +17,9 @@ public class ClientManager implements Runnable {
 	private String name;
 	private JTextField map;
 	private String difficult;
-//	private JFileChooserClass chooser;
-//	private JButton[] buttons;
-//	private JDialog dialog;
-//	private int cursorPositionDialog;
 	private ServerGameManager server;
 	private Socket socket;
 	
-
 	public ClientManager(Socket socket, ServerGameManager server) {
 		this.socket = socket;
 		this.server = server;
@@ -37,7 +29,6 @@ public class ClientManager implements Runnable {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-//		this.dialog = new JDialog();
 	}
 
 	public void dispatch(final String message) {
@@ -69,7 +60,7 @@ public class ClientManager implements Runnable {
 		String s = reader.readLine();
 		String[] split = s.split(":");
 		name=string;
-		server.name.put(split[0], name);
+		server.getName().put(split[0], name);
 		if(split.length>1){
 			System.out.println("clientmanager "+split[1]+" "+split[2]);
 			map.setText(split[1]);

@@ -179,7 +179,7 @@ public class FullGamePanel extends JPanel {
 			int cont = 0;
 
 			if (!GameManager.offline)
-				gameManager.lock.lock();
+				gameManager.getLock().lock();
 
 			g.setColor(Color.WHITE);
 			for (int a = 0; a < gameManager.getPower().size(); a++) {
@@ -209,7 +209,7 @@ public class FullGamePanel extends JPanel {
 				}
 			}
 			if (!GameManager.offline)
-				gameManager.lock.unlock();
+				gameManager.getLock().unlock();
 		}
 
 	}

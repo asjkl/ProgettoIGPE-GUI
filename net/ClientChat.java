@@ -21,7 +21,6 @@ public class ClientChat extends JPanel implements Runnable {
 
 	private TextField tf1;
 	private TextField tf2;
-
 	private String clientName;
 	private String host;
 	private int port;
@@ -30,64 +29,58 @@ public class ClientChat extends JPanel implements Runnable {
 	private String stage;
 	private JDialog dialog;
 	private TextArea ta;
-//	private TextArea to;
 	private Socket socket;
-	public DataOutputStream dout;
+	private DataOutputStream dout;
 	private DataInputStream din;
-	private int count = 0;
+	private int count;
 	private ArrayList<String> nameOfClientsOnline;
-	private boolean readyP1 = false;
-	private boolean readyP2 = false;
+	private boolean readyP1;
+	private boolean readyP2;
 	private MainFrame mainFrame;
-	private boolean exitThrad=false;
-
-
-	private boolean notShowInChat = true;
-	private String points = "........................................";
-	private int updateStageRealTime = 1; //stage 1 di default
-	private String updateDifficultRealTime="easy";
-
+	private boolean exitThrad;
+	private boolean notShowInChat;
+	private String points;
+	private int updateStageRealTime;
+	private String updateDifficultRealTime;
 
 	public ClientChat(String name, String host, int portChat, MainFrame mainFrame) {
 
+		this.count = 0;
+		this.readyP1 = false;
+		this.readyP2 = false;
+		this.exitThrad=false;
+		this.notShowInChat = true;
+		this.points = "........................................";
+		this.updateStageRealTime = 1; //stage 1 di default
+		this.updateDifficultRealTime = "easy";
+		
 		this.host = host;
 		this.clientName = name;
 		this.setPortChat(portChat);
 		this.setNameOfClientsOnline(new ArrayList<>());
 		this.mainFrame = mainFrame;
-		dialog = new JDialog(dialog, "ERROR");	
-		tf1 = new TextField(name + ":");
+		this.dialog = new JDialog(dialog, "ERROR");	
+		this.tf1 = new TextField(name + ":");
 		this.setSize(new Dimension(500, 300));
-		tf1.setEditable(false);
-		tf2 = new TextField();
-		ta = new TextArea();
-//		to = new TextArea("People Online: \n", 50, 16);
-		ta.setEditable(false);
-//		to.setEditable(false);
-
-		tf1.setBackground(Color.black);
-		tf2.setBackground(Color.black);
-		ta.setBackground(Color.black);
-//		to.setBackground(Color.black);
-
-		tf1.setForeground(Color.white);
-		tf2.setForeground(Color.white);
-		ta.setForeground(Color.white);
-//		to.setForeground(Color.white);
-
-		tf1.setFont(MainFrame.customFontS);
-		tf2.setFont(MainFrame.customFontS);
-		ta.setFont(MainFrame.customFontS);
-//		to.setFont(MainFrame.customFontS);
-
-		tf2.requestFocus();
-		setLayout(new BorderLayout());
-		add("North", tf1);
-		add("South", tf2);
-		add("Center", ta);
-//		add("West", to);
-
-		tf2.addActionListener(new ActionListener() {
+		this.tf1.setEditable(false);
+		this.tf2 = new TextField();
+		this.ta = new TextArea();
+		this.ta.setEditable(false);
+		this.tf1.setBackground(Color.black);
+		this.tf2.setBackground(Color.black);
+		this.ta.setBackground(Color.black);
+		this.tf1.setForeground(Color.white);
+		this.tf2.setForeground(Color.white);
+		this.ta.setForeground(Color.white);
+		this.tf1.setFont(MainFrame.customFontS);
+		this.tf2.setFont(MainFrame.customFontS);
+		this.ta.setFont(MainFrame.customFontS);
+		this.tf2.requestFocus();
+		this.setLayout(new BorderLayout());
+		this.add("North", tf1);
+		this.add("South", tf2);
+		this.add("Center", ta);
+		this.tf2.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
 
@@ -99,20 +92,19 @@ public class ClientChat extends JPanel implements Runnable {
 			socket = new Socket(host, Integer.valueOf(portChat));
 			System.out.println("Connessione per " + clientName);
 			din = new DataInputStream(socket.getInputStream());
-			dout = new DataOutputStream(socket.getOutputStream());
+			setDout(new DataOutputStream(socket.getOutputStream()));
 			new Thread(this).start();
 			processMessage(tf1.getText() + "^^^^^^");
 		} catch (IOException e) {
 			showDialog();
 		}
 			
-	}// costruttore
-
+	}
 
 	private void processMessage(String message) {
 		
 		try {
-			dout.writeUTF(tf1.getText() + ":" + message);
+			getDout().writeUTF(tf1.getText() + ":" + message);
 			tf2.setText(" ");
 		} catch (IOException ie) {
 //			System.out.println(ie);
@@ -383,12 +375,20 @@ public class ClientChat extends JPanel implements Runnable {
 	public void setSocket(Socket socket) {
 		this.socket = socket;
 	}
+	
 	public boolean isExitThrad() {
 		return exitThrad;
 	}
 
-
 	public void setExitThrad(boolean exitThrad) {
 		this.exitThrad = exitThrad;
+	}
+
+	public DataOutputStream getDout() {
+		return dout;
+	}
+
+	public void setDout(DataOutputStream dout) {
+		this.dout = dout;
 	}
 }

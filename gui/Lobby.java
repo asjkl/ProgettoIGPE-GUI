@@ -106,7 +106,7 @@ public class Lobby extends JPanel {
 	
 			if(client.isReadyP1() && client.isReadyP2() && client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 				try {
-					client.dout.writeUTF(String.valueOf(client.getPoints() + countDown--));	 // <- "..............5"
+					client.getDout().writeUTF(String.valueOf(client.getPoints() + countDown--));	 // <- "..............5"
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -116,7 +116,7 @@ public class Lobby extends JPanel {
 			
 			if (countDown < 0) {
 				try {
-					client.dout.writeUTF(String.valueOf(client.getPoints() + "StartGame"));	 // <- "..............5"
+					client.getDout().writeUTF(String.valueOf(client.getPoints() + "StartGame"));	 // <- "..............5"
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -202,7 +202,7 @@ public class Lobby extends JPanel {
 							repaint();
 							
 							try {
-								client.dout.writeUTF("#difficult# "+difficult);
+								client.getDout().writeUTF("#difficult# "+difficult);
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -347,7 +347,7 @@ public class Lobby extends JPanel {
 				repaint();
 
 				try {
-					client.dout.writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
+					client.getDout().writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -375,7 +375,7 @@ public class Lobby extends JPanel {
 				repaint();
 				
 				try {
-					client.dout.writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
+					client.getDout().writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -430,14 +430,14 @@ public class Lobby extends JPanel {
 						if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 							timer.cancel();
 							try {
-								client.dout.writeUTF("EXITALL");
+								client.getDout().writeUTF("EXITALL");
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
 						
 						} else {
 							try {
-								client.dout.writeUTF("EXIT "+client.getClientName());
+								client.getDout().writeUTF("EXIT "+client.getClientName());
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
@@ -489,14 +489,14 @@ public class Lobby extends JPanel {
 					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 						timer.cancel();
 						try {
-							client.dout.writeUTF("EXITALL");
+							client.getDout().writeUTF("EXITALL");
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 					
 					} else {
 						try {
-							client.dout.writeUTF("EXIT "+client.getClientName());
+							client.getDout().writeUTF("EXIT "+client.getClientName());
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
@@ -527,14 +527,14 @@ public class Lobby extends JPanel {
 							
 						//	2) mando il messaggio a tutti 
 							try {
-								client.dout.writeUTF("p1 true");
+								client.getDout().writeUTF("p1 true");
 							} catch (IOException e2) {
 								e2.printStackTrace();
 							}
 										
 						//  3) do il via libero al connect ( tutti i client )
 							try {
-								client.dout.writeUTF("connect"+" "+portTextField.getText()+" "+stage+" "+difficult);
+								client.getDout().writeUTF("connect"+" "+portTextField.getText()+" "+stage+" "+difficult);
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
@@ -545,13 +545,13 @@ public class Lobby extends JPanel {
 					else if (client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
 						if (!client.isReadyP2()) {
 							try {
-								client.dout.writeUTF("p2 true");
+								client.getDout().writeUTF("p2 true");
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
 						} else {
 							try {
-								client.dout.writeUTF("p2 false");
+								client.getDout().writeUTF("p2 false");
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}

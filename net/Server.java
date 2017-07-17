@@ -11,23 +11,20 @@ import java.util.Map;
 
 public class Server implements Runnable {
 
-	@SuppressWarnings("rawtypes")
-	private Hashtable outputStreams = new Hashtable();
-	private boolean exitChat = false;
-	int port;
-	ServerSocket serverSocket;
-	ServerGameManager gameManagerServer;
-	public static String OnlineNames = "";
-	public HashMap<Socket, String> client = new HashMap<>();
+	private Hashtable<Socket, DataOutputStream> outputStreams;
+	private boolean exitChat;
+	private int port;
+	private ServerSocket serverSocket;
+	private ServerGameManager gameManagerServer;
+	private String OnlineNames;
 
-	public static void main(String[] args) throws IOException {
-		final Server server1 = new Server(1234);
-		final Server server2 = new Server(1232);
-		new Thread(server1, "game").start();
-		new Thread(server2, "chat").start();
+	public Server(int port) {
+		this.port = port;
+		exitChat = false;
+		outputStreams = new Hashtable<Socket, DataOutputStream>();
+		OnlineNames = "";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
 
@@ -96,10 +93,13 @@ public class Server implements Runnable {
 
 	}
 
-	public Server(int port) {
-		this.port = port;
+	public static void main(String[] args) throws IOException {
+		final Server server1 = new Server(1234);
+		final Server server2 = new Server(1232);
+		new Thread(server1, "game").start();
+		new Thread(server2, "chat").start();
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	Enumeration getOutputStreams() {
 		return outputStreams.elements();
@@ -175,5 +175,23 @@ public class Server implements Runnable {
 
 	public void setExitChat(boolean exitChat) {
 		this.exitChat = exitChat;
+	}
+
+	public String getOnlineNames() {
+		return OnlineNames;
+	}
+
+	public void setOnlineNames(String onlineNames) {
+		OnlineNames = onlineNames;
+	}
+
+	private HashMap<Socket, String> client = new HashMap<>();
+
+	public HashMap<Socket, String> getClient() {
+		return client;
+	}
+
+	public void setClient(HashMap<Socket, String> client) {
+		this.client = client;
 	}
 }

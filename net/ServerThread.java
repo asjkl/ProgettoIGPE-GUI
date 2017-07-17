@@ -33,12 +33,12 @@ public class ServerThread extends Thread {
 				} else if (elements[0].equals("EXIT")) {
 					String client = elements[1];
 					server.removeConnection(client);
-					String[] clients = Server.OnlineNames.split(" ");
-					Server.OnlineNames = "";
+					String[] clients = server.getOnlineNames().split(" ");
+					server.setOnlineNames("");
 					for (String s : clients) {
 						if (!s.equals(client)) {
-							Server.OnlineNames += s;
-							Server.OnlineNames += " ";
+							server.setOnlineNames(server.getOnlineNames() +s);
+							server.setOnlineNames(server.getOnlineNames() + " ");
 						}
 					}
 					server.sendToAll("EXIT " + client);
@@ -59,7 +59,7 @@ public class ServerThread extends Thread {
 						nameSocket = searchName(message);
 						int cont = 0;
 
-						String[] clients = Server.OnlineNames.split(" ");
+						String[] clients = server.getOnlineNames().split(" ");
 						for (String s : clients) {
 							if (s.equals(nameSocket)) {
 								cont++;
@@ -67,7 +67,7 @@ public class ServerThread extends Thread {
 						}
 
 						if (cont < 1) {
-							Server.OnlineNames += nameSocket + " ";
+							server.setOnlineNames(server.getOnlineNames() + nameSocket + " " );
 						} else {
 							server.sendToSocket(socket, "ERRORNAME");
 							server.removeConnection(socket);
@@ -76,7 +76,7 @@ public class ServerThread extends Thread {
 						}
 					}
 					if(!no){
-						server.client.put(socket, nameSocket);
+						server.getClient().put(socket, nameSocket);
 						server.sendToAll(message);
 					}
 				}
