@@ -23,7 +23,7 @@ public class ServerThread extends Thread {
 
 			while (true) {
 				String message = din.readUTF();
-				System.out.println(message);
+//				System.out.println(".... "+message);
 				String[] elements = message.split(" ");
 				if (elements[0].equals("EXITALL")) {
 					server.sendToAll("EXITALL");

@@ -23,7 +23,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	public static Font customFontM;
 	public static Font customFontB;
 	public static Font customFontS;
-	
+	 
 	private boolean transparent;
 	private boolean slide; 
 	private int highScoreP1;

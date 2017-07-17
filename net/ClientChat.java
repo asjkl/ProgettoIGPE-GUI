@@ -38,7 +38,7 @@ public class ClientChat extends JPanel implements Runnable {
 	private boolean readyP2;
 	private MainFrame mainFrame;
 	private boolean exitThrad;
-	private boolean notShowInChat;
+	private boolean showInChat;
 	private String points;
 	private int updateStageRealTime;
 	private String updateDifficultRealTime;
@@ -49,7 +49,7 @@ public class ClientChat extends JPanel implements Runnable {
 		this.readyP1 = false;
 		this.readyP2 = false;
 		this.exitThrad=false;
-		this.notShowInChat = true;
+		this.showInChat = true;
 		this.points = "........................................";
 		this.updateStageRealTime = 1; //stage 1 di default
 		this.updateDifficultRealTime = "easy";
@@ -138,16 +138,16 @@ public class ClientChat extends JPanel implements Runnable {
 
 					if (elements[0].equals("p2") && elements[1].equals("true")) {
 						readyP2 = true;
-						notShowInChat=false;
+						showInChat=false;
 					} else if (elements[0].equals("p2") && elements[1].equals("false")) {
 						readyP2 = false;
-						notShowInChat=false;
+						showInChat=false;
 					} else if (elements[0].equals("p1") && elements[1].equals("true")) {
 						readyP1 = true;
-						notShowInChat=false;
+						showInChat=false;
 					} else if (elements[0].equals("p1") && elements[1].equals("false")) {
 						readyP1 = false;
-						notShowInChat=false;
+						showInChat=false;
 					}
 				
 
@@ -166,7 +166,7 @@ public class ClientChat extends JPanel implements Runnable {
 				if(elements[0].equals("OKNAME")){
 					
 					mainFrame.showLobby(false);
-					notShowInChat=true;
+					showInChat=false;
 				}
 			
 				if(elements[0].equals("ERRORNAME")){
@@ -192,17 +192,17 @@ public class ClientChat extends JPanel implements Runnable {
 				
 				if(elements[0].equals("#stage#")) {
 					setUpdateStageRealTime(Integer.valueOf(elements[1]));
-					notShowInChat=false;
+					showInChat=false;
 				}
 				
 				else if(elements[0].equals("#difficult#")) {
 					updateDifficultRealTime=(elements[1]);
-					notShowInChat=false;
+					showInChat=false;
 				}
 
 				// ------------------------------------------------
 
-				if(notShowInChat) {
+				if(showInChat) {
 					if (count == 0 && !(message.equals(null))) {
 	
 						String[] names = message.split(" ");
@@ -233,7 +233,6 @@ public class ClientChat extends JPanel implements Runnable {
 						}
 	
 						if (name == false) {
-	
 							ta.append(message + "\n");
 						} else {
 							String name1 = "";
@@ -243,11 +242,15 @@ public class ClientChat extends JPanel implements Runnable {
 								i++;
 							}
 							nameOfClientsOnline.add(name1);
+							if(nameOfClientsOnline.get(0).equals(clientName)){
+								dout.writeUTF("#difficult# "+updateDifficultRealTime);
+								dout.writeUTF("#stage# "+String.valueOf(getUpdateStageRealTime()));
+							}
 //							to.append(name1 + "\n");
 						}
 					}
 				}
-				notShowInChat=true;
+				showInChat=true;
 			}
 
 		} catch (IOException ie) {

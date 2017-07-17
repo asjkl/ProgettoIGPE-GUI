@@ -35,7 +35,7 @@ public class SlideContainer extends JLayeredPane {
 			oldComponent = components[0];
 		} 
 		else 
-			if(oldComponent == component) {
+			if(oldComponent == component && component != null) {
 				return super.add(component);
 		} 
 		else 
