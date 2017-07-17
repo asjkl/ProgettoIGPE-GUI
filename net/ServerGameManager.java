@@ -132,6 +132,7 @@ public class ServerGameManager {
 			public void run() {
 				gamePanel.gameLoop();
 				System.out.println("CHIUSO_SERVERGAME");
+				dispatch("CLOSE");
 				try {
 					server.close();
 				} catch (IOException e) {

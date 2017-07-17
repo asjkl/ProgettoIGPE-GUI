@@ -51,13 +51,12 @@ public class ClientManager implements Runnable {
 	public void run() {
 		try {
 			server.setReady(this);
-			final boolean running = true;
-			while (running) {
-				String string = reader.readLine();
-				if(string!=null){
-					server.received(string);
-				}
+			String string = reader.readLine();
+			while (string!=null) {
+				server.received(string);
+			string = reader.readLine();
 			}
+			socket.close();
 		} catch (final IOException e) {
 			server.disconnetctedClient(name);
 		}

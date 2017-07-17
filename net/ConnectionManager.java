@@ -88,13 +88,7 @@ public class ConnectionManager implements Runnable {
 			final GameManager gameManager = mainFrame.showNetwork(this, map, difficult);
 			buffer = br.readLine();
 			while (buffer != null) {
-
-				gameManager.parseStatusFromString(buffer);
-				playSounds(gameManager);
-				mainFrame.getGamePanel().repaint();
-				mainFrame.getFullGamePanel().repaint();
-
-				if (gameManager.isExit() || ((gameManager.getPlayersArray().get(0).toString().equals(nameOfGame)
+				if (buffer.contains("CLOSE") || gameManager.isExit() || ((gameManager.getPlayersArray().get(0).toString().equals(nameOfGame)
 						&& gameManager.getPlayersArray().get(0).isExitOnline())
 						|| (gameManager.getPlayersArray().get(1).toString().equals(nameOfGame)
 								&& gameManager.getPlayersArray().get(1).isExitOnline()))) {
@@ -130,9 +124,15 @@ public class ConnectionManager implements Runnable {
 					mainFrame.showLobby(false);
 					close();
 				} else {
+					gameManager.parseStatusFromString(buffer);
+					playSounds(gameManager);
+					mainFrame.getGamePanel().repaint();
+					mainFrame.getFullGamePanel().repaint();
+					
 					buffer = br.readLine();
 				}
 			}
+			System.out.println("EXIT------> CONNECTIONMANAGER CLOSE");
 		} catch (final IOException e) {
 			System.out.println("Connessione chiusa");
 		}
