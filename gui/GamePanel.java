@@ -1762,10 +1762,17 @@ public class GamePanel extends JPanel {
 					g.setFont(MainFrame.customFontS);
 					
 					int size = game.getPlayersArray().get(a).getNameOfPlayerTank().length();
-				
+					
+					if(size <= 3)
+						size = size * 3;
+					else if(size < 9)
+						size = size * 4;
+					else
+						size = size * 5;
+					
 					g.drawString(game.getPlayersArray().get(a).getNameOfPlayerTank(),
-							(int) game.getPlayersArray().get(a).getyGraphics() + size,
-							(int) game.getPlayersArray().get(a).getxGraphics() - 25);
+							(int) game.getPlayersArray().get(a).getyGraphics() + 15 - size,
+							(int) game.getPlayersArray().get(a).getxGraphics() - 15);
 				} 
 			}
 		}
