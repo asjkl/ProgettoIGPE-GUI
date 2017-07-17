@@ -126,8 +126,10 @@ public class ServerGameManager {
 				dispatch(statusToString);
 			}
 		}, name, map);
+		
 		gamePanel=new GamePanel(null, difficult);
 		gamePanel.setGame(gameManager);
+		
 		new Thread() {
 			@Override
 			public void run() {

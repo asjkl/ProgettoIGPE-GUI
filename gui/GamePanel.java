@@ -67,7 +67,6 @@ public class GamePanel extends JPanel {
 	private int cursorPositionDialog;
 	private FullGamePanel fullGamePanel;
 	private ConnectionManager connectionManager;
-	private ArrayList<JLabel> labelForNameOfPlayers;
 	private ArrayList<Color> labelForNameOfPlayersColor;
 
 	// online
@@ -81,12 +80,8 @@ public class GamePanel extends JPanel {
 		this.shift = 17;
 		this.difficult = difficult;
 		this.setSwitcher(switcher);
-		this.labelForNameOfPlayers = new ArrayList<>();
 		this.labelForNameOfPlayersColor = new ArrayList<>();
 		for (int a = 0; a < 2; a++) {
-			JLabel l = new JLabel();
-			add(l);
-			labelForNameOfPlayers.add(l);
 			labelForNameOfPlayersColor.add(chooseColorOfLabel());
 		}
 
@@ -1761,16 +1756,17 @@ public class GamePanel extends JPanel {
 				}
 			}
 
-			if (!GameManager.offline) {
+			if (!GameManager.offline && game.getPlayersArray().get(a).getNameOfPlayerTank() != null) {
 				if (!game.getPlayersArray().get(a).isDied()) {
-					labelForNameOfPlayers.get(a).setText(game.getPlayersArray().get(a).getNameOfPlayerTank());
-					labelForNameOfPlayers.get(a).setForeground(labelForNameOfPlayersColor.get(a));
-					labelForNameOfPlayers.get(a).setBounds((int) game.getPlayersArray().get(a).getyGraphics(),
-							(int) game.getPlayersArray().get(a).getxGraphics() - 25, 70, 30);
-					labelForNameOfPlayers.get(a).setFont(MainFrame.customFontS);
-				} else {
-					labelForNameOfPlayers.get(a).setText("");
-				}
+					g.setColor(labelForNameOfPlayersColor.get(a));
+					g.setFont(MainFrame.customFontS);
+					
+					int size = game.getPlayersArray().get(a).getNameOfPlayerTank().length();
+				
+					g.drawString(game.getPlayersArray().get(a).getNameOfPlayerTank(),
+							(int) game.getPlayersArray().get(a).getyGraphics() + size,
+							(int) game.getPlayersArray().get(a).getxGraphics() - 25);
+				} 
 			}
 		}
 
