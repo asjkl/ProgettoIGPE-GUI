@@ -19,6 +19,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -26,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.MouseInputAdapter;
+
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.AbstractDynamicObject;
 import progettoIGPE.davide.giovanni.unical2016.AbstractStaticObject;
@@ -1887,9 +1892,9 @@ public class GamePanel extends JPanel {
 	}
 
 	private void paused(Graphics g, Graphics2D g2d) {
-		if ((GameManager.offline && game.paused && (System.currentTimeMillis() / 400) % 2 == 0)||
-		 !GameManager.offline && game.paused) {
-			g2d.drawImage(ImageProvider.getPause(), this.getWidth() / 2 - (70 + shift), getHeight() / 2 - (45 + shift) ,null);
+		if (game.paused && (System.currentTimeMillis() / 400) % 2 == 0) {
+			g2d.drawImage(ImageProvider.getPause(), this.getWidth() / 2 - (70 + shift), getHeight() / 2 - (45 + shift),
+					null);
 		}
 	}
 

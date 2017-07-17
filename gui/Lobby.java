@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import net.ClientChat;
 import net.Server;
 
@@ -34,6 +37,7 @@ public class Lobby extends JPanel {
 	private int cursorPosition = 0;
 	private JButton arrowLeft, arrowRight;
 	private final ArrayList<JButton> buttons;
+//	private int stageShifter = 1;
 	private ArrayList<JRadioButton> level;
 	private ArrayList<JLabel> labels;
 	private ButtonGroup group;
@@ -52,7 +56,6 @@ public class Lobby extends JPanel {
 		height = h;
 		difficult = "easy";
 		stage = "stage1";
-		
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
@@ -110,17 +113,17 @@ public class Lobby extends JPanel {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				
 				SoundsProvider.playOnlineStart();
-			
 			}
 			
 			if (countDown < 0) {
-				SoundsProvider.playOnlineEnd();
 				try {
 					client.dout.writeUTF(String.valueOf(client.getPoints() + "StartGame"));	 // <- "..............5"
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				SoundsProvider.playOnlineEnd();
 				this.cancel();
 			}
 			
@@ -290,6 +293,8 @@ public class Lobby extends JPanel {
 		client.setSize(new Dimension(800, 190));
 		chatPanel.add(client);
 		add(chatPanel);
+		
+		
 		
 		// solo moderatore avvia timer che manda messaggi
 		if(client.getClientName().equals(client.getNameOfClientsOnline().get(0))){
@@ -512,7 +517,6 @@ public class Lobby extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
 
-					if(!client.isReadyP1() || !client.isReadyP2()) {
 					// se sono P1
 					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 						if (client.isReadyP2()) {
@@ -557,7 +561,6 @@ public class Lobby extends JPanel {
 						}
 					}
 
-				}
 				}
 			});
 			break;
@@ -648,20 +651,5 @@ public class Lobby extends JPanel {
 	public ClientChat getClient() {
 		return client;
 	}
-	
-	public String getDifficult() {
-		return difficult;
-	}
 
-	public void setDifficult(String difficult) {
-		this.difficult = difficult;
-	}
-
-	public String getStage() {
-		return stage;
-	}
-
-	public void setStage(String stage) {
-		this.stage = stage;
-	}
 }
