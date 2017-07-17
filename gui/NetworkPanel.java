@@ -214,7 +214,7 @@ public class NetworkPanel extends JPanel {
 						
 					} else if(nameTextField.getText().length()> lengthMaxName){ 
 						((MainFrame)getSwitcher()).setTransparent(true);
-						warning = new WarningDialog("Insert name min "+lengthMaxName+" !!", ((MainFrame) getSwitcher()));						
+						warning = new WarningDialog("Insert a maximum of "+lengthMaxName+" characters!", ((MainFrame) getSwitcher()));						
 					}else {
 						buttons.get(1).setEnabled(false);
 		
@@ -224,9 +224,18 @@ public class NetworkPanel extends JPanel {
 						client=new ClientChat(nameTextField.getText(), ipTextField.getText(), portChat, ((MainFrame)getSwitcher()));
 
 						nameTextField.setText("");
-						if(client.getSocket().isConnected())
-							getSwitcher().showLobby(false);
+					
+						//importanete
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}
 						
+						if(client.getSocket().isConnected() && !client.isExitThrad())
+							getSwitcher().showLobby(false);
+						else
+							((MainFrame)getSwitcher()).setTransparent(true);
 					}
 				}
 			});
@@ -235,50 +244,6 @@ public class NetworkPanel extends JPanel {
 			break;
 		}
 	}
-
-//	private void showDialog() {
-//
-//		JLabel label = new JLabel("Impossible to connect to " + ipTextField.getText() + ":" + portTextField.getText());
-//
-//		label.setFont(MainFrame.customFontS);
-//		label.setBackground(Color.BLACK);
-//		label.setForeground(Color.RED);
-//		label.setHorizontalAlignment(JLabel.CENTER);
-//
-//		JPanel panel = new JPanel(new GridLayout(2, 0));
-//
-//		panel.setBackground(Color.BLACK);
-//		panel.setBorder(BorderFactory.createLineBorder(Color.RED));
-//
-//		JButton ok = new JButton("OK");
-//
-//		ok.setBorder(null);
-//		ok.setContentAreaFilled(false);
-//		ok.setBorderPainted(false);
-//		ok.setFocusPainted(false);
-//		ok.setFont(MainFrame.customFontS);
-//		ok.setBackground(Color.BLACK);
-//		ok.setForeground(Color.WHITE);
-//		ok.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//
-//				SoundsProvider.playBulletHit1();
-//				dialog.dispose();
-//			}
-//		});
-//
-//		panel.add(label);
-//		panel.add(ok);
-//		panel.setPreferredSize(new Dimension(300, 100));
-//		dialog.setContentPane(panel);
-//		dialog.setUndecorated(true);
-//		dialog.setModal(true);
-//		dialog.pack();
-//		dialog.setLocationRelativeTo(this);
-//		dialog.setVisible(true);
-//	}
 
 	public void setBoundAndText(int j) {
 
@@ -343,6 +308,7 @@ public class NetworkPanel extends JPanel {
 	public void setSwitcher(PanelSwitcher switcher) {
 		this.switcher = switcher;
 	}
+
 	public JTextField getIpTextField() {
 		return ipTextField;
 	}

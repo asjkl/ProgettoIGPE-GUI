@@ -40,6 +40,8 @@ public class ClientChat extends JPanel implements Runnable {
 	private boolean readyP2 = false;
 	private MainFrame mainFrame;
 	private boolean exitThrad=false;
+
+
 	private boolean notShowInChat = true;
 	private String points = "........................................";
 	private int updateStageRealTime = 1; //stage 1 di default
@@ -171,8 +173,9 @@ public class ClientChat extends JPanel implements Runnable {
 			
 				if(elements[0].equals("ERRORNAME")){
 					exitThrad=true;
-					new WarningDialog(clientName+" is present in this Lobby", mainFrame);
+					new WarningDialog(clientName+" is already present in the Lobby. Try again!", mainFrame);
 					mainFrame.showNetwork();
+				
 				}
 				
 				if (elements.length == 1 && elements[0].equals(points+"StartGame") && readyP1 && readyP2) { // entrambi si connettono
@@ -297,7 +300,6 @@ public class ClientChat extends JPanel implements Runnable {
 		dialog.setVisible(true);
 	}	
 
-
 	protected void connectoToServer() throws Exception {
 		Socket socket = new Socket(host, port);
 		ConnectionManager connectionManager = null;
@@ -349,20 +351,18 @@ public class ClientChat extends JPanel implements Runnable {
 	public void setPortChat(int portChat) {
 		this.portChat = portChat;
 	}
+
 	public String getPoints() {
 		return points;
 	}
-
 
 	public void setPoints(String points) {
 		this.points = points;
 	}
 
-
 	public int getUpdateStageRealTime() {
 		return updateStageRealTime;
 	}
-
 
 	public void setUpdateStageRealTime(int updateStageRealTime) {
 		this.updateStageRealTime = updateStageRealTime;
@@ -372,7 +372,6 @@ public class ClientChat extends JPanel implements Runnable {
 		return updateDifficultRealTime;
 	}
 
-
 	public void setUpdateDifficultRealTime(String updateDifficultRealTime) {
 		this.updateDifficultRealTime = updateDifficultRealTime;
 	}
@@ -381,20 +380,15 @@ public class ClientChat extends JPanel implements Runnable {
 		return socket;
 	}
 
-
 	public void setSocket(Socket socket) {
 		this.socket = socket;
 	}
+	public boolean isExitThrad() {
+		return exitThrad;
+	}
 
 
-	// public static void main(String args[])
-	// {
-	// String ip = "127.0.0.1";
-	// int port = 1234;
-	//
-	// Client obj = new Client(ip,port);
-	// obj.setSize(new Dimension(500,500));
-	// obj.setVisible(true);
-	// obj.setTitle("Chatting Client");
-	// }
+	public void setExitThrad(boolean exitThrad) {
+		this.exitThrad = exitThrad;
+	}
 }
