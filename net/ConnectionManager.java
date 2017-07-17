@@ -135,6 +135,13 @@ public class ConnectionManager implements Runnable {
 			System.out.println("EXIT------> CONNECTIONMANAGER CLOSE");
 		} catch (final IOException e) {
 			System.out.println("Connessione chiusa");
+			mainFrame.showNetwork();
+			try {
+				socket.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
 		}
 	}
 
