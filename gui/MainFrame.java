@@ -263,7 +263,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	@Override
-	public void showSlide(JTextField filename) {
+	public void showSlideStage(JTextField filename) {
 		slideStage = new SlideStage(WIDTH, HEIGHT, this, filename);
 		switchTo(slideStage);
 	}

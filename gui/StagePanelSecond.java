@@ -168,7 +168,7 @@ public class StagePanelSecond extends JPanel {
 	                    
 	                    JTextField directory=new JTextField();
 	                    directory.setText(fileChooser.getCurrentDirectory().toString());
-	                    getSwitcher().showSlide(fileNameMap);
+	                    getSwitcher().showSlideStage(fileNameMap);
 	                    cursorPosition = 0;
 					}
 				}

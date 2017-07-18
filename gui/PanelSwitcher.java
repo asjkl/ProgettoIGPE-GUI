@@ -23,7 +23,7 @@ public interface PanelSwitcher {
 	
 	void showLobby(boolean gamePanelExit);
 
-	void showSlide(JTextField f);
+	void showSlideStage(JTextField f);
 
 }
 

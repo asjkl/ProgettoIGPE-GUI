@@ -165,10 +165,19 @@ public class ConnectionManager implements Runnable {
 				SoundsProvider.playBulletShot();
 			}
 
-			if (!game.getPlayersArray().get(a).isPressed())
-				SoundsProvider.playStop();
-			else
-				SoundsProvider.playMove();
+			if(!game.getPlayersArray().get(0).isDied() && !game.getPlayersArray().get(1).isDied()) {
+				
+				if (!game.getPlayersArray().get(0).isPressed())
+					SoundsProvider.playStop();
+				else
+					SoundsProvider.playMove();
+			}
+			else if(!game.getPlayersArray().get(a).isDied()) {
+				if (!game.getPlayersArray().get(a).isPressed())
+					SoundsProvider.playStop();
+				else
+					SoundsProvider.playMove();
+			}
 		}
 
 		// rockets

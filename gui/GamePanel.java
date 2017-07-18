@@ -653,7 +653,7 @@ public class GamePanel extends JPanel {
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.setExit(true);
 						dialog.dispose();
-						getSwitcher().showSlide(game.getFilename());
+						getSwitcher().showSlideStage(game.getFilename());
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
 						game.getTimer().cancel();
@@ -1054,20 +1054,32 @@ public class GamePanel extends JPanel {
 					game.getPlayersArray().get(a).setShot(false);
 				}
 
-				if (GameManager.offline)
+				if (GameManager.offline) {
 					// SINGLEPLAYER OFFLINE
-					// TODO
-					if (game.getPlayersArray().size() == 1 && a == 0) {
-						if (!game.getPlayersArray().get(a).isPressed())
+					
+					if (GameManager.singlePlayer && a == 0) {
+						if (!game.getPlayersArray().get(0).isPressed())
 							SoundsProvider.playStop();
 						else
 							SoundsProvider.playMove();
-					} else {// MULTIPLAYER OFFLINE
-						if (!game.getPlayersArray().get(a).isPressed())
-							SoundsProvider.playStop();
-						else
-							SoundsProvider.playMove();
+					} else if( !GameManager.singlePlayer){
+						// MULTIPLAYER OFFLINE
+						
+						if(!game.getPlayersArray().get(0).isDied() && !game.getPlayersArray().get(1).isDied()) {
+						
+							if (!game.getPlayersArray().get(0).isPressed())
+								SoundsProvider.playStop();
+							else
+								SoundsProvider.playMove();
+						}
+						else if(!game.getPlayersArray().get(a).isDied()) {
+							if (!game.getPlayersArray().get(a).isPressed())
+								SoundsProvider.playStop();
+							else
+								SoundsProvider.playMove();
+						}
 					}
+				}
 			}
 		}
 
