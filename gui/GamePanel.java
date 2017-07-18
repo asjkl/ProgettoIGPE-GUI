@@ -349,38 +349,35 @@ public class GamePanel extends JPanel {
 
 			// ANIMATION ROCKET
 			for (int a = 0; a < game.getRocket().size(); a++) {
-				Rocket rocket = game.getRocket().get(a);
-				game.getRocket().get(a).updateRect();
-				if (game.collision(rocket)) {
-					game.destroyRocket(rocket);
-				} else {
+//				Rocket rocket = game.getRocket().get(a);
+				
+				if (game.collision(game.getRocket().get(a))) {
+					game.destroyRocket(game.getRocket().get(a));
+				} 
+				else {
 					if (!game.getRocket().get(a).isUpdateObject() && game.getRocket().get(a).isRocketForPlayer()) {
-
-						game.getRocket().get(a)
-								.setCont(contFPS(game.getRocket().get(a), game.getRocket().get(a).getDirection(),
-										game.getRocket().get(a).getCont(),
-										game.returnSpeed(game.getRocket().get(a).getTank().getSpeedShot(),
-												game.getRocket().get(a)),
-										end));
+						
+						game.getRocket().get(a).setCont(contFPS(game.getRocket().get(a), 
+								game.getRocket().get(a).getDirection(),game.getRocket().get(a).getCont(),
+								game.returnSpeed(game.getRocket().get(a).getTank().getSpeedShot(),
+								game.getRocket().get(a)),end));
 					}
-					// if (game.getRocket().get(a).getCont() >= tile &&
-					// game.getRocket().get(a).isFirstAnimationNo()) {
-					// game.getRocket().get(a).setFirstAnimationNo(false);
-					// }
-
+			
+					game.getRocket().get(a).updateRect();
+					
 					if (!game.getRocket().get(a).getRect().intersects(game.getRocket().get(a).getTank().getRect())) {
 						game.getRocket().get(a).setFirstAnimationNo(false);
 					}
 
 					if (game.getRocket().get(a).getCont() >= tile) {
 
-						// prima di creare il secondo rocket al livello > 1 devo
+						// prima di creare il secondo rocket devo
 						// aver finito l animazione del primo
 						if (game.getRocket().get(a).getTank() instanceof PlayerTank
 								&& ((PlayerTank) game.getRocket().get(a).getTank()).isEnter()
-								&& ((PlayerTank) game.getRocket().get(a).getTank()).getLevel() >= 1)
-							((PlayerTank) game.getRocket().get(a).getTank()).setFinish(true);
-
+								&& ((PlayerTank) game.getRocket().get(a).getTank()).getLevel() >= 1) {
+						((PlayerTank) game.getRocket().get(a).getTank()).setFinish(true);
+						}
 						game.getRocket().get(a).FPS();
 						if (!game.getRocket().get(a).isOnBorder())
 							game.getRocket().get(a).setUpdateObject(true);
@@ -434,8 +431,7 @@ public class GamePanel extends JPanel {
 								.setCont(contFPS(game.getPlayersArray().get(a), game.getPlayersArray().get(a).getOldD(),
 										game.getPlayersArray().get(a).getCont(),
 										game.returnSpeed(game.getPlayersArray().get(a).getSpeed(),
-												game.getPlayersArray().get(a)),
-										end));
+										game.getPlayersArray().get(a)),end));
 					}
 				}
 
@@ -1151,10 +1147,6 @@ public class GamePanel extends JPanel {
 
 				game.getEnemy().get(a).setTmpDirection(game.getEnemy().get(a).getDirection());
 
-				if (game.isShotEnabled() && game.getEnemy().get(a).getShotTimeEverySecond() == 1) {
-					game.createRocketTank(game.getEnemy().get(a).getDirection(), game.getEnemy().get(a));
-					game.getEnemy().get(a).setShotTimeEverySecond(0);
-				}
 			}
 		}
 		for (int a = 0; a < game.getEnemy().size(); a++) {
@@ -1166,6 +1158,11 @@ public class GamePanel extends JPanel {
 					powerUpPickUp(game.getEnemy().get(a), ((PowerUp) game.getEnemy().get(a).getNext()));
 				}
 				game.getEnemy().get(a).update();
+				
+				if (game.isShotEnabled() && game.getEnemy().get(a).getShotTimeEverySecond() == 1) {
+					game.createRocketTank(game.getEnemy().get(a).getDirection(), game.getEnemy().get(a));
+					game.getEnemy().get(a).setShotTimeEverySecond(0);
+				}
 
 				game.getMatrix().getWorld()[game.getEnemy().get(a).getX()][game.getEnemy().get(a).getY()] = game.getEnemy()
 						.get(a);
@@ -1469,6 +1466,13 @@ public class GamePanel extends JPanel {
 					rotation(game.getRocket().get(i), game.getRocket().get(i).getDirection());
 					at.rotate(Math.toRadians(game.getRocket().get(i).getRotateDegrees()), tile / 2, tile / 2);
 					g2d.drawImage(ImageProvider.getRocket(), at, null);
+			
+//					 g.drawRect((int)game.getRocket().get(i).getRect().getY(),(int)
+//					 game.getRocket().get(i).getRect().getX(),
+//					 (int)game.getRocket().get(i).getRect().getWidth(),
+//					 (int)game.getRocket().get(i).getRect().getHeight());
+					
+					
 				}
 
 				// DA SEMPRE PROBLEMI DI ECCEZZIONI
