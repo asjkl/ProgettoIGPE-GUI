@@ -299,6 +299,8 @@ public class GamePanel extends JPanel {
 					SoundsProvider.cancelMove();
 					SoundsProvider.cancelStop();
 				}
+				if(!GameManager.offline)
+					game.getRunnable().run();
 			}
 
 			if (GameManager.offline) { // IL SERVER NON LO DEVE DISEGNARE
