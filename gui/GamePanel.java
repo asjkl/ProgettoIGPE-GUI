@@ -349,10 +349,10 @@ public class GamePanel extends JPanel {
 
 			// ANIMATION ROCKET
 			for (int a = 0; a < game.getRocket().size(); a++) {
-//				Rocket rocket = game.getRocket().get(a);
+				Rocket rocket = game.getRocket().get(a);
 				
-				if (game.collision(game.getRocket().get(a))) {
-					game.destroyRocket(game.getRocket().get(a));
+				if (game.collision(rocket)) {
+					game.destroyRocket(rocket);
 				} 
 				else {
 					if (!game.getRocket().get(a).isUpdateObject() && game.getRocket().get(a).isRocketForPlayer()) {
