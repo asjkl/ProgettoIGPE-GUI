@@ -213,7 +213,7 @@ public class NetworkPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-					SoundsProvider.playBulletHit1();
+					SoundsProvider.playBulletHit1();	
 					if (nameTextField.getText().equals(defaultName)) {
 						((MainFrame)getSwitcher()).setTransparent(true);
 						setWarning(new WarningDialog("Insert name!!", ((MainFrame) getSwitcher())));
@@ -221,6 +221,9 @@ public class NetworkPanel extends JPanel {
 					} else if(nameTextField.getText().length()> lengthMaxName){ 
 						((MainFrame)getSwitcher()).setTransparent(true);
 						setWarning(new WarningDialog("Insert a maximum of "+lengthMaxName+" characters!", ((MainFrame) getSwitcher())));						
+					}else if(nameTextField.getText().contains(" ") && !nameTextField.getText().endsWith(" ")){
+						((MainFrame)getSwitcher()).setTransparent(true);
+						setWarning(new WarningDialog("Space isn't supported", ((MainFrame) getSwitcher())));	
 					}else {
 						buttons.get(1).setEnabled(false);
 		
