@@ -980,10 +980,11 @@ public class GamePanel extends JPanel {
 
 				e.printStackTrace();
 			}
-
+			dialog.dispose();
 			new TranslucentWindow(getSwitcher(), game.getFilename(), ImageProvider.getGameOver());
 			game.getTimer().cancel();
 			game.getTimer2().cancel();
+			
 		}
 
 	}
@@ -1015,12 +1016,13 @@ public class GamePanel extends JPanel {
 
 				e.printStackTrace();
 			}
-
+			dialog.dispose();
 			SoundsProvider.playStageComplete();
 			new TranslucentWindow(getSwitcher(), game.getFilename(), ImageProvider.getStageComplete());
 
 			game.getTimer().cancel();
 			game.getTimer2().cancel();
+			
 		}
 
 	}
