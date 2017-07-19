@@ -287,7 +287,7 @@ public class GamePanel extends JPanel {
 				graphic();
 				if(!GameManager.offline)
 					game.getRunnable().run();
-
+				
 				if(GameManager.offline){
 					longTime = (System.nanoTime() - start);
 					end = (double) (longTime.doubleValue() / 1000000);
@@ -326,6 +326,9 @@ public class GamePanel extends JPanel {
 
 	public void logic() {
 
+		//RESET DELLE BOOLEANE PER IL SUONO
+		resetBooleanForSounds();
+		
 		// MANAGE KEYS
 		keyPresses();
 
@@ -1030,11 +1033,9 @@ public class GamePanel extends JPanel {
 	}
 
 	private void sounds() {
-
 		if (game.isSoundPowerUp()) {
 			if (GameManager.offline)
 				SoundsProvider.playPowerUpAppear();
-			game.setSoundPowerUp(false);
 		}
 
 		if (game.isExplosion()) {
@@ -1042,7 +1043,6 @@ public class GamePanel extends JPanel {
 				SoundsProvider.playExplosion1();
 				SoundsProvider.playExplosion2();
 			}
-			game.setExplosion(false);
 		}
 
 		// players
@@ -1053,7 +1053,6 @@ public class GamePanel extends JPanel {
 					if (GameManager.offline) {
 						SoundsProvider.playBulletShot();
 					}
-					game.getPlayersArray().get(a).setShot(false);
 				}
 
 				if (GameManager.offline) {
@@ -1084,21 +1083,16 @@ public class GamePanel extends JPanel {
 				}
 			}
 		}
-
-		// rockets
-		for (int a = 0; a < game.getRocket().size(); a++) {
-
-			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
-				if (game.getRocket().get(a).getNext() instanceof BrickWall)
-					SoundsProvider.playBulletHit2();
-				else if (game.getRocket().get(a).getNext() instanceof SteelWall
-						|| game.getRocket().get(a).isOnBorder()) {
-					SoundsProvider.playBulletHit1();
-				}
-			}
-		}
 	}
 
+	private void resetBooleanForSounds() {
+		game.setSoundPowerUp(false);
+		game.setExplosion(false);
+		for(int a=0; a<game.getPlayersArray().size(); a++){
+			game.getPlayersArray().get(a).setShot(false);
+		}
+	}
+	
 	private void players() {
 
 		// LOGIC
@@ -1210,12 +1204,15 @@ public class GamePanel extends JPanel {
 				if (game.getRocket().get(a).isUpdateObject()) {
 
 					game.updateRocket(game.getRocket().get(a));
-					if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
-						if (game.getRocket().get(a).getNext() instanceof BrickWall)
-							SoundsProvider.playBulletHit2();
-						else if (game.getRocket().get(a).getNext() instanceof SteelWall
-								|| game.getRocket().get(a).isOnBorder()) {
-							SoundsProvider.playBulletHit1();
+					
+					if(GameManager.offline) {
+						if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
+							if (game.getRocket().get(a).getNext() instanceof BrickWall)
+								SoundsProvider.playBulletHit2();
+							else if (game.getRocket().get(a).getNext() instanceof SteelWall
+									|| game.getRocket().get(a).isOnBorder()) {
+								SoundsProvider.playBulletHit1();
+							}
 						}
 					}
 				}

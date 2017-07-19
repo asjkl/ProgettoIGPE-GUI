@@ -146,9 +146,6 @@ public class ConnectionManager implements Runnable {
 	}
 
 	private void playSounds(GameManager game) {
-		if(!game.getPlayersArray().get(0).canGo){
-			SoundsProvider.playHitForCanGo();
-		}
 		
 		if (game.isSoundPowerUp()) {
 			SoundsProvider.playPowerUpAppear();
@@ -161,30 +158,38 @@ public class ConnectionManager implements Runnable {
 
 		// players
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if (game.getPlayersArray().get(a).isShot()) {
-				SoundsProvider.playBulletShot();
-			}
-
-			if(!game.getPlayersArray().get(0).isDied() && !game.getPlayersArray().get(1).isDied()) {
+			if(nameOfGame.equals(game.getPlayersArray().get(a).toString())){
+				if (game.getPlayersArray().get(a).isShot()) {
+					SoundsProvider.playBulletShot();
+				}
 				
-				if (!game.getPlayersArray().get(0).isPressed())
-					SoundsProvider.playStop();
-				else
-					SoundsProvider.playMove();
-			}
-			else if(!game.getPlayersArray().get(a).isDied()) {
-				if (!game.getPlayersArray().get(a).isPressed())
-					SoundsProvider.playStop();
-				else
-					SoundsProvider.playMove();
+				//TODO DA GUARDARE QUESTO CANGO PER IL SUONO!!!
+//				if(!game.getPlayersArray().get(a).canGo){
+//					SoundsProvider.playHitForCanGo();
+//				}
+	
+				if(!game.getPlayersArray().get(a).isDied()) {
+					
+					if (!game.getPlayersArray().get(0).isPressed())
+						SoundsProvider.playStop();
+					else
+						SoundsProvider.playMove();
+				}
+				else if(!game.getPlayersArray().get(a).isDied()) {
+					if (!game.getPlayersArray().get(a).isPressed())
+						SoundsProvider.playStop();
+					else
+						SoundsProvider.playMove();
+				}
 			}
 		}
 
 		// rockets
 		for (int a = 0; a < game.getRocket().size(); a++) {
 			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
-				if (game.getRocket().get(a).getNext() instanceof BrickWall)
+				if (game.getRocket().get(a).getNext() instanceof BrickWall){
 					SoundsProvider.playBulletHit2();
+				}
 				else if (game.getRocket().get(a).getNext() instanceof SteelWall
 						|| game.getRocket().get(a).isOnBorder()) {
 					SoundsProvider.playBulletHit1();

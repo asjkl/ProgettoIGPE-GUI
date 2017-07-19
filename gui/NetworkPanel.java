@@ -44,6 +44,7 @@ public class NetworkPanel extends JPanel {
 	private ClientChat client;
 	private Server serverChat;
 	private int lengthMaxName;
+	private boolean hide;
 	
 	public NetworkPanel(int w, int h, PanelSwitcher switcher) {
 
@@ -52,11 +53,11 @@ public class NetworkPanel extends JPanel {
 		this.setSwitcher(switcher);
 		this.setLayout(null);
 		lengthMaxName=10;
-		DIM = 2;
+		DIM = 5;
 		dialog = new JDialog(dialog, "ERROR");
-		cursorPosition = 1;
+		cursorPosition = 4;
 		buttons = new ArrayList<>();
-	
+		hide = false;
 		createLabels();
 		createButtons();
 	}
@@ -76,6 +77,25 @@ public class NetworkPanel extends JPanel {
 		ipTextField.setForeground(Color.WHITE);
 		ipTextField.setFont(MainFrame.customFontM);
 		ipTextField.setBounds(640, 320, 200, 40);
+		ipTextField.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					SoundsProvider.playBulletHit1();
+					
+					if(ipTextField.isRequestFocusEnabled()) {
+						hide = false;
+						buttons.get(1).requestFocus();
+					}
+					else {
+						hide=true;
+						ipTextField.requestFocus();
+					}
+				}
+			}
+		});
 		this.add(ipTextField);
 
 		// ----
@@ -92,6 +112,25 @@ public class NetworkPanel extends JPanel {
 		portTextField.setForeground(Color.WHITE);
 		portTextField.setFont(MainFrame.customFontM);
 		portTextField.setBounds(640, 380, 200, 40);
+		portTextField.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					SoundsProvider.playBulletHit1();
+					
+					if(portTextField.isRequestFocusEnabled()) {
+						hide = false;
+						buttons.get(2).requestFocus();
+					}
+					else {
+						hide=true;
+						portTextField.requestFocus();
+					}
+				}
+			}
+		});
 		this.add(portTextField);
 
 		// -----
@@ -108,6 +147,26 @@ public class NetworkPanel extends JPanel {
 		nameTextField.setForeground(Color.WHITE);
 		nameTextField.setFont(MainFrame.customFontM);
 		nameTextField.setBounds(640, 440, 200, 40);
+		nameTextField.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					SoundsProvider.playBulletHit1();
+					
+					if(nameTextField.isRequestFocusEnabled()) {
+						hide = false;
+						buttons.get(3).requestFocus();
+					}
+					else {
+						hide=true;
+						nameTextField.requestFocus();
+					}
+				}
+			}
+		});
+		
 		this.add(nameTextField);
 	}
 
@@ -123,9 +182,11 @@ public class NetworkPanel extends JPanel {
 			buttons.get(i).setBorderPainted(false);
 			buttons.get(i).setFocusPainted(false);
 			buttons.get(i).setFont(MainFrame.customFontM);
-			buttons.get(i).setForeground(Color.WHITE);
-			buttons.get(i).setBackground(Color.BLACK);
-			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
+			if( i == 0 || i == 4) {
+				buttons.get(i).setForeground(Color.WHITE);
+				buttons.get(i).setBackground(Color.BLACK);
+				buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
+			}
 			setBoundAndText(i);
 			buttons.get(i).addMouseListener(new MouseInputAdapter() {
 				
@@ -147,7 +208,7 @@ public class NetworkPanel extends JPanel {
 
 					if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						SoundsProvider.playBulletHit1();
-						cursorPosition = 1;
+						cursorPosition = 4;
 						ipTextField.setText(defaultIp);
 						portTextField.setText(defaultPort);
 						nameTextField.setText(defaultName);
@@ -202,13 +263,46 @@ public class NetworkPanel extends JPanel {
 					ipTextField.setText(defaultIp);
 					portTextField.setText(defaultPort);
 					nameTextField.setText(defaultName);
-					cursorPosition = 1;
+					cursorPosition = 4;
 					getSwitcher().showMenu();
 
 				}
 			});
 			break;
-		case 1: // LOBBY
+		case 1:
+			buttons.get(j).addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					SoundsProvider.playBulletHit1();
+					ipTextField.requestFocus();
+					hide=true;
+				}
+			});
+			break;
+		case 2:
+			buttons.get(j).addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					SoundsProvider.playBulletHit1();
+					portTextField.requestFocus();
+					hide=true;
+				}
+			});
+			break;
+		case 3:
+			buttons.get(j).addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					SoundsProvider.playBulletHit1();
+					nameTextField.requestFocus();
+					hide=true;
+				}
+			});
+			break;
+		case 4: // LOBBY
 			buttons.get(j).addActionListener(new ActionListener() {
 
 				@Override
@@ -249,7 +343,16 @@ public class NetworkPanel extends JPanel {
 			buttons.get(j).setBounds(18, 12, 70, 35);
 			buttons.get(j).setText("Back");
 			break;
-		case 1:
+		case 1: // 1 2 3 sono bottoni nascosti mi servono per il cursore
+			buttons.get(j).setBounds(850, 325, 10, 10);
+			break;
+		case 2:
+			buttons.get(j).setBounds(850, 385, 10, 10);
+			break;
+		case 3:
+			buttons.get(j).setBounds(850, 445, 10, 10);
+			break;
+		case 4:
 			buttons.get(j).setBounds(600, 570, 150, 35);
 			buttons.get(j).setText("Lobby");
 			break;
@@ -278,12 +381,15 @@ public class NetworkPanel extends JPanel {
 		if (!((MainFrame) getSwitcher()).isTransparent())
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
-		if (cursorPosition == 0)
-			g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX() + 85,
-					buttons.get(cursorPosition).getY() - 6, this);
-		else
+		if (cursorPosition == 4)
 			g.drawImage(ImageProvider.getCursorRight(), buttons.get(cursorPosition).getX() - 60,
 					buttons.get(cursorPosition).getY() - 8, this);
+		else if (cursorPosition == 0)
+			g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX() + 85,
+					buttons.get(cursorPosition).getY() - 6, this);
+ 		else if(!hide)
+			g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX(),
+					buttons.get(cursorPosition).getY() - 4, this);
 	}
 
 	public int getCursorPosition() {
@@ -338,11 +444,9 @@ public class NetworkPanel extends JPanel {
 		this.portTextField = portTextField;
 	}
 
-
 	public WarningDialog getWarning() {
 		return warning;
 	}
-
 
 	public void setWarning(WarningDialog warning) {
 		this.warning = warning;
