@@ -44,6 +44,7 @@ public class ClientManager implements Runnable {
 			server.setReady(this);
 			String string = reader.readLine();
 			while (string!=null) {
+				string+=":"+System.currentTimeMillis();
 				server.received(string);
 			string = reader.readLine();
 			}

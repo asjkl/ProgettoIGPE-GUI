@@ -14,7 +14,6 @@ import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
 import progettoIGPE.davide.giovanni.unical2016.PowerUp;
 import progettoIGPE.davide.giovanni.unical2016.SteelWall;
-import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
 import progettoIGPE.davide.giovanni.unical2016.GUI.ImageProvider;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;

@@ -83,6 +83,7 @@ public class ServerGameManager {
 							gameManager.getPlayersArray().get(a).getKeyBits().clear(Integer.valueOf(split[1]));
 							gameManager.getPlayersArray().get(a).setReleaseKeyRocket(Boolean.parseBoolean(split[4]));
 						}
+						gameManager.getPlayersArray().get(a).setCurrentTimeMillis(Long.parseLong(split[7]));
 					}
 				}
 			}

@@ -158,6 +158,7 @@ public class ClientChat extends JPanel implements Runnable {
 						port = Integer.parseInt(elements[1]);
 						stage = elements[2];
 						difficult = elements[3];
+						showInChat=false;
 						
 					}
 
@@ -188,6 +189,16 @@ public class ClientChat extends JPanel implements Runnable {
 					}		
 
 				
+				}
+				
+				if(elements[0].equals("#PLAY#START")){
+					SoundsProvider.playOnlineStart();
+					showInChat=false;
+				}
+				
+				else if(elements[0].equals("#PLAY#END")){
+					SoundsProvider.playOnlineEnd();
+					showInChat=false;
 				}
 				
 				if(elements[0].equals("#stage#")) {

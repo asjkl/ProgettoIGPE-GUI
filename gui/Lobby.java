@@ -114,7 +114,12 @@ public class Lobby extends JPanel {
 					e.printStackTrace();
 				}
 				
-				SoundsProvider.playOnlineStart();
+				try {
+					client.getDout().writeUTF("#PLAY#START");	
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
 			}
 			
 			if (countDown < 0) {
@@ -123,10 +128,14 @@ public class Lobby extends JPanel {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				SoundsProvider.playOnlineEnd();
+				
+				try {
+					client.getDout().writeUTF("#PLAY#END");	
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				this.cancel();
 			}
-			
 		}
 	}
 	
