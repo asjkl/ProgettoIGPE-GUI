@@ -624,7 +624,6 @@ public class GamePanel extends JPanel {
 					}
 
 					else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
-						if(GameManager.offline)
 						SoundsProvider.playBulletHit1();
 						if (curRow < 1) {
 							buttons[buttons.length - 1].requestFocus();
@@ -636,7 +635,6 @@ public class GamePanel extends JPanel {
 
 						}
 					} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-						if(GameManager.offline)
 						SoundsProvider.playBulletHit1();
 						buttons[(curRow + 1) % buttons.length].requestFocus();
 						cursorPositionDialog = (curRow + 1) % buttons.length;
@@ -671,7 +669,6 @@ public class GamePanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(GameManager.offline)
 					SoundsProvider.playBulletHit1();
 					((MainFrame) getSwitcher()).setTransparent(false);
 					game.setPauseOptionDialog(false);
@@ -729,7 +726,6 @@ public class GamePanel extends JPanel {
 
 					if (!GameManager.offline) {
 						
-						if(GameManager.offline)
 						SoundsProvider.playBulletHit1();
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.setExit(true);
@@ -1149,6 +1145,11 @@ public class GamePanel extends JPanel {
 			game.setExplosion(false);
 			for(int a=0; a<game.getPlayersArray().size(); a++){
 				game.getPlayersArray().get(a).setShot(false);
+			}
+			
+			for(int a=0; a<game.getEffects().size(); a++){
+				if(game.getEffects().get(a) instanceof Rocket)
+				((Rocket)game.getEffects().get(a)).setOneTimeSound(false);
 			}
 		}
 	}

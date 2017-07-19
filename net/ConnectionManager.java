@@ -13,6 +13,7 @@ import progettoIGPE.davide.giovanni.unical2016.BrickWall;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
 import progettoIGPE.davide.giovanni.unical2016.PowerUp;
+import progettoIGPE.davide.giovanni.unical2016.Rocket;
 import progettoIGPE.davide.giovanni.unical2016.SteelWall;
 import progettoIGPE.davide.giovanni.unical2016.GUI.ImageProvider;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
@@ -140,6 +141,8 @@ public class ConnectionManager implements Runnable {
 			System.out.println("EXIT------> CONNECTIONMANAGER CLOSE");
 		} catch (final IOException e) {
 			System.out.println("Connessione chiusa");
+			SoundsProvider.cancelMove();
+			SoundsProvider.cancelStop();
 			mainFrame.showNetwork();
 			try {
 				socket.close();
@@ -153,7 +156,7 @@ public class ConnectionManager implements Runnable {
 	private void playSounds(GameManager game) {
 		
 		restoreBoolean(game);
-		
+	
 		if(game.isPaused() && !soundsPaused){
 			SoundsProvider.playPause();
 			soundsPaused=true;
@@ -197,15 +200,33 @@ public class ConnectionManager implements Runnable {
 		}
 
 		// rockets
-		for (int a = 0; a < game.getRocket().size(); a++) {
-			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
-				if (game.getRocket().get(a).getNext() instanceof BrickWall){
+//		for (int a = 0; a < game.getRocket().size(); a++) {
+//			if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
+//				if (game.getRocket().get(a).getNext() instanceof BrickWall){
+//					SoundsProvider.playBulletHit2();
+//				}
+//				else if (game.getRocket().get(a).getNext() instanceof SteelWall
+//						|| game.getRocket().get(a).isOnBorder()) {
+//					SoundsProvider.playBulletHit1();
+//				}
+//			}
+//		}
+		
+		for(int a=0;a<game.getEffects().size();a++) {
+			
+			if(game.getEffects().get(a) instanceof Rocket && 
+					((Rocket)game.getEffects().get(a)).getTank() instanceof PlayerTank &&
+					((Rocket)game.getEffects().get(a)).isOneTimeSound()) {
+				if (((Rocket)game.getEffects().get(a)).getNext() instanceof BrickWall) {
 					SoundsProvider.playBulletHit2();
+					
 				}
-				else if (game.getRocket().get(a).getNext() instanceof SteelWall
-						|| game.getRocket().get(a).isOnBorder()) {
+				else if (((Rocket)game.getEffects().get(a)).getNext() instanceof SteelWall
+						|| ((Rocket)game.getEffects().get(a)).isOnBorder()) {
 					SoundsProvider.playBulletHit1();
+					
 				}
+				((Rocket)game.getEffects().get(a)).setOneTimeSound(false);
 			}
 		}
 	}

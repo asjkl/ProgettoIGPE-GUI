@@ -9,7 +9,8 @@ import javax.sound.sampled.FloatControl;
 public class SoundsProvider {
 	
 	private static FloatControl gainControl;
-	private static FloatControl gainControlPlayer;
+	private static FloatControl gainControlLower;
+	private static FloatControl gainControlMedium;
 	private static AudioInputStream audio;
 	
 	private static File stageStart;
@@ -44,7 +45,7 @@ public class SoundsProvider {
 	private static Clip powerUpPickClip;
 	private static Clip bulletShotClip;
 	private static Clip gameOverClip;
-	public static Clip stageStartClip; //tmp
+	public static Clip stageStartClip; 
 	private static Clip tankHitClip;
 	private static Clip canGoClip;
 	private static Clip onlineStartClip;
@@ -161,8 +162,14 @@ public class SoundsProvider {
 	
 	public static void setGainLower(Clip clip) {
 		
-		gainControlPlayer = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControlPlayer.setValue(-(SettingsPanel.soundValue + 10));
+		gainControlLower = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControlLower.setValue(-(SettingsPanel.soundValue + 10));
+	}
+	
+	public static void setGainMedium(Clip clip) {
+		
+		gainControlMedium = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControlMedium.setValue(-(SettingsPanel.soundValue + 5));
 	}
 
 	public static void playStop() {
@@ -247,14 +254,14 @@ public class SoundsProvider {
 	public static void playBulletHit1() {
 		
 		bulletHit1Clip.setFramePosition(0);
-		setGain(bulletHit1Clip);
+		setGainMedium(bulletHit1Clip);
 		bulletHit1Clip.start();
 	}
 	
 	public static void playBulletHit2() {
 		
 		bulletHit2Clip.setFramePosition(0);
-		setGain(bulletHit2Clip);
+		setGainMedium(bulletHit2Clip);
 		bulletHit2Clip.start();
 	}
 	
