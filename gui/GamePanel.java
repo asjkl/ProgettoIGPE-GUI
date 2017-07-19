@@ -145,7 +145,9 @@ public class GamePanel extends JPanel {
 			public void run() {
 				boolean run=true;
 				while(run){
-					connectionManager.dispatch(getUpdateTime(System.currentTimeMillis()));
+					
+					if(connectionManager!=null)
+						connectionManager.dispatch(getUpdateTime(System.currentTimeMillis()));
 					if(game!=null && game.isExit()){
 						run=false;
 					}

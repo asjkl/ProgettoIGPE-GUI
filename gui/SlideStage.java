@@ -31,25 +31,30 @@ public class SlideStage extends JLayeredPane {
 	// ONLINE
 	public SlideStage(int w, int h, PanelSwitcher switcher, JTextField filename, ConnectionManager connectionManager,
 			String difficult) {
-		init(w, h, filename);
+		init(w, h, filename, switcher);
 
-		instantiateOnline(difficult, connectionManager, switcher);
+		instantiateOnline(difficult, connectionManager);
+		
+		add(panels.get(0), panels.get(1));
 	}
 
 	// OFFLINE
 	public SlideStage(final int w, final int h, PanelSwitcher switcher, JTextField filename) {
-		init(w, h, filename);
+		init(w, h, filename, switcher);
 
-		instantiateOffline(switcher);
+		instantiateOffline();
+		
+		add(panels.get(0), panels.get(1));
 
 	}
 
-	private void init(int w, int h, JTextField filename) {
+	private void init(int w, int h, JTextField filename, PanelSwitcher switcher) {
 		SoundsProvider.playStageStart();
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
 		this.setLayout(null);
 		this.setOpaque(true);
+		this.setSwitcher(switcher);
 		flag = false;
 		this.filename = filename;
 
@@ -61,8 +66,6 @@ public class SlideStage extends JLayeredPane {
 			panels.get(i).setPreferredSize(new Dimension(w, h));
 			panels.get(i).setBackground(Color.GRAY);
 		}
-
-		add(panels.get(0), panels.get(1));
 	}
 
 	private void setLabel() {
@@ -83,20 +86,17 @@ public class SlideStage extends JLayeredPane {
 		this.add(label);
 	}
 
-	private void instantiateOnline(String difficult, ConnectionManager connectionManager, PanelSwitcher switcher) {
+	private void instantiateOnline(String difficult, ConnectionManager connectionManager) {
 		((MainFrame) switcher).setGamePanel(new GamePanel(switcher, difficult));
 		((MainFrame) switcher)
 				.setGameManager(((MainFrame) switcher).getGamePanel().startNetwork(connectionManager, filename));
 		((MainFrame) switcher).getGamePanel().setGame(((MainFrame) switcher).getGameManager());
 		((MainFrame) switcher).setFullGame(new FullGamePanel(WIDTH, HEIGHT, ((MainFrame) switcher).getGameWidth(),
 				((MainFrame) switcher).getGameHeight(), getSwitcher(), ((MainFrame) switcher).getGamePanel()));
-		
-		this.setSwitcher(switcher);
-
 	}
 
 	// BISOGNA FARLI DURANTE IL CARICAMENTO
-	public void instantiateOffline(PanelSwitcher switcher) {
+	public void instantiateOffline() {
 
 		((MainFrame) switcher).setGameManager(new GameManager(filename));
 		((MainFrame) switcher).setFlag(((MainFrame) switcher).getGameManager().getFlag());
@@ -109,8 +109,6 @@ public class SlideStage extends JLayeredPane {
 		((MainFrame) switcher).setFullGame(new FullGamePanel(WIDTH, HEIGHT, ((MainFrame) switcher).getGameWidth(),
 				((MainFrame) switcher).getGameHeight(), ((MainFrame) switcher), ((MainFrame) switcher).getGamePanel()));
 		((MainFrame) switcher).getGamePanel().setFullGamePanel(((MainFrame) switcher).getFullGame());
-		
-		this.setSwitcher(switcher);
 	}
 
 	public void add(Component component1, Component component2) {
