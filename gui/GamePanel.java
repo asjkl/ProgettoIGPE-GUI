@@ -99,6 +99,7 @@ public class GamePanel extends JPanel {
 						}
 					} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
 						if (!game.isPaused() && !game.isExit()) {
+							if(GameManager.offline)
 							SoundsProvider.playPause();
 							game.setPaused(true);
 						} else {
@@ -185,6 +186,7 @@ public class GamePanel extends JPanel {
 					} else if (event.getKeyCode() == KeyEvent.VK_ENTER) {
 
 						if (!game.isPaused() && !game.isExit()) {
+							if(GameManager.offline)
 							SoundsProvider.playPause();
 							if (game.getPlayersArray().size() > 1) {
 								game.getPlayersArray().get(0).getKeys().clear();
@@ -594,6 +596,7 @@ public class GamePanel extends JPanel {
 					}
 
 					else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
+						if(GameManager.offline)
 						SoundsProvider.playBulletHit1();
 						if (curRow < 1) {
 							buttons[buttons.length - 1].requestFocus();
@@ -605,6 +608,7 @@ public class GamePanel extends JPanel {
 
 						}
 					} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+						if(GameManager.offline)
 						SoundsProvider.playBulletHit1();
 						buttons[(curRow + 1) % buttons.length].requestFocus();
 						cursorPositionDialog = (curRow + 1) % buttons.length;
@@ -639,6 +643,7 @@ public class GamePanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					if(GameManager.offline)
 					SoundsProvider.playBulletHit1();
 					((MainFrame) getSwitcher()).setTransparent(false);
 					game.setPauseOptionDialog(false);
@@ -695,6 +700,8 @@ public class GamePanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 
 					if (!GameManager.offline) {
+						
+						if(GameManager.offline)
 						SoundsProvider.playBulletHit1();
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.setExit(true);
@@ -1045,17 +1052,15 @@ public class GamePanel extends JPanel {
 			}
 		}
 
+		if(GameManager.offline) {
 		// players
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
 
 			if (!SoundsProvider.stageStartClip.isActive()) {
 				if (game.getPlayersArray().get(a).isShot()) {
-					if (GameManager.offline) {
 						SoundsProvider.playBulletShot();
-					}
 				}
 
-				if (GameManager.offline) {
 					// SINGLEPLAYER OFFLINE
 					
 					if (GameManager.singlePlayer && a == 0) {

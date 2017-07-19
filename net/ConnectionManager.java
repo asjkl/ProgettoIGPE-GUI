@@ -12,7 +12,9 @@ import javax.swing.JTextField;
 import progettoIGPE.davide.giovanni.unical2016.BrickWall;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
+import progettoIGPE.davide.giovanni.unical2016.PowerUp;
 import progettoIGPE.davide.giovanni.unical2016.SteelWall;
+import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
 import progettoIGPE.davide.giovanni.unical2016.GUI.ImageProvider;
 import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
 import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
@@ -28,6 +30,8 @@ public class ConnectionManager implements Runnable {
 	private final Socket socket;
 	private JTextField map;
 	private String difficult;
+	
+	private boolean soundsPaused;
 
 	//COSTRUTTORE PER P1
 	public ConnectionManager(final Socket socket, final String name, MainFrame mainFrame, String stage, String difficult) {
@@ -41,6 +45,8 @@ public class ConnectionManager implements Runnable {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		
+		this.soundsPaused=false;
 	}
 
 	public void close() {
@@ -147,6 +153,13 @@ public class ConnectionManager implements Runnable {
 
 	private void playSounds(GameManager game) {
 		
+		restoreBoolean(game);
+		
+		if(game.isPaused() && !soundsPaused){
+			SoundsProvider.playPause();
+			soundsPaused=true;
+		}
+		
 		if (game.isSoundPowerUp()) {
 			SoundsProvider.playPowerUpAppear();
 		}
@@ -158,25 +171,25 @@ public class ConnectionManager implements Runnable {
 
 		// players
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
-			if(nameOfGame.equals(game.getPlayersArray().get(a).toString())){
-				if (game.getPlayersArray().get(a).isShot()) {
-					SoundsProvider.playBulletShot();
-				}
-				
-				//TODO DA GUARDARE QUESTO CANGO PER IL SUONO!!!
+			if (game.getPlayersArray().get(a).isShot()) {
+				SoundsProvider.playBulletShot();
+			}
+			
+			if(game.getPlayersArray().get(a).getNext() instanceof PowerUp){
+				SoundsProvider.playPowerUpPick();
+			}
+			
+			//TODO DA GUARDARE QUESTO CANGO PER IL SUONO!!!
 //				if(!game.getPlayersArray().get(a).canGo){
 //					SoundsProvider.playHitForCanGo();
 //				}
-	
+			
+			if(nameOfGame.equals(game.getPlayersArray().get(a).toString())){
 				if(!game.getPlayersArray().get(a).isDied()) {
-					
-					if (!game.getPlayersArray().get(0).isPressed())
-						SoundsProvider.playStop();
-					else
-						SoundsProvider.playMove();
-				}
-				else if(!game.getPlayersArray().get(a).isDied()) {
-					if (!game.getPlayersArray().get(a).isPressed())
+					if(game.isPaused()){
+						SoundsProvider.cancelMove();
+						SoundsProvider.cancelStop();
+					}else if (!game.getPlayersArray().get(a).isPressed())
 						SoundsProvider.playStop();
 					else
 						SoundsProvider.playMove();
@@ -196,6 +209,12 @@ public class ConnectionManager implements Runnable {
 				}
 			}
 		}
+	}
+
+	private void restoreBoolean(GameManager game) {
+		if(!game.isPaused()){
+			soundsPaused=false;
+		}	
 	}
 
 	public String getNameOfGame() {
