@@ -149,6 +149,12 @@ public class GamePanel extends JPanel {
 					if(game!=null && game.isExit()){
 						run=false;
 					}
+					try {
+						sleep(8);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			};
 		}.start();
