@@ -44,7 +44,7 @@ public class ClientManager implements Runnable {
 			server.setReady(this);
 			String string = reader.readLine();
 			while (string!=null) {
-				string+=":"+System.currentTimeMillis();
+//				string+=":"+System.currentTimeMillis();
 				server.received(string);
 			string = reader.readLine();
 			}
@@ -52,9 +52,8 @@ public class ClientManager implements Runnable {
 		} catch (final IOException e) {
 			server.disconnetctedClient(name);
 		}
-
 	}
-
+	
 	String setup(String string) throws IOException {
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		printer = new PrintWriter(socket.getOutputStream(), true);

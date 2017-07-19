@@ -146,7 +146,7 @@ public class Lobby extends JPanel {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g;
-				if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
+				if((client.isReadyP1() && client.isReadyP2()) || client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
 					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 					
 					if(client.getUpdateDifficultRealTime().equals("easy")) {
@@ -198,11 +198,12 @@ public class Lobby extends JPanel {
 			difficultPanel.add(level.get(i));
 			difficultPanel.add(labels.get(i));
 			
-			if(client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
+			if((!client.isReadyP1() || !client.isReadyP2()) && client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
 				level.get(i).addActionListener(new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						if(!client.isReadyP1() || !client.isReadyP2()) {
 						if(client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
 							if (level.get(0).isSelected()) {
 								difficult = "easy";
@@ -219,11 +220,13 @@ public class Lobby extends JPanel {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
+							SoundsProvider.playBulletHit1();
 						
 					}
+						}
 				});
 	
-			if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
+			if((client.isReadyP1() && client.isReadyP2()) || client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
 		
 				level.get(i).setBorder(null);
 				level.get(i).setOpaque(false);
@@ -320,7 +323,7 @@ public class Lobby extends JPanel {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g;
-				if(client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
+				if((client.isReadyP1() && client.isReadyP2()) || client.getNameOfClientsOnline().size() > 1 && client.getClientName().equals(client.getNameOfClientsOnline().get(1))) {
 					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 				}	
 		
@@ -344,11 +347,12 @@ public class Lobby extends JPanel {
 		arrowLeft.setBorderPainted(false);
 		arrowLeft.setFocusPainted(false);
 
-	if(client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
+	if((!client.isReadyP1() || !client.isReadyP2()) && client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
 		arrowLeft.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!client.isReadyP1() || !client.isReadyP2()) {
 				SoundsProvider.playBulletHit1();
 				if (client.getUpdateStageRealTime() == 1) {
 					client.setUpdateStageRealTime(24);
@@ -363,6 +367,7 @@ public class Lobby extends JPanel {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+				}
 			}
 		});
 		panel.add(arrowLeft);
@@ -374,11 +379,12 @@ public class Lobby extends JPanel {
 		arrowRight.setBorderPainted(false);
 		arrowRight.setFocusPainted(false);
 	
-	if(client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
+	if((!client.isReadyP1() || !client.isReadyP2()) && client.getNameOfClientsOnline().size() > 0 && client.getClientName().equals(client.getNameOfClientsOnline().get(0)))
 		arrowRight.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!client.isReadyP1() || !client.isReadyP2()) {
 				SoundsProvider.playBulletHit1();
 				if(client.getUpdateStageRealTime() < 23)
 					client.setUpdateStageRealTime((client.getUpdateStageRealTime() + 1) % 24);
@@ -390,6 +396,7 @@ public class Lobby extends JPanel {
 					client.getDout().writeUTF("#stage# "+String.valueOf(client.getUpdateStageRealTime()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
+				}
 				}
 			}
 		});
@@ -428,6 +435,8 @@ public class Lobby extends JPanel {
 
 				@Override
 				public void keyPressed(KeyEvent e) {
+					
+					if(!client.isReadyP1() || !client.isReadyP2()) {
 
 					boolean enter = false;
 
@@ -479,6 +488,7 @@ public class Lobby extends JPanel {
 					if (enter)
 						SoundsProvider.playBulletHit1();
 				}
+				}
 			});
 
 			addActionListener(i);
@@ -494,6 +504,7 @@ public class Lobby extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					if(!client.isReadyP1() || !client.isReadyP2()) {
 					SoundsProvider.playBulletHit1();
 					setCursorPosition(0);
 
@@ -517,6 +528,7 @@ public class Lobby extends JPanel {
 					getSwitcher().showNetwork();
 					repaint();
 				}
+				}
 			});
 			break;
 		case 1:
@@ -524,8 +536,10 @@ public class Lobby extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					SoundsProvider.playBulletHit1();
+			
 
+					if(!client.isReadyP1() || !client.isReadyP2()) {
+						SoundsProvider.playBulletHit1();
 					// se sono P1
 					if (client.getClientName().equals(client.getNameOfClientsOnline().get(0))) {
 						if (client.isReadyP2()) {
@@ -550,6 +564,7 @@ public class Lobby extends JPanel {
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
+						
 						}
 					}
 
@@ -570,6 +585,7 @@ public class Lobby extends JPanel {
 						}
 					}
 
+				}
 				}
 			});
 			break;

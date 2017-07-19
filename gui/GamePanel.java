@@ -73,7 +73,6 @@ public class GamePanel extends JPanel {
 	// online
 	public GamePanel(PanelSwitcher switcher, String difficult) {
 		this.tile = 35;
-		limit-=70;
 		ExitDelay = 500;
 		this.dialog = new JDialog();
 		this.setBackground(Color.BLACK);
@@ -141,6 +140,18 @@ public class GamePanel extends JPanel {
 						game.getPlayersArray().get(0).isReleaseKeyRocket(), game.isPauseOptionDialog(), game.isPaused()));
 			}
 		});
+		
+		new Thread("TIME"){
+			public void run() {
+				boolean run=true;
+				while(run){
+					connectionManager.dispatch(getUpdateTime(System.currentTimeMillis()));
+					if(game!=null && game.isExit()){
+						run=false;
+					}
+				}
+			};
+		}.start();
 	}
 
 	// offline
@@ -478,6 +489,10 @@ public class GamePanel extends JPanel {
 	protected String getUpdateOptionPanel(String getNameOfGame, boolean exit) {
 		return "EXIT" + ":" + getNameOfGame + ":" + exit;
 	}
+	
+	protected String getUpdateTime(long time) {
+		return "TIME" + ":" + playerName+":"+time;
+	}
 
 	private Color chooseColorOfLabel() {
 		int R = (int) (Math.random() * 256);
@@ -788,9 +803,6 @@ public class GamePanel extends JPanel {
 	          game.getPlayersArray().get(a).setKeyPressLength(
 	              System.currentTimeMillis() - game.getPlayersArray().get(a).getKeyPressedMillis());
 	        }else{
-	        	
-	        	System.out.println(game.getPlayersArray().get(a).getKeyPressLength());
-	        	
 	          game.getPlayersArray().get(a).setKeyPressLength(
 	              game.getPlayersArray().get(a).getCurrentTimeMillis() - game.getPlayersArray().get(a).getKeyPressedMillis());
 	        }

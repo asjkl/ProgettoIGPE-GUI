@@ -68,6 +68,12 @@ public class ServerGameManager {
 			if(split[0].equals("EXIT")){
 				disconnetctedClient(split[1]);
 				gameManager.setExit(Boolean.parseBoolean(split[2]));
+			}else if(split[0].equals("TIME")){
+				for(int a=0; a<gameManager.getPlayersArray().size(); a++){
+					if(gameManager.getPlayersArray().get(a).toString().equals(split[1])){
+						gameManager.getPlayersArray().get(a).setCurrentTimeMillis(Long.parseLong(split[2]));
+					}
+				}
 			}else{
 				//BOOLEANE DI SISTEMA
 				gameManager.setPauseOptionDialog(Boolean.parseBoolean(split[5]));
@@ -83,7 +89,6 @@ public class ServerGameManager {
 							gameManager.getPlayersArray().get(a).getKeyBits().clear(Integer.valueOf(split[1]));
 							gameManager.getPlayersArray().get(a).setReleaseKeyRocket(Boolean.parseBoolean(split[4]));
 						}
-						gameManager.getPlayersArray().get(a).setCurrentTimeMillis(Long.parseLong(split[7]));
 					}
 				}
 			}
