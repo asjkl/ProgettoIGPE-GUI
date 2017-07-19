@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
+import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 @SuppressWarnings("serial")
@@ -26,9 +27,24 @@ public class SlideStage extends JLayeredPane {
 	private PanelSwitcher switcher;
 	private JTextField filename;
 	private ArrayList<JPanel> panels = new ArrayList<>();
-	
+
+	// ONLINE
+	public SlideStage(int w, int h, PanelSwitcher switcher, JTextField filename, ConnectionManager connectionManager,
+			String difficult) {
+		init(w, h, filename);
+
+		instantiateOnline(difficult, connectionManager, switcher);
+	}
+
+	// OFFLINE
 	public SlideStage(final int w, final int h, PanelSwitcher switcher, JTextField filename) {
-		
+		init(w, h, filename);
+
+		instantiateOffline(switcher);
+
+	}
+
+	private void init(int w, int h, JTextField filename) {
 		SoundsProvider.playStageStart();
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(new Dimension(w, h));
@@ -36,52 +52,67 @@ public class SlideStage extends JLayeredPane {
 		this.setOpaque(true);
 		flag = false;
 		this.filename = filename;
-		this.setSwitcher(switcher);
-		
+
 		setLabel();
-		
-		for(int i = 0; i < 2; i++) {
-			
+
+		for (int i = 0; i < 2; i++) {
+
 			panels.add(new JPanel());
 			panels.get(i).setPreferredSize(new Dimension(w, h));
 			panels.get(i).setBackground(Color.GRAY);
 		}
-		
-		instantiate();
+
 		add(panels.get(0), panels.get(1));
 	}
 
 	private void setLabel() {
-		
+
 		label = new JLabel();
 		label.setFont(MainFrame.customFontB);
-		
-		if(filename.getText().contains("career"))
-			label.setText("Stage " + filename.getText().
-					subSequence(filename.getText().indexOf("stage") + 5, filename.getText().length() - 4));
+
+		if (filename.getText().contains("career"))
+			label.setText("Stage " + filename.getText().subSequence(filename.getText().indexOf("stage") + 5,
+					filename.getText().length() - 4));
 		else
 			label.setText("Custom");
-		
-		label.setBounds((int) (getPreferredSize().getWidth() / 2 - 50),
-				(int) getPreferredSize().getHeight() / 2 - 50, 300, 100);
+
+		label.setBounds((int) (getPreferredSize().getWidth() / 2 - 50), (int) getPreferredSize().getHeight() / 2 - 50,
+				300, 100);
 		label.setBackground(Color.GRAY);
 		label.setForeground(Color.BLACK);
 		this.add(label);
 	}
 
-	// BISOGNA FARLI DURANTE IL CARICAMENTO
-	public void instantiate() {
+	private void instantiateOnline(String difficult, ConnectionManager connectionManager, PanelSwitcher switcher) {
+		((MainFrame) switcher).setGamePanel(new GamePanel(switcher, difficult));
+		((MainFrame) switcher)
+				.setGameManager(((MainFrame) switcher).getGamePanel().startNetwork(connectionManager, filename));
+		((MainFrame) switcher).getGamePanel().setGame(((MainFrame) switcher).getGameManager());
+		((MainFrame) switcher).setFullGame(new FullGamePanel(WIDTH, HEIGHT, ((MainFrame) switcher).getGameWidth(),
+				((MainFrame) switcher).getGameHeight(), getSwitcher(), ((MainFrame) switcher).getGamePanel()));
 		
-		((MainFrame)switcher).setGameManager(new GameManager(filename));
-		((MainFrame)switcher).setFlag(((MainFrame)switcher).getGameManager().getFlag());
-		if(SettingsPanel.normal)
-			((MainFrame)switcher).getGameManager().setMedium(true);
-		
-		((MainFrame)switcher).setGamePanel(new GamePanel(((MainFrame)switcher).getGameWidth(), ((MainFrame)switcher).getGameHeight(), ((MainFrame)switcher), ((MainFrame)switcher).getGameManager()));
-		((MainFrame)switcher).setFullGame(new FullGamePanel(WIDTH, HEIGHT, ((MainFrame)switcher).getGameWidth(), ((MainFrame)switcher).getGameHeight(), ((MainFrame)switcher), ((MainFrame)switcher).getGamePanel()));
-		((MainFrame)switcher).getGamePanel().setFullGamePanel(((MainFrame)switcher).getFullGame());
+		this.setSwitcher(switcher);
+
 	}
-	
+
+	// BISOGNA FARLI DURANTE IL CARICAMENTO
+	public void instantiateOffline(PanelSwitcher switcher) {
+
+		((MainFrame) switcher).setGameManager(new GameManager(filename));
+		((MainFrame) switcher).setFlag(((MainFrame) switcher).getGameManager().getFlag());
+//		if (SettingsPanel.normal)
+//			((MainFrame) switcher).getGameManager().setMedium(true);
+
+		((MainFrame) switcher).setGamePanel(
+				new GamePanel(((MainFrame) switcher).getGameWidth(), ((MainFrame) switcher).getGameHeight(),
+						((MainFrame) switcher), ((MainFrame) switcher).getGameManager()));
+		((MainFrame) switcher).setFullGame(new FullGamePanel(WIDTH, HEIGHT, ((MainFrame) switcher).getGameWidth(),
+				((MainFrame) switcher).getGameHeight(), ((MainFrame) switcher), ((MainFrame) switcher).getGamePanel()));
+		((MainFrame) switcher).getGamePanel().setFullGamePanel(((MainFrame) switcher).getFullGame());
+		
+		this.setSwitcher(switcher);
+	}
+
 	public void add(Component component1, Component component2) {
 
 		this.add(component1);
@@ -94,41 +125,41 @@ public class SlideStage extends JLayeredPane {
 		component1.setLocation(0, -getPreferredSize().height);
 		component2.setSize(getPreferredSize());
 		component2.setLocation(0, getPreferredSize().height);
-		
+
 		slideTopAndBottom(component1, component2);
 	}
 
-	public void slideTopAndBottom(final Component component1,final Component component2) {
+	public void slideTopAndBottom(final Component component1, final Component component2) {
 
 		final int tmp = -(getPreferredSize().height / 2);
-	
+
 		new Timer(DELAY, new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				int y1 = component1.getY();
 				int y2 = component2.getY();
-				
+
 				if (y1 >= tmp) {
 
 					component1.setLocation(0, y1);
 					component2.setLocation(0, y2);
 					putLayer((JComponent) component1, JLayeredPane.DEFAULT_LAYER);
 					putLayer((JComponent) component2, JLayeredPane.DEFAULT_LAYER);
-					
-					if(oldComponent != null)
+
+					if (oldComponent != null)
 						remove(oldComponent);
-						
-						((Timer) e.getSource()).stop();
-					
-						try {
-							Thread.sleep(500);
-							getSwitcher().showGame();
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}						
-						
+
+					((Timer) e.getSource()).stop();
+
+					try {
+						Thread.sleep(500);
+						getSwitcher().showGame();
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+
 				} else {
 
 					y1 += DELTA_Y;
@@ -156,5 +187,5 @@ public class SlideStage extends JLayeredPane {
 
 	public void setFlag(boolean flag) {
 		this.flag = flag;
-	}	
+	}
 }

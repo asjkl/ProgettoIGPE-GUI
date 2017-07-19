@@ -139,7 +139,7 @@ public class ScoresPanel extends JPanel {
 								writeScore(Integer.parseInt(value) + 1);
 								filename.setText(path + "/stage" + String.valueOf(Integer.parseInt(value) + 1) + ".txt");
 								Thread.sleep(SHOW);
-								getSwitcher().showSlideStage(filename);
+								getSwitcher().showSlideStage(filename,true, null, null);
 							}
 						}
 				else {			

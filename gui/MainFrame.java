@@ -263,8 +263,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	@Override
-	public void showSlideStage(JTextField filename) {
-		slideStage = new SlideStage(WIDTH, HEIGHT, this, filename);
+	public void showSlideStage(JTextField filename, boolean offline, ConnectionManager connectionManager, String difficult) {
+		if(offline)
+			slideStage = new SlideStage(WIDTH, HEIGHT, this, filename);
+		else
+			slideStage = new SlideStage(WIDTH, HEIGHT, this, filename, connectionManager, difficult);
 		switchTo(slideStage);
 	}
 
@@ -290,12 +293,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename, String difficult) {
-		
-		gamePanel = new GamePanel(this, difficult);
-		gameManager = gamePanel.startNetwork(connectionManager, filename);
-		gamePanel.setGame(gameManager);
-		fullGame = new FullGamePanel(WIDTH, HEIGHT, gameWidth, gameHeight, this, gamePanel);
-		switchTo(fullGame);
+		showSlideStage(filename, false, connectionManager, difficult);
 		return gameManager;
 	}
 	

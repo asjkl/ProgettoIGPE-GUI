@@ -663,7 +663,7 @@ public class GamePanel extends JPanel {
 						((MainFrame) getSwitcher()).setTransparent(false);
 						game.setExit(true);
 						dialog.dispose();
-						getSwitcher().showSlideStage(game.getFilename());
+						getSwitcher().showSlideStage(game.getFilename(), true, null, null);
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();
 						game.getTimer().cancel();
@@ -1040,19 +1040,36 @@ public class GamePanel extends JPanel {
 	}
 
 	private void sounds() {
+		
+		if (GameManager.offline) {
+			
 		if (game.isSoundPowerUp()) {
-			if (GameManager.offline)
-				SoundsProvider.playPowerUpAppear();
+			SoundsProvider.playPowerUpAppear();
 		}
 
 		if (game.isExplosion()) {
-			if (GameManager.offline) {
-				SoundsProvider.playExplosion1();
-				SoundsProvider.playExplosion2();
-			}
+			SoundsProvider.playExplosion1();
+			SoundsProvider.playExplosion2();
 		}
+		
+		for(int a=0;a<game.getEffects().size();a++) {
+			
+				if(game.getEffects().get(a) instanceof Rocket && 
+						((Rocket)game.getEffects().get(a)).getTank() instanceof PlayerTank &&
+						((Rocket)game.getEffects().get(a)).isOneTimeSound()) {
+					if (((Rocket)game.getEffects().get(a)).getNext() instanceof BrickWall) {
+						SoundsProvider.playBulletHit2();
+						
+					}
+					else if (((Rocket)game.getEffects().get(a)).getNext() instanceof SteelWall
+							|| ((Rocket)game.getEffects().get(a)).isOnBorder()) {
+						SoundsProvider.playBulletHit1();
+						
+					}
+					((Rocket)game.getEffects().get(a)).setOneTimeSound(false);
+				}
+			}
 
-		if(GameManager.offline) {
 		// players
 		for (int a = 0; a < game.getPlayersArray().size(); a++) {
 
@@ -1207,22 +1224,9 @@ public class GamePanel extends JPanel {
 				}
 
 				if (game.getRocket().get(a).isUpdateObject()) {
-
 					game.updateRocket(game.getRocket().get(a));
-					
-					if(GameManager.offline) {
-						if (game.getRocket().get(a).getTank() instanceof PlayerTank) {
-							if (game.getRocket().get(a).getNext() instanceof BrickWall)
-								SoundsProvider.playBulletHit2();
-							else if (game.getRocket().get(a).getNext() instanceof SteelWall
-									|| game.getRocket().get(a).isOnBorder()) {
-								SoundsProvider.playBulletHit1();
-							}
-						}
-					}
 				}
 			}
-
 		}
 	}
 

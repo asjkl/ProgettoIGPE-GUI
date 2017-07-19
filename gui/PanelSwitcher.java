@@ -1,6 +1,8 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 import javax.swing.JTextField;
 
+import net.ConnectionManager;
+
 public interface PanelSwitcher {
 
 	void showMenu();
@@ -23,7 +25,6 @@ public interface PanelSwitcher {
 	
 	void showLobby(boolean gamePanelExit);
 
-	void showSlideStage(JTextField f);
-
+	void showSlideStage(JTextField f, boolean offline, ConnectionManager connectionManager, String difficult); 
 }
 
