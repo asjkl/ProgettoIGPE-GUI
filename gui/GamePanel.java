@@ -19,6 +19,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -152,7 +155,7 @@ public class GamePanel extends JPanel {
 						run=false;
 					}
 					try {
-						sleep(8);
+						sleep(200);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -309,6 +312,7 @@ public class GamePanel extends JPanel {
 				
 				logic();
 				graphic();
+				
 				if(!GameManager.offline)
 					game.getRunnable().run();
 				
@@ -327,12 +331,12 @@ public class GamePanel extends JPanel {
 					game.getRunnable().run();
 			}
 
-			if (GameManager.offline) { // IL SERVER NON LO DEVE DISEGNARE
+//			if(GameManager.offline){
 				repaint();
 				if (fullGamePanel != null)
 					fullGamePanel.repaint();
-
-			}
+//			}
+		
 			
 			if(!GameManager.offline){
 				try {
@@ -1085,23 +1089,25 @@ public class GamePanel extends JPanel {
 				game.setExplosion(false);
 			}
 			
-			for(int a=0;a<game.getEffects().size();a++) {
-				
-					if(game.getEffects().get(a) instanceof Rocket && 
-							((Rocket)game.getEffects().get(a)).getTank() instanceof PlayerTank &&
-							((Rocket)game.getEffects().get(a)).isOneTimeSound()) {
-						if (((Rocket)game.getEffects().get(a)).getNext() instanceof BrickWall) {
-							SoundsProvider.playBulletHit2();
-							
+			synchronized (this) {
+				for(int a=0;a<game.getEffects().size();a++) {
+					
+						if(game.getEffects().get(a) instanceof Rocket && 
+								((Rocket)game.getEffects().get(a)).getTank() instanceof PlayerTank &&
+								((Rocket)game.getEffects().get(a)).isOneTimeSound()) {
+							if (((Rocket)game.getEffects().get(a)).getNext() instanceof BrickWall) {
+								SoundsProvider.playBulletHit2();
+								
+							}
+							else if (((Rocket)game.getEffects().get(a)).getNext() instanceof SteelWall
+									|| ((Rocket)game.getEffects().get(a)).isOnBorder()) {
+								SoundsProvider.playBulletHit1();
+								
+							}
+							((Rocket)game.getEffects().get(a)).setOneTimeSound(false);
 						}
-						else if (((Rocket)game.getEffects().get(a)).getNext() instanceof SteelWall
-								|| ((Rocket)game.getEffects().get(a)).isOnBorder()) {
-							SoundsProvider.playBulletHit1();
-							
-						}
-						((Rocket)game.getEffects().get(a)).setOneTimeSound(false);
 					}
-				}
+			}
 	
 			// players
 			for (int a = 0; a < game.getPlayersArray().size(); a++) {
@@ -1598,10 +1604,10 @@ public class GamePanel extends JPanel {
 						g.drawImage(ImageProvider.getRocketExplosion2(), Y, X, null);
 					else if (inc == 3)
 						g.drawImage(ImageProvider.getRocketExplosion3(), Y, X, null);
-					else if (inc > 3 && GameManager.offline) {
-						game.getEffects().remove(game.getEffects().get(i));
-						i--;
-					}
+//					else if (inc > 3) {
+//						game.getEffects().remove(game.getEffects().get(i));
+//						i--;
+//					}
 				}
 
 				// FLAG boom
@@ -1620,10 +1626,10 @@ public class GamePanel extends JPanel {
 						g.drawImage(ImageProvider.getBigExplosion4(), Y - pixel, X - pixel, null);
 					else if (inc == 5)
 						g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
-					else if (inc > 5 && GameManager.offline) {
-						game.getEffects().remove(game.getEffects().get(i));
-						i--;
-					}
+//					else if (inc > 5) {
+//						game.getEffects().remove(game.getEffects().get(i));
+//						i--;
+//					}
 				}
 
 				// ENEMY & PLAYER boom
@@ -1644,10 +1650,10 @@ public class GamePanel extends JPanel {
 						g.drawImage(ImageProvider.getBigExplosion5(), Y - pixel, X - pixel, null);
 
 					// ONLY PLAYER
-					else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank) {
-						game.getEffects().remove(game.getEffects().get(i));
-						i--;
-					}
+//					else if (inc > 5 && game.getEffects().get(i) instanceof PlayerTank) {
+//						game.getEffects().remove(game.getEffects().get(i));
+//						i--;
+//					}
 					// ONLY ENEMY POINTS
 					else if (game.getEffects().get(i) instanceof EnemyTank) {
 						if (((EnemyTank) game.getEffects().get(i)).getInc() > 5
@@ -1665,10 +1671,11 @@ public class GamePanel extends JPanel {
 								g.drawImage(ImageProvider.getPoints200(), game.getEffects().get(i).getY() * tile,
 										game.getEffects().get(i).getX() * tile, null);
 							}
-						} else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12) {
-							game.getEffects().remove(game.getEffects().get(i));
-							i--;
 						}
+//						else if (((EnemyTank) game.getEffects().get(i)).getInc() >= 12 ) {
+//							game.getEffects().remove(game.getEffects().get(i));
+//							i--;
+//						}
 					}
 				}
 
@@ -1679,10 +1686,10 @@ public class GamePanel extends JPanel {
 						g.drawImage(ImageProvider.getPoints500(), game.getEffects().get(i).getY() * tile,
 								game.getEffects().get(i).getX() * tile, null);
 					}
-					if (((PowerUp) game.getEffects().get(i)).getInc() >= 12) {
-						game.getEffects().remove(game.getEffects().get(i));
-						i--;
-					}
+//					if (((PowerUp) game.getEffects().get(i)).getInc() >= 12) {
+//						game.getEffects().remove(game.getEffects().get(i));
+//						i--;
+//					}
 				}
 			}
 		}
