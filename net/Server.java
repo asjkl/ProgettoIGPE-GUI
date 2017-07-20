@@ -94,12 +94,12 @@ public class Server implements Runnable {
 
 	}
 
-	public static void main(String[] args) throws IOException {
-		final Server server1 = new Server(1234);
-		final Server server2 = new Server(1232);
-		new Thread(server1, "game").start();
-		new Thread(server2, "chat").start();
-	}
+//	public static void main(String[] args) throws IOException {
+//		final Server server1 = new Server(1234);
+//		final Server server2 = new Server(1232);
+//		new Thread(server1, "game").start();
+//		new Thread(server2, "chat").start();
+//	}
 	
 	@SuppressWarnings("rawtypes")
 	Enumeration getOutputStreams() {
