@@ -60,6 +60,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private SlideStage slideStage;
 	private LoadPanel load;
 
+	private JComponent tmp = null;
 	public MainFrame() {
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
@@ -84,7 +85,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		});
 		
 		load = new LoadPanel(WIDTH, HEIGHT, this);
-		
+		tmp = load;
 		this.add(load);
 		this.setResizable(false);
 		this.pack();
@@ -105,6 +106,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		setUndecorated(true);
 		device.setFullScreenWindow(this);
 		fullscreen = true;
+	
+		this.validate();
+		this.repaint();
+		tmp.transferFocusBackward();
+		selectFocusButton(tmp);
 	}
 	
 	public void mainScreenTurnOff() {
@@ -114,6 +120,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		dispose();
 		setUndecorated(false);
 		setVisible(true);
+				
+		this.validate();
+		this.repaint();
+		tmp.transferFocusBackward();
+		selectFocusButton(tmp);
 	}
 	
 	protected void processWindowEvent(WindowEvent e)
@@ -124,6 +135,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	    super.processWindowEvent(e);        
 	}  
+	
 	//---------------------------------------------------------------------------------
 
 	private void instantiate() {
@@ -160,7 +172,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	public void switchTo(JComponent component) {
-		
+		if(component instanceof SlideContainer)
+			tmp = menu;
+		else
+			tmp = component;
 		this.getContentPane().removeAll();
 		this.add(component);
 		this.validate();
