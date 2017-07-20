@@ -261,10 +261,8 @@ public class ImageProvider {
 //			maps2P.add((ImageIO.read(new File("resource/mapBonus_Multi.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 //			java.awt.Image.SCALE_SMOOTH)));
 			
-			setGameOver((ImageIO.read(new File("resource/gameOver.png")).getScaledInstance(400, 50,
-					java.awt.Image.SCALE_SMOOTH)));
-			setStageComplete((ImageIO.read(new File("resource/stageComplete.png")).getScaledInstance(600, 50,
-					java.awt.Image.SCALE_SMOOTH)));
+			setGameOver(ImageIO.read(new File("resource/gameOver.png")));
+			setStageComplete(ImageIO.read(new File("resource/stageComplete.png")));
 			setLocked((ImageIO.read(new File("resource/locked.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
 			setBackground1P((ImageIO.read(new File("resource/player1A.png")).getScaledInstance(600, 600,
@@ -273,16 +271,14 @@ public class ImageProvider {
 					java.awt.Image.SCALE_SMOOTH)));
 			setBackground2P((ImageIO.read(new File("resource/player2A.png")).getScaledInstance(750, 750,
 					java.awt.Image.SCALE_SMOOTH)));
-			setTitle((ImageIO.read(new File("resource/title.png")).getScaledInstance(975, 115,
-					java.awt.Image.SCALE_SMOOTH)));
+			setTitle(ImageIO.read(new File("resource/title.png")));
 			setCursorRight((ImageIO.read(new File("resource/cursorRight.gif")).getScaledInstance(38, 40,
 					java.awt.Image.SCALE_SMOOTH)));
 			setCursorLeft((ImageIO.read(new File("resource/cursorLeft.gif")).getScaledInstance(38, 40,
 					java.awt.Image.SCALE_SMOOTH)));
 			setSelectMap((ImageIO.read(new File("resource/selectMap.png")).getScaledInstance(186, 186,
 					java.awt.Image.SCALE_SMOOTH)));
-			setLoading((ImageIO.read(new File("resource/loading.gif")).getScaledInstance(223, 50,
-					java.awt.Image.SCALE_SMOOTH)));
+			setLoading(ImageIO.read(new File("resource/loading.gif")));
 			setEasy((ImageIO.read(new File("resource/easy.png")).getScaledInstance(54, 20,
 					java.awt.Image.SCALE_SMOOTH)));
 			setNormal((ImageIO.read(new File("resource/normal.png")).getScaledInstance(72, 20,
@@ -291,8 +287,7 @@ public class ImageProvider {
 					java.awt.Image.SCALE_SMOOTH)));
 			setSound((ImageIO.read(new File("resource/sound.png")).getScaledInstance(78, 24,
 					java.awt.Image.SCALE_SMOOTH)));
-			setBattleCity((ImageIO.read(new File("resource/battleCity.png")).getScaledInstance(376, 136,
-					java.awt.Image.SCALE_SMOOTH)));
+			setBattleCity(ImageIO.read(new File("resource/battleCity.png")));
 			setPause((ImageIO.read(new File("resource/pause.png")).getScaledInstance(140, 50,
 					java.awt.Image.SCALE_SMOOTH)));
 			setGrenade((ImageIO.read(new File("resource/grenade.png")).getScaledInstance(getTile(), getTile(),

@@ -132,9 +132,9 @@ public class PlayerPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					setCursorPosition(1);
 					getSwitcher().showFirstStage("./maps/career/singleplayer");
-					repaint();
+					setCursorPosition(1);
+					
 				}
 			});
 			break;
@@ -143,11 +143,9 @@ public class PlayerPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-				
 					SoundsProvider.playBulletHit1();
-					setCursorPosition(2);
-					repaint();
 					getSwitcher().showFirstStage("./maps/career/multiplayer");
+					setCursorPosition(1);
 				}				
 			});
 			break;

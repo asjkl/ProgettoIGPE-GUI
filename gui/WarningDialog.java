@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 @SuppressWarnings("serial")
-public class WarningDialog extends JDialog{
+public class WarningDialog extends JDialog {
 	
 	private JPanel p;
 	private JLabel l;
@@ -50,6 +50,7 @@ public class WarningDialog extends JDialog{
 	}
 	
 	private void init(String text){
+		
 		p = new JPanel();
 		l = new JLabel(text);
 		p.setBackground(Color.BLACK);

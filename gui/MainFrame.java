@@ -14,12 +14,19 @@ import progettoIGPE.davide.giovanni.unical2016.GameManager;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements PanelSwitcher {
 	
+//	private Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+//	private final int WIDTH = (int) dimension.getWidth();
+//	private final int HEIGHT = (int) dimension.getHeight();
+//
+//	private final int gameWidth = WIDTH - 633;
+//  private final int gameHeight = HEIGHT - 68;
+ 
 	private final int WIDTH = 1300;
 	private final int HEIGHT = 740;
 
 	private final int gameWidth = WIDTH - 565;
   	private final int gameHeight = HEIGHT - 40;
- 
+	
 	public static Font customFontM;
 	public static Font customFontB;
 	public static Font customFontS; 
@@ -37,10 +44,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private Flag flag;
 
 	//FullScreen
-	private GraphicsEnvironment graphicscEnvironment;
+	private GraphicsEnvironment graphicsEnvironment;
 	private GraphicsDevice device;
 	private boolean fullscreen;
-	private boolean pressF11=false;
+	private boolean pressF11 = false;
 
 	private NetworkPanel network;
 	private Lobby lobby;
@@ -59,13 +66,14 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private LoadPanel load;
 
 	public MainFrame() {
+		
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
-		this.setSize(new Dimension(WIDTH, HEIGHT));
+		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 		  .addKeyEventDispatcher(new KeyEventDispatcher() {
-		      @SuppressWarnings("static-access")
+		    @SuppressWarnings("static-access")
 			@Override
 		      public boolean dispatchKeyEvent(KeyEvent e) {
 		    	  if(e.getKeyCode() == e.VK_F11 && !pressF11){
@@ -85,9 +93,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		
 		this.add(load);
 		this.setResizable(false);
+		this.setUndecorated(true);
 //		addKeyListener(this);
 		this.pack();
-//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
@@ -128,8 +137,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	
 		new ImageProvider();
 		new SoundsProvider();
-		graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		device = graphicscEnvironment.getDefaultScreenDevice();
+		graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		device = graphicsEnvironment.getDefaultScreenDevice();
 		transparent = false;
 		timer.setRepeats(false);
 		timer.start();
@@ -185,13 +194,10 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			customFontM = (Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f));
 			customFontB =(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f));
 			customFontS =(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f));
-			graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
+			graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
 
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		} catch (FontFormatException e) {
+		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
 	} 

@@ -1,6 +1,5 @@
 package progettoIGPE.davide.giovanni.unical2016.GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -16,7 +15,6 @@ public class LoadPanel extends JPanel {
 	public LoadPanel(final int w, final int h, PanelSwitcher switcher) {
 			
 		this.setPreferredSize(new Dimension(w, h));
-		this.setLayout(new BorderLayout());
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
 		setSwitcher(switcher);
@@ -33,14 +31,14 @@ public class LoadPanel extends JPanel {
 				ImageProvider.getLoading().getHeight(null));
 		progressBar.setOpaque(false);
 		progressBar.setBorderPainted(false);
-		this.add(progressBar, BorderLayout.NORTH);
+		this.add(progressBar);
 	}
   	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(ImageProvider.getBattleCity(), (int) this.getPreferredSize().getWidth() / 2 - (ImageProvider.getBattleCity().getWidth(null) / 2),
-				(int) this.getPreferredSize().getHeight() / 2 - (ImageProvider.getBattleCity().getHeight(null) / 2), null);
+		g.drawImage(ImageProvider.getBattleCity(), (int) (this.getWidth() / 2) - (ImageProvider.getBattleCity().getWidth(null) / 2),
+				(int) this.getHeight() / 2 - (ImageProvider.getBattleCity().getHeight(null) / 2), null);
 		g.drawImage(ImageProvider.getLoading(), progressBar.getX(), progressBar.getY(), this);
 	}
 	

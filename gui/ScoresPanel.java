@@ -45,8 +45,17 @@ public class ScoresPanel extends JPanel {
 		this.setLayout(null);
 	
 		complete = false;
-		value = (String) filename.getText().
+		
+		if(!filename.getText().contains("editor"))
+			
+			value = (String) filename.getText().
 				subSequence(filename.getText().indexOf("stage") + 5, filename.getText().length() - 4);
+		else {
+			value = (String) filename.getText().subSequence(
+				filename.getText().lastIndexOf("/") + 1, filename.getText().length());
+		value = (String) value.subSequence(0, value.length() - 4);
+		}
+		
 		path = (String) filename.getText().subSequence(0, filename.getText().lastIndexOf("/"));
 		this.game = game;
 		this.filename = filename;
@@ -126,7 +135,7 @@ public class ScoresPanel extends JPanel {
 	
 					 ((Timer)e.getSource()).stop();
 					
-						 if(path.contains("single") || path.contains("multi")) {
+						 if(!path.contains("editor")) {
 						 
 							if(((MainFrame)getSwitcher()).isSlide()) {
 								
@@ -186,7 +195,10 @@ public class ScoresPanel extends JPanel {
 		stage.setFont(MainFrame.customFontB);
 		stage.setBackground(Color.BLACK);
 		stage.setForeground(Color.WHITE);
-		stage.setText("Stage " + value);
+		if(value.matches("^[0-9]+"))	
+			stage.setText("Stage " + value);
+		else
+			stage.setText(value);
 		stage.setBounds(555, 185, 300, 100);
 		
 		this.add(stage);

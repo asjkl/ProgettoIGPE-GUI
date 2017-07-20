@@ -56,7 +56,7 @@ public class MenuPanel extends JPanel{
 		DIM = 6;
 		LENGTH = 5;
 		posY = 70;
-		posX = 120;
+		posX = 150;
 		cursorPositionDialog = 0;
 		hide = false;
 		tmpHiScore = -1;
