@@ -70,7 +70,7 @@ public class GamePanel extends JPanel {
 	private ArrayList<Color> labelForNameOfPlayersColor;
 	private long limit;
 	private Timer timer;
-	
+
 	// online
 	public GamePanel(PanelSwitcher switcher, String difficult) {
 		this.tile = 35;
@@ -155,7 +155,7 @@ public class GamePanel extends JPanel {
 						run = false;
 					}
 					try {
-						sleep(200);
+						sleep(5);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -1044,7 +1044,6 @@ public class GamePanel extends JPanel {
 			if (game.isExit()) {
 				if(GameManager.offline)
 					((MainFrame) getSwitcher()).setTransparent(true);
-				
 				timer = new Timer(1000, new ActionListener() {
 
 					@Override
@@ -1071,9 +1070,10 @@ public class GamePanel extends JPanel {
 				((MainFrame) switcher).setCurrentResumeP2(3);
 				((MainFrame) switcher).setCurrentLevelP2(0);
 			}
+			
+			SoundsProvider.playGameOver();
+			new TranslucentWindow(getSwitcher(), game.getFilename(), ImageProvider.getGameOver());
 		}
-		SoundsProvider.playGameOver();
-		new TranslucentWindow(getSwitcher(), game.getFilename(), ImageProvider.getGameOver());
 	}
 
 	public void win() {
@@ -1090,11 +1090,9 @@ public class GamePanel extends JPanel {
 				game.getPlayersArray().get(1).setCurrentLevel(game.getPlayersArray().get(1).getLevel());
 				((MainFrame) switcher).setCurrentLevelP1(game.getPlayersArray().get(1).getCurrentLevel());
 			}
+			SoundsProvider.playStageComplete();
+			new TranslucentWindow(getSwitcher(), game.getFilename(), ImageProvider.getStageComplete());
 		}
-		
-		SoundsProvider.playStageComplete();
-		new TranslucentWindow(getSwitcher(), game.getFilename(), ImageProvider.getStageComplete());
-
 	}
 
 	private void sounds() {
@@ -2178,4 +2176,7 @@ public class GamePanel extends JPanel {
 		this.fullGamePanel = fullGamePanel;
 	}
 
+	public JDialog getDialog() {
+		return dialog;
+	}
 }
