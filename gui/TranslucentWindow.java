@@ -52,7 +52,9 @@ public class TranslucentWindow extends JDialog {
 		this.setUndecorated(true);
 		this.setBackground(new Color(0,0,0,0));
 		this.setContentPane(new TranslucentPane());
-		this.add(new JLabel(new ImageIcon(image)));
+		JLabel j=new JLabel(new ImageIcon(image));
+		j.setLocation(getWidth()/2-(image.getWidth(null)/2), getHeight()/2-(image.getHeight(null)/2));
+		this.add(j);
 		this.pack();
 		this.setLocationRelativeTo((MainFrame)switcher);
 		this.setVisible(true);

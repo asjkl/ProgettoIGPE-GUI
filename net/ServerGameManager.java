@@ -143,6 +143,13 @@ public class ServerGameManager {
 			@Override
 			public void run() {
 				gamePanel.gameLoop();
+				
+				if (gameManager.isWin()) {
+					gamePanel.win();
+				} else {
+					gamePanel.gameOver();
+				}
+				
 				gameManager.getTimer().cancel();
 				gameManager.getTimer2().cancel();
 				System.out.println("CHIUSO_SERVERGAME");
