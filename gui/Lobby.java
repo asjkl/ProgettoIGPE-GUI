@@ -550,6 +550,8 @@ public class Lobby extends JPanel {
 							final Server server1 = new Server(1234);
 							new Thread(server1, "game").start();
 							
+							server1.setModeratorServerGame(client.getNameOfClientsOnline().get(0));
+							
 							
 						//	2) mando il messaggio a tutti 
 							try {

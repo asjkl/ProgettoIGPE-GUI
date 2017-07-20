@@ -1,6 +1,5 @@
 package net;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,9 +19,10 @@ public class ServerGameManager {
 	private GamePanel gamePanel;
 	private String difficult;
 	private JTextField map;
-	private ServerSocket server;
+	private Server server;
+	private String moderatorNameOfGame;
 
-	public ServerGameManager(ServerSocket server) {
+	public ServerGameManager(Server server) {
 		this.server=server;
 		this.clients = new ArrayList<>();
 		this.readyClients = new HashSet<ClientManager>();
@@ -67,7 +67,7 @@ public class ServerGameManager {
 		if(gameManager!=null){
 			if(split[0].equals("EXIT")){
 				disconnetctedClient(split[1]);
-				gameManager.setExit(Boolean.parseBoolean(split[2]));
+//				gameManager.setExit(Boolean.parseBoolean(split[2]));
 			}else if(split[0].equals("TIME")){
 				for(int a=0; a<gameManager.getPlayersArray().size(); a++){
 					if(gameManager.getPlayersArray().get(a).toString().equals(split[1])){
@@ -112,7 +112,10 @@ public class ServerGameManager {
 		nameOfPlayers.add("P2");
 		final List<String> names = new ArrayList<>();
 		for (final ClientManager cm : clients) {
-			cm.setup(nameOfPlayers.remove(0));
+			String nameTmp=cm.setup(nameOfPlayers.remove(0));
+			if(nameTmp.equals(server.getModeratorServerGame())){
+				moderatorNameOfGame=cm.getName();
+			}
 			new Thread(cm, cm.getName()).start();
 			names.add(cm.getName());
 		}	
@@ -143,7 +146,7 @@ public class ServerGameManager {
 				System.out.println("CHIUSO_SERVERGAME");
 				dispatch("CLOSE");
 				try {
-					server.close();
+					server.getServerSocket().close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -152,21 +155,25 @@ public class ServerGameManager {
 	}
 
 	public void disconnetctedClient(String name) {
+		if(name.equals(moderatorNameOfGame)){
+			gameManager.setExit(true);	
+		}else{
 		
-		int cont = 0;
-		
-		for(int a=0; a<gameManager.getPlayersArray().size(); a++){
-			if(gameManager.getPlayersArray().get(a).toString().equals(name)){
-				gameManager.getPlayersArray().get(a).setResume(0);
-				gameManager.destroyPlayerTank(gameManager.getPlayersArray().get(a));
-				gameManager.getPlayersArray().get(a).setExitOnline(true);
+			int cont = 0;
+			
+			for(int a=0; a<gameManager.getPlayersArray().size(); a++){
+				if(gameManager.getPlayersArray().get(a).toString().equals(name)){
+					gameManager.getPlayersArray().get(a).setResume(0);
+					gameManager.destroyPlayerTank(gameManager.getPlayersArray().get(a));
+					gameManager.getPlayersArray().get(a).setExitOnline(true);
+				}
+				if(gameManager.getPlayersArray().get(a).getResume()<0){
+					cont++;
+				}
 			}
-			if(gameManager.getPlayersArray().get(a).getResume()<0){
-				cont++;
+			if(cont==2){
+				gamePanel.gameOverOrWin();
 			}
-		}
-		if(cont==2){
-			gamePanel.gameOverOrWin();
 		}
 		System.out.println("CLIENTE DISCONNESSO: " + name);
 	}
@@ -193,5 +200,13 @@ public class ServerGameManager {
 
 	public void setName(HashMap<String, String> name) {
 		this.name = name;
+	}
+
+	public String getModeratorNameOfGame() {
+		return moderatorNameOfGame;
+	}
+
+	public void setModeratorNameOfGame(String moderatorNameOfGame) {
+		this.moderatorNameOfGame = moderatorNameOfGame;
 	}
 }

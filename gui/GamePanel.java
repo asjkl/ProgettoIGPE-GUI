@@ -494,8 +494,8 @@ public class GamePanel extends JPanel {
 		return "PAINT" + ":" + isWaitToExit;
 	}
 
-	protected String getUpdateOptionPanel(String getNameOfGame, boolean exit) {
-		return "EXIT" + ":" + getNameOfGame + ":" + exit;
+	protected String getUpdateOptionPanel(String getNameOfGame) {
+		return "EXIT" + ":" + getNameOfGame;
 	}
 	
 	protected String getUpdateTime(long time) {
@@ -733,9 +733,9 @@ public class GamePanel extends JPanel {
 						game.setExit(true);
 						dialog.dispose();
 						if (getGameManager().getPlayersArray().get(1).isDied()) {
-							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), true));
+							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame()));
 						} else {
-							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame(), false));
+							connectionManager.dispatch(getUpdateOptionPanel(connectionManager.getNameOfGame()));
 						}
 						SoundsProvider.cancelMove();
 						SoundsProvider.cancelStop();

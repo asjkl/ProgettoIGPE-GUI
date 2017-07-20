@@ -67,7 +67,7 @@ public class ClientManager implements Runnable {
 			difficult=split[2];
 		}	
 		server.dispatch(server.getConnectedClientNames());
-		return name;
+		return split[0];
 	}
 	
 	public String getName() {

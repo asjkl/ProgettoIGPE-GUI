@@ -12,6 +12,7 @@ import java.util.Map;
 public class Server implements Runnable {
 
 	private Hashtable<Socket, DataOutputStream> outputStreams;
+	private String moderatorServerGame;
 	private boolean exitChat;
 	private int port;
 	private ServerSocket serverSocket;
@@ -31,12 +32,12 @@ public class Server implements Runnable {
 		if (Thread.currentThread().getName().equals("game")) {
 			try {
 				serverSocket = new ServerSocket(port);
-				System.out.println("SERVER GAME -> " + serverSocket);
+				System.out.println("MODERATOR: "+moderatorServerGame+" |SERVER GAME -> " + serverSocket);
 
 				// Player P1
 				Socket socket1 = null;
 				socket1 = serverSocket.accept();
-				gameManagerServer = new ServerGameManager(serverSocket);
+				gameManagerServer = new ServerGameManager(this);
 				ClientManager cm1 = new ClientManager(socket1, gameManagerServer);
 				gameManagerServer.add(cm1);
 
@@ -193,5 +194,17 @@ public class Server implements Runnable {
 
 	public void setClient(HashMap<Socket, String> client) {
 		this.client = client;
+	}
+
+	public String getModeratorServerGame() {
+		return moderatorServerGame;
+	}
+
+	public void setModeratorServerGame(String moderatorServerGame) {
+		this.moderatorServerGame = moderatorServerGame;
+	}
+	
+	public ServerSocket getServerSocket() {
+		return serverSocket;
 	}
 }
