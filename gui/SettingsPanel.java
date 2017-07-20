@@ -20,16 +20,20 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
+
 @SuppressWarnings("serial")
 public class SettingsPanel extends JPanel {
 
 	private boolean hide;
-	protected static float soundValue=0.0f;
-	public static boolean easy=true, normal=false, hard=false;
-	
+	protected static float soundValue = 0.0f;
+	protected static boolean easy = true, normal = false, hard = false;
 	private float currValue;
 	private int cursorPosition;
+	private final int WIDTH = 200;
+	private final int HEIGHT = 100;
 	private final int DIM = 4;
+	private final int TILE = 20;
+	private int posY;
 	private PanelSwitcher switcher;
 	private JSlider sound;
 	private ArrayList<JRadioButton> level;
@@ -44,13 +48,15 @@ public class SettingsPanel extends JPanel {
 		this.setLayout(null);
 		this.dialogKeyBoard = new JDialog(((MainFrame)switcher));
 		hide = false;
+		posY = 270;
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
 		level = new ArrayList<>();
 		group =  new ButtonGroup();
 		setSwitcher(switcher);
+		setSlider((int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		this.add(sound);
 		setButtons();
-		setSlider();
 		createRadioButtons();
 	}
 	
@@ -140,28 +146,30 @@ public class SettingsPanel extends JPanel {
 						SoundsProvider.playBulletHit1();
 				}
 			});
-			
 				this.add(buttons.get(i));
-			}
+				
+				if(i != 0)
+					posY += 100;
+		}
 	}
 	
 	public void setBoundsAndText(int j) {
 		
 		switch(j) {
 		case 0:
-			buttons.get(j).setBounds(20, 20, 100, 30);
+			buttons.get(j).setBounds(10, 10, 100, 30);
 			buttons.get(j).setText("Back");
 			break;
 		case 1:
-			buttons.get(j).setBounds(265, 270, 200, 100);
+			buttons.get(j).setBounds(sound.getX() - (sound.getWidth() - 50), posY, WIDTH, HEIGHT);
 			buttons.get(j).setText("Sound");
 			break;
 		case 2:
-			buttons.get(j).setBounds(265, 370, 200, 100);
+			buttons.get(j).setBounds(sound.getX() - (sound.getWidth() - 50), posY, WIDTH, HEIGHT);
 			buttons.get(j).setText("Level");
 			break;
 		case 3:
-			buttons.get(j).setBounds(265, 470, 200, 100);
+			buttons.get(j).setBounds(sound.getX() - (sound.getWidth() - 50), posY, WIDTH, HEIGHT);
 			buttons.get(j).setText("Keys");
 		default:
 			break;
@@ -237,7 +245,6 @@ public class SettingsPanel extends JPanel {
 		JPanel p = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
-				// TODO Auto-generated method stub
 				super.paintComponent(g);
 				
 				g.drawImage(ImageProvider.getKeyboard(), 0, 0, null);
@@ -249,7 +256,6 @@ public class SettingsPanel extends JPanel {
 		JButton b = new JButton("Close");
 		b.setFont(MainFrame.customFontM);
 		b.setBackground(Color.BLACK);
-		
 		b.setBorder(null);
 		b.setOpaque(false);
 		b.setContentAreaFilled(false);
@@ -326,37 +332,36 @@ public class SettingsPanel extends JPanel {
 					}
 			});	
 			
-			setBoundRadioButton(i);
-			group.add(level.get(i));
-			this.add(level.get(i));
+			if(i != DIM - 1) {
+				
+				setBoundRadioButton((int) getPreferredSize().getHeight(), i);
+				group.add(level.get(i));
+				this.add(level.get(i));
+			}
 	    }
 	}
 
-	public void setBoundRadioButton(int j) {
+	public void setBoundRadioButton(int h, int j) {
 		
 		switch (j) {
 		case 0:
-			level.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2 - 100),
-					(int) (this.getPreferredSize().getHeight() / 2 + 45), 20, 20);
+			level.get(j).setBounds(sound.getX(), h / 2 + 45, TILE, TILE);
 			break;
 		case 1:
-			level.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2 + 35),
-					(int) (this.getPreferredSize().getHeight() / 2 + 45), 20, 20);
+			level.get(j).setBounds(sound.getX() + sound.getWidth() / 2, h / 2 + 45, TILE, TILE);
 			break;
 		case 2:
-			level.get(j).setBounds((int) (this.getPreferredSize().getWidth() / 2 + 170),
-					(int) (this.getPreferredSize().getHeight() / 2 + 45), 20, 20);
+			level.get(j).setBounds(sound.getX() + sound.getWidth(), h / 2 + 45, TILE, TILE);
 			break;
 		default:
 			break;
 		}
 	}
 	
-	public void setSlider() {
+	public void setSlider(int w, int h) {
 
 		sound = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
-		sound.setBounds((int) (this.getPreferredSize().getWidth() / 2 - 105),
-				(int) (this.getPreferredSize().getHeight() / 2 - 65), 300, 50);
+		sound.setBounds(w / 2 - 150, h / 2 - 65, 300, 50);
 		sound.setBackground(null);
 		sound.addChangeListener(new ChangeListener() {
 
@@ -367,7 +372,6 @@ public class SettingsPanel extends JPanel {
 				repaint();
 				
 				if(sound.getValue() != 0) {
-				
 					currValue = (sound.getMaximum() - sound.getValue()) / 2;
 					soundValue = currValue / 2;
 				}
@@ -375,8 +379,6 @@ public class SettingsPanel extends JPanel {
 					soundValue = currValue;
 			}
 		});
-
-		this.add(sound);
 	}
 
 	@Override
@@ -389,12 +391,24 @@ public class SettingsPanel extends JPanel {
 			if(cursorPosition == 0)
 				g.drawImage(ImageProvider.getCursorLeft(), buttons.get(cursorPosition).getX() + 100,buttons.get(cursorPosition).getY() - 8, this);
 			else
-				g.drawImage(ImageProvider.getCursorRight(), buttons.get(cursorPosition).getX() - 35, buttons.get(cursorPosition).getY() + 25, this);
+				g.drawImage(ImageProvider.getCursorRight(), buttons.get(cursorPosition).getX() - 60, buttons.get(cursorPosition).getY() + 25, this);
 		}
 		
 		g.drawImage(ImageProvider.getEasy(), level.get(0).getX() - 17, level.get(0).getY() + 25, null);
 		g.drawImage(ImageProvider.getNormal(),level.get(1).getX() - 27, level.get(1).getY() + 25, null);
 		g.drawImage(ImageProvider.getHard(), level.get(2).getX() - 17, level.get(2).getY() + 25, null);
+	}
+	
+	public int getPosY() {
+		return posY;
+	}
+	
+	public void setPosY(int posY) {
+		this.posY = posY;
+	}
+	
+	public int getDIM() {
+		return DIM;
 	}
 	
 	public JButton getButton(int i) {

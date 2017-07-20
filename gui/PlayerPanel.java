@@ -19,7 +19,7 @@ public class PlayerPanel extends JPanel {
 	
 	private final int DIM = 3;
 	private final int posY = 70;
-	private final int posX = 120;
+	private final int posX = 130;
 	private int cursorPosition;
 	private PanelSwitcher switcher;
 	private final ArrayList<JButton> buttons;
@@ -52,7 +52,7 @@ public class PlayerPanel extends JPanel {
 			buttons.get(i).setFocusPainted(false);
 			buttons.get(i).setForeground(Color.WHITE);
 			buttons.get(i).setBackground(Color.BLACK);
-			buttons.get(i).setHorizontalAlignment( SwingConstants.LEFT );
+			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
 			buttons.get(i).addMouseListener(myListener);
 			buttons.get(i).addMouseMotionListener(myListener);
 			
@@ -61,7 +61,7 @@ public class PlayerPanel extends JPanel {
 			else
 				buttons.get(i).setFont(MainFrame.customFontB);
 			
-			setBoundAndText(i);
+			setBoundAndText((int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight(), i);
 			buttons.get(i).addKeyListener(new KeyAdapter() {
 	               
 			@Override
@@ -134,7 +134,6 @@ public class PlayerPanel extends JPanel {
 					SoundsProvider.playBulletHit1();
 					getSwitcher().showFirstStage("./maps/career/singleplayer");
 					setCursorPosition(1);
-					
 				}
 			});
 			break;
@@ -154,21 +153,19 @@ public class PlayerPanel extends JPanel {
 		}
 	}
 					
-	public void setBoundAndText(int j) {
+	public void setBoundAndText(int w, int h, int j) {
 	
 		switch (j) {
 		case 0:
-			buttons.get(j).setBounds(20, 20, 70, 30);
+			buttons.get(j).setBounds(10, 10, 70, 30);
 			buttons.get(j).setText("Back");
 			break;
 		case 1:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-					(int) (this.getPreferredSize().getHeight()) / 2 - posY, 260, 40);
+			buttons.get(j).setBounds(w / 2 - posX, h / 2 - posY, 260, 40);
 			buttons.get(j).setText("Singleplayer");
 			break;
 		case 2:
-			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
-					(int) (this.getPreferredSize().getHeight()) / 2 , 260, 40);
+			buttons.get(j).setBounds(w / 2 - posX, h / 2 , 260, 40);
 			buttons.get(j).setText("Multiplayer");
 			break;
 		default:
@@ -183,10 +180,14 @@ public class PlayerPanel extends JPanel {
 		
 		if(getCursorPosition() == 0)
 			g.drawImage(ImageProvider.getCursorLeft(), 
-					buttons.get(cursorPosition).getX() + 90,buttons.get(cursorPosition).getY() - 8, this);
+					buttons.get(cursorPosition).getX() + 90, buttons.get(cursorPosition).getY() - 8, this);
 		else
 			g.drawImage(ImageProvider.getCursorRight(), 
-					buttons.get(cursorPosition).getX() - 65,buttons.get(cursorPosition).getY() - 5, this);
+					buttons.get(cursorPosition).getX() - 65, buttons.get(cursorPosition).getY() - 5, this);
+	}
+	
+	public int getDIM() {
+		return DIM;
 	}
 	
 	public int getCursorPosition() {

@@ -360,8 +360,8 @@ public class ConstructionPanel extends JPanel {
 				&& ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))) {
 			setWarning(new WarningDialog("Numbers total Enemies is 20 with SinglePlayer!",((MainFrame)switcher)));
 			return false;
-		} else if ((contArmor + contBasic + contFast + contPower) > 40 && contPlayerP1 == 1 && contPlayerP2 == 1) {
-			setWarning(new WarningDialog("Numbers total Enemies is 40 with MultiPlayer!", ((MainFrame)switcher)));
+		} else if ((contArmor + contBasic + contFast + contPower) > 30 && contPlayerP1 == 1 && contPlayerP2 == 1) {
+			setWarning(new WarningDialog("Numbers total Enemies is 30 with MultiPlayer!", ((MainFrame)switcher)));
 			return false;
 		}
 
@@ -428,9 +428,9 @@ public class ConstructionPanel extends JPanel {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				if (cursorPositionDialog == 0) {
-					g.drawImage(ImageProvider.getCursorRight(), 75, 58, this);
+					g.drawImage(ImageProvider.getCursorRight(), 75, 55, this);
 				} else {
-					g.drawImage(ImageProvider.getCursorRight(), 75, 106, this);
+					g.drawImage(ImageProvider.getCursorRight(), 75, 103, this);
 				}
 			}
 		};
@@ -581,7 +581,7 @@ public class ConstructionPanel extends JPanel {
 
 		switch (j) {
 		case 0:
-			buttons.get(j).setBounds(18, 12, 70, 35);
+			buttons.get(j).setBounds(10, 10, 70, 35);
 			buttons.get(j).setText("Back");
 			break;
 		case 1:

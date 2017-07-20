@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-
 import javax.swing.*;
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.Flag;
@@ -39,7 +38,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private Flag flag;
 
 	//FullScreen
-	private GraphicsEnvironment graphicscEnvironment;
+	private GraphicsEnvironment graphicsEnvironment;
 	private GraphicsDevice device;
 	private boolean fullscreen;
 	private boolean pressF11=false;
@@ -59,31 +58,13 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private GamePanel gamePanel;
 	private SlideStage slideStage;
 	private LoadPanel load;
-
 	private JComponent tmp = null;
+	
 	public MainFrame() {
+		
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
-		this.setSize(new Dimension(WIDTH, HEIGHT));
-		
-		KeyboardFocusManager.getCurrentKeyboardFocusManager()
-		  .addKeyEventDispatcher(new KeyEventDispatcher() {
-		      @SuppressWarnings("static-access")
-			@Override
-		      public boolean dispatchKeyEvent(KeyEvent e) {
-		    	  if(e.getKeyCode() == e.VK_F11 && !pressF11){
-						if(!fullscreen)
-							mainScreenTurnOn();
-						else
-							mainScreenTurnOff();
-						pressF11=true;
-		    	  }else{
-		    		  pressF11=false;
-		    	  }
-		        return false;
-		      }
-		});
-		
+//		this.setSize(new Dimension(WIDTH, HEIGHT));
 		load = new LoadPanel(WIDTH, HEIGHT, this);
 		tmp = load;
 		this.add(load);
@@ -91,6 +72,33 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+		
+		KeyboardFocusManager.getCurrentKeyboardFocusManager()
+		  .addKeyEventDispatcher(new KeyEventDispatcher() {
+		      
+			@Override
+		      public boolean dispatchKeyEvent(KeyEvent e) {
+		    	  if(e.getKeyCode() == KeyEvent.VK_F11 && !pressF11){
+		    		  
+		    		  if(tmp != null) {
+		    		  
+						if(!fullscreen) {
+							mainScreenTurnOn();
+						}
+						else {
+							mainScreenTurnOff();
+						}
+						
+						resizeComponent();
+						pressF11=true;
+		    		  	}
+		    	  }
+		    	  else {
+		    		  pressF11=false;
+		    	  }
+		        return false;
+		      }
+		});
 	}
 
 	public static void main(String[] args) {
@@ -106,7 +114,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		setUndecorated(true);
 		device.setFullScreenWindow(this);
 		fullscreen = true;
-	
 		this.validate();
 		this.repaint();
 		tmp.transferFocusBackward();
@@ -120,16 +127,16 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		dispose();
 		setUndecorated(false);
 		setVisible(true);
-				
 		this.validate();
 		this.repaint();
 		tmp.transferFocusBackward();
 		selectFocusButton(tmp);
 	}
 	
-	protected void processWindowEvent(WindowEvent e)
-	{
-	    if (e.getID() == WindowEvent.WINDOW_DEACTIVATED){
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
+		
+	    if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
 	       return;
 	    }        
 
@@ -141,17 +148,17 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private void instantiate() {
 	
 		Timer timer = new Timer(8000, new ActionListener() {
-
+			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent arg0) {
 				showMenu();
 			}
 		});
 	
 		new ImageProvider();
 		new SoundsProvider();
-		graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		device = graphicscEnvironment.getDefaultScreenDevice();
+		graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		device = graphicsEnvironment.getDefaultScreenDevice();
 		transparent = false;
 		timer.setRepeats(false);
 		timer.start();
@@ -162,7 +169,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
 		menu = new MenuPanel(WIDTH, HEIGHT, this);
-		menu.drawScore();
+		menu.loadScore();
 		player = new PlayerPanel(WIDTH, HEIGHT, this);
 		firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
 		secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
@@ -172,6 +179,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 	
 	public void switchTo(JComponent component) {
+		
 		if(component instanceof SlideContainer)
 			tmp = menu;
 		else
@@ -210,14 +218,12 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			customFontM = (Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f));
 			customFontB =(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f));
 			customFontS =(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f));
-			graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
-
-		} catch (IOException e) {
+			graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
+			
+		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 
-		} catch (FontFormatException e) {
-			e.printStackTrace();
 		}
 	} 
 	
@@ -314,15 +320,63 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			manageLooby();
 		}
 		switchTo(lobby); 
-		lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
+		lobby.revalidate();//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
 	}
 
 	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename, String difficult) {
 		showSlideStage(filename, false, connectionManager, difficult);
 		return gameManager;
 	}
-	
+
 	//---------------------------------SET & GET---------------------------------------------
+	
+	public void resizeComponent() {
+		
+		if(tmp instanceof LoadPanel) {
+			
+			((LoadPanel)tmp).setProgressBar(tmp.getWidth(), tmp.getHeight());
+			((LoadPanel)tmp).repaint();
+		}
+		else if(tmp instanceof MenuPanel) {
+			
+			for(int i = 0; i < ((MenuPanel)tmp).getDIM(); i++) {
+				((MenuPanel)tmp).setBoundAndText(tmp.getWidth(), tmp.getHeight(), i);
+			}
+			((MenuPanel)tmp).addLabel(tmp.getWidth());
+			((MenuPanel)tmp).repaint();
+		}
+		else if(tmp instanceof PlayerPanel) {
+			
+			for(int i = 0; i < ((PlayerPanel)tmp).getDIM(); i++) {
+				((PlayerPanel)tmp).setBoundAndText(tmp.getWidth(), tmp.getHeight(), i);
+			}
+			((PlayerPanel)tmp).repaint();
+		}
+		else if(tmp instanceof SettingsPanel) {
+			
+			((SettingsPanel)tmp).setPosY(270);
+			((SettingsPanel)tmp).setSlider(tmp.getWidth(), tmp.getHeight());
+			
+			for(int i = 0; i < ((SettingsPanel)tmp).getDIM(); i++) {
+				((SettingsPanel)tmp).setBoundsAndText(i);
+				
+				if(i != 0)
+					((SettingsPanel)tmp).setPosY(((SettingsPanel)tmp).getPosY() + 100);
+				
+				if(i != 3)
+					((SettingsPanel)tmp).setBoundRadioButton(tmp.getHeight(), i);
+			}
+		}
+		else if(tmp instanceof ConstructionPanel) {
+			
+		}
+		else if(tmp instanceof GamePanel) {
+			
+		}
+		else if(tmp instanceof NetworkPanel) {
+			
+		}
+	}
 	
 	public FullGamePanel getFullGamePanel() {
 		return fullGame;

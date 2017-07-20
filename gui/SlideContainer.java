@@ -20,7 +20,7 @@ public class SlideContainer extends JLayeredPane {
 	public SlideContainer(final int w, final int h) {
 		
 		this.setBackground(Color.BLACK);
-		this.setSize(new Dimension(w, h));
+		this.setPreferredSize(new Dimension(w, h));
 		this.setLayout(null);
 		this.setOpaque(true);
 		setReady(false);
@@ -72,7 +72,7 @@ public class SlideContainer extends JLayeredPane {
 						remove(oldComponent);
 						
 						setReady(true);
-						((Timer) e.getSource()).stop();
+						((Timer)e.getSource()).stop();
 					
 				} else {
 
