@@ -262,7 +262,8 @@ public class ImageProvider {
 //			java.awt.Image.SCALE_SMOOTH)));
 			
 			setGameOver(ImageIO.read(new File("resource/gameOver.png")));
-			setStageComplete(ImageIO.read(new File("resource/stageComplete.png")));
+			setStageComplete(ImageIO.read(new File("resource/stageComplete.png")).getScaledInstance(700,80,
+					java.awt.Image.SCALE_SMOOTH));
 			setLocked((ImageIO.read(new File("resource/locked.png")).getScaledInstance(getMapsXY(), getMapsXY(),
 					java.awt.Image.SCALE_SMOOTH)));
 			setBackground1P((ImageIO.read(new File("resource/player1A.png")).getScaledInstance(600, 600,

@@ -19,15 +19,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.event.MouseInputAdapter;
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.AbstractDynamicObject;
@@ -66,20 +64,20 @@ public class GamePanel extends JPanel {
 	private String playerName;
 	private static double tempFPS;
 	private PanelSwitcher switcher;
-	private final int ExitDelay;
 	private int cursorPositionDialog;
 	private FullGamePanel fullGamePanel;
 	private ConnectionManager connectionManager;
 	private ArrayList<Color> labelForNameOfPlayersColor;
-	private long limit = 120;
-
+	private long limit;
+	private Timer timer;
+	
 	// online
 	public GamePanel(PanelSwitcher switcher, String difficult) {
 		this.tile = 35;
-		ExitDelay = 500;
 		this.dialog = new JDialog(((MainFrame) switcher));
 		this.setBackground(Color.BLACK);
 		this.longTime = new Long(0);
+		this.limit = 120;
 		tempFPS = 1.5d;
 		this.shift = 17;
 		this.difficult = difficult;
@@ -173,8 +171,8 @@ public class GamePanel extends JPanel {
 		this.setPreferredSize(new Dimension(w, h));
 		this.setGame(game);
 		this.shift = 17;
-		ExitDelay = 500;
 		this.tile = 35;
+		this.limit = 120;
 		this.dialog = new JDialog(((MainFrame) switcher));
 		this.setSwitcher(switcher);
 		this.setBackground(Color.BLACK);
@@ -295,6 +293,18 @@ public class GamePanel extends JPanel {
 			@Override
 			public void run() {
 				gameLoop();
+
+				if (game.isWin()) {
+					win();
+				} else {
+					gameOver();
+				}
+
+				SoundsProvider.cancelMove();
+				SoundsProvider.cancelStop();
+				dialog.dispose();
+				game.getTimer().cancel();
+				game.getTimer2().cancel();
 			}
 		}.start();
 
@@ -305,7 +315,8 @@ public class GamePanel extends JPanel {
 
 	public void gameLoop() {
 
-		while (!game.isExit()) {
+		while (!game.isExitWhileGameLoop()) {
+
 			if (!game.isPaused()) {
 
 				if (GameManager.offline)
@@ -332,11 +343,11 @@ public class GamePanel extends JPanel {
 					game.getRunnable().run();
 			}
 
-			// if(GameManager.offline){
-			repaint();
-			if (fullGamePanel != null)
-				fullGamePanel.repaint();
-			// }
+			if (GameManager.offline) {
+				repaint();
+				if (fullGamePanel != null)
+					fullGamePanel.repaint();
+			}
 
 			if (!GameManager.offline) {
 				try {
@@ -346,10 +357,6 @@ public class GamePanel extends JPanel {
 				}
 			}
 		}
-		repaint();
-		if (fullGamePanel != null)
-			fullGamePanel.repaint();
-
 	}
 
 	private void removeEffect() {
@@ -505,7 +512,7 @@ public class GamePanel extends JPanel {
 					game.getPlayersArray().get(a).setOld(game.getPlayersArray().get(a).getTmpDirection());
 					game.getPlayersArray().get(a).setPressed(false);
 				}
-			} 
+			}
 		}
 
 	}
@@ -1000,42 +1007,58 @@ public class GamePanel extends JPanel {
 
 	public void gameOverOrWin() {
 
-		// SINGLEPLAYER
-		if (GameManager.singlePlayer) {
-			if (game.getFlag().isHit() || game.getPlayersArray().get(0).getResume() <= 0) {
-				gameOver();
-			} else if (game.getEnemy().size() == 0)
-				win();
-		}
-		// MULTIPLAYER
-		else if (!GameManager.singlePlayer) {
-
-			for (int a = 0; a < game.getPlayersArray().size(); a++) {
-				if (game.getPlayersArray().get(a).getResume() < 0 && !game.isExit()) {
-					game.getPlayersArray().get(a).setExitOnline(true);
+		if (!game.isExit()) {
+			// SINGLEPLAYER
+			if (GameManager.singlePlayer) {
+				if (game.getFlag().isHit() || game.getPlayersArray().get(0).getResume() <= 0) {
+					game.setExit(true);
+					game.setWin(false);
+				} else if (game.getEnemy().size() == 0){
+					game.setExit(true);
+					game.setWin(true);
 				}
 			}
+			// MULTIPLAYER
+			else if (!GameManager.singlePlayer) {
 
-			if (((game.getPlayersArray().size() > 1 && (game.getPlayersArray().get(0).getResume() <= 0
-					&& game.getPlayersArray().get(1).getResume() <= 0)))
-					|| game.getPlayersArray().size() == 1 && ((game.getPlayersArray().get(0).getResume() <= 0
-							|| game.getPlayersArray().get(1).getResume() <= 0))
-					|| game.getFlag().isHit()) {
-				gameOver();
-			} else if (game.getEnemy().size() == 0)
-				win();
+				for (int a = 0; a < game.getPlayersArray().size(); a++) {
+					if (game.getPlayersArray().get(a).getResume() < 0 && !game.isExit()) {
+						game.getPlayersArray().get(a).setExitOnline(true);
+					}
+				}
+
+				if (((game.getPlayersArray().size() > 1 && (game.getPlayersArray().get(0).getResume() <= 0
+						&& game.getPlayersArray().get(1).getResume() <= 0)))
+						|| game.getPlayersArray().size() == 1 && ((game.getPlayersArray().get(0).getResume() <= 0
+								|| game.getPlayersArray().get(1).getResume() <= 0))
+						|| game.getFlag().isHit()) {
+					game.setExit(true);
+					game.setWin(false);
+				} else if (game.getEnemy().size() == 0) {
+					game.setExit(true);
+					game.setWin(true);
+				}
+
+			}
+
+			if (game.isExit()) {
+				((MainFrame) getSwitcher()).setTransparent(true);
+				timer = new Timer(1000, new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						game.setExitWhileGameLoop(true);
+					}
+				});
+
+				timer.setRepeats(false);
+				timer.start();
+			}
 		}
-
 	}
 
 	private void gameOver() {
-		game.setExit(true);
 		if (GameManager.offline) {
-
-			SoundsProvider.cancelMove();
-			SoundsProvider.cancelStop();
-			((MainFrame) getSwitcher()).setTransparent(true);
-			repaint();
 
 			((MainFrame) switcher).setSlide(true);
 			((MainFrame) switcher).setCurrentResumeP1(3);
@@ -1049,29 +1072,12 @@ public class GamePanel extends JPanel {
 
 			SoundsProvider.playGameOver();
 
-			try {
-				Thread.sleep(ExitDelay);
-			} catch (InterruptedException e) {
-
-				e.printStackTrace();
-			}
-			dialog.dispose();
 			new TranslucentWindow(getSwitcher(), game.getFilename(), ImageProvider.getGameOver());
-			game.getTimer().cancel();
-			game.getTimer2().cancel();
-
 		}
-
 	}
 
 	private void win() {
-		game.setExit(true);
 		if (GameManager.offline) {
-
-			SoundsProvider.cancelMove();
-			SoundsProvider.cancelStop();
-			((MainFrame) getSwitcher()).setTransparent(true);
-			repaint();
 
 			game.getPlayersArray().get(0).setCurrentResume(game.getPlayersArray().get(0).getResume());
 			((MainFrame) switcher).setCurrentResumeP1(game.getPlayersArray().get(0).getCurrentResume());
@@ -1085,19 +1091,8 @@ public class GamePanel extends JPanel {
 				((MainFrame) switcher).setCurrentLevelP1(game.getPlayersArray().get(1).getCurrentLevel());
 			}
 
-			try {
-				Thread.sleep(ExitDelay);
-			} catch (InterruptedException e) {
-
-				e.printStackTrace();
-			}
-			dialog.dispose();
 			SoundsProvider.playStageComplete();
 			new TranslucentWindow(getSwitcher(), game.getFilename(), ImageProvider.getStageComplete());
-
-			game.getTimer().cancel();
-			game.getTimer2().cancel();
-
 		}
 
 	}
