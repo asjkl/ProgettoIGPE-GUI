@@ -18,6 +18,7 @@ public class WarningDialog extends JDialog {
 	private MainFrame mainframe;
 	
 	public WarningDialog(String text, TypeMatrix[][] matrix, MainFrame mainframe) {
+		super(mainframe);
 		this.mainframe = mainframe;
 		init(text);
 

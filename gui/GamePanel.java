@@ -74,7 +74,7 @@ public class GamePanel extends JPanel {
 	public GamePanel(PanelSwitcher switcher, String difficult) {
 		this.tile = 35;
 		ExitDelay = 500;
-		this.dialog = new JDialog();
+		this.dialog = new JDialog(((MainFrame)switcher));
 		this.setBackground(Color.BLACK);
 		this.longTime = new Long(0);
 		tempFPS = 1.5d;
@@ -170,7 +170,7 @@ public class GamePanel extends JPanel {
 		this.shift = 17;
 		ExitDelay = 500;
 		this.tile = 35;
-		this.dialog = new JDialog();
+		this.dialog = new JDialog(((MainFrame)switcher));
 		this.setSwitcher(switcher);
 		this.setBackground(Color.BLACK);
 		this.longTime = new Long(0);
@@ -658,7 +658,7 @@ public class GamePanel extends JPanel {
 		// dialog.setResizable(true);
 		dialog.setModal(true);
 		dialog.pack();
-		dialog.setLocationRelativeTo(this);
+		dialog.setLocationRelativeTo(((MainFrame)switcher));
 		dialog.setVisible(true);
 
 	}

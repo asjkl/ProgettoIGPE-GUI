@@ -27,7 +27,7 @@ public class JFileChooserClass {
 	private FileNameExtensionFilter filter;
 		
 	@SuppressWarnings("static-access")
-	public JFileChooserClass(boolean online) {
+	public JFileChooserClass(MainFrame m, boolean online) {
 		this.chooser=new JFileChooser();
 		this.filename = new JTextField();
 		this.dir=new JTextField();

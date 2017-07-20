@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+
 import javax.swing.*;
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.Flag;
@@ -85,9 +87,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		
 		this.add(load);
 		this.setResizable(false);
-//		addKeyListener(this);
 		this.pack();
-//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
@@ -101,6 +101,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	
 	public void mainScreenTurnOn() {
 		dispose(); 
+		transparent=false;
 		setUndecorated(true);
 		device.setFullScreenWindow(this);
 		fullscreen = true;
@@ -108,12 +109,21 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	
 	public void mainScreenTurnOff() {
 		fullscreen = false;
+		transparent=false;
 		device.setFullScreenWindow(null);
 		dispose();
 		setUndecorated(false);
 		setVisible(true);
 	}
 	
+	protected void processWindowEvent(WindowEvent e)
+	{
+	    if (e.getID() == WindowEvent.WINDOW_DEACTIVATED){
+	       return;
+	    }        
+
+	    super.processWindowEvent(e);        
+	}  
 	//---------------------------------------------------------------------------------
 
 	private void instantiate() {

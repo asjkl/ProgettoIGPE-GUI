@@ -42,7 +42,7 @@ public class SettingsPanel extends JPanel {
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
-		this.dialogKeyBoard = new JDialog();
+		this.dialogKeyBoard = new JDialog(((MainFrame)switcher));
 		hide = false;
 		cursorPosition = 1;
 		buttons = new ArrayList<>();
@@ -268,12 +268,18 @@ public class SettingsPanel extends JPanel {
 	
 			}
 		});
-		
+		b.addKeyListener(new KeyAdapter() {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				SoundsProvider.playBulletHit1();
+					dialogKeyBoard.dispose();
+			}
+		});
 		p.add(b);
 		
 		dialogKeyBoard.add(p);
 		dialogKeyBoard.setUndecorated(true);
-		// dialog.setResizable(true);
 		dialogKeyBoard.setModal(true);
 		dialogKeyBoard.pack();
 		dialogKeyBoard.setLocationRelativeTo(this);

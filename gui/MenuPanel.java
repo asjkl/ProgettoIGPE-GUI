@@ -50,7 +50,7 @@ public class MenuPanel extends JPanel{
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
 	
-		jfilechooser = new JFileChooserClass(false);
+		jfilechooser = new JFileChooserClass(((MainFrame)switcher), false);
 		setSwitcher(switcher);
 		setCursorPosition(0);
 		DIM = 6;
@@ -64,7 +64,7 @@ public class MenuPanel extends JPanel{
 	
 		high = new JLabel();
 		player = new JLabel();
-		dialog = new JDialog();
+		dialog = new JDialog(((MainFrame)switcher));
 		buttons = new ArrayList<>();
 		myListener = new MyListener();
 		
@@ -150,7 +150,7 @@ public class MenuPanel extends JPanel{
 	public void addActionListener(int j) {
 
 		switch (j) {
-		case 0:
+		case 0: //paly
 			buttons.get(j).addActionListener(new ActionListener() {
 
 				@Override
@@ -194,7 +194,7 @@ public class MenuPanel extends JPanel{
 				}
 			});
 			break;
-		case 3:
+		case 3: 
 			buttons.get(j).addActionListener(new ActionListener() {
 
 				@Override
@@ -371,7 +371,7 @@ public class MenuPanel extends JPanel{
 		dialog.setUndecorated(true);
 		dialog.setModal(true);
 		dialog.pack();
-		dialog.setLocationRelativeTo(this);
+		dialog.setLocationRelativeTo(((MainFrame)switcher));
 		dialog.setVisible(true);
 	}
 

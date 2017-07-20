@@ -114,7 +114,7 @@ public class ConstructionPanel extends JPanel {
 		this.saveFile = false;
 		this.numberOfEnemyPaint = new ArrayList<>();
 		this.stringOfEnemy = new String();
-		this.dialog = new JDialog();
+		this.dialog = new JDialog(((MainFrame)switcher));
 		this.cursorPositionDialog = 0;
 		this.hide = false;
 		this.matrix = new TypeMatrix[height][width];
@@ -134,7 +134,7 @@ public class ConstructionPanel extends JPanel {
 		}
 
 		this.myListener = new MyListener();
-		this.jfilechooser = new JFileChooserClass(false);
+		this.jfilechooser = new JFileChooserClass(((MainFrame)switcher), false);
 
 		setSwitcher(switcher);
 		setCursorPosition(1);
