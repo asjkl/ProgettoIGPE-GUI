@@ -79,6 +79,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		this.setResizable(false);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
