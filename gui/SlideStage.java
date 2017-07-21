@@ -29,8 +29,7 @@ public class SlideStage extends JLayeredPane {
 	private ArrayList<JPanel> panels = new ArrayList<>();
 
 	// ONLINE
-	public SlideStage(int w, int h, PanelSwitcher switcher, JTextField filename, ConnectionManager connectionManager,
-			String difficult) {
+	public SlideStage(int w, int h, PanelSwitcher switcher, JTextField filename, ConnectionManager connectionManager, String difficult) {
 		init(w, h, filename, switcher);
 
 		instantiateOnline(difficult, connectionManager);
@@ -106,7 +105,7 @@ public class SlideStage extends JLayeredPane {
 		((MainFrame) switcher).setGamePanel(
 				new GamePanel(((MainFrame) switcher).getGameWidth(), ((MainFrame) switcher).getGameHeight(),
 						((MainFrame) switcher), ((MainFrame) switcher).getGameManager()));
-		((MainFrame) switcher).setFullGame(new FullGamePanel(WIDTH, HEIGHT, ((MainFrame) switcher).getGameWidth(),
+		((MainFrame) switcher).setFullGame(new FullGamePanel((int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight(), ((MainFrame) switcher).getGameWidth(),
 				((MainFrame) switcher).getGameHeight(), ((MainFrame) switcher), ((MainFrame) switcher).getGamePanel()));
 		((MainFrame) switcher).getGamePanel().setFullGamePanel(((MainFrame) switcher).getFullGame());
 	}

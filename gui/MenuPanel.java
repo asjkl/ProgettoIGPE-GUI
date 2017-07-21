@@ -514,6 +514,8 @@ public class MenuPanel extends JPanel{
 			g2d.fill(getBounds());
 		}
 		
+		System.out.println("menu " + getWidth());
+		
 		g.drawImage(ImageProvider.getTitle(), 
 				(this.getWidth() / 2) - (ImageProvider.getTitle().getWidth(null) / 2), 75, null);
 		
