@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
-import javax.swing.plaf.synth.SynthSpinnerUI;
 
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.Flag;
@@ -201,7 +200,40 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			}
 		}
 		else if(t instanceof ConstructionPanel) {
+			int b = 100;
+			int tile = 35;
+			((ConstructionPanel) t).setBegin1(((getWidth())-(((ConstructionPanel) t).getWidthMatrix()*tile)-((ConstructionPanel) t).getSizeButton())/4);
+		
+			for(int a = 0; a< ((ConstructionPanel)t).getPositionLabel().size(); a++) {
+				Rectangle j = ((ConstructionPanel)t).getPositionLabel().get(a);
+				if (a < 9) {
+					j.setBounds(WIDTH-((ConstructionPanel)t).getBegin1()-((ConstructionPanel)t).getSizeButton()+100, b, tile, tile);
+					if (a == 8) {
+						b = 130;
+					}
+					b += 40;
+				} else {
+					j.setBounds(WIDTH-((ConstructionPanel)t).getBegin1()-((ConstructionPanel)t).getSizeButton()+200, b, tile, tile);
+					b += 50;
+				}
+			}
 			
+			b = 170;
+			for (int a = 0; a < ((ConstructionPanel)t).getPositionCont().size(); a++) {
+				Rectangle j = ((ConstructionPanel)t).getPositionCont().get(a);
+				if (a < 4) {
+					j.setBounds(WIDTH-((ConstructionPanel)t).getBegin1()-((ConstructionPanel)t).getSizeButton()+250, b, tile, tile);
+
+					if (a == 3)
+						b = 125;
+				} else
+					j.setBounds(WIDTH-((ConstructionPanel)t).getBegin1()-((ConstructionPanel)t).getSizeButton()+300, b, tile, tile);
+				b += 50;
+			}
+			
+			for(int a=0; a<((ConstructionPanel)t).getButtons().size(); a++){
+				((ConstructionPanel)t).setBoundAndText(a);
+			}
 		}
 		else if(t instanceof GamePanel) {
 			
