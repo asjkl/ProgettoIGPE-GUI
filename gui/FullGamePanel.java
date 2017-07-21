@@ -258,4 +258,12 @@ public class FullGamePanel extends JPanel {
 	public void setGamePanel(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 	}
+
+	public int getShift() {
+		return shift;
+	}
+
+	public void setShift(int shift) {
+		this.shift = shift;
+	}
 }

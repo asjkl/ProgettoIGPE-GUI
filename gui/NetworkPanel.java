@@ -54,7 +54,7 @@ public class NetworkPanel extends JPanel {
 		this.setLayout(null);
 		lengthMaxName=10;
 		DIM = 5;
-		dialog = new JDialog(((MainFrame)switcher), "ERROR");
+		setDialog(new JDialog(((MainFrame)switcher), "ERROR"));
 		cursorPosition = 4;
 		buttons = new ArrayList<>();
 		hide = false;
@@ -450,5 +450,13 @@ public class NetworkPanel extends JPanel {
 
 	public void setWarning(WarningDialog warning) {
 		this.warning = warning;
+	}
+
+	public JDialog getDialog() {
+		return dialog;
+	}
+
+	public void setDialog(JDialog dialog) {
+		this.dialog = dialog;
 	}
 }
