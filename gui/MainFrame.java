@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 import net.ConnectionManager;
 import progettoIGPE.davide.giovanni.unical2016.Flag;
 import progettoIGPE.davide.giovanni.unical2016.GameManager;
@@ -66,12 +68,14 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
-//		this.setSize(new Dimension(WIDTH, HEIGHT));
+		
 		pressF11 = false;
 		load = new LoadPanel(WIDTH, HEIGHT, this);
 		tmp = load;
+		slide=true;
 		components=new ArrayList<>();
 		components.add(load);
+		slideContainer = new SlideContainer(WIDTH, HEIGHT);
 		this.add(load);
 		this.setResizable(false);
 		this.pack();
@@ -83,7 +87,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		      
 			@Override
 		      public boolean dispatchKeyEvent(KeyEvent e) {
-		    	  if(e.getKeyCode() == KeyEvent.VK_F11 && !pressF11){
+		    	  if(e.getKeyCode() == KeyEvent.VK_F11 && !pressF11 && (SlideContainer.isReady() || (!SlideContainer.isReady() && slide))){
 		    		  
 		    		  if(tmp != null) {
 		    		  
@@ -91,11 +95,17 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 							mainScreenTurnOn();
 							WIDTH=device.getFullScreenWindow().getWidth();
 							HEIGHT=device.getFullScreenWindow().getHeight();
+							  for(int a=0; a<components.size(); a++){
+					    		  resizeComponent(components.get(a));
+					    	  }	
 						}
 						else {
 							mainScreenTurnOff();
 							WIDTH = 1300;
 							HEIGHT = 740;
+							for(int a=0; a<components.size(); a++){
+					    		  resizeComponent(components.get(a));
+					    	  }	
 						}
 						pressF11=true;
 		    		  }
@@ -103,10 +113,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		    	  else {
 		    		  pressF11=false;
 		    	  }	  
-		    	  
-		    	  for(int a=0; a<components.size(); a++){
-		    		  resizeComponent(components.get(a));
-		    	  }		    	  
+    	  
 		        return false;
 		      }
 		});
@@ -155,6 +162,54 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	    super.processWindowEvent(e);        
 	}  
 	
+	public void resizeComponent(JComponent t) {
+		
+		if(t instanceof LoadPanel) {
+			((LoadPanel)t).setProgressBar(WIDTH, HEIGHT);
+			((LoadPanel)t).repaint();
+		}
+		else if(t instanceof MenuPanel && (SlideContainer.isReady() || (!SlideContainer.isReady() && slide))) {
+				t.setBounds(0, 0, WIDTH, HEIGHT);
+			
+			for(int i = 0; i < ((MenuPanel)t).getDIM(); i++) {
+				((MenuPanel)t).setBoundAndText(WIDTH, HEIGHT, i);
+				
+			}
+			((MenuPanel)t).addLabel(WIDTH);
+			((MenuPanel)t).repaint();
+		}
+		else if(t instanceof PlayerPanel) {
+			
+			for(int i = 0; i < ((PlayerPanel)t).getDIM(); i++) {
+				((PlayerPanel)t).setBoundAndText(WIDTH, HEIGHT, i);
+			}
+			((PlayerPanel)t).repaint();
+		}
+		else if(t instanceof SettingsPanel) {
+			
+			((SettingsPanel)t).setPosY(270);
+			((SettingsPanel)t).setSlider(WIDTH, HEIGHT);
+			
+			for(int i = 0; i < ((SettingsPanel)t).getDIM(); i++) {
+				((SettingsPanel)t).setBoundsAndText(i);
+				
+				if(i != 0)
+					((SettingsPanel)t).setPosY(((SettingsPanel)t).getPosY() + 100);
+				
+				if(i != 3)
+					((SettingsPanel)t).setBoundRadioButton(HEIGHT, i);
+			}
+		}
+		else if(t instanceof ConstructionPanel) {
+			
+		}
+		else if(t instanceof GamePanel) {
+			
+		}
+		else if(t instanceof NetworkPanel) {
+			
+		}
+	}
 	//---------------------------------------------------------------------------------
 
 	private void instantiate() {
@@ -174,7 +229,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		transparent = false;
 		timer.setRepeats(false);
 		timer.start();
-		setSlide(true);
 		new ImageProvider();
 		new SoundsProvider();
 		setFont();
@@ -267,12 +321,12 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 		GameManager.offline = false;
 
-//		if (isSlide()) {
-//			slideContainer = new SlideContainer(WIDTH, HEIGHT);
-//			slideContainer.add(menu);
-//			switchTo(slideContainer);
-//			setSlide(false);
-//		} else
+		if (isSlide()) {
+		
+			slideContainer.add(menu);
+			switchTo(slideContainer);
+			setSlide(false);
+		} else
 			switchTo(menu);
 	}
 
@@ -347,53 +401,6 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	}
 
 	//---------------------------------SET & GET---------------------------------------------
-	
-	public void resizeComponent(JComponent tmp) {
-		
-		if(tmp instanceof LoadPanel) {
-			((LoadPanel)tmp).setProgressBar(WIDTH, HEIGHT);
-			((LoadPanel)tmp).repaint();
-		}
-		else if(tmp instanceof MenuPanel) {
-			
-			for(int i = 0; i < ((MenuPanel)tmp).getDIM(); i++) {
-				((MenuPanel)tmp).setBoundAndText(WIDTH, HEIGHT, i);
-			}
-			((MenuPanel)tmp).addLabel(WIDTH);
-			((MenuPanel)tmp).repaint();
-		}
-		else if(tmp instanceof PlayerPanel) {
-			
-			for(int i = 0; i < ((PlayerPanel)tmp).getDIM(); i++) {
-				((PlayerPanel)tmp).setBoundAndText(WIDTH, HEIGHT, i);
-			}
-			((PlayerPanel)tmp).repaint();
-		}
-		else if(tmp instanceof SettingsPanel) {
-			
-			((SettingsPanel)tmp).setPosY(270);
-			((SettingsPanel)tmp).setSlider(WIDTH, HEIGHT);
-			
-			for(int i = 0; i < ((SettingsPanel)tmp).getDIM(); i++) {
-				((SettingsPanel)tmp).setBoundsAndText(i);
-				
-				if(i != 0)
-					((SettingsPanel)tmp).setPosY(((SettingsPanel)tmp).getPosY() + 100);
-				
-				if(i != 3)
-					((SettingsPanel)tmp).setBoundRadioButton(HEIGHT, i);
-			}
-		}
-		else if(tmp instanceof ConstructionPanel) {
-			
-		}
-		else if(tmp instanceof GamePanel) {
-			
-		}
-		else if(tmp instanceof NetworkPanel) {
-			
-		}
-	}
 	
 	public FullGamePanel getFullGamePanel() {
 		return fullGame;

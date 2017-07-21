@@ -68,6 +68,7 @@ public class MenuPanel extends JPanel{
 		createButton();
 		this.add(player);
 		this.add(high);
+		addLabel(w);
 	}
 
 	public void createButton() {
@@ -417,7 +418,7 @@ public class MenuPanel extends JPanel{
 		high.setBackground(Color.BLACK);
 		high.setForeground(Color.WHITE);
 		high.setText("Hi - " + values[1]);
-		high.setBounds(player.getWidth(), 0, 500, 100);
+		high.setBounds(currentX + player.getWidth() / 2, 0, 500, 100);
 	}
 	
 	public void loadScore() {
@@ -514,10 +515,9 @@ public class MenuPanel extends JPanel{
 			g2d.fill(getBounds());
 		}
 		
-		System.out.println("menu " + getWidth());
 		
 		g.drawImage(ImageProvider.getTitle(), 
-				(this.getWidth() / 2) - (ImageProvider.getTitle().getWidth(null) / 2), 75, null);
+				(((MainFrame)switcher).getWIDTH() / 2) - (ImageProvider.getTitle().getWidth(null) / 2), 75, null);
 		
 		if(!hide)
 			g.drawImage(ImageProvider.getCursorRight(),

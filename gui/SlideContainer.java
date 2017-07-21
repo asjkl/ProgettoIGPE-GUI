@@ -28,7 +28,7 @@ public class SlideContainer extends JLayeredPane {
 
 	@Override
 	public Component add(Component component) {
-
+		
 		Component[] components = this.getComponents();
 
 		if(components.length > 0) {
@@ -55,6 +55,7 @@ public class SlideContainer extends JLayeredPane {
 	}
 
 	public void slideFromBottom(final Component component) {
+		
 
 		new Timer(DELAY, new ActionListener() {
 
@@ -91,6 +92,7 @@ public class SlideContainer extends JLayeredPane {
 
 	public static void setReady(boolean ready) {
 		SlideContainer.ready = ready;
+
+	}
 	}
 	
-}
