@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;

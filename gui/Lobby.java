@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;

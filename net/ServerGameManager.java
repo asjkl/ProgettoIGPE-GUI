@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.JTextField;
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
-import progettoIGPE.davide.giovanni.unical2016.GUI.GamePanel;
+
+import core.GameManager;
+import gui.GamePanel;
 
 public class ServerGameManager {
 	

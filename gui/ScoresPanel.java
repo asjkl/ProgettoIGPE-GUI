@@ -1,5 +1,5 @@
 
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,8 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
-import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
+
+import core.GameManager;
+import core.PlayerTank;
 
 @SuppressWarnings("serial")
 public class ScoresPanel extends JPanel {

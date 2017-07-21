@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -7,9 +7,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
-import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
-import progettoIGPE.davide.giovanni.unical2016.Power;
+
+import core.GameManager;
+import core.PlayerTank;
+import core.Power;
 
 @SuppressWarnings("serial")
 public class FullGamePanel extends JPanel {

@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.*;
 import java.io.File;
@@ -10,9 +10,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
 
+import core.Flag;
+import core.GameManager;
 import net.ConnectionManager;
-import progettoIGPE.davide.giovanni.unical2016.Flag;
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements PanelSwitcher {
@@ -79,7 +79,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		this.setResizable(false);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
+		this.setLocationRelativeTo(this);
 		this.setVisible(true);
 		
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
@@ -204,7 +204,8 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			int b = 100;
 			int tile = 35;
 			((ConstructionPanel) t).setBegin1(((getWidth())-(((ConstructionPanel) t).getWidthMatrix()*tile)-((ConstructionPanel) t).getSizeButton())/4);
-		
+			((ConstructionPanel) t).setBegin2((getHeight() / 2) - ((((ConstructionPanel) t).getHeightMatrix() * tile) / 2));
+
 			for(int a = 0; a< ((ConstructionPanel)t).getPositionLabel().size(); a++) {
 				Rectangle j = ((ConstructionPanel)t).getPositionLabel().get(a);
 				if (a < 9) {
@@ -235,6 +236,16 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			for(int a=0; a<((ConstructionPanel)t).getButtons().size(); a++){
 				((ConstructionPanel)t).setBoundAndText(a);
 			}
+			int cont;
+			if(fullscreen){
+				if(WIDTH>1300) {
+					cont=15;
+				}else{
+					cont=20;
+				}
+				((ConstructionPanel)t).initMatrixCell(((ConstructionPanel) t).getBegin1(),((ConstructionPanel) t).getBegin2()+cont);
+			}else
+				((ConstructionPanel)t).initMatrixCell(((ConstructionPanel) t).getBegin1(),((ConstructionPanel) t).getBegin2());
 		}
 		else if(t instanceof GamePanel) {
 			

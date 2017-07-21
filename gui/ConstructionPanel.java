@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -30,18 +30,18 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
-import progettoIGPE.davide.giovanni.unical2016.BrickWall;
-import progettoIGPE.davide.giovanni.unical2016.Direction;
-import progettoIGPE.davide.giovanni.unical2016.EnemyTank;
-import progettoIGPE.davide.giovanni.unical2016.Flag;
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
-import progettoIGPE.davide.giovanni.unical2016.Ice;
-import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
-import progettoIGPE.davide.giovanni.unical2016.Speed;
-import progettoIGPE.davide.giovanni.unical2016.SteelWall;
-import progettoIGPE.davide.giovanni.unical2016.Tree;
-import progettoIGPE.davide.giovanni.unical2016.Water;
-import progettoIGPE.davide.giovanni.unical2016.World;
+import core.BrickWall;
+import core.Direction;
+import core.EnemyTank;
+import core.Flag;
+import core.GameManager;
+import core.Ice;
+import core.PlayerTank;
+import core.Speed;
+import core.SteelWall;
+import core.Tree;
+import core.Water;
+import core.World;
 
 @SuppressWarnings("serial")
 public class ConstructionPanel extends JPanel {
@@ -92,13 +92,13 @@ public class ConstructionPanel extends JPanel {
 	private int begin2;
 	private int end1;
 	private int sizeButton = 400;
+	private Cell[][] matrixCell;
 
 	public ConstructionPanel(final int w, final int h, PanelSwitcher switcher, Flag flag) {
 
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
-
 		this.heightMatrix = 20;
 		this.widthMatrix = 21;
 		this.tile = 30;
@@ -145,9 +145,18 @@ public class ConstructionPanel extends JPanel {
 
 		setSwitcher(switcher);
 		setCursorPosition(1);
-
+		initMatrixCell(begin1, begin2);
 		createButton();
 		initialize();
+	}
+
+	void initMatrixCell(int dim, int dim2) {
+		matrixCell = new Cell[heightMatrix][widthMatrix];
+		for (int a = 0; a < heightMatrix; a++) {
+			for (int b = 0; b < widthMatrix; b++) {
+				matrixCell[a][b] = new Cell(tile, a, b, dim, dim2);
+			}
+		}
 	}
 
 	public void createButton() {
@@ -584,23 +593,26 @@ public class ConstructionPanel extends JPanel {
 		return true;
 	}
 
-	public void setBoundAndText(int j) {	
+	public void setBoundAndText(int j) {
 		switch (j) {
 		case 0:
 			buttons.get(j).setBounds(10, 10, 100, 30);
 			buttons.get(j).setText("Back");
 			break;
 		case 1:
-			
-			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH()-getBegin1()-125,((MainFrame) switcher).getHEIGHT()-240, 70, 35);
+
+			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH() - getBegin1() - 125,
+					((MainFrame) switcher).getHEIGHT() - 240, 70, 35);
 			buttons.get(j).setText("Load");
 			break;
 		case 2:
-			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH()-getBegin1()-125,((MainFrame) switcher).getHEIGHT()-170, 70, 35);
+			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH() - getBegin1() - 125,
+					((MainFrame) switcher).getHEIGHT() - 170, 70, 35);
 			buttons.get(j).setText("Save");
 			break;
 		case 3:
-			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH()-getBegin1()-125, ((MainFrame) switcher).getHEIGHT()-100, 120, 35);
+			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH() - getBegin1() - 125,
+					((MainFrame) switcher).getHEIGHT() - 100, 120, 35);
 			buttons.get(j).setText("Cancel");
 		default:
 			break;
@@ -827,6 +839,17 @@ public class ConstructionPanel extends JPanel {
 			g2d.setColor(getBackground());
 			g2d.fill(getBounds());
 		}
+		
+		//NON CANCELLAREEEEEE
+
+		// for (int a = 0; a < heightMatrix; a++) {
+		// for (int b = 0; b < widthMatrix; b++) {
+		// g.setColor(Color.orange);
+		// g.drawRect((int)matrixCell[a][b].r.getY(),(int)matrixCell[a][b].r.getX(),(int)
+		// matrixCell[a][b].r.getWidth(),(int) matrixCell[a][b].r.getHeight());
+		//
+		// }
+		// }
 
 		if (!hide) {
 			if (cursorPosition == 0)
@@ -839,7 +862,9 @@ public class ConstructionPanel extends JPanel {
 
 		// TANK BACKGROUND
 		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-		g.drawImage(ImageProvider.getBackground1P(), 135, 52, null);
+		g.drawImage(ImageProvider.getBackground1P(),
+				(begin1 + (widthMatrix * tile / 2)) - ImageProvider.getBackground1P().getWidth(null) / 2,
+				(begin1 + (heightMatrix * tile / 2)) - ImageProvider.getBackground1P().getHeight(null) / 2, null);
 		if (!((MainFrame) getSwitcher()).isTransparent())
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
@@ -1103,62 +1128,75 @@ public class ConstructionPanel extends JPanel {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-
 			if (type != TypeMatrix.DEFAULT) {
-				int col = (int) (e.getX() / tile) - 3;
-				int row = (int) (e.getY() / tile) - 2;
+				double row = e.getX();
+				double col = e.getY();
 
-				if ((col < widthMatrix && row < heightMatrix && col >= 0 && row >= 0)) {
-					if (((col == 0 && row == 0) || (col == widthMatrix / 2 && row == 0)
-							|| (col == widthMatrix - 1 && row == 0)) && type != TypeMatrix.EMPTY) {
-						matrix[row][col] = type;
-						((MainFrame) getSwitcher()).setTransparent(true);
-						setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix,
-								((MainFrame) getSwitcher())));
-					} else {
+				for (int a = 0; a < heightMatrix; a++) {
+					for (int b = 0; b < widthMatrix; b++) {
 
-						if (matrix[row][col] == TypeMatrix.FLAG) {
-							contFlag--;
-						}
-						if (matrix[row][col] == TypeMatrix.PLAYER1) {
-							contPlayerP1--;
-							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-								setTotEnemyIntoMap(20);
-							else
-								setTotEnemyIntoMap(40);
-						}
-						if (matrix[row][col] == TypeMatrix.PLAYER2) {
-							contPlayerP2--;
-							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-								setTotEnemyIntoMap(20);
-							else
-								setTotEnemyIntoMap(40);
-						}
+						if (matrixCell[a][b].intersect(col, row)
+								&& (b < widthMatrix && a < heightMatrix && b >= 0 && a >= 0)) {
+							if (((a == 0 && b == 0) || (b == widthMatrix / 2 && a == 0)
+									|| (b == widthMatrix - 1 && a == 0)) && type != TypeMatrix.EMPTY) {
+								matrix[a][b] = type;
+								((MainFrame) getSwitcher()).setTransparent(true);
+								setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix,
+										((MainFrame) getSwitcher())));
+							} else {
+								if (matrix[a][b] == TypeMatrix.FLAG) {
+									contFlag--;
+								}
 
-						if (((type == TypeMatrix.FLAG && contFlag == 0)
-								|| (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0)
-								|| (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0))
-								|| (type != TypeMatrix.PLAYER2 && type != TypeMatrix.PLAYER1
-										&& type != TypeMatrix.FLAG)) {
-							matrix[row][col] = type;
-							repaint();
-						}
-						if (type == TypeMatrix.FLAG && contFlag == 0) {
-							contFlag++;
-						}
-						if (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0) {
-							contPlayerP1++;
-							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-								setTotEnemyIntoMap(20);
-							else
-								setTotEnemyIntoMap(40);
-						}
-						if (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0) {
-							contPlayerP2++;
-							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-								setTotEnemyIntoMap(20);
-							else
-								setTotEnemyIntoMap(40);
+								if (matrix[a][b] == TypeMatrix.PLAYER1) {
+									contPlayerP1--;
+									if ((contPlayerP1 == 1 && contPlayerP2 == 0)
+											|| (contPlayerP1 == 0 && contPlayerP2 == 1))
+										setTotEnemyIntoMap(20);
+									else
+										setTotEnemyIntoMap(40);
+								}
+
+								if (matrix[a][b] == TypeMatrix.PLAYER2) {
+									contPlayerP2--;
+									if ((contPlayerP1 == 1 && contPlayerP2 == 0)
+											|| (contPlayerP1 == 0 && contPlayerP2 == 1))
+										setTotEnemyIntoMap(20);
+									else
+										setTotEnemyIntoMap(40);
+								}
+
+								if (((type == TypeMatrix.FLAG && contFlag == 0)
+										|| (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0)
+										|| (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0))
+										|| (type != TypeMatrix.PLAYER2 && type != TypeMatrix.PLAYER1
+												&& type != TypeMatrix.FLAG)) {
+									matrix[a][b] = type;
+									repaint();
+								}
+
+								if (type == TypeMatrix.FLAG && contFlag == 0) {
+									contFlag++;
+								}
+
+								if (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0) {
+									contPlayerP1++;
+									if ((contPlayerP1 == 1 && contPlayerP2 == 0)
+											|| (contPlayerP1 == 0 && contPlayerP2 == 1))
+										setTotEnemyIntoMap(20);
+									else
+										setTotEnemyIntoMap(40);
+								}
+
+								if (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0) {
+									contPlayerP2++;
+									if ((contPlayerP1 == 1 && contPlayerP2 == 0)
+											|| (contPlayerP1 == 0 && contPlayerP2 == 1))
+										setTotEnemyIntoMap(20);
+									else
+										setTotEnemyIntoMap(40);
+								}
+							}
 						}
 					}
 				}
@@ -1260,40 +1298,62 @@ public class ConstructionPanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (type != TypeMatrix.DEFAULT) {
-				int col = (int) (e.getX() / tile) - 3;
-				int row = (int) (e.getY() / tile) - 2;
+				double row = e.getX();
+				double col = e.getY();
 
-				if (((col == 0 && row == 0) || (col == widthMatrix / 2 && row == 0)
-						|| (col == widthMatrix - 1 && row == 0)) && type != TypeMatrix.EMPTY) {
-					matrix[row][col] = type;
-					((MainFrame) getSwitcher()).setTransparent(true);
-					setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix,
-							((MainFrame) getSwitcher())));
-				}
+				for (int a = 0; a < heightMatrix; a++) {
+					for (int b = 0; b < widthMatrix; b++) {
+						if (matrixCell[a][b].intersect(col, row) && ((b == 0 && a == 0)
+								|| (b == widthMatrix / 2 && a == 0) || (b == widthMatrix - 1 && a == 0))
+								&& type != TypeMatrix.EMPTY) {
+							matrix[a][b] = type;
+							((MainFrame) getSwitcher()).setTransparent(true);
+							setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix,
+									((MainFrame) getSwitcher())));
+						} else if (matrixCell[a][b].intersect(col, row) && type != TypeMatrix.FLAG
+								&& type != TypeMatrix.PLAYER1 && type != TypeMatrix.PLAYER2) {
+							if (matrix[a][b] == TypeMatrix.FLAG) {
+								contFlag--;
+							}
+							if (matrix[a][b] == TypeMatrix.PLAYER1) {
+								contPlayerP1--;
+								if ((contPlayerP1 == 1 && contPlayerP2 == 0)
+										|| (contPlayerP1 == 0 && contPlayerP2 == 1))
+									setTotEnemyIntoMap(20);
+								else
+									setTotEnemyIntoMap(40);
+							} else if (matrix[a][b] == TypeMatrix.PLAYER2) {
+								contPlayerP2--;
+								if ((contPlayerP1 == 1 && contPlayerP2 == 0)
+										|| (contPlayerP1 == 0 && contPlayerP2 == 1))
+									setTotEnemyIntoMap(20);
+								else
+									setTotEnemyIntoMap(40);
+							}
 
-				else if ((col < widthMatrix && row < heightMatrix && col >= 0 && row >= 0) && type != TypeMatrix.FLAG
-						&& type != TypeMatrix.PLAYER1 && type != TypeMatrix.PLAYER2) {
-					if (matrix[row][col] == TypeMatrix.FLAG) {
-						contFlag--;
+							matrix[a][b] = type;
+							repaint();
+						}
 					}
-					if (matrix[row][col] == TypeMatrix.PLAYER1) {
-						contPlayerP1--;
-						if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-							setTotEnemyIntoMap(20);
-						else
-							setTotEnemyIntoMap(40);
-					} else if (matrix[row][col] == TypeMatrix.PLAYER2) {
-						contPlayerP2--;
-						if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
-							setTotEnemyIntoMap(20);
-						else
-							setTotEnemyIntoMap(40);
-					}
-					matrix[row][col] = type;
-					repaint();
 				}
 			}
 		}
+	}
+
+	private class Cell {
+		public Rectangle r;
+
+		public Cell(int pixel, int a, int b, int dim1, int dim2) {
+			r = new Rectangle((dim1 + pixel + (a * pixel)), (dim2 + pixel + (b * pixel)), pixel, pixel);
+		}
+
+		boolean intersect(double x, double y) {
+			if (r.contains(x, y)) {
+				return true;
+			}
+			return false;
+		}
+
 	}
 
 	public int getCursorPosition() {
@@ -1366,6 +1426,14 @@ public class ConstructionPanel extends JPanel {
 
 	public ArrayList<JButton> getButtons() {
 		return buttons;
+	}
+
+	public int getHeightMatrix() {
+		return heightMatrix;
+	}
+
+	public void setBegin2(int begin2) {
+		this.begin2 = begin2;
 	}
 
 }

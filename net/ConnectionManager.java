@@ -9,16 +9,16 @@ import java.net.SocketException;
 
 import javax.swing.JTextField;
 
-import progettoIGPE.davide.giovanni.unical2016.BrickWall;
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
-import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
-import progettoIGPE.davide.giovanni.unical2016.PowerUp;
-import progettoIGPE.davide.giovanni.unical2016.Rocket;
-import progettoIGPE.davide.giovanni.unical2016.SteelWall;
-import progettoIGPE.davide.giovanni.unical2016.GUI.ImageProvider;
-import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
-import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
-import progettoIGPE.davide.giovanni.unical2016.GUI.TranslucentWindow;
+import core.BrickWall;
+import core.GameManager;
+import core.PlayerTank;
+import core.PowerUp;
+import core.Rocket;
+import core.SteelWall;
+import gui.ImageProvider;
+import gui.MainFrame;
+import gui.SoundsProvider;
+import gui.TranslucentWindow;
 
 public class ConnectionManager implements Runnable {
 

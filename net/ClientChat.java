@@ -10,9 +10,10 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import progettoIGPE.davide.giovanni.unical2016.GUI.MainFrame;
-import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
-import progettoIGPE.davide.giovanni.unical2016.GUI.WarningDialog;
+
+import gui.MainFrame;
+import gui.SoundsProvider;
+import gui.WarningDialog;
 
 import java.io.*;
 

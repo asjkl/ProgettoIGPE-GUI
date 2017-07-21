@@ -1,11 +1,11 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
+import core.GameManager;
 
 @SuppressWarnings("serial")
 public class TranslucentWindow extends JDialog {

@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -27,27 +27,28 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputAdapter;
+
+import core.AbstractDynamicObject;
+import core.AbstractStaticObject;
+import core.ArmorTank;
+import core.BasicTank;
+import core.BrickWall;
+import core.Direction;
+import core.EnemyTank;
+import core.FastTank;
+import core.Flag;
+import core.GameManager;
+import core.Ice;
+import core.PlayerTank;
+import core.Power;
+import core.PowerTank;
+import core.PowerUp;
+import core.Rocket;
+import core.SteelWall;
+import core.Tank;
+import core.Tree;
+import core.Water;
 import net.ConnectionManager;
-import progettoIGPE.davide.giovanni.unical2016.AbstractDynamicObject;
-import progettoIGPE.davide.giovanni.unical2016.AbstractStaticObject;
-import progettoIGPE.davide.giovanni.unical2016.ArmorTank;
-import progettoIGPE.davide.giovanni.unical2016.BasicTank;
-import progettoIGPE.davide.giovanni.unical2016.BrickWall;
-import progettoIGPE.davide.giovanni.unical2016.Direction;
-import progettoIGPE.davide.giovanni.unical2016.EnemyTank;
-import progettoIGPE.davide.giovanni.unical2016.FastTank;
-import progettoIGPE.davide.giovanni.unical2016.Flag;
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
-import progettoIGPE.davide.giovanni.unical2016.Ice;
-import progettoIGPE.davide.giovanni.unical2016.PlayerTank;
-import progettoIGPE.davide.giovanni.unical2016.Power;
-import progettoIGPE.davide.giovanni.unical2016.PowerTank;
-import progettoIGPE.davide.giovanni.unical2016.PowerUp;
-import progettoIGPE.davide.giovanni.unical2016.Rocket;
-import progettoIGPE.davide.giovanni.unical2016.SteelWall;
-import progettoIGPE.davide.giovanni.unical2016.Tank;
-import progettoIGPE.davide.giovanni.unical2016.Tree;
-import progettoIGPE.davide.giovanni.unical2016.Water;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {

@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 import javax.swing.JTextField;
 
 import net.ConnectionManager;

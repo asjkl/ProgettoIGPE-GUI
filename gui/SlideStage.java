@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
+import core.GameManager;
 import net.ConnectionManager;
-import progettoIGPE.davide.giovanni.unical2016.GameManager;
 
 @SuppressWarnings("serial")
 public class SlideStage extends JLayeredPane {

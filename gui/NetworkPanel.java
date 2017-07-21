@@ -1,4 +1,4 @@
-package progettoIGPE.davide.giovanni.unical2016.GUI;
+package gui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -20,10 +20,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.MouseInputAdapter;
 
+import gui.PanelSwitcher;
+import gui.SoundsProvider;
 import net.ClientChat;
 import net.Server;
-import progettoIGPE.davide.giovanni.unical2016.GUI.PanelSwitcher;
-import progettoIGPE.davide.giovanni.unical2016.GUI.SoundsProvider;
 
 @SuppressWarnings("serial")
 public class NetworkPanel extends JPanel {
