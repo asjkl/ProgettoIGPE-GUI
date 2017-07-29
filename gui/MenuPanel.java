@@ -26,10 +26,10 @@ import java.util.StringTokenizer;
 @SuppressWarnings("serial")
 public class MenuPanel extends JPanel{
 
-	private final int DIM = 6;
-	private final int LENGTH = 5;
-	private final int posY = 70;
-	private final int posX = 130;
+	private int DIM;
+	private int LENGTH;
+	private int posY;
+	private int posX;
 	private JDialog dialog;
 	private JButton[] bts;
 	private boolean hide;
@@ -53,7 +53,10 @@ public class MenuPanel extends JPanel{
 		jfilechooser = new JFileChooserClass(((MainFrame)switcher), false);
 		setSwitcher(switcher);
 		setCursorPosition(0);
-		
+		DIM = 6;
+		LENGTH = 5;
+		posY = 70;
+		posX = 150;
 		cursorPositionDialog = 0;
 		hide = false;
 		tmpHiScore = -1;
@@ -65,10 +68,7 @@ public class MenuPanel extends JPanel{
 		buttons = new ArrayList<>();
 		myListener = new MyListener();
 		
-		createButton();
-		this.add(player);
-		this.add(high);
-		addLabel(w);
+		createButton();		
 	}
 
 	public void createButton() {
@@ -89,7 +89,7 @@ public class MenuPanel extends JPanel{
 			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
 			buttons.get(i).addMouseListener(myListener);
 			buttons.get(i).addMouseMotionListener(myListener);
-			setBoundAndText((int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight(), i);
+			setBoundAndText(i);
 			buttons.get(i).addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -150,7 +150,7 @@ public class MenuPanel extends JPanel{
 	public void addActionListener(int j) {
 
 		switch (j) {
-		case 0: //play
+		case 0: //paly
 			buttons.get(j).addActionListener(new ActionListener() {
 
 				@Override
@@ -188,8 +188,8 @@ public class MenuPanel extends JPanel{
 					
 					if(jfilechooser.functionLoadFile()) {
 						setCursorPosition(0);
-						jfilechooser.getFilename().setText(jfilechooser.getFile().toString() + "/" + jfilechooser.getFilename().getText() + ".txt");
-						getSwitcher().showSlideStage(jfilechooser.getFilename(), true, null, null);
+						jfilechooser.getFilename().setText(jfilechooser.getFile().toString()+"/"+jfilechooser.getFilename().getText() + ".txt");
+						  getSwitcher().showSlideStage(jfilechooser.getFilename(), true, null, null);
 					}
 				}
 			});
@@ -227,7 +227,7 @@ public class MenuPanel extends JPanel{
 					SoundsProvider.playBulletHit1();
 					hide = true;
 					setCursorPosition(j);
-					((MainFrame) getSwitcher()).setTransparent(true);
+					((MainFrame)getSwitcher()).setTransparent(true);
 					exitDialog();
 				}
 			});
@@ -238,31 +238,37 @@ public class MenuPanel extends JPanel{
 		}
 	}
 
-	public void setBoundAndText(int w, int h, int j) {
-		
+	public void setBoundAndText(int j) {
+
 		switch (j) {
 		case 0:
-			buttons.get(j).setBounds(w / 2 - posX, h / 2 - posY + (posY * j), 120, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 120, 40);
 			buttons.get(j).setText("Play");
 			break;
 		case 1:
-			buttons.get(j).setBounds(w / 2 - posX, h / 2 - posY + (posY * j), 200, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 200, 40);
 			buttons.get(j).setText("Network");
 			break;
 		case 2:
-			buttons.get(j).setBounds(w / 2 - posX, h / 2 - posY + (posY * j), 300, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 300, 40);
 			buttons.get(j).setText("Custom Maps");
 			break;
 		case 3:
-			buttons.get(j).setBounds(w / 2 - posX, h / 2 - posY + (posY * j), 300, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 300, 40);
 			buttons.get(j).setText("Construction");
 			break;
 		case 4:
-			buttons.get(j).setBounds(w / 2 - posX, h / 2 - posY + (posY * j), 180, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 180, 40);
 			buttons.get(j).setText("Settings");
 			break;
 		case 5:
-			buttons.get(j).setBounds(w / 2 - posX, h / 2 - posY + (posY * j), 120, 40);
+			buttons.get(j).setBounds((int) (this.getPreferredSize().getWidth()) / 2 - posX,
+					(int) (this.getPreferredSize().getHeight()) / 2 - posY + (posY * j), 120, 40);
 			buttons.get(j).setText("Exit");
 		default:
 			break;
@@ -277,9 +283,9 @@ public class MenuPanel extends JPanel{
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				if (cursorPositionDialog == 0) {
-					g.drawImage(ImageProvider.getCursorRight(), 75, 55, this);
+					g.drawImage(ImageProvider.getCursorRight(), 75, 58, this);
 				} else {
-					g.drawImage(ImageProvider.getCursorRight(), 75, 103, this);
+					g.drawImage(ImageProvider.getCursorRight(), 75, 106, this);
 				}
 			}
 		};
@@ -383,6 +389,7 @@ public class MenuPanel extends JPanel{
 					hide = false;
 					repaint();
 					dialog.dispose();
+					
 				}
 			});
 			break;
@@ -404,22 +411,30 @@ public class MenuPanel extends JPanel{
 		}
 	}
 	
-	public void addLabel(int w) {
+	public void drawScore() {
 		
-		int currentX = (w / 2) - ImageProvider.getTitle().getWidth(null) / 2;
+		loadScore();
+
+		if(tmpHiScore < Integer.parseInt(values[1])) {
+			
+			tmpHiScore = Integer.parseInt(values[1]);
+			
+			high.setFont(MainFrame.customFontB);
+			high.setBackground(Color.BLACK);
+			high.setForeground(Color.WHITE);
+			high.setText("Hi - " + values[1]);
+			high.setBounds(475, 0, 500, 100);
+		}
 		
 		player.setFont(MainFrame.customFontB);
 		player.setBackground(Color.BLACK);
 		player.setForeground(Color.WHITE);
 		player.setText("I - " + values[0]);
-		player.setBounds(currentX, 0, 500, 100);
+		player.setBounds(190, 0, 500, 100);
 		
-		high.setFont(MainFrame.customFontB);
-		high.setBackground(Color.BLACK);
-		high.setForeground(Color.WHITE);
-		high.setText("Hi - " + values[1]);
-		high.setBounds(currentX + player.getWidth() / 2, 0, 500, 100);
-	}
+		this.add(player);
+		this.add(high);
+	}	
 	
 	public void loadScore() {
 		
@@ -464,11 +479,6 @@ public class MenuPanel extends JPanel{
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		
-		if(tmpHiScore < Integer.parseInt(values[1]))
-			tmpHiScore = Integer.parseInt(values[1]);
-		
-		addLabel((int) this.getPreferredSize().getWidth());
 	}
 
 	public void resetScore() {
@@ -514,18 +524,12 @@ public class MenuPanel extends JPanel{
 			g2d.setColor(getBackground());
 			g2d.fill(getBounds());
 		}
-		
-		
-		g.drawImage(ImageProvider.getTitle(), 
-				(((MainFrame)switcher).getWIDTH() / 2) - (ImageProvider.getTitle().getWidth(null) / 2), 75, null);
+
+		g.drawImage(ImageProvider.getTitle(), 175, 75, null);
 		
 		if(!hide)
 			g.drawImage(ImageProvider.getCursorRight(),
-					buttons.get(cursorPosition).getX() - 65, buttons.get(cursorPosition).getY() - 4, this);
-	}
-	
-	public int getDIM() {
-		return DIM;
+					buttons.get(cursorPosition).getX() - 70, buttons.get(cursorPosition).getY() - 4, this);
 	}
 
 	public int getCursorPosition() {

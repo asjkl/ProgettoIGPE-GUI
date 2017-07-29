@@ -46,10 +46,10 @@ import core.World;
 @SuppressWarnings("serial")
 public class ConstructionPanel extends JPanel {
 
-	private int heightMatrix;
-	private int widthMatrix;
+	private int height;
+	private int width;
 	private int tile;
-
+	
 	private int contBasic;
 	private int contArmor;
 	private int contFast;
@@ -57,10 +57,10 @@ public class ConstructionPanel extends JPanel {
 	private int contFlag;
 	private int contPlayerP1;
 	private int contPlayerP2;
-
+	
 	private boolean isFlag;
 	private boolean isPlayer;
-	private boolean isEnemy;
+	private boolean isEnemy ;
 
 	private TypeMatrix[][] matrix;
 	private TypeMatrix type;
@@ -88,24 +88,19 @@ public class ConstructionPanel extends JPanel {
 	private Flag flag;
 	private WarningDialog warning;
 
-	private int begin1;
-	private int begin2;
-	private int end1;
-	private int sizeButton = 400;
-	private Cell[][] matrixCell;
-
 	public ConstructionPanel(final int w, final int h, PanelSwitcher switcher, Flag flag) {
 
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
-		this.heightMatrix = 20;
-		this.widthMatrix = 21;
+
+		this.height = 20;
+		this.width = 21;
 		this.tile = 30;
 		this.contBasic = contArmor = contFast = contPower = contFlag = contPlayerP1 = contPlayerP2 = 0;
 
 		// se prima di salvare si dimentica qualcosa
-		this.flag = flag;
+		this.flag=flag;
 		this.isFlag = false;
 		this.isPlayer = false;
 		this.isEnemy = false;
@@ -119,15 +114,13 @@ public class ConstructionPanel extends JPanel {
 		this.saveFile = false;
 		this.numberOfEnemyPaint = new ArrayList<>();
 		this.stringOfEnemy = new String();
-		this.dialog = new JDialog(((MainFrame) switcher));
+		this.dialog = new JDialog(((MainFrame)switcher));
 		this.cursorPositionDialog = 0;
 		this.hide = false;
-		this.matrix = new TypeMatrix[heightMatrix][widthMatrix];
+		this.matrix = new TypeMatrix[height][width];
 		this.positionLabel = new ArrayList<>();
 		this.positionCont = new ArrayList<>();
-		this.begin1 = ((getWidth()) - (widthMatrix * tile) - sizeButton) / 4;
-		this.begin2 = (getHeight() / 2) - ((heightMatrix * tile) / 2);
-		this.end1 = heightMatrix * tile;
+
 		this.numberOfEnemyPaint = new ArrayList<>();
 		this.stringOfEnemy = new String();
 
@@ -141,22 +134,13 @@ public class ConstructionPanel extends JPanel {
 		}
 
 		this.myListener = new MyListener();
-		this.jfilechooser = new JFileChooserClass(((MainFrame) switcher), false);
+		this.jfilechooser = new JFileChooserClass(((MainFrame)switcher), false);
 
 		setSwitcher(switcher);
 		setCursorPosition(1);
-		initMatrixCell(begin1, begin2);
-		createButton();
-		initialize();
-	}
 
-	void initMatrixCell(int dim, int dim2) {
-		matrixCell = new Cell[heightMatrix][widthMatrix];
-		for (int a = 0; a < heightMatrix; a++) {
-			for (int b = 0; b < widthMatrix; b++) {
-				matrixCell[a][b] = new Cell(tile, a, b, dim, dim2);
-			}
-		}
+		createButton();
+		initialize(w, h);
 	}
 
 	public void createButton() {
@@ -179,11 +163,11 @@ public class ConstructionPanel extends JPanel {
 			buttons.get(i).setHorizontalAlignment(SwingConstants.LEFT);
 			setBoundAndText(i);
 			buttons.get(i).addMouseListener(new MouseInputAdapter() {
-
+				
 				@Override
 				public void mousePressed(MouseEvent e) {
-
-					if (e.getComponent().getY() == buttons.get(curRow).getY()) {
+				
+					if(e.getComponent().getY() == buttons.get(curRow).getY()) {
 						cursorPosition = curRow;
 						repaint();
 					}
@@ -206,21 +190,21 @@ public class ConstructionPanel extends JPanel {
 						if (!empty()) {
 							if (!saveFile) {
 								SoundsProvider.playBulletHit1();
-								((MainFrame) getSwitcher()).setTransparent(true);
+								((MainFrame)getSwitcher()).setTransparent(true);
 								backDialog();
 							} else {
 								setCursorPosition(1);
 								cleanMatrixOfType();
 								saveFile = selection = isFlag = isPlayer = isEnemy = false;
 								type = TypeMatrix.DEFAULT;
-								((MainFrame) getSwitcher()).setTransparent(false);
+								((MainFrame)getSwitcher()).setTransparent(false);
 								getSwitcher().showMenu();
 							}
 						} else {
 							isFlag = isPlayer = isEnemy = false;
 							repaint();
 							cursorPosition = 1;
-							((MainFrame) getSwitcher()).setTransparent(false);
+							((MainFrame)getSwitcher()).setTransparent(false);
 							getSwitcher().showMenu();
 						}
 					} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -271,7 +255,7 @@ public class ConstructionPanel extends JPanel {
 
 					if (!empty()) {
 						if (!saveFile) {
-							((MainFrame) getSwitcher()).setTransparent(true);
+							((MainFrame)getSwitcher()).setTransparent(true);
 							backDialog();
 						} else {
 							setCursorPosition(1);
@@ -279,12 +263,12 @@ public class ConstructionPanel extends JPanel {
 							saveFile = selection = isFlag = isPlayer = isEnemy = false;
 							type = TypeMatrix.DEFAULT;
 							SoundsProvider.playBulletHit1();
-							((MainFrame) getSwitcher()).setTransparent(false);
+							((MainFrame)getSwitcher()).setTransparent(false);
 							getSwitcher().showMenu();
 						}
 					} else {
 						isFlag = isPlayer = isEnemy = false;
-						((MainFrame) getSwitcher()).setTransparent(false);
+						((MainFrame)getSwitcher()).setTransparent(false);
 						getSwitcher().showMenu();
 					}
 					repaint();
@@ -374,10 +358,10 @@ public class ConstructionPanel extends JPanel {
 	protected boolean numbersMaxOfEnemy() {
 		if ((contArmor + contBasic + contFast + contPower) > 20
 				&& ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))) {
-			setWarning(new WarningDialog("Numbers total Enemies is 20 with SinglePlayer!", ((MainFrame) switcher)));
+			setWarning(new WarningDialog("Numbers total Enemies is 20 with SinglePlayer!",((MainFrame)switcher)));
 			return false;
-		} else if ((contArmor + contBasic + contFast + contPower) > 30 && contPlayerP1 == 1 && contPlayerP2 == 1) {
-			setWarning(new WarningDialog("Numbers total Enemies is 30 with MultiPlayer!", ((MainFrame) switcher)));
+		} else if ((contArmor + contBasic + contFast + contPower) > 40 && contPlayerP1 == 1 && contPlayerP2 == 1) {
+			setWarning(new WarningDialog("Numbers total Enemies is 40 with MultiPlayer!", ((MainFrame)switcher)));
 			return false;
 		}
 
@@ -393,14 +377,14 @@ public class ConstructionPanel extends JPanel {
 		if (e.isHasApath()) {
 			return true;
 		}
-		((MainFrame) getSwitcher()).setTransparent(true);
-		setWarning(new WarningDialog("Can't found path to Flag!", ((MainFrame) switcher)));
+		((MainFrame)getSwitcher()).setTransparent(true);
+		setWarning(new WarningDialog("Can't found path to Flag!",((MainFrame)switcher)));
 		return false;
 	}
 
 	private void initWorld(World world) {
-		for (int a = 0; a < heightMatrix; a++) {
-			for (int b = 0; b < widthMatrix; b++) {
+		for (int a = 0; a < height; a++) {
+			for (int b = 0; b < width; b++) {
 				switch (matrix[a][b]) {
 				case EMPTY:
 					world.getWorld()[a][b] = null;
@@ -444,9 +428,9 @@ public class ConstructionPanel extends JPanel {
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				if (cursorPositionDialog == 0) {
-					g.drawImage(ImageProvider.getCursorRight(), 75, 55, this);
+					g.drawImage(ImageProvider.getCursorRight(), 75, 58, this);
 				} else {
-					g.drawImage(ImageProvider.getCursorRight(), 75, 103, this);
+					g.drawImage(ImageProvider.getCursorRight(), 75, 106, this);
 				}
 			}
 		};
@@ -480,11 +464,11 @@ public class ConstructionPanel extends JPanel {
 			bts[i].setBorder(null);
 			bts[i].setFocusPainted(false);
 			bts[i].addMouseListener(new MouseInputAdapter() {
-
+				
 				@Override
 				public void mousePressed(MouseEvent e) {
-
-					if (e.getComponent().getY() == bts[curRow].getY()) {
+				
+					if(e.getComponent().getY() == bts[curRow].getY()) {
 						cursorPositionDialog = curRow;
 						repaint();
 					}
@@ -546,7 +530,7 @@ public class ConstructionPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					SoundsProvider.playBulletHit1();
-					((MainFrame) getSwitcher()).setTransparent(false);
+					((MainFrame)getSwitcher()).setTransparent(false);
 					cursorPositionDialog = 0;
 					dialog.dispose();
 				}
@@ -567,7 +551,7 @@ public class ConstructionPanel extends JPanel {
 					isPlayer = false;
 					type = TypeMatrix.DEFAULT;
 
-					((MainFrame) getSwitcher()).setTransparent(false);
+					((MainFrame)getSwitcher()).setTransparent(false);
 					hide = false;
 					dialog.dispose();
 					getSwitcher().showMenu();
@@ -584,8 +568,8 @@ public class ConstructionPanel extends JPanel {
 			return false;
 		}
 
-		for (int a = 0; a < heightMatrix; a++) {
-			for (int b = 0; b < widthMatrix; b++) {
+		for (int a = 0; a < height; a++) {
+			for (int b = 0; b < width; b++) {
 				if (matrix[a][b] != TypeMatrix.EMPTY)
 					return false;
 			}
@@ -594,51 +578,76 @@ public class ConstructionPanel extends JPanel {
 	}
 
 	public void setBoundAndText(int j) {
+
 		switch (j) {
 		case 0:
-			buttons.get(j).setBounds(10, 10, 100, 30);
+			buttons.get(j).setBounds(18, 12, 70, 35);
 			buttons.get(j).setText("Back");
 			break;
 		case 1:
-
-			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH() - getBegin1() - 125,
-					((MainFrame) switcher).getHEIGHT() - 240, 70, 35);
+			buttons.get(j).setBounds(950, 490, 70, 35);
 			buttons.get(j).setText("Load");
 			break;
 		case 2:
-			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH() - getBegin1() - 125,
-					((MainFrame) switcher).getHEIGHT() - 170, 70, 35);
+			buttons.get(j).setBounds(950, 550, 70, 35);
 			buttons.get(j).setText("Save");
 			break;
 		case 3:
-			buttons.get(j).setBounds(((MainFrame) switcher).getWIDTH() - getBegin1() - 125,
-					((MainFrame) switcher).getHEIGHT() - 100, 120, 35);
+			buttons.get(j).setBounds(950, 610, 120, 35);
 			buttons.get(j).setText("Cancel");
 		default:
 			break;
 		}
 	}
 
-	private void initialize() {
+	private void initialize(int w, int h) {
 
 		cleanMatrixOfType();
 
+		int b = 100;
+		int tile = 35;
 		for (int a = 0; a < 13; a++) {
+
 			Rectangle j = new Rectangle(tile, tile);
+
+			if (a < 9) {
+				j.setBounds(850, b, tile, tile);
+
+				if (a == 8) {
+					b = 130;
+				}
+				b += 40;
+			} else {
+
+				j.setBounds(950, b, tile, tile);
+				b += 50;
+			}
 			positionLabel.add(j);
 		}
 
+		b = 170;
+
 		for (int a = 0; a < 8; a++) {
+
 			Rectangle j = new Rectangle();
+
+			if (a < 4) {
+				j.setBounds(1000, b, tile, tile);
+
+				if (a == 3)
+					b = 125;
+			} else
+				j.setBounds(1050, b, tile, tile);
+
 			positionCont.add(j);
+			b += 50;
 		}
-		((MainFrame) switcher).resizeComponent(this);
 	}
 
 	private void cleanMatrixOfType() {
 
-		for (int a = 0; a < heightMatrix; a++) {
-			for (int b = 0; b < widthMatrix; b++) {
+		for (int a = 0; a < height; a++) {
+			for (int b = 0; b < width; b++) {
 				matrix[a][b] = TypeMatrix.EMPTY;
 			}
 		}
@@ -661,7 +670,7 @@ public class ConstructionPanel extends JPanel {
 					new FileReader(dir.getText() + "/" + filename.getText() + ".txt"));
 			String line = reader.readLine();
 
-			while (i < heightMatrix) {
+			while (i < height) {
 
 				StringTokenizer st = new StringTokenizer(line, " ");
 				String tmp;
@@ -762,9 +771,9 @@ public class ConstructionPanel extends JPanel {
 
 		try {
 
-			for (int a = 0; a < heightMatrix; a++) {
+			for (int a = 0; a < height; a++) {
 
-				for (int c = 0; c < widthMatrix; c++) {
+				for (int c = 0; c < width; c++) {
 
 					switch (matrix[a][c]) {
 					case EMPTY:
@@ -827,11 +836,7 @@ public class ConstructionPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		begin1 = ((getWidth()) - (widthMatrix * tile) - sizeButton) / 4;
-		begin2 = (getHeight() / 2) - ((heightMatrix * tile) / 2);
-		end1 = heightMatrix * tile;
-
-		if (((MainFrame) getSwitcher()).isTransparent()) {
+		if (((MainFrame)getSwitcher()).isTransparent()) {
 
 			// Apply our own painting effect
 			Graphics2D g2d = (Graphics2D) g;
@@ -839,17 +844,6 @@ public class ConstructionPanel extends JPanel {
 			g2d.setColor(getBackground());
 			g2d.fill(getBounds());
 		}
-		
-		//NON CANCELLAREEEEEE
-
-		// for (int a = 0; a < heightMatrix; a++) {
-		// for (int b = 0; b < widthMatrix; b++) {
-		// g.setColor(Color.orange);
-		// g.drawRect((int)matrixCell[a][b].r.getY(),(int)matrixCell[a][b].r.getX(),(int)
-		// matrixCell[a][b].r.getWidth(),(int) matrixCell[a][b].r.getHeight());
-		//
-		// }
-		// }
 
 		if (!hide) {
 			if (cursorPosition == 0)
@@ -862,29 +856,33 @@ public class ConstructionPanel extends JPanel {
 
 		// TANK BACKGROUND
 		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-		g.drawImage(ImageProvider.getBackground1P(),
-				(begin1 + (widthMatrix * tile / 2)) - ImageProvider.getBackground1P().getWidth(null) / 2,
-				(begin1 + (heightMatrix * tile / 2)) - ImageProvider.getBackground1P().getHeight(null) / 2, null);
-		if (!((MainFrame) getSwitcher()).isTransparent())
+		g.drawImage(ImageProvider.getBackground1P(), 135, 52, null);
+		if (!((MainFrame)getSwitcher()).isTransparent())
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 		if (selection)
 			g.drawImage(ImageProvider.getSelection(), positionXObject - 2, positionYObject - 2, null);
 
-		if (!((MainFrame) getSwitcher()).isTransparent())
+		if (!((MainFrame)getSwitcher()).isTransparent())
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
 
 		g.setColor(Color.WHITE);
 
-		for (int i = 0; i <= heightMatrix; i++) {
-			g.drawLine(begin1, begin2 + (i * tile), end1 + begin1 + tile, begin2 + (i * tile));
+		int begin = tile * 3;
+		int end = height * tile;
+
+		for (int i = 2; i <= height + 2; i++) {
+			g.drawLine(begin + tile, i * tile, end + begin + (tile * 2), i * tile);
 		}
 
-		for (int i = 0; i <= widthMatrix; i++) {
-			g.drawLine((begin1) + (i * tile), begin2, (begin1) + (i * tile), getHeight() - begin2);
+		begin = tile * 2;
+		end = width * tile;
+
+		for (int i = 4; i <= width + 4; i++) {
+			g.drawLine(i * tile, begin, i * tile, end + tile);
 		}
 
-		if (!((MainFrame) getSwitcher()).isTransparent())
+		if (!((MainFrame)getSwitcher()).isTransparent())
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 		for (int a = 0; a < positionLabel.size(); a++) {
@@ -906,13 +904,13 @@ public class ConstructionPanel extends JPanel {
 				g.drawImage(ImageProvider.getTree(), x, y, null);
 			else if (a == 5) {
 				if (contFlag == 0) {
-					if (isFlag && time == 0 && !((MainFrame) getSwitcher()).isTransparent()) {
-						if (!((MainFrame) getSwitcher()).isTransparent())
+					if (isFlag && time == 0 && !((MainFrame)getSwitcher()).isTransparent()) {
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getFlag(), x, y, null);
 
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 					} else {
@@ -920,57 +918,57 @@ public class ConstructionPanel extends JPanel {
 					}
 				} else {
 
-					if (!((MainFrame) getSwitcher()).isTransparent())
+					if (!((MainFrame)getSwitcher()).isTransparent())
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 					g.drawImage(ImageProvider.getFlag(), x, y, null);
 
-					if (!((MainFrame) getSwitcher()).isTransparent())
+					if (!((MainFrame)getSwitcher()).isTransparent())
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 				}
 			} else if (a == 6) {
 
 				if (contPlayerP1 == 0) {
 					if (isPlayer && time == 0) {
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getPlayer1A(), x, y, null);
 
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					} else
 						g.drawImage(ImageProvider.getPlayer1A(), x, y, null);
 				} else {
 
-					if (!((MainFrame) getSwitcher()).isTransparent())
+					if (!((MainFrame)getSwitcher()).isTransparent())
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 					g.drawImage(ImageProvider.getPlayer1A(), x, y, null);
 
-					if (!((MainFrame) getSwitcher()).isTransparent())
+					if (!((MainFrame)getSwitcher()).isTransparent())
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 				}
 			} else if (a == 7) {
 				if (contPlayerP2 == 0) {
 					if (isPlayer && time == 0) {
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getPlayer2A(), x, y, null);
 
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					} else
 						g.drawImage(ImageProvider.getPlayer2A(), x, y, null);
 				} else {
 
-					if (!((MainFrame) getSwitcher()).isTransparent())
+					if (!((MainFrame)getSwitcher()).isTransparent())
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 					g.drawImage(ImageProvider.getPlayer2A(), x, y, null);
 
-					if (!((MainFrame) getSwitcher()).isTransparent())
+					if (!((MainFrame)getSwitcher()).isTransparent())
 						((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 				}
 			} else if (a == 8) {
@@ -984,12 +982,12 @@ public class ConstructionPanel extends JPanel {
 					if (isEnemy && time == 1) {
 						g.drawImage(ImageProvider.getBasicA(), x, y, null);
 					} else {
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getBasicA(), x, y, null);
 
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					}
 				}
@@ -1002,12 +1000,12 @@ public class ConstructionPanel extends JPanel {
 					if (isEnemy && time == 1) {
 						g.drawImage(ImageProvider.getArmorA(), x, y, null);
 					} else {
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getArmorA(), x, y, null);
 
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					}
 				}
@@ -1019,12 +1017,12 @@ public class ConstructionPanel extends JPanel {
 					if (isEnemy && time == 1) {
 						g.drawImage(ImageProvider.getFastA(), x, y, null);
 					} else {
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getFastA(), x, y, null);
 
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					}
 				}
@@ -1037,21 +1035,21 @@ public class ConstructionPanel extends JPanel {
 					if (isEnemy && time == 1) {
 						g.drawImage(ImageProvider.getPowerA(), x, y, null);
 					} else {
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 
 						g.drawImage(ImageProvider.getPowerA(), x, y, null);
 
-						if (!((MainFrame) getSwitcher()).isTransparent())
+						if (!((MainFrame)getSwitcher()).isTransparent())
 							((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 					}
 				}
 		}
 
-		paintNumber(g, contBasic, getWidth() - begin1 - 25, 170, numberOfEnemyPaint.get(0));
-		paintNumber(g, contArmor, getWidth() - begin1 - 25, 220, numberOfEnemyPaint.get(1));
-		paintNumber(g, contFast, getWidth() - begin1 - 25, 270, numberOfEnemyPaint.get(2));
-		paintNumber(g, contPower, getWidth() - begin1 - 25, 320, numberOfEnemyPaint.get(3));
+		paintNumber(g, contBasic, 1100, 170, numberOfEnemyPaint.get(0));
+		paintNumber(g, contArmor, 1100, 220, numberOfEnemyPaint.get(1));
+		paintNumber(g, contFast, 1100, 270, numberOfEnemyPaint.get(2));
+		paintNumber(g, contPower, 1100, 320, numberOfEnemyPaint.get(3));
 
 		for (int a = 0; a < positionCont.size(); a++) {
 
@@ -1064,48 +1062,48 @@ public class ConstructionPanel extends JPanel {
 				g.drawImage(ImageProvider.getLess(), x, y - 5, null);
 		}
 
-		for (int a = 0; a < heightMatrix; a++) {
+		for (int a = 0; a < height; a++) {
 
-			for (int b = 0; b < widthMatrix; b++) {
+			for (int b = 0; b < width; b++) {
 
 				switch (matrix[a][b]) {
 				case BRICKWALL:
-					g.drawImage(ImageProvider.getBrick(), (b * tile) + begin1, (a * tile) + begin2,
+					g.drawImage(ImageProvider.getBrick(), (b * tile) + 120, (a * tile) + 60,
 							(int) (ImageProvider.getBrick().getWidth(null) * 0.9),
 							(int) (ImageProvider.getBrick().getHeight(null) * 0.9), null);
 					break;
 				case STEELWALL:
-					g.drawImage(ImageProvider.getSteel(), (b * tile) + begin1, (a * tile) + begin2,
+					g.drawImage(ImageProvider.getSteel(), (b * tile) + 120, (a * tile) + 60,
 							(int) (ImageProvider.getBrick().getWidth(null) * 0.9),
 							(int) (ImageProvider.getBrick().getHeight(null) * 0.9), null);
 					break;
 				case ICE:
-					g.drawImage(ImageProvider.getIce(), (b * tile) + begin1, (a * tile) + begin2,
+					g.drawImage(ImageProvider.getIce(), (b * tile) + 120, (a * tile) + 60,
 							(int) (ImageProvider.getBrick().getWidth(null) * 0.9),
 							(int) (ImageProvider.getBrick().getHeight(null) * 0.9), null);
 					break;
 				case WATER:
-					g.drawImage(ImageProvider.getWaterA(), (b * tile) + begin1, (a * tile) + begin2,
+					g.drawImage(ImageProvider.getWaterA(), (b * tile) + 120, (a * tile) + 60,
 							(int) (ImageProvider.getBrick().getWidth(null) * 0.9),
 							(int) (ImageProvider.getBrick().getHeight(null) * 0.9), null);
 					break;
 				case FLAG:
-					g.drawImage(ImageProvider.getFlag(), (b * tile) + begin1, (a * tile) + begin2,
+					g.drawImage(ImageProvider.getFlag(), (b * tile) + 120, (a * tile) + 60,
 							(int) (ImageProvider.getBrick().getWidth(null) * 0.9),
 							(int) (ImageProvider.getBrick().getHeight(null) * 0.9), null);
 					break;
 				case TREE:
-					g.drawImage(ImageProvider.getTree(), (b * tile) + begin1, (a * tile) + begin2,
+					g.drawImage(ImageProvider.getTree(), (b * tile) + 120, (a * tile) + 60,
 							(int) (ImageProvider.getBrick().getWidth(null) * 0.9),
 							(int) (ImageProvider.getBrick().getHeight(null) * 0.9), null);
 					break;
 				case PLAYER1:
-					g.drawImage(ImageProvider.getPlayer1A(), (b * tile) + begin1, (a * tile) + begin2,
+					g.drawImage(ImageProvider.getPlayer1A(), (b * tile) + 120, (a * tile) + 60,
 							(int) (ImageProvider.getBrick().getWidth(null) * 0.9),
 							(int) (ImageProvider.getBrick().getHeight(null) * 0.9), null);
 					break;
 				case PLAYER2:
-					g.drawImage(ImageProvider.getPlayer2A(), (b * tile) + begin1, (a * tile) + begin2,
+					g.drawImage(ImageProvider.getPlayer2A(), (b * tile) + 120, (a * tile) + 60,
 							(int) (ImageProvider.getBrick().getWidth(null) * 0.9),
 							(int) (ImageProvider.getBrick().getHeight(null) * 0.9), null);
 					break;
@@ -1129,74 +1127,59 @@ public class ConstructionPanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			if (type != TypeMatrix.DEFAULT) {
-				double row = e.getX();
-				double col = e.getY();
+				int col = (int) (e.getX() / tile) - 4;
+				int row = (int) (e.getY() / tile) - 2;
 
-				for (int a = 0; a < heightMatrix; a++) {
-					for (int b = 0; b < widthMatrix; b++) {
+				if ((col < width && row < height && col >= 0 && row >= 0)) {
+					if (((col == 0 && row == 0) || (col == width / 2 && row == 0) || (col == width - 1 && row == 0))
+							&& type != TypeMatrix.EMPTY) {
+						matrix[row][col] = type;
+						((MainFrame)getSwitcher()).setTransparent(true);
+						setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix, ((MainFrame)getSwitcher())));
+					} else {
 
-						if (matrixCell[a][b].intersect(col, row)
-								&& (b < widthMatrix && a < heightMatrix && b >= 0 && a >= 0)) {
-							if (((a == 0 && b == 0) || (b == widthMatrix / 2 && a == 0)
-									|| (b == widthMatrix - 1 && a == 0)) && type != TypeMatrix.EMPTY) {
-								matrix[a][b] = type;
-								((MainFrame) getSwitcher()).setTransparent(true);
-								setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix,
-										((MainFrame) getSwitcher())));
-							} else {
-								if (matrix[a][b] == TypeMatrix.FLAG) {
-									contFlag--;
-								}
+						if (matrix[row][col] == TypeMatrix.FLAG) {
+							contFlag--;
+						}
+						if (matrix[row][col] == TypeMatrix.PLAYER1) {
+							contPlayerP1--;
+							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
+								setTotEnemyIntoMap(20);
+							else
+								setTotEnemyIntoMap(40);
+						}
+						if (matrix[row][col] == TypeMatrix.PLAYER2) {
+							contPlayerP2--;
+							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
+								setTotEnemyIntoMap(20);
+							else
+								setTotEnemyIntoMap(40);
+						}
 
-								if (matrix[a][b] == TypeMatrix.PLAYER1) {
-									contPlayerP1--;
-									if ((contPlayerP1 == 1 && contPlayerP2 == 0)
-											|| (contPlayerP1 == 0 && contPlayerP2 == 1))
-										setTotEnemyIntoMap(20);
-									else
-										setTotEnemyIntoMap(40);
-								}
-
-								if (matrix[a][b] == TypeMatrix.PLAYER2) {
-									contPlayerP2--;
-									if ((contPlayerP1 == 1 && contPlayerP2 == 0)
-											|| (contPlayerP1 == 0 && contPlayerP2 == 1))
-										setTotEnemyIntoMap(20);
-									else
-										setTotEnemyIntoMap(40);
-								}
-
-								if (((type == TypeMatrix.FLAG && contFlag == 0)
-										|| (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0)
-										|| (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0))
-										|| (type != TypeMatrix.PLAYER2 && type != TypeMatrix.PLAYER1
-												&& type != TypeMatrix.FLAG)) {
-									matrix[a][b] = type;
-									repaint();
-								}
-
-								if (type == TypeMatrix.FLAG && contFlag == 0) {
-									contFlag++;
-								}
-
-								if (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0) {
-									contPlayerP1++;
-									if ((contPlayerP1 == 1 && contPlayerP2 == 0)
-											|| (contPlayerP1 == 0 && contPlayerP2 == 1))
-										setTotEnemyIntoMap(20);
-									else
-										setTotEnemyIntoMap(40);
-								}
-
-								if (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0) {
-									contPlayerP2++;
-									if ((contPlayerP1 == 1 && contPlayerP2 == 0)
-											|| (contPlayerP1 == 0 && contPlayerP2 == 1))
-										setTotEnemyIntoMap(20);
-									else
-										setTotEnemyIntoMap(40);
-								}
-							}
+						if (((type == TypeMatrix.FLAG && contFlag == 0)
+								|| (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0)
+								|| (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0))
+								|| (type != TypeMatrix.PLAYER2 && type != TypeMatrix.PLAYER1
+										&& type != TypeMatrix.FLAG)) {
+							matrix[row][col] = type;
+							repaint();
+						}
+						if (type == TypeMatrix.FLAG && contFlag == 0) {
+							contFlag++;
+						}
+						if (type == TypeMatrix.PLAYER1 && contPlayerP1 == 0) {
+							contPlayerP1++;
+							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
+								setTotEnemyIntoMap(20);
+							else
+								setTotEnemyIntoMap(40);
+						}
+						if (type == TypeMatrix.PLAYER2 && contPlayerP2 == 0) {
+							contPlayerP2++;
+							if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
+								setTotEnemyIntoMap(20);
+							else
+								setTotEnemyIntoMap(40);
 						}
 					}
 				}
@@ -1298,62 +1281,39 @@ public class ConstructionPanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (type != TypeMatrix.DEFAULT) {
-				double row = e.getX();
-				double col = e.getY();
+				int col = (int) (e.getX() / tile) - 4;
+				int row = (int) (e.getY() / tile) - 2;
 
-				for (int a = 0; a < heightMatrix; a++) {
-					for (int b = 0; b < widthMatrix; b++) {
-						if (matrixCell[a][b].intersect(col, row) && ((b == 0 && a == 0)
-								|| (b == widthMatrix / 2 && a == 0) || (b == widthMatrix - 1 && a == 0))
-								&& type != TypeMatrix.EMPTY) {
-							matrix[a][b] = type;
-							((MainFrame) getSwitcher()).setTransparent(true);
-							setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix,
-									((MainFrame) getSwitcher())));
-						} else if (matrixCell[a][b].intersect(col, row) && type != TypeMatrix.FLAG
-								&& type != TypeMatrix.PLAYER1 && type != TypeMatrix.PLAYER2) {
-							if (matrix[a][b] == TypeMatrix.FLAG) {
-								contFlag--;
-							}
-							if (matrix[a][b] == TypeMatrix.PLAYER1) {
-								contPlayerP1--;
-								if ((contPlayerP1 == 1 && contPlayerP2 == 0)
-										|| (contPlayerP1 == 0 && contPlayerP2 == 1))
-									setTotEnemyIntoMap(20);
-								else
-									setTotEnemyIntoMap(40);
-							} else if (matrix[a][b] == TypeMatrix.PLAYER2) {
-								contPlayerP2--;
-								if ((contPlayerP1 == 1 && contPlayerP2 == 0)
-										|| (contPlayerP1 == 0 && contPlayerP2 == 1))
-									setTotEnemyIntoMap(20);
-								else
-									setTotEnemyIntoMap(40);
-							}
+				if (((col == 0 && row == 0) || (col == width / 2 && row == 0) || (col == width - 1 && row == 0))
+						&& type != TypeMatrix.EMPTY) {
+					matrix[row][col] = type;
+					((MainFrame)getSwitcher()).setTransparent(true);
+					setWarning(new WarningDialog("Warning! Cannot manage spawn positions.", matrix, ((MainFrame)getSwitcher())));
+				}
 
-							matrix[a][b] = type;
-							repaint();
-						}
+				else if ((col < width && row < height && col >= 0 && row >= 0) && type != TypeMatrix.FLAG
+						&& type != TypeMatrix.PLAYER1 && type != TypeMatrix.PLAYER2) {
+					if (matrix[row][col] == TypeMatrix.FLAG) {
+						contFlag--;
 					}
+					if (matrix[row][col] == TypeMatrix.PLAYER1) {
+						contPlayerP1--;
+						if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
+							setTotEnemyIntoMap(20);
+						else
+							setTotEnemyIntoMap(40);
+					} else if (matrix[row][col] == TypeMatrix.PLAYER2) {
+						contPlayerP2--;
+						if ((contPlayerP1 == 1 && contPlayerP2 == 0) || (contPlayerP1 == 0 && contPlayerP2 == 1))
+							setTotEnemyIntoMap(20);
+						else
+							setTotEnemyIntoMap(40);
+					}
+					matrix[row][col] = type;
+					repaint();
 				}
 			}
 		}
-	}
-
-	private class Cell {
-		public Rectangle r;
-
-		public Cell(int pixel, int a, int b, int dim1, int dim2) {
-			r = new Rectangle((dim1 + pixel + (a * pixel)), (dim2 + pixel + (b * pixel)), pixel, pixel);
-		}
-
-		boolean intersect(double x, double y) {
-			if (r.contains(x, y)) {
-				return true;
-			}
-			return false;
-		}
-
 	}
 
 	public int getCursorPosition() {
@@ -1391,49 +1351,4 @@ public class ConstructionPanel extends JPanel {
 	public void setWarning(WarningDialog warning) {
 		this.warning = warning;
 	}
-
-	public ArrayList<Rectangle> getPositionLabel() {
-		return positionLabel;
-	}
-
-	public int getBegin1() {
-		return begin1;
-	}
-
-	public int getBegin2() {
-		return begin2;
-	}
-
-	public int getEnd1() {
-		return end1;
-	}
-
-	public int getSizeButton() {
-		return sizeButton;
-	}
-
-	public ArrayList<Rectangle> getPositionCont() {
-		return positionCont;
-	}
-
-	public void setBegin1(int begin1) {
-		this.begin1 = begin1;
-	}
-
-	public int getWidthMatrix() {
-		return widthMatrix;
-	}
-
-	public ArrayList<JButton> getButtons() {
-		return buttons;
-	}
-
-	public int getHeightMatrix() {
-		return heightMatrix;
-	}
-
-	public void setBegin2(int begin2) {
-		this.begin2 = begin2;
-	}
-
 }

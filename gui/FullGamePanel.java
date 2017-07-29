@@ -25,22 +25,18 @@ public class FullGamePanel extends JPanel {
 	private GameManager gameManager;
 	private PanelPlayersInfo[] panelOfInfo;
 
-	public FullGamePanel(final int w, int h, int gameWidth, int gameHeight, PanelSwitcher switcher, GamePanel gamePanel) {
+	public FullGamePanel(final int WIDTH, int HEIGHT, int gameWidth, int gameHeight, PanelSwitcher switcher,GamePanel gamePanel) {
 
-		setPreferredSize(new Dimension(w, h));
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setLayout(null);
 		setBackground(Color.GRAY);
 		this.switcher = switcher;
-		
-		System.out.println(w + " " + h + " " + gameWidth + " " + gameHeight);
 		
 		this.setGamePanel(gamePanel);
 		this.gameManager = gamePanel.getGame();
 		gamePanel.setFocusable(true);
 //		gamePanel.setBounds(322 - shift, 32 - shift, gameWidth + shift * 2 + 3, gameHeight + shift * 2);
-//		gamePanel.setBounds(282 - shift, 20 - shift, gameWidth + shift * 2 + 3, gameHeight + shift * 2);
-		gamePanel.setBounds((int) (this.getPreferredSize().getWidth() / 2 - gamePanel.getPreferredSize().getWidth() / 2), 
-				(int) (this.getPreferredSize().getHeight() / 2 - gamePanel.getPreferredSize().getHeight() / 2), gameWidth, gameHeight);
+		gamePanel.setBounds(282 - shift, 20 - shift, gameWidth + shift * 2 + 3, gameHeight + shift * 2);
 		
 		if (GameManager.offline)
 			valueMap = gameManager.getFilename().getText().replaceAll("[^0-9]", "");	
@@ -48,7 +44,8 @@ public class FullGamePanel extends JPanel {
 		createInfoLabel();
 
 		labelValueMap = new JLabel();
-		labelValueMap.setBounds((int) (this.getPreferredSize().getWidth() - gameWidth) / 2 + gameWidth, gameHeight - 30, 30, 30);
+		labelValueMap.setBounds(1175, 660, 30, 30);
+		labelValueMap.setPreferredSize(new Dimension(30, 30));
 		labelValueMap.setForeground(Color.BLACK);
 		labelValueMap.setFont(MainFrame.customFontM);
 		labelValueMap.setText(valueMap);
@@ -258,13 +255,5 @@ public class FullGamePanel extends JPanel {
 
 	public void setGamePanel(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
-	}
-
-	public int getShift() {
-		return shift;
-	}
-
-	public void setShift(int shift) {
-		this.shift = shift;
 	}
 }

@@ -3,11 +3,11 @@ package gui;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+
 import javax.swing.*;
 
 import core.Flag;
@@ -17,18 +17,18 @@ import net.ConnectionManager;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame implements PanelSwitcher {
 	
-	private int WIDTH = 1300;
-	private int HEIGHT = 740;
+	private final int WIDTH = 1300;
+	private final int HEIGHT = 740;
 
-	private final int gameWidth = WIDTH - 530;
-  	private final int gameHeight = HEIGHT - 5;
+	private final int gameWidth = WIDTH - 565;
+  	private final int gameHeight = HEIGHT - 40;
  
 	public static Font customFontM;
 	public static Font customFontB;
 	public static Font customFontS; 
 	 
 	private boolean transparent;
-	private boolean slide; 
+	private boolean slide = true; 
 	private int highScoreP1;
 	private int highScoreP2;
 	private int unlockedMapsP1;
@@ -40,12 +40,11 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private Flag flag;
 
 	//FullScreen
-	private GraphicsEnvironment graphicsEnvironment;
+	private GraphicsEnvironment graphicscEnvironment;
 	private GraphicsDevice device;
 	private boolean fullscreen;
-	private boolean pressF11;
+	private boolean pressF11=false;
 
-	private ArrayList<JComponent> components;
 	private NetworkPanel network;
 	private Lobby lobby;
 	private MenuPanel menu;
@@ -61,63 +60,38 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 	private GamePanel gamePanel;
 	private SlideStage slideStage;
 	private LoadPanel load;
-	private JComponent tmp = null;
+	private JComponent tmp;
 	
 	public MainFrame() {
-		
 		this.setLayout(new BorderLayout());
 		this.setTitle("BATTLE CITY UNICAL");
-		
-		pressF11 = false;
-		load = new LoadPanel(WIDTH, HEIGHT, this);
-		tmp = load;
-		slide=true;
-		components=new ArrayList<>();
-		components.add(load);
-		slideContainer = new SlideContainer(WIDTH, HEIGHT);
-		this.add(load);
-		this.setResizable(false);
-		this.pack();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(this);
-		this.setVisible(true);
-		
+		this.setSize(new Dimension(WIDTH, HEIGHT));
+		tmp = null;
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 		  .addKeyEventDispatcher(new KeyEventDispatcher() {
-		      
+		      @SuppressWarnings("static-access")
 			@Override
 		      public boolean dispatchKeyEvent(KeyEvent e) {
-		    	  if(e.getKeyCode() == KeyEvent.VK_F11 && !pressF11 && (SlideContainer.isReady() || (!SlideContainer.isReady() && slide))){
-		    		  
-		    		  if(tmp != null) {
-		    		  
-						if(!fullscreen) {
+		    	  if(e.getKeyCode() == e.VK_F11 && !pressF11){
+						if(!fullscreen)
 							mainScreenTurnOn();
-							WIDTH=device.getFullScreenWindow().getWidth();
-							HEIGHT=device.getFullScreenWindow().getHeight();
-							  for(int a=0; a<components.size(); a++){
-					    		  resizeComponent(components.get(a));
-					    	  }	
-						}
-						else {
+						else
 							mainScreenTurnOff();
-							WIDTH = 1300;
-							HEIGHT = 740;
-							for(int a=0; a<components.size(); a++){
-					    		  resizeComponent(components.get(a));
-					    	  }	
-						}
 						pressF11=true;
-		    		  }
-		    	  }
-		    	  else {
+		    	  }else{
 		    		  pressF11=false;
-		    	  }	  
-    	  
+		    	  }
 		        return false;
 		      }
 		});
 		
+		load = new LoadPanel(WIDTH, HEIGHT, this);
+		tmp = load;
+		this.add(load);
+		this.setResizable(false);
+		this.pack();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
 	}
 
 	public static void main(String[] args) {
@@ -133,6 +107,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		setUndecorated(true);
 		device.setFullScreenWindow(this);
 		fullscreen = true;
+	
 		this.validate();
 		this.repaint();
 		tmp.transferFocusBackward();
@@ -146,159 +121,60 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		dispose();
 		setUndecorated(false);
 		setVisible(true);
+				
 		this.validate();
 		this.repaint();
 		tmp.transferFocusBackward();
 		selectFocusButton(tmp);
 	}
 	
-	@Override
-	protected void processWindowEvent(WindowEvent e) {
-		
-	    if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
+	protected void processWindowEvent(WindowEvent e)
+	{
+	    if (e.getID() == WindowEvent.WINDOW_DEACTIVATED){
 	       return;
 	    }        
 
 	    super.processWindowEvent(e);        
 	}  
 	
-	public void resizeComponent(JComponent t) {
-		
-		if(t instanceof LoadPanel) {
-			((LoadPanel)t).setProgressBar(WIDTH, HEIGHT);
-			((LoadPanel)t).repaint();
-		}
-		else if(t instanceof MenuPanel && (SlideContainer.isReady() || (!SlideContainer.isReady() && slide))) {
-				t.setBounds(0, 0, WIDTH, HEIGHT);
-			
-			for(int i = 0; i < ((MenuPanel)t).getDIM(); i++) {
-				((MenuPanel)t).setBoundAndText(WIDTH, HEIGHT, i);
-				
-			}
-			((MenuPanel)t).addLabel(WIDTH);
-			((MenuPanel)t).repaint();
-		}
-		else if(t instanceof PlayerPanel) {
-			
-			for(int i = 0; i < ((PlayerPanel)t).getDIM(); i++) {
-				((PlayerPanel)t).setBoundAndText(WIDTH, HEIGHT, i);
-			}
-			((PlayerPanel)t).repaint();
-		}
-		else if(t instanceof SettingsPanel) {
-			
-			((SettingsPanel)t).setPosY(270);
-			((SettingsPanel)t).setSlider(WIDTH, HEIGHT);
-			
-			for(int i = 0; i < ((SettingsPanel)t).getDIM(); i++) {
-				((SettingsPanel)t).setBoundsAndText(i);
-				
-				if(i != 0)
-					((SettingsPanel)t).setPosY(((SettingsPanel)t).getPosY() + 100);
-				
-				if(i != 3)
-					((SettingsPanel)t).setBoundRadioButton(HEIGHT, i);
-			}
-		}
-		else if(t instanceof ConstructionPanel) {
-			int b = 100;
-			int tile = 35;
-			((ConstructionPanel) t).setBegin1(((getWidth())-(((ConstructionPanel) t).getWidthMatrix()*tile)-((ConstructionPanel) t).getSizeButton())/4);
-			((ConstructionPanel) t).setBegin2((getHeight() / 2) - ((((ConstructionPanel) t).getHeightMatrix() * tile) / 2));
-
-			for(int a = 0; a< ((ConstructionPanel)t).getPositionLabel().size(); a++) {
-				Rectangle j = ((ConstructionPanel)t).getPositionLabel().get(a);
-				if (a < 9) {
-					j.setBounds(WIDTH-((ConstructionPanel)t).getBegin1()-((ConstructionPanel)t).getSizeButton()+100, b, tile, tile);
-					if (a == 8) {
-						b = 130;
-					}
-					b += 40;
-				} else {
-					j.setBounds(WIDTH-((ConstructionPanel)t).getBegin1()-((ConstructionPanel)t).getSizeButton()+200, b, tile, tile);
-					b += 50;
-				}
-			}
-			
-			b = 170;
-			for (int a = 0; a < ((ConstructionPanel)t).getPositionCont().size(); a++) {
-				Rectangle j = ((ConstructionPanel)t).getPositionCont().get(a);
-				if (a < 4) {
-					j.setBounds(WIDTH-((ConstructionPanel)t).getBegin1()-((ConstructionPanel)t).getSizeButton()+250, b, tile, tile);
-
-					if (a == 3)
-						b = 125;
-				} else
-					j.setBounds(WIDTH-((ConstructionPanel)t).getBegin1()-((ConstructionPanel)t).getSizeButton()+300, b, tile, tile);
-				b += 50;
-			}
-			
-			for(int a=0; a<((ConstructionPanel)t).getButtons().size(); a++){
-				((ConstructionPanel)t).setBoundAndText(a);
-			}
-			int cont;
-			if(fullscreen){
-				if(WIDTH>1300) {
-					cont=15;
-				}else{
-					cont=20;
-				}
-				((ConstructionPanel)t).initMatrixCell(((ConstructionPanel) t).getBegin1(),((ConstructionPanel) t).getBegin2()+cont);
-			}else
-				((ConstructionPanel)t).initMatrixCell(((ConstructionPanel) t).getBegin1(),((ConstructionPanel) t).getBegin2());
-		}
-		else if(t instanceof GamePanel) {
-			
-		}
-		else if(t instanceof NetworkPanel) {
-			
-		}
-	}
 	//---------------------------------------------------------------------------------
 
 	private void instantiate() {
 	
 		Timer timer = new Timer(8000, new ActionListener() {
-			
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				showMenu();
 			}
 		});
 	
 		new ImageProvider();
 		new SoundsProvider();
-		graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		device = graphicsEnvironment.getDefaultScreenDevice();
+		graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		device = graphicscEnvironment.getDefaultScreenDevice();
 		transparent = false;
 		timer.setRepeats(false);
 		timer.start();
+		setSlide(true);
 		new ImageProvider();
 		new SoundsProvider();
 		setFont();
 		
 		network = new NetworkPanel(WIDTH, HEIGHT, this);
-		components.add(network);
 		menu = new MenuPanel(WIDTH, HEIGHT, this);
-		components.add(menu);
-		menu.loadScore();
+		menu.drawScore();
 		player = new PlayerPanel(WIDTH, HEIGHT, this);
-		components.add(player);
 		firstStage = new StagePanelFirst(WIDTH, HEIGHT, this);
-		components.add(firstStage);
 		secondStage = new StagePanelSecond(WIDTH, HEIGHT, this);
-		components.add(secondStage);
 		editor = new ConstructionPanel(WIDTH, HEIGHT, this, flag);
-		components.add(editor);
 		settings = new SettingsPanel(WIDTH, HEIGHT, this);
-		components.add(settings);
 		
 	}
 	
 	public void switchTo(JComponent component) {
-		
 		if(component instanceof SlideContainer)
-			tmp = menu;	
+			tmp = menu;
 		else
 			tmp = component;
 		this.getContentPane().removeAll();
@@ -335,12 +211,14 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			customFontM = (Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(25f));
 			customFontB =(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(40f));
 			customFontS =(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")).deriveFont(16f));
-			graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			graphicsEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
-			
-		} catch (IOException | FontFormatException e) {
+			graphicscEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			graphicscEnvironment.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("./font/Minecraft.ttf")));
+
+		} catch (IOException e) {
 			e.printStackTrace();
 
+		} catch (FontFormatException e) {
+			e.printStackTrace();
 		}
 	} 
 	
@@ -350,7 +228,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		lobby.setNameTextField(network.getNameTextField());
 		lobby.setIpTextField(network.getIpTextField());
 		lobby.setPortTextField(network.getPortTextField());
-		while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){System.out.println("ok");}
+		while(!lobby.getClient().isPresentInTheArrayOfClientOnline()){System.out.println("loop");}
 		lobby.createChat(lobby.getClient());
 		lobby.createOnlinePanel();
 		lobby.createDifficultPanel();
@@ -366,7 +244,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 		GameManager.offline = false;
 
 		if (isSlide()) {
-		
+			slideContainer = new SlideContainer(WIDTH, HEIGHT);
 			slideContainer.add(menu);
 			switchTo(slideContainer);
 			setSlide(false);
@@ -393,6 +271,7 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 
 	@Override
 	public void showSecondStage(String path) {
+		
 		secondStage.setPath(path);
 		secondStage.repaint();
 		switchTo(secondStage);
@@ -436,14 +315,14 @@ public class MainFrame extends JFrame implements PanelSwitcher {
 			manageLooby();
 		}
 		switchTo(lobby); 
-		lobby.revalidate();//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
+		lobby.revalidate();		//va messo perchè quando faccio il passaggio da un pannello ad un'altro io aggiungo dopo un'altro pannello di sopra
 	}
 
 	public GameManager showNetwork(ConnectionManager connectionManager, JTextField filename, String difficult) {
 		showSlideStage(filename, false, connectionManager, difficult);
 		return gameManager;
 	}
-
+	
 	//---------------------------------SET & GET---------------------------------------------
 	
 	public FullGamePanel getFullGamePanel() {

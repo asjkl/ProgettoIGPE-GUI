@@ -40,7 +40,6 @@ public class ScoresPanel extends JPanel {
 	private final int SHOW = 500;
 	
 	public ScoresPanel(final int w, final int h, PanelSwitcher switcher, GameManager game, JTextField filename) {
-
 		this.setPreferredSize(new Dimension(w, h));
 		this.setBackground(Color.BLACK);
 		this.setLayout(null);
@@ -574,15 +573,14 @@ public class ScoresPanel extends JPanel {
 		if(((MainFrame)switcher).getUnlockedMapsP1() < v)
 			((MainFrame)switcher).setUnlockedMapsP1(v);
 
-		
 		b.write("SCORE\n");
 		b.write(String.valueOf(currScoreP1) + "\n");
 		b.write("HI-SCORE\n");
 		b.write(String.valueOf(highScoreP1) + "\n");
 		b.write("LIVES\n");
-		b.write(String.valueOf(((MainFrame)switcher).getCurrentResumeP1()) + "\n");
+		b.write(((MainFrame)switcher).getCurrentResumeP1() + "\n");
 		b.write("LEVEL\n");
-		b.write(String.valueOf(((MainFrame)switcher).getCurrentLevelP1()) + "\n");
+		b.write(((MainFrame)switcher).getCurrentLevelP1() + "\n");
 		b.write("MAPS\n");
 		b.write(String.valueOf(((MainFrame)switcher).getUnlockedMapsP1()));
 		

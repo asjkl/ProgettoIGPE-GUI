@@ -94,11 +94,7 @@ public class ConnectionManager implements Runnable {
 			final GameManager gameManager = mainFrame.showNetwork(this, map, difficult);
 			buffer = br.readLine();
 			while (buffer != null) {
-				if(gameManager.isExit()){
-					mainFrame.getGamePanel().getDialog().dispose();
-				}
-				
-				if (buffer.contains("CLOSE") || gameManager.isExitWhileGameLoop() || ((gameManager.getPlayersArray().get(0).toString().equals(nameOfGame)
+				if (buffer.contains("CLOSE") || gameManager.isExit() || ((gameManager.getPlayersArray().get(0).toString().equals(nameOfGame)
 						&& gameManager.getPlayersArray().get(0).isExitOnline())
 						|| (gameManager.getPlayersArray().get(1).toString().equals(nameOfGame)
 								&& gameManager.getPlayersArray().get(1).isExitOnline()))) {

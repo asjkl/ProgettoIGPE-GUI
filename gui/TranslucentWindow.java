@@ -51,10 +51,8 @@ public class TranslucentWindow extends JDialog {
 		this.setModal(true);
 		this.setUndecorated(true);
 		this.setBackground(new Color(0,0,0,0));
-		this.setContentPane(new TranslucentPane());
-		JLabel j=new JLabel(new ImageIcon(image));
-		j.setLocation(getWidth()/2-(image.getWidth(null)/2), getHeight()/2-(image.getHeight(null)/2));
-		this.add(j);
+		this.setContentPane(new TranslucentPane());	
+		this.add(new JLabel(new ImageIcon(image)));
 		this.pack();
 		this.setLocationRelativeTo((MainFrame)switcher);
 		this.setVisible(true);
@@ -68,8 +66,10 @@ public class TranslucentWindow extends JDialog {
 
         @Override
         protected void paintComponent(Graphics g) {
+            ((MainFrame)getSwitcher()).getGamePanel().repaint();
             super.paintComponent(g); 
-
+            
+    
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setComposite(AlphaComposite.SrcOver.derive(.0f));
             g2d.setColor(getBackground());
